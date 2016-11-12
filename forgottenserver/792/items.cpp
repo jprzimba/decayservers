@@ -897,26 +897,10 @@ bool Items::loadFromXml()
 								if(readXMLInteger(itemAttributesNode, "value", intValue))
 									it.abilities.absorbPercentFire = intValue;
 							}
-							else if(tmpStrValue == "absorbpercentpoison" ||
-								tmpStrValue == "absorbpercentearth")
+							else if(tmpStrValue == "absorbpercentpoison" || tmpStrValue == "absorbpercentearth")
 							{
 								if(readXMLInteger(itemAttributesNode, "value", intValue))
-									it.abilities.absorbPercentEarth = intValue;
-							}
-							else if(tmpStrValue == "absorbpercentice")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue))
-									it.abilities.absorbPercentIce = intValue;
-							}
-							else if(tmpStrValue == "absorbpercentholy")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue))
-									it.abilities.absorbPercentHoly = intValue;
-							}
-							else if(tmpStrValue == "absorbpercentdeath")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue))
-									it.abilities.absorbPercentDeath = intValue;
+									it.abilities.absorbPercentPoison = intValue;
 							}
 							else if(tmpStrValue == "absorbpercentlifedrain")
 							{
@@ -968,21 +952,6 @@ bool Items::loadFromXml()
 								if(readXMLInteger(itemAttributesNode, "value", intValue))
 									it.abilities.conditionSuppressions |= CONDITION_DROWN;
 							}
-							else if(tmpStrValue == "suppressfreeze")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-									it.abilities.conditionSuppressions |= CONDITION_FREEZING;
-							}
-							else if(tmpStrValue == "suppressdazzle")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-									it.abilities.conditionSuppressions |= CONDITION_DAZZLED;
-							}
-							else if(tmpStrValue == "suppresscurse")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-									it.abilities.conditionSuppressions |= CONDITION_CURSED;
-							}
 							else if(tmpStrValue == "field")
 							{
 								it.group = ITEM_GROUP_MAGICFIELD;
@@ -1006,7 +975,7 @@ bool Items::loadFromXml()
 									else if(tmpStrValue == "poison")
 									{
 										conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_POISON);
-										combatType = COMBAT_EARTHDAMAGE;
+										combatType = COMBAT_POISONDAMAGE;
 									}
 									else if(tmpStrValue == "drown")
 									{
@@ -1132,20 +1101,12 @@ bool Items::loadFromXml()
 								if(readXMLInteger(itemAttributesNode, "value", intValue))
 									it.transformToFree = intValue;
 							}
-							else if(tmpStrValue == "elementice")
+							else if(tmpStrValue == "elementearth" || tmpStrValue == "elementpoison")
 							{
 								if(readXMLInteger(itemAttributesNode, "value", intValue))
 								{
 									it.abilities.elementDamage = intValue;
-									it.abilities.elementType = COMBAT_ICEDAMAGE;
-								}
-							}
-							else if(tmpStrValue == "elementearth")
-							{
-								if(readXMLInteger(itemAttributesNode, "value", intValue))
-								{
-									it.abilities.elementDamage = intValue;
-									it.abilities.elementType = COMBAT_EARTHDAMAGE;
+									it.abilities.elementType = COMBAT_POISONDAMAGE;
 								}
 							}
 							else if(tmpStrValue == "elementfire")

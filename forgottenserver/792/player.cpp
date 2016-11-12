@@ -1934,12 +1934,12 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 					break;
 				}
 
-				case COMBAT_EARTHDAMAGE:
+				case COMBAT_POISONDAMAGE:
 				{
-					if(it.abilities.absorbPercentEarth != 0)
+					if(it.abilities.absorbPercentPoison!= 0)
 					{
-						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentEarth) / 100));
-						absorbedDamage = (it.abilities.absorbPercentEarth > 0);
+						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentPoison) / 100));
+						absorbedDamage = (it.abilities.absorbPercentPoison > 0);
 					}
 					break;
 				}
@@ -1970,36 +1970,6 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 					{
 						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentDrown) / 100));
 						absorbedDamage = (it.abilities.absorbPercentDrown > 0);
-					}
-					break;
-				}
-
-				case COMBAT_ICEDAMAGE:
-				{
-					if(it.abilities.absorbPercentIce != 0)
-					{
-						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentIce) / 100));
-						absorbedDamage = (it.abilities.absorbPercentIce > 0);
-					}
-					break;
-				}
-
-				case COMBAT_HOLYDAMAGE:
-				{
-					if(it.abilities.absorbPercentHoly != 0)
-					{
-						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentHoly) / 100));
-						absorbedDamage = (it.abilities.absorbPercentHoly > 0);
-					}
-					break;
-				}
-
-				case COMBAT_DEATHDAMAGE:
-				{
-					if(it.abilities.absorbPercentDeath != 0)
-					{
-						damage = (int32_t)std::ceil(damage * ((float)(100 - it.abilities.absorbPercentDeath) / 100));
-						absorbedDamage = (it.abilities.absorbPercentDeath > 0);
 					}
 					break;
 				}
@@ -3265,24 +3235,19 @@ void Player::onAddCombatCondition(ConditionType_t type)
 		case CONDITION_POISON:
 			sendTextMessage(MSG_STATUS_DEFAULT, "You are poisoned.");
 			break;
+
 		case CONDITION_DROWN:
 			sendTextMessage(MSG_STATUS_DEFAULT, "You are drowning.");
 			break;
+
 		case CONDITION_PARALYZE:
 			sendTextMessage(MSG_STATUS_DEFAULT, "You are paralyzed.");
 			break;
+
 		case CONDITION_DRUNK:
 			sendTextMessage(MSG_STATUS_DEFAULT, "You are drunk.");
 			break;
-		case CONDITION_CURSED:
-			sendTextMessage(MSG_STATUS_DEFAULT, "You are cursed.");
-			break;
-		case CONDITION_FREEZING:
-			sendTextMessage(MSG_STATUS_DEFAULT, "You are freezing.");
-			break;
-		case CONDITION_DAZZLED:
-			sendTextMessage(MSG_STATUS_DEFAULT, "You are dazzled.");
-			break;
+
 		default:
 			break;
 	}

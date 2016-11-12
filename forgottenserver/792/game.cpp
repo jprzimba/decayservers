@@ -3709,22 +3709,14 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 			case COMBAT_ENERGYDAMAGE:
 			case COMBAT_FIREDAMAGE:
 			case COMBAT_PHYSICALDAMAGE:
-			case COMBAT_ICEDAMAGE:
-			case COMBAT_DEATHDAMAGE:
 			{
 				hitEffect = NM_ME_BLOCKHIT;
 				break;
 			}
 
-			case COMBAT_EARTHDAMAGE:
+			case COMBAT_POISONDAMAGE:
 			{
 				hitEffect = NM_ME_POISON_RINGS;
-				break;
-			}
-
-			case COMBAT_HOLYDAMAGE:
-			{
-				hitEffect = NM_ME_HOLYDAMAGE;
 				break;
 			}
 
@@ -3850,7 +3842,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 						break;
 					}
 
-					case COMBAT_EARTHDAMAGE:
+					case COMBAT_POISONDAMAGE:
 					{
 						textColor = TEXTCOLOR_LIGHTGREEN;
 						hitEffect = NM_ME_POISON_RINGS;
@@ -3868,27 +3860,6 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 					{
 						textColor = TEXTCOLOR_ORANGE;
 						hitEffect = NM_ME_HITBY_FIRE;
-						break;
-					}
-
-					case COMBAT_ICEDAMAGE:
-					{
-						textColor = TEXTCOLOR_LIGHTBLUE;
-						hitEffect = NM_ME_ICEATTACK;
-						break;
-					}
-
-					case COMBAT_HOLYDAMAGE:
-					{
-						textColor = TEXTCOLOR_YELLOW;
-						hitEffect = NM_ME_HOLYDAMAGE;
-						break;
-					}
-
-					case COMBAT_DEATHDAMAGE:
-					{
-						textColor = TEXTCOLOR_DARKRED;
-						hitEffect = NM_ME_SMALLCLOUDS;
 						break;
 					}
 

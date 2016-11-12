@@ -1659,17 +1659,6 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	}
 }
 
-void ProtocolGame::sendTutorial(uint8_t tutorialId)
-{
-	NetworkMessage* msg = getOutputBuffer();
-	if(msg)
-	{
-		TRACK_MESSAGE(msg);
-		msg->AddByte(0xDC);
-		msg->AddByte(tutorialId);
-	}
-}
-
 void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
 {
 	NetworkMessage* msg = getOutputBuffer();

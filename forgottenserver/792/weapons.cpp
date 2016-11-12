@@ -997,18 +997,12 @@ bool WeaponWand::configureEvent(xmlNodePtr p)
 	if(readXMLString(p, "type", strValue))
 	{
 		std::string tmpStrValue = asLowerCaseString(strValue);
-		if(tmpStrValue == "earth")
-			params.combatType = COMBAT_EARTHDAMAGE;
-		else if(tmpStrValue == "ice")
-			params.combatType = COMBAT_ICEDAMAGE;
+		if(tmpStrValue == "earth" || tmpStrValue == "poison")
+			params.combatType = COMBAT_POISONDAMAGE;
 		else if(tmpStrValue == "energy")
 			params.combatType = COMBAT_ENERGYDAMAGE;
 		else if(tmpStrValue == "fire")
 			params.combatType = COMBAT_FIREDAMAGE;
-		else if(tmpStrValue == "death")
-			params.combatType = COMBAT_DEATHDAMAGE;
-		else if(tmpStrValue == "holy")
-			params.combatType = COMBAT_HOLYDAMAGE;
 		else
 			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << strValue << "\" does not exist." << std::endl;
 	}

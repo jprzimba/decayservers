@@ -1357,9 +1357,6 @@ void LuaScriptInterface::registerFunctions()
 	//doShowTextDialog(cid, itemid, text)
 	lua_register(m_luaState, "doShowTextDialog", LuaScriptInterface::luaDoShowTextDialog);
 
-	//doSendTutorial(cid, tutorialid)
-	lua_register(m_luaState, "doSendTutorial", LuaScriptInterface::luaDoSendTutorial);
-
 	//doAddMapMark(cid, pos, type, <optional> description)
 	lua_register(m_luaState, "doAddMapMark", LuaScriptInterface::luaDoAddMark);
 
@@ -2981,26 +2978,6 @@ int32_t LuaScriptInterface::luaDoShowTextDialog(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
-	return 1;
-}
-
-int LuaScriptInterface::luaDoSendTutorial(lua_State *L)
-{
-	//doSendTutorial(cid, tutorialid)
-	uint32_t tutorial = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
-	if(!player)
-	{
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	player->sendTutorial(tutorial);
-	lua_pushboolean(L, true);
 	return 1;
 }
 

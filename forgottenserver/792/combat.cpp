@@ -163,19 +163,7 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 			break;
 
 		case CONDITION_POISON:
-			return COMBAT_EARTHDAMAGE;
-			break;
-
-		case CONDITION_FREEZING:
-			return COMBAT_ICEDAMAGE;
-			break;
-
-		case CONDITION_DAZZLED:
-			return COMBAT_HOLYDAMAGE;
-			break;
-
-		case CONDITION_CURSED:
-			return COMBAT_DEATHDAMAGE;
+			return COMBAT_POISONDAMAGE;
 			break;
 
 		default:
@@ -200,20 +188,8 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 			return CONDITION_DROWN;
 			break;
 
-		case COMBAT_EARTHDAMAGE:
+		case COMBAT_POISONDAMAGE:
 			return CONDITION_POISON;
-			break;
-
-		case COMBAT_ICEDAMAGE:
-			return CONDITION_FREEZING;
-			break;
-
-		case COMBAT_HOLYDAMAGE:
-			return CONDITION_DAZZLED;
-			break;
-
-		case COMBAT_DEATHDAMAGE:
-			return CONDITION_CURSED;
 			break;
 
 		default:
@@ -695,17 +671,6 @@ void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const 
 	uint8_t effect)
 {
 	uint8_t distanceEffect = effect;
-	if(distanceEffect == NM_SHOOT_WEAPONTYPE)
-	{
-		switch(caster->getWeaponType())
-		{
-			case WEAPON_AXE: distanceEffect = NM_SHOOT_WHIRLWINDAXE; break;
-			case WEAPON_SWORD: distanceEffect = NM_SHOOT_WHIRLWINDSWORD; break;
-			case WEAPON_CLUB: distanceEffect = NM_SHOOT_WHIRLWINDCLUB; break;
-			default: distanceEffect = NM_ME_NONE; break;
-		}
-	}
-
 	if(caster && distanceEffect != NM_ME_NONE)
 		g_game.addDistanceEffect(fromPos, toPos, distanceEffect);
 }
