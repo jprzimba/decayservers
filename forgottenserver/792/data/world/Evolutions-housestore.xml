@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<houses>
+  <house houseid="1" owner="" paid="0" warnings="0"/>
+  <house houseid="2" owner="" paid="0" warnings="0"/>
+  <house houseid="3" owner="" paid="0" warnings="0"/>
+  <house houseid="4" owner="" paid="0" warnings="0"/>
+  <house houseid="5" owner="GM Xidaozu" paid="0" warnings="0">
+    <accesslist listid="256" text="Xidaozu"/>
+  </house>
+  <house houseid="6" owner="" paid="0" warnings="0"/>
+  <house houseid="7" owner="" paid="0" warnings="0"/>
+  <house houseid="8" owner="" paid="0" warnings="0"/>
+  <house houseid="9" owner="" paid="0" warnings="0"/>
+  <house houseid="10" owner="" paid="0" warnings="0"/>
+  <house houseid="11" owner="" paid="0" warnings="0"/>
+  <house houseid="12" owner="" paid="0" warnings="0"/>
+  <house houseid="13" owner="" paid="0" warnings="0"/>
+  <house houseid="14" owner="" paid="0" warnings="0"/>
+  <house houseid="15" owner="" paid="0" warnings="0"/>
+  <house houseid="16" owner="" paid="0" warnings="0"/>
+  <house houseid="17" owner="" paid="0" warnings="0"/>
+  <house houseid="18" owner="" paid="0" warnings="0"/>
+  <house houseid="19" owner="" paid="0" warnings="0"/>
+  <house houseid="20" owner="" paid="0" warnings="0"/>
+  <house houseid="21" owner="" paid="0" warnings="0"/>
+  <house houseid="22" owner="" paid="0" warnings="0"/>
+  <house houseid="23" owner="" paid="0" warnings="0"/>
+  <house houseid="24" owner="" paid="0" warnings="0"/>
+  <house houseid="25" owner="" paid="0" warnings="0"/>
+  <house houseid="26" owner="" paid="0" warnings="0"/>
+  <house houseid="27" owner="" paid="0" warnings="0"/>
+  <house houseid="28" owner="" paid="0" warnings="0"/>
+  <house houseid="29" owner="" paid="0" warnings="0"/>
+  <house houseid="30" owner="" paid="0" warnings="0"/>
+  <house houseid="31" owner="" paid="0" warnings="0"/>
+  <house houseid="32" owner="" paid="0" warnings="0"/>
+  <house houseid="33" owner="" paid="0" warnings="0"/>
+  <house houseid="34" owner="" paid="0" warnings="0"/>
+  <house houseid="35" owner="" paid="0" warnings="0"/>
+  <house houseid="36" owner="" paid="0" warnings="0"/>
+  <house houseid="37" owner="" paid="0" warnings="0"/>
+  <house houseid="38" owner="" paid="0" warnings="0"/>
+  <house houseid="39" owner="" paid="0" warnings="0"/>
+  <house houseid="40" owner="" paid="0" warnings="0"/>
+  <house houseid="41" owner="" paid="0" warnings="0"/>
+  <house houseid="42" owner="" paid="0" warnings="0"/>
+  <house houseid="43" owner="" paid="0" warnings="0"/>
+  <house houseid="44" owner="" paid="0" warnings="0"/>
+  <house houseid="45" owner="" paid="0" warnings="0"/>
+  <house houseid="46" owner="" paid="0" warnings="0"/>
+  <house houseid="47" owner="" paid="0" warnings="0"/>
+  <house houseid="48" owner="" paid="0" warnings="0"/>
+  <house houseid="49" owner="" paid="0" warnings="0"/>
+</houses>

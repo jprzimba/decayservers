@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<houses>
+<house name="Enigma Square I" houseid="1" entryx="1011" entryy="989" entryz="7" rent="3500" townid="1" size="71"/>
+<house name="Enigma Square II" houseid="2" entryx="1003" entryy="989" entryz="7" rent="3150" townid="1" size="63"/>
+<house name="Enigma Square III" houseid="3" entryx="992" entryy="989" entryz="7" rent="2700" townid="1" size="54"/>
+<house name="Enigma Square IV" houseid="4" entryx="990" entryy="994" entryz="7" rent="3800" townid="1" size="76"/>
+<house name="Enigma Square V" houseid="5" entryx="990" entryy="1003" entryz="7" rent="3700" townid="1" size="70"/>
+<house name="Enigma Square VI" houseid="6" entryx="1000" entryy="1007" entryz="7" rent="3100" townid="1" size="62"/>
+<house name="Enigma Square VII" houseid="7" entryx="1008" entryy="1007" entryz="7" rent="3500" townid="1" size="70"/>
+<house name="Enigma Square VIII" houseid="8" entryx="1010" entryy="1003" entryz="7" rent="4150" townid="1" size="83"/>
+<house name="Enigma Square IX" houseid="9" entryx="1010" entryy="997" entryz="7" rent="3050" townid="1" size="61"/>
+<house name="Enigma Plaza I" houseid="10" entryx="984" entryy="1017" entryz="7" rent="1050" townid="1" size="21"/>
+<house name="Enigma Plaza II" houseid="11" entryx="984" entryy="1021" entryz="7" rent="1450" townid="1" size="29"/>
+<house name="Enigma Plaza III" houseid="12" entryx="988" entryy="1023" entryz="7" rent="1100" townid="1" size="22"/>
+<house name="Enigma Plaza IV" houseid="13" entryx="997" entryy="1021" entryz="7" rent="1750" townid="1" size="35"/>
+<house name="Boat Lane I" houseid="14" entryx="959" entryy="980" entryz="7" rent="6300" townid="1" size="126"/>
+<house name="Boat Lane II" houseid="15" entryx="977" entryy="978" entryz="7" rent="4000" townid="1" size="81"/>
+<house name="Western Flat I" houseid="16" entryx="993" entryy="971" entryz="7" rent="1600" townid="1" size="32"/>
+<house name="Western Flat II" houseid="17" entryx="1003" entryy="971" entryz="7" rent="1600" townid="1" size="32"/>
+<house name="Western Flat III" houseid="18" entryx="996" entryy="968" entryz="6" rent="1550" townid="1" size="31"/>
+<house name="Western Flat IV" houseid="19" entryx="1000" entryy="968" entryz="6" rent="1550" townid="1" size="31"/>
+<house name="Western Flat V" houseid="20" entryx="996" entryy="968" entryz="5" rent="1550" townid="1" size="31"/>
+<house name="Western Flat VI" houseid="21" entryx="1000" entryy="968" entryz="5" rent="1550" townid="1" size="31"/>
+<house name="Eastern Flat I" houseid="22" entryx="1010" entryy="971" entryz="7" rent="1600" townid="1" size="32"/>
+<house name="Eastern Flat II" houseid="23" entryx="1020" entryy="971" entryz="7" rent="1600" townid="1" size="32"/>
+<house name="Eastern Flat III" houseid="24" entryx="1013" entryy="968" entryz="6" rent="1550" townid="1" size="31"/>
+<house name="Eastern Flat IV" houseid="25" entryx="1017" entryy="968" entryz="6" rent="1550" townid="1" size="31"/>
+<house name="Eastern Flat V" houseid="26" entryx="1013" entryy="968" entryz="5" rent="1550" townid="1" size="31"/>
+<house name="Eastern Flat VI" houseid="27" entryx="1017" entryy="968" entryz="5" rent="1550" townid="1" size="31"/>
+<house name="Ocean Mansion" houseid="28" entryx="1009" entryy="956" entryz="7" rent="2000" townid="1" size="41"/>
+<house name="Ocean Plaza I" houseid="29" entryx="1012" entryy="949" entryz="7" rent="850" townid="1" size="17"/>
+<house name="Ocean Plaza II" houseid="30" entryx="1017" entryy="949" entryz="7" rent="850" townid="1" size="17"/>
+<house name="Ocean Plaza III" houseid="31" entryx="1022" entryy="949" entryz="7" rent="850" townid="1" size="17"/>
+<house name="Guildhouse of the Park" houseid="32" entryx="1056" entryy="995" entryz="7" rent="11500" townid="1" size="223"/>
+<house name="Dream Lane I" houseid="33" entryx="1027" entryy="956" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Dream Lane II" houseid="34" entryx="1027" entryy="961" entryz="7" rent="1650" townid="1" size="33"/>
+<house name="Dream Lane III" houseid="35" entryx="1027" entryy="965" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Dream Lane IV" houseid="36" entryx="1027" entryy="969" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Park Flat I" houseid="37" entryx="1044" entryy="978" entryz="7" rent="0" townid="1" size="30"/>
+<house name="Park Flat II" houseid="38" entryx="1053" entryy="978" entryz="7" rent="1500" townid="1" size="26"/>
+<house name="Park Flat III" houseid="39" entryx="1046" entryy="976" entryz="6" rent="1450" townid="1" size="29"/>
+<house name="Park Lane I" houseid="40" entryx="1026" entryy="1016" entryz="7" rent="3750" townid="1" size="76"/>
+<house name="Park Lane II" houseid="41" entryx="1035" entryy="1016" entryz="7" rent="3750" townid="1" size="76"/>
+<house name="River Street I" houseid="42" entryx="962" entryy="1001" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="River Street II" houseid="43" entryx="962" entryy="994" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="River Street III" houseid="44" entryx="962" entryy="987" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Wizard&apos;s House I" houseid="45" entryx="973" entryy="1000" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Wizard&apos;s House II" houseid="46" entryx="973" entryy="1005" entryz="7" rent="1250" townid="1" size="25"/>
+<house name="Wizard&apos;s House III" houseid="47" entryx="973" entryy="1000" entryz="6" rent="1250" townid="1" size="25"/>
+<house name="Mystical House" houseid="48" entryx="973" entryy="987" entryz="7" rent="0" townid="1" size="74"/>
+<house name="Guildhouse of the River" houseid="49" entryx="971" entryy="1017" entryz="7" rent="11400" townid="1" size="228"/>
+</houses>

@@ -79,8 +79,8 @@
 	timeBetweenExActions = 1000
 
 	-- Map
-	mapName = "forgotten"
-	mapAuthor = "Komic"
+	mapName = "Evolutions"
+	mapAuthor = "Xidaozu"
 	randomizeTiles = "yes"
 	mapStorageType = "relational"
 
