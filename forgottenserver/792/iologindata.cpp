@@ -324,7 +324,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	if(player->accessLevel > 0)
 	{
 		if(acc.accountType > 4)
-			player->defaultOutfit.lookType = 266;
+			player->defaultOutfit.lookType = 9;
 		else
 			player->defaultOutfit.lookType = 75;
 	}

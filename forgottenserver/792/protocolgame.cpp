@@ -2123,7 +2123,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, bool isLogin)
 			{
 				msg->AddByte(0x0A);
 				msg->AddU32(player->getID());
-
 				msg->AddByte(0x32);
 				msg->AddByte(0x00);
 
@@ -2135,7 +2134,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, bool isLogin)
 				if(violationReasons[player->getAccountType()] > 0)
 				{
 					msg->AddByte(0x0B);
-					for(int32_t i = 0; i <= 22; i++)
+					for(int32_t i = 0; i < 32; i++)
 					{
 						if(i <= violationReasons[player->getAccountType()])
 							msg->AddByte(violationActions[player->getAccountType()]);
