@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 
 	std::cout << ">> Loading database driver..." << std::flush;
 	Database* db = Database::getInstance();
-	if(!db->isConnected())
+	if(db == NULL || !db->isConnected())
 	{
 		switch(db->getDatabaseEngine())
 		{
