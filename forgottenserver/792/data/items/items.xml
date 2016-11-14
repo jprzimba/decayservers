@@ -3,7 +3,8 @@
 	<item id="100" name="void">
 	</item>
 	<item id="101" name="earth">
-	</item>
+	</item>frod
+
 	<item id="103" name="dirt">
 	</item>
 	<item id="104" name="sand">
@@ -3760,42 +3761,42 @@
 	</item>
 	<item id="2180" article="an" name="orb of nature">
 	</item>
-	<item id="2181" article="a" name="terra rod">
-		<attribute key="description" value="Small stones are flying from its tip."/>
-		<attribute key="weight" value="2500"/>
+	<item id="2181" article="a" name="quagmire rod">
+		<attribute key="description" value="It emits clouds of poisonous swamp gas."/>
+		<attribute key="weight" value="2650"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="smallearth"/>
+		<attribute key="shootType" value="poison"/>
 		<attribute key="range" value="3"/>
 	</item>
 	<item id="2182" article="a" name="snakebite rod">
 		<attribute key="description" value="It seems to twitch and quiver as if trying to escape your grip."/>
 		<attribute key="weight" value="4300"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="smallearth"/>
+		<attribute key="shootType" value="poison"/>
 		<attribute key="range" value="3"/>
 	</item>
-	<item id="2183" article="a" name="hailstorm rod">
-		<attribute key="description" value="It grants you the power of striking your foes with furious hailstorms."/>
+	<item id="2183" article="a" name="tempest rod">
+		<attribute key="description" value="It grants you the power of striking your foes with furious thunderstorms."/>
 		<attribute key="weight" value="2700"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="smallice"/>
+		<attribute key="shootType" value="energy"/>
 		<attribute key="range" value="3"/>
 	</item>
 	<item id="2184" article="a" name="crystal wand">
 		<attribute key="weight" value="2800"/>
 	</item>
-	<item id="2185" article="a" name="necrotic rod">
-		<attribute key="description" value="It was brought up from hell to deliver death."/>
-		<attribute key="weight" value="2300"/>
+	<item id="2185" article="a" name="volcanic rod">
+		<attribute key="description" value="It erupts powerful bursts of magma upon everything in your path."/>
+		<attribute key="weight" value="2900"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="death"/>
+		<attribute key="shootType" value="fire"/>
 		<attribute key="range" value="3"/>
 	</item>
 	<item id="2186" article="a" name="moonlight rod">
 		<attribute key="description" value="Icecold rays of moonlight shimmer on its tip."/>
 		<attribute key="weight" value="2100"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="smallice"/>
+		<attribute key="shootType" value="energy"/>
 		<attribute key="range" value="3"/>
 	</item>
 	<item id="2187" article="a" name="wand of inferno">
@@ -3805,11 +3806,11 @@
 		<attribute key="shootType" value="fire"/>
 		<attribute key="range" value="3"/>
 	</item>
-	<item id="2188" article="a" name="wand of decay">
-		<attribute key="description" value="It is half-rotten itself and reeks terribly."/>
+	<item id="2188" article="a" name="wand of plague">
+		<attribute key="description" value="Infectious goo covers its tip"/>
 		<attribute key="weight" value="2300"/>
 		<attribute key="weaponType" value="wand"/>
-		<attribute key="shootType" value="death"/>
+		<attribute key="shootType" value="poison"/>
 		<attribute key="range" value="3"/>
 	</item>
 	<item id="2189" article="a" name="wand of cosmic energy">
@@ -3867,7 +3868,6 @@
 		<attribute key="absorbPercentEnergy" value="10"/>
 		<attribute key="absorbPercentFire" value="10"/>
 		<attribute key="absorbPercentEarth" value="10"/>
-		<attribute key="absorbPercentIce" value="10"/>
 	</item>
 	<item id="2199" article="a" name="garlic necklace">
 		<attribute key="weight" value="380"/>
@@ -10247,7 +10247,7 @@
 		<attribute key="weight" value="2200"/>
 		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="distance"/>
-		<attribute key="shootType" value="huntingspear"/>
+		<attribute key="shootType" value="spear"/>
 		<attribute key="range" value="5"/>
 		<attribute key="breakChance" value="10"/>
 		<attribute key="ammoAction" value="moveback"/>
