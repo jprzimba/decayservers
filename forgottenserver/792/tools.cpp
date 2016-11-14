@@ -148,7 +148,7 @@ bool readXMLInteger(xmlNodePtr node, const char* tag, int& value)
 	return false;
 }
 
-#if (defined __WINDOWS__ || defined WIN32) && !defined __GNUC__
+/*#if (defined __WINDOWS__ || defined WIN32) && !defined __GNUC__
 bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value)
 {
 	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
@@ -161,7 +161,7 @@ bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value)
 
 	return false;
 }
-#endif
+#endif*/
 
 bool readXMLInteger64(xmlNodePtr node, const char* tag, uint64_t& value)
 {
@@ -444,7 +444,7 @@ std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLenght)
 		{
 			madeNumber = false;
 			madeCharacter = false;
-			doNumber = (bool)random_range(0, 1);
+			bool doNumber = random_range(0, 1) != 0;
 			if(doNumber)
 			{
 				number = random_range(2, 9);

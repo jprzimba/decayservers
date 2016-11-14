@@ -303,7 +303,7 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 	int intValue;
 	std::string strValue;
 	if(readXMLInteger(node, "speed", intValue) || readXMLInteger(node, "interval", intValue))
-		sb.speed = std::max(1, intValue);
+		sb.speed = std::max<uint32_t>(1, intValue);
 
 	if(readXMLInteger(node, "chance", intValue))
 	{
@@ -379,7 +379,7 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 
 				//need direction spell
 				if(readXMLInteger(node, "spread", intValue))
-					spread = std::max(0, intValue);
+					spread = std::max<int32_t>(0, intValue);
 
 				AreaCombat* area = new AreaCombat();
 				area->setupArea(length, spread);
@@ -844,7 +844,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 							/*if(intValue > 6){
 								SHOW_XML_WARNING("targetdistance greater than 6");
 							}*/
-							mType->targetDistance = std::max(1, intValue);
+							mType->targetDistance = std::max<int32_t>(1, intValue);
 						}
 
 						if(readXMLInteger(tmpNode, "runonhealth", intValue))
@@ -860,7 +860,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			else if(xmlStrcmp(p->name, (const xmlChar*)"targetchange") == 0)
 			{
 				if(readXMLInteger(p, "speed", intValue) || readXMLInteger(p, "interval", intValue))
-					mType->changeTargetSpeed = std::max(1, intValue);
+					mType->changeTargetSpeed = std::max<int32_t>(1, intValue);
 				else
 					SHOW_XML_WARNING("Missing targetchange.speed");
 
@@ -1168,7 +1168,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			else if(xmlStrcmp(p->name, (const xmlChar*)"summons") == 0)
 			{
 				if(readXMLInteger(p, "maxSummons", intValue))
-					mType->maxSummons = std::min(intValue, 100);
+					mType->maxSummons = std::min<int32_t>(intValue, 100);
 				else
 					SHOW_XML_WARNING("Missing summons.maxSummons");
 

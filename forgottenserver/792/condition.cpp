@@ -1334,7 +1334,7 @@ bool ConditionDamage::init()
 			if(startDamage > maxDamage)
 				startDamage = maxDamage;
 			else if(startDamage == 0)
-				startDamage = std::max((int32_t)1, (int32_t)std::ceil(((float)amount / 20.0)));
+				startDamage = std::max<int32_t>((int32_t)1, (int32_t)std::ceil(((float)amount / 20.0)));
 
 			std::list<int32_t> list;
 			ConditionDamage::generateDamageList(amount, startDamage, list);

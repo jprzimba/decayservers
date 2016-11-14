@@ -95,7 +95,7 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 						max = (int32_t)(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb);
 						if(params.useCharges && tool->hasCharges())
 						{
-							int32_t newCharge = std::max((int32_t)0, ((int32_t)tool->getCharges()) - 1);
+							int32_t newCharge = std::max<int32_t>((int32_t)0, ((int32_t)tool->getCharges()) - 1);
 							g_game.transformItem(tool, tool->getID(), newCharge);
 						}
 					}
@@ -935,7 +935,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 					attackValue = tool->getAttack();
 					if(useCharges && tool->hasCharges())
 					{
-						int32_t newCharge = std::max(0, tool->getCharges() - 1);
+						int32_t newCharge = std::max<int32_t>(0, tool->getCharges() - 1);
 						g_game.transformItem(tool, tool->getID(), newCharge);
 					}
 				}
@@ -1109,14 +1109,14 @@ bool AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 	return true;
 }
 
-int32_t round(float v)
+/*int32_t round(float v)
 {
 	int32_t t = (long)std::floor(v);
 	if((v - t) > 0.5)
 		return t + 1;
 	else
 		return t;
-}
+}*/
 
 void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const
 {
@@ -1241,7 +1241,7 @@ void AreaCombat::setupArea(const std::list<uint32_t>& list, uint32_t rows)
 	//NORTH
 	areas[NORTH] = area;
 
-	uint32_t maxOutput = std::max(area->getCols(), area->getRows()) * 2;
+	uint32_t maxOutput = std::max<uint32_t>(area->getCols(), area->getRows()) * 2;
 
 	//SOUTH
 	MatrixArea* southArea = new MatrixArea(maxOutput, maxOutput);
@@ -1337,7 +1337,7 @@ void AreaCombat::setupExtArea(const std::list<uint32_t>& list, uint32_t rows)
 	//NORTH-WEST
 	areas[NORTHWEST] = area;
 
-	uint32_t maxOutput = std::max(area->getCols(), area->getRows()) * 2;
+	uint32_t maxOutput = std::max<uint32_t>(area->getCols(), area->getRows()) * 2;
 
 	//NORTH-EAST
 	MatrixArea* neArea = new MatrixArea(maxOutput, maxOutput);

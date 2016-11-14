@@ -411,7 +411,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		}
 
 		player->lastIP = player->getIP();
-		player->lastLoginSaved = std::max(time(NULL), player->lastLoginSaved + 1);
+		player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
 		m_acceptPackets = true;
 		return true;
 	}
@@ -455,7 +455,7 @@ bool ProtocolGame::connect(uint32_t playerId)
 	player->client->sendAddCreature(player, false);
 	player->sendIcons();
 	player->lastIP = player->getIP();
-	player->lastLoginSaved = std::max(time(NULL), player->lastLoginSaved + 1);
+	player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
 	m_acceptPackets = true;
 	return true;
 }
@@ -940,7 +940,7 @@ void ProtocolGame::GetMapDescription(uint16_t x, uint16_t y, unsigned char z,
 	if(z > 7)
 	{
 		startz = z - 2;
-		endz = std::min(MAP_MAX_LAYERS - 1, z + 2);
+		endz = std::min<int32_t>(MAP_MAX_LAYERS - 1, z + 2);
 		zstep = 1;
 	}
 	else
@@ -1543,7 +1543,7 @@ void ProtocolGame::parseViolationWindow(NetworkMessage& msg)
 	std::string comment = msg.GetString();
 	std::string statement = msg.GetString();
 	msg.GetU16();
-	bool ipBanishment = msg.GetByte();
+	bool ipBanishment = msg.GetByte() != 0;
 	addGameTask(&Game::violationWindow, player->getID(), targetPlayerName, reasonId, actionId, comment, statement, ipBanishment);
 }
 
@@ -2123,6 +2123,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, bool isLogin)
 			{
 				msg->AddByte(0x0A);
 				msg->AddU32(player->getID());
+
 				msg->AddByte(0x32);
 				msg->AddByte(0x00);
 
@@ -2175,7 +2176,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, bool isLogin)
 					std::string tempstring = g_config.getString(ConfigManager::LOGIN_MSG);
 					if(player->getName() != "Account Manager")
 					{
-						if(!player->getLastLoginSaved() > 0)
+						if(!player->getLastLoginSaved() != 0)
 						{
 							tempstring += " Please choose your outfit.";
 							sendOutfitWindow();
@@ -2579,7 +2580,7 @@ void ProtocolGame::AddCreature(NetworkMessage* msg, const Creature* creature, bo
 		msg->AddString(creature->getName());
 	}
 
-	msg->AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max(creature->getMaxHealth(), (int32_t)1)));
+	msg->AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), (int32_t)1)));
 	msg->AddByte((uint8_t)creature->getDirection());
 
 	if(!creature->isInvisible() && !creature->isInGhostMode())
@@ -2707,7 +2708,7 @@ void ProtocolGame::AddCreatureHealth(NetworkMessage* msg,const Creature* creatur
 {
 	msg->AddByte(0x8C);
 	msg->AddU32(creature->getID());
-	msg->AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max(creature->getMaxHealth(), (int32_t)1)));
+	msg->AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), (int32_t)1)));
 }
 
 void ProtocolGame::AddCreatureInvisible(NetworkMessage* msg, const Creature* creature)

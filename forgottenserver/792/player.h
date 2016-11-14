@@ -267,7 +267,7 @@ class Player : public Creature, public Cylinder
 		double getFreeCapacity() const
 		{
 			if(!hasFlag(PlayerFlag_HasInfiniteCapacity))
-				return std::max(0.00, capacity - inventoryWeight);
+				return std::max<double>(0, capacity - inventoryWeight);
 			else
 				return 5000.00;
 		}

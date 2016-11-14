@@ -238,7 +238,7 @@ void BedItem::regeneratePlayer(Player* player) const
 		int32_t regen = 0;
 		if(condition->getTicks() != -1)
 		{
-			regen = std::min((condition->getTicks()/1000), sleptTime) / 30;
+			regen = std::min<int32_t>((condition->getTicks()/1000), sleptTime) / 30;
 			int32_t newRegenTicks = condition->getTicks() - (regen * 30000);
 			if(newRegenTicks <= 0)
 			{
@@ -255,7 +255,7 @@ void BedItem::regeneratePlayer(Player* player) const
 		player->changeMana(regen);
 	}
 
-	int32_t soulRegen = (int32_t)std::max((float)0, ((float)sleptTime/(60*15)));
+	const int32_t soulRegen = sleptTime / (60 * 15);
 	player->changeSoul(soulRegen);
 }
 

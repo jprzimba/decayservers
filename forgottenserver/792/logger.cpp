@@ -22,6 +22,7 @@
 
 #include "logger.h"
 #include <iostream>
+#include <ctime>
 #include "tools.h"
 
 Logger::Logger()

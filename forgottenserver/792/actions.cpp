@@ -361,7 +361,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 {
 	const ItemType& it = Item::items[id];
-	char buffer[40 + it.name.size()];
+	char* buffer = new char[40 + it.name.size()];
 
 	if(count == 1)
 		sprintf(buffer, "Using the last %s...", it.name.c_str());
@@ -563,9 +563,9 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 			LuaScriptInterface::pushPosition(L, posEx, 0);
 		}
 	
-		bool result = m_scriptInterface->callFunction(5);
+		int32_t result = m_scriptInterface->callFunction(5) != 0;
 		m_scriptInterface->releaseScriptEnv();
-		return result;
+		return result != 0;
 	}
 	else
 	{

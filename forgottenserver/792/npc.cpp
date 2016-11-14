@@ -775,7 +775,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 
 	uint32_t delay = SCHEDULER_MINTICKS;
 	if (parameters > 1) {
-		delay = std::max(delay, popNumber(L));
+		delay = std::max<uint32_t>(delay, popNumber(L));
 	}
 
 	std::string msg(popString(L));
@@ -875,7 +875,7 @@ int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 			lua_pushnumber(L, -1);
 		else
 		{
-			int32_t dist = std::max(std::abs(npc_pos.x - thing_pos.x), std::abs(npc_pos.y - thing_pos.y));
+			int32_t dist = std::max<int32_t>(std::abs(npc_pos.x - thing_pos.x), std::abs(npc_pos.y - thing_pos.y));
 			lua_pushnumber(L, dist);
 		}
 	}

@@ -2658,7 +2658,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	if(parameters > 4)
 	{
 		//subtype already supplied, count then is the amount
-		itemCount = std::max((int32_t)1, (int32_t)count);
+		itemCount = std::max<int32_t>((int32_t)1, (int32_t)count);
 	}
 	else if(it.hasSubType())
 	{
@@ -2668,11 +2668,11 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		subType = count;
 	}
 	else
-		itemCount = std::max((int32_t)1, (int32_t)count);
+		itemCount = std::max<int32_t>((int32_t)1, (int32_t)count);
 
 	while(itemCount > 0)
 	{
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
+		int32_t stackCount = std::min<int32_t>((int32_t)100, (int32_t)subType);
 
 		Item* newItem = Item::CreateItem(itemId, stackCount);
 		if(!newItem)
@@ -3297,11 +3297,11 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 		subType = count;
 	}
 	else
-		itemCount = std::max((int32_t)1, (int32_t)count);
+		itemCount = std::max<int32_t>((int32_t)1, (int32_t)count);
 
 	while(itemCount > 0)
 	{
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
+		int32_t stackCount = std::min<int32_t>((int32_t)100, (int32_t)subType);
 		Item* newItem = Item::CreateItem(itemId, stackCount);
 		if(!newItem)
 		{
@@ -6137,11 +6137,11 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 		subType = count;
 	}
 	else
-		itemCount = std::max((int32_t)1, (int32_t)count);
+		itemCount = std::max<int32_t>((int32_t)1, (int32_t)count);
 
 	while(itemCount > 0)
 	{
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
+		int32_t stackCount = std::min<int32_t>((int32_t)100, (int32_t)subType);
 		Item* newItem = Item::CreateItem(itemId, stackCount);
 		if(!newItem)
 		{
@@ -6513,7 +6513,7 @@ int32_t LuaScriptInterface::luaGetItemWeight(lua_State* L)
 	uint32_t itemid = popNumber(L);
 
 	const ItemType& it = Item::items[itemid];
-	double weight = it.weight * std::max(1, count);
+	double weight = it.weight * std::max<double>(1, count);
 	if(precise)
 	{
 		std::stringstream ws;
@@ -6865,7 +6865,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 
 	eventDesc.parameters = params;
 
-	uint32_t delay = std::max((uint32_t)100, popNumber(L));
+	uint32_t delay = std::max<uint32_t>((uint32_t)100, popNumber(L));
 	eventDesc.function = luaL_ref(L, LUA_REGISTRYINDEX);
 
 	eventDesc.scriptId = env->getScriptId();

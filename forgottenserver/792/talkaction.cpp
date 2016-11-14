@@ -174,7 +174,7 @@ int32_t TalkAction::executeSay(Creature* creature, const std::string& words, con
 		lua_pushstring(L, words.c_str());
 		lua_pushstring(L, param.c_str());
 
-		bool result = m_scriptInterface->callFunction(3);
+		bool result = m_scriptInterface->callFunction(3) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;

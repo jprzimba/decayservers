@@ -376,11 +376,11 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 	}
 
 	if( ((flags & FLAG_NOLIMIT) == FLAG_NOLIMIT) ){
-		maxQueryCount = std::max((uint32_t)1, count);
+		maxQueryCount = std::max<uint32_t>((uint32_t)1, count);
 		return RET_NOERROR;
 	}
 
-	int32_t freeSlots = std::max((int32_t)(capacity() - size()), (int32_t)0);
+	int32_t freeSlots = std::max<int32_t>((int32_t)(capacity() - size()), (int32_t)0);
 
 	if(item->isStackable()){
 		uint32_t n = 0;
@@ -633,7 +633,7 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 	}
 
 	if(item->isStackable() && count != item->getItemCount()){
-		int32_t newCount = std::max(0, (int32_t)(item->getItemCount() - count));
+		int32_t newCount = std::max<int32_t>(0, (int32_t)(item->getItemCount() - count));
 		item->setItemCount(newCount);
 
 		//send change to client

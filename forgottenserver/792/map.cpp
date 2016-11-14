@@ -303,12 +303,12 @@ bool Map::removeCreature(Creature* creature)
 void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, bool checkforduplicate, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ)
 {
 	int32_t minoffset = centerPos.z - maxRangeZ;
-	int32_t x1 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.x + minRangeX + minoffset)));
-	int32_t y1 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.y + minRangeY + minoffset)));
+	int32_t x1 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.x + minRangeX + minoffset)));
+	int32_t y1 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.y + minRangeY + minoffset)));
 
 	int32_t maxoffset = centerPos.z - minRangeZ;
-	int32_t x2 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.x + maxRangeX + maxoffset)));
-	int32_t y2 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.y + maxRangeY + maxoffset)));
+	int32_t x2 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.x + maxRangeX + maxoffset)));
+	int32_t y2 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.y + maxRangeY + maxoffset)));
 
 	int32_t startx1 = x1 - (x1 % FLOOR_SIZE);
 	int32_t starty1 = y1 - (y1 % FLOOR_SIZE);
@@ -341,10 +341,10 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, b
 						//get current floor limits
 						offsetZ = centerPos.z - nz;
 
-						floorx1 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.x + minRangeX + offsetZ)));
-						floory1 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.y + minRangeY + offsetZ)));
-						floorx2 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.x + maxRangeX + offsetZ)));
-						floory2 = std::min((int32_t)0xFFFF, std::max((int32_t)0, (centerPos.y + maxRangeY + offsetZ)));
+						floorx1 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.x + minRangeX + offsetZ)));
+						floory1 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.y + minRangeY + offsetZ)));
+						floorx2 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.x + maxRangeX + offsetZ)));
+						floory2 = std::min<int32_t>((int32_t)0xFFFF, std::max<int32_t>((int32_t)0, (centerPos.y + maxRangeY + offsetZ)));
 
 						for(int32_t ly = 0; ly < FLOOR_SIZE; ++ly)
 						{
@@ -422,8 +422,8 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos,
 				//underground
 
 				//8->15
-				minRangeZ = std::max(centerPos.z - 2, 0);
-				maxRangeZ = std::min(centerPos.z + 2, MAP_MAX_LAYERS - 1);
+				minRangeZ = std::max<int32_t>(centerPos.z - 2, 0);
+				maxRangeZ = std::min<int32_t>(centerPos.z + 2, MAP_MAX_LAYERS - 1);
 			}
 			//above ground
 			else if(centerPos.z == 6)
@@ -482,8 +482,8 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 			//underground
 
 			//8->15
-			minRangeZ = std::max(centerPos.z - 2, 0);
-			maxRangeZ = std::min(centerPos.z + 2, MAP_MAX_LAYERS - 1);
+			minRangeZ = std::max<int32_t>(centerPos.z - 2, 0);
+			maxRangeZ = std::min<int32_t>(centerPos.z + 2, MAP_MAX_LAYERS - 1);
 		}
 		//above ground
 		else if(centerPos.z == 6)
@@ -626,7 +626,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 		{
 			if(lastrz != rz)
 			{
-				if(getTile(lastrx, lastry, std::min(lastrz, rz)))
+				if(getTile(lastrx, lastry, std::min<uint8_t>(lastrz, rz)))
 					return false;
 			}
 			lastrx = rx; lastry = ry; lastrz = rz;
@@ -1148,7 +1148,7 @@ int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
 
 int AStarNodes::getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal)
 {
-	int h_diagonal = std::min(std::abs(x - xGoal), std::abs(y - yGoal));
+	int h_diagonal = std::min<int>(std::abs(x - xGoal), std::abs(y - yGoal));
 	int h_straight = (std::abs(x - xGoal) + std::abs(y - yGoal));
 
 	return MAP_DIAGONALWALKCOST * h_diagonal + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);

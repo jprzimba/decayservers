@@ -100,7 +100,7 @@ bool IOLoginData::createAccount(uint32_t accountNumber, std::string newPassword)
 
 	DBQuery query;
 	query << "INSERT INTO `accounts` (`id`, `password`, `type`, `premdays`, `lastday`, `key`, `warnings`, `group_id`) VALUES (" << accountNumber << ", " << db->escapeString(newPassword) << ", 1, 0, 0, 0, 0, 1);";
-	return db->executeQuery(query.str());
+	return db->executeQuery(query.str());	return db->executeQuery(query.str());
 }
 
 bool IOLoginData::getPassword(uint32_t accno, const std::string& name, std::string& password)
@@ -276,7 +276,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	player->bankBalance = (uint64_t)result->getDataLong("balance");
 
 	player->setSex((PlayerSex_t)result->getDataInt("sex"));
-	player->level = std::max((uint32_t)1, (uint32_t)result->getDataInt("level"));
+	player->level = std::max<uint32_t>((uint32_t)1, (uint32_t)result->getDataInt("level"));
 
 	uint64_t currExpCount = Player::getExpForLevel(player->level);
 	uint64_t nextExpCount = Player::getExpForLevel(player->level + 1);
@@ -321,12 +321,9 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	player->health = result->getDataInt("health");
 	player->healthMax = result->getDataInt("healthmax");
 
-	if(player->accessLevel > 0)
+	if(player->accessLevel != 0)
 	{
-		if(acc.accountType > 4)
-			player->defaultOutfit.lookType = 9;
-		else
-			player->defaultOutfit.lookType = 75;
+		player->defaultOutfit.lookType = 75;
 	}
 	else
 		player->defaultOutfit.lookType = result->getDataInt("looktype");
@@ -1150,7 +1147,7 @@ bool IOLoginData::createCharacter(uint32_t accountNumber, std::string characterN
 	if(level > 1)
 		exp = Player::getExpForLevel(level);
 
-	uint32_t tmpLevel = std::min((uint32_t)7, level - 1);
+	uint32_t tmpLevel = std::min<uint32_t>((uint32_t)7, level - 1);
 	if(tmpLevel > 0)
 	{
 		healthMax += rookVoc->getHPGain() * tmpLevel;

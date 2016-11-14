@@ -140,7 +140,8 @@ Item* Item::CreateItem(PropStream& propStream)
 		else if(_id >= 7063 && _id <= 7066)
 			_id = 7062;
 
-		if((bool)random_range(0, 1))
+		bool rr = random_range(0, 1) != 0;
+		if(rr)
 		{
 			switch(_id)
 			{
@@ -741,7 +742,7 @@ bool Item::hasProperty(enum ITEMPROPERTY prop) const
 double Item::getWeight() const
 {
 	if(isStackable())
-		return items[id].weight * std::max((int32_t)1, (int32_t)count);
+		return items[id].weight * std::max<int32_t>((int32_t)1, (int32_t)count);
 
 	return items[id].weight;
 }

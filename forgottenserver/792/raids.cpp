@@ -323,7 +323,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 		RaidEvent* newRaidEvent = getNextRaidEvent();
 		if(newRaidEvent)
 		{
-			uint32_t ticks = (uint32_t)std::max(((uint32_t)RAID_MINTICKS), ((int32_t)newRaidEvent->getDelay() - raidEvent->getDelay()));
+			uint32_t ticks = (uint32_t)std::max<uint32_t>(((uint32_t)RAID_MINTICKS), ((int32_t)newRaidEvent->getDelay() - raidEvent->getDelay()));
 			nextEventEvent = Scheduler::getScheduler().addEvent(createSchedulerTask(ticks, boost::bind(&Raid::executeRaidEvent, this, newRaidEvent)));
 		}
 		else
@@ -756,7 +756,7 @@ bool ScriptEvent::executeEvent()
 		
 		m_scriptInterface.pushFunction(m_scriptId);
 	
-		bool result = m_scriptInterface.callFunction(0);
+		bool result = m_scriptInterface.callFunction(0) != 0;
 		m_scriptInterface.releaseScriptEnv();
 
 		return result;

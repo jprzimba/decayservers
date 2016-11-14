@@ -23,6 +23,7 @@
 
 #include "enums.h"
 #include <string>
+#include <algorithm>
 #include <map>
 #include "item.h"
 
@@ -44,7 +45,7 @@ class Vocation
 		uint32_t getHealthGainTicks() const {return gainHealthTicks;}
 		uint32_t getHealthGainAmount() const {return gainHealthAmount;}
 
-		uint16_t getSoulMax() const {return std::min((uint32_t)soulMax, (uint32_t)255);}
+		uint16_t getSoulMax() const {return std::min<uint32_t>((uint32_t)soulMax, (uint32_t)255);}
 		uint16_t getSoulGainTicks() const {return gainSoulTicks;}
 
 		uint32_t getAttackSpeed() const {return attackSpeed;}

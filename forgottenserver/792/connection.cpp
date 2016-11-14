@@ -409,7 +409,9 @@ bool Connection::closingConnection()
 			m_socket.close(error);
 			m_socketClosed = true;
 			if(error)
+			{
 				PRINT_ASIO_ERROR("Close");
+			}
 		}
 
 		if(m_pendingRead == 0)

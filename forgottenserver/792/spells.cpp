@@ -354,7 +354,7 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 		lua_pushnumber(L, cid);
 		m_scriptInterface->pushVariant(L, var);
 
-		bool result = m_scriptInterface->callFunction(2);
+		bool result = m_scriptInterface->callFunction(2) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;
@@ -1169,7 +1169,7 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 		lua_pushnumber(L, cid);
 		m_scriptInterface->pushVariant(L, var);
 
-		bool result = m_scriptInterface->callFunction(2);
+		bool result = m_scriptInterface->callFunction(2) != 0;
 		m_scriptInterface->releaseScriptEnv();
 		
 		return result;
@@ -2067,7 +2067,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 		{
 			if(g_config.getBool(ConfigManager::REMOVE_RUNE_CHARGES))
 			{
-				int32_t newCharge = std::max((int32_t)0, ((int32_t)item->getCharges()) - 1);
+				int32_t newCharge = std::max<int32_t>((int32_t)0, ((int32_t)item->getCharges()) - 1);
 				g_game.transformItem(item, item->getID(), newCharge);
 			}
 		}
@@ -2129,7 +2129,7 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 		lua_pushnumber(L, cid);
 		m_scriptInterface->pushVariant(L, var);
 
-		bool result = m_scriptInterface->callFunction(2);
+		bool result = m_scriptInterface->callFunction(2) != 0;
 		m_scriptInterface->releaseScriptEnv();
 		
 		return result;

@@ -1246,7 +1246,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	uint32_t n = 0;
 
 	if(item->isStackable())
-		m = std::min((uint32_t)count, maxQueryCount);
+		m = std::min<uint32_t>((uint32_t)count, maxQueryCount);
 	else
 		m = maxQueryCount;
 
@@ -1268,7 +1268,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	{
 		if(toItem && toItem->getID() == item->getID())
 		{
-			n = std::min((uint32_t)100 - toItem->getItemCount(), m);
+			n = std::min<uint32_t>((uint32_t)100 - toItem->getItemCount(), m);
 			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 			updateItem = toItem;
 		}
@@ -1343,7 +1343,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	uint32_t n = 0;
 
 	if(item->isStackable())
-		m = std::min((uint32_t)item->getItemCount(), maxQueryCount);
+		m = std::min<uint32_t>((uint32_t)item->getItemCount(), maxQueryCount);
 	else
 		m = maxQueryCount;
 
@@ -1356,7 +1356,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		{
 			if(toItem && toItem->getID() == item->getID())
 			{
-				n = std::min((uint32_t)100 - toItem->getItemCount(), m);
+				n = std::min<uint32_t>((uint32_t)100 - toItem->getItemCount(), m);
 				toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 			}
 			
@@ -1704,13 +1704,13 @@ void Game::addMoney(Cylinder* cylinder, int32_t money, uint32_t flags /*= 0*/)
 	{
 		do
 		{
-			Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min(100, crys));
+			Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min<uint16_t>(100, crys));
 
 			ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
 			if(ret != RET_NOERROR)
 				internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 
-			crys -= std::min(100, crys);
+			crys -= std::min<int32_t>(100, crys);
 		}
 		while(crys > 0);
 	}
@@ -2762,7 +2762,7 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	if(!tradeItem)
 		return false;
 
-	int32_t lookDistance = std::max(std::abs(player->getPosition().x - tradeItem->getPosition().x),
+	int32_t lookDistance = std::max<int32_t>(std::abs(player->getPosition().x - tradeItem->getPosition().x),
 		std::abs(player->getPosition().y - tradeItem->getPosition().y));
 
 	char buffer[475];
@@ -2899,7 +2899,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 		lookDistance = -1;
 	else
 	{
-		lookDistance = std::max(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
+		lookDistance = std::max<int32_t>(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
 		if(playerPos.z != thingPos.z)
 			lookDistance = lookDistance + 9 + 6;
 	}
@@ -3535,7 +3535,7 @@ void Game::addCreatureCheck(Creature* creature)
 	if(creature->checkCreatureVectorIndex != 0)
 		return; //Already in a vector
 
-	size_t min = std::numeric_limits<size_t>::max();
+	size_t min = (std::numeric_limits<size_t>::max)();
 	size_t insertindex = 0;
 	for(size_t i = 0; i < EVENT_CREATURECOUNT; ++i)
 	{
@@ -3762,8 +3762,8 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		{
 			if(target->hasCondition(CONDITION_MANASHIELD) && combatType != COMBAT_UNDEFINEDDAMAGE)
 			{
-				int32_t manaDamage = std::min(target->getMana(), damage);
-				damage = std::max((int32_t)0, damage - manaDamage);
+				int32_t manaDamage = std::min<int32_t>(target->getMana(), damage);
+				damage = std::max<int32_t>((int32_t)0, damage - manaDamage);
 				if(manaDamage != 0)
 				{
 					target->drainMana(attacker, manaDamage);
@@ -3786,7 +3786,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				}
 			}
 
-			damage = std::min(target->getHealth(), damage);
+			damage = std::min<int32_t>(target->getHealth(), damage);
 			if(damage > 0)
 			{
 				target->drainHealth(attacker, combatType, damage);
@@ -3909,7 +3909,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		if(attacker && target && attacker->defaultOutfit.lookFeet == target->defaultOutfit.lookFeet && g_config.getBool(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET))
 			return false;
 
-		int32_t manaLoss = std::min(target->getMana(), -manaChange);
+		int32_t manaLoss = std::min<int32_t>(target->getMana(), -manaChange);
 		BlockType_t blockType = target->blockHit(attacker, COMBAT_MANADRAIN, manaLoss);
 		
 		if(blockType != BLOCK_NONE)

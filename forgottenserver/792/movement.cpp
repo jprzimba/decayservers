@@ -877,7 +877,7 @@ uint32_t MoveEvent::executeStep(Creature* creature, Item* item, const Position& 
 		LuaScriptInterface::pushPosition(L, pos, 0);
 		LuaScriptInterface::pushPosition(L, creature->getLastPosition());
 	
-		bool result = m_scriptInterface->callFunction(4);
+		bool result = m_scriptInterface->callFunction(4) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;
@@ -924,7 +924,7 @@ uint32_t MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 		LuaScriptInterface::pushThing(L, item, itemid);
 		lua_pushnumber(L, slot);
 	
-		bool result = m_scriptInterface->callFunction(3);
+		bool result = m_scriptInterface->callFunction(3) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;
@@ -973,7 +973,7 @@ uint32_t MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position
 		LuaScriptInterface::pushThing(L, tileItem, itemidTile);
 		LuaScriptInterface::pushPosition(L, pos, 0);
 	
-		bool result = m_scriptInterface->callFunction(3);
+		bool result = m_scriptInterface->callFunction(3) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;

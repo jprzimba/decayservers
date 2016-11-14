@@ -84,7 +84,7 @@ class Weapon : public Event
 
 		const uint32_t getReqLevel() const {return level;}
 		const uint32_t getReqMagLv() const {return magLevel;}
-		const bool hasExhaustion() const {return exhaustion;}
+		const bool hasExhaustion() const {return exhaustion != 0;}
 		const bool isPremium() const {return premium;}
 		const bool isWieldedUnproperly() const {return wieldUnproperly;}
 

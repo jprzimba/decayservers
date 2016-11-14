@@ -21,6 +21,7 @@
 #include "otpch.h"
 
 #include "fileloader.h"
+#include <algorithm>
 
 FileLoader::FileLoader()
 {
@@ -93,7 +94,7 @@ bool FileLoader::openFile(const char* filename, bool write, bool caching /*= fal
 					m_use_cache = true;
 					fseek(m_file, 0, SEEK_END);
 					int32_t file_size = ftell(m_file);
-					m_cache_size = std::min(32768, std::max(file_size/20, 8192)) & ~0x1FFF;
+					m_cache_size = std::min<uint32_t>(32768, std::max<uint32_t>(file_size/20, 8192)) & ~0x1FFF;
 				}
 
 				//parse nodes
@@ -395,7 +396,7 @@ inline bool FileLoader::readBytes(unsigned char* buffer, int32_t size, int32_t p
 			m_cache_offset = pos - m_cached_data[i].base;
 			
 			//get maximum read block size and calculate remaining bytes
-			reading = std::min(remain, m_cached_data[i].size - m_cache_offset);
+			reading = std::min<uint32_t>(remain, m_cached_data[i].size - m_cache_offset);
 			remain = remain - reading;
 
 			//read it

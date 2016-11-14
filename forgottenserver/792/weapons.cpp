@@ -337,7 +337,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 	else
 		trueRange = range;
 
-	if(std::max(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y)) > trueRange)
+	if(std::max<uint32_t>(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y)) > trueRange)
 		return 0;
 
 	if(!player->hasFlag(PlayerFlag_IgnoreWeaponCheck))
@@ -478,12 +478,12 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 	{
 		if(ammoAction == AMMOACTION_REMOVECOUNT)
 		{
-			int32_t newCount = std::max(0, item->getItemCount() - 1);
+			int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 			g_game.transformItem(item, item->getID(), newCount);
 		}
 		else if(ammoAction == AMMOACTION_REMOVECHARGE)
 		{
-			int32_t newCharge = std::max((int32_t)0, ((int32_t)item->getCharges()) - 1);
+			int32_t newCharge = std::max<int32_t>((int32_t)0, ((int32_t)item->getCharges()) - 1);
 			g_game.transformItem(item, item->getID(), newCharge);
 		}
 		else if(ammoAction == AMMOACTION_MOVE)
@@ -491,7 +491,7 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 		else if(ammoAction == AMMOACTION_MOVEBACK){ /* do nothing */ }
 		else if(item->hasCharges())
 		{
-			int32_t newCharge = std::max((int32_t)0, ((int32_t)item->getCharges()) - 1);
+			int32_t newCharge = std::max<int32_t>((int32_t)0, ((int32_t)item->getCharges()) - 1);
 			g_game.transformItem(item, item->getID(), newCharge);
 		}
 	}
@@ -535,7 +535,7 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 		lua_pushnumber(L, cid);
 		m_scriptInterface->pushVariant(L, var);
 
-		bool result = m_scriptInterface->callFunction(2);
+		bool result = m_scriptInterface->callFunction(2) != 0;
 		m_scriptInterface->releaseScriptEnv();
 		
 		return result;
@@ -667,7 +667,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) co
 int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackSkill = player->getWeaponSkill(item);
-	int32_t attackValue = std::max((int32_t)0, ((int32_t)item->getAttack() - elementDamage));
+	int32_t attackValue = std::max<int32_t>((int32_t)0, ((int32_t)item->getAttack() - elementDamage));
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(attackSkill, attackValue, attackFactor);
@@ -796,20 +796,20 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		uint32_t skill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
-		uint32_t distance = std::max(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y));
+		uint32_t distance = std::max<uint32_t>(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y));
 
 		if(maxHitChance == 75)
 		{
 			//chance for one-handed weapons
 			switch(distance)
 			{
-				case 1: chance = (uint32_t)((float)std::min(skill, (uint32_t)74)) + 1; break;
-				case 2: chance = (uint32_t)((float)2.4 * std::min(skill, (uint32_t)28)) + 8; break;
-				case 3: chance = (uint32_t)((float)1.55 * std::min(skill, (uint32_t)45)) + 6; break;
-				case 4: chance = (uint32_t)((float)1.25 * std::min(skill, (uint32_t)58)) + 3; break;
-				case 5: chance = (uint32_t)((float)std::min(skill, (uint32_t)74)) + 1; break;
-				case 6: chance = (uint32_t)((float)0.8 * std::min(skill, (uint32_t)90)) + 3; break;
-				case 7: chance = (uint32_t)((float)0.7 * std::min(skill, (uint32_t)104)) + 2; break;
+				case 1: chance = (uint32_t)((float)std::min<uint32_t>(skill, (uint32_t)74)) + 1; break;
+				case 2: chance = (uint32_t)((float)2.4 * std::min<uint32_t>(skill, (uint32_t)28)) + 8; break;
+				case 3: chance = (uint32_t)((float)1.55 * std::min<uint32_t>(skill, (uint32_t)45)) + 6; break;
+				case 4: chance = (uint32_t)((float)1.25 * std::min<uint32_t>(skill, (uint32_t)58)) + 3; break;
+				case 5: chance = (uint32_t)((float)std::min<uint32_t>(skill, (uint32_t)74)) + 1; break;
+				case 6: chance = (uint32_t)((float)0.8 * std::min<uint32_t>(skill, (uint32_t)90)) + 3; break;
+				case 7: chance = (uint32_t)((float)0.7 * std::min<uint32_t>(skill, (uint32_t)104)) + 2; break;
 				default: chance = hitChance; break;
 			}
 		}
@@ -818,13 +818,13 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			//formula for two-handed weapons
 			switch(distance)
 			{
-				case 1: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)74)) + 1; break;
-				case 2: chance = (uint32_t)((float)3.2 * std::min(skill, (uint32_t)28)); break;
-				case 3: chance = (uint32_t)((float)2.0 * std::min(skill, (uint32_t)45)); break;
-				case 4: chance = (uint32_t)((float)1.55 * std::min(skill, (uint32_t)58)); break;
-				case 5: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)74)) + 1; break;
-				case 6: chance = (uint32_t)((float)1.0 * std::min(skill, (uint32_t)90)); break;
-				case 7: chance = (uint32_t)((float)1.0 * std::min(skill, (uint32_t)90)); break;
+				case 1: chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, (uint32_t)74)) + 1; break;
+				case 2: chance = (uint32_t)((float)3.2 * std::min<uint32_t>(skill, (uint32_t)28)); break;
+				case 3: chance = (uint32_t)((float)2.0 * std::min<uint32_t>(skill, (uint32_t)45)); break;
+				case 4: chance = (uint32_t)((float)1.55 * std::min<uint32_t>(skill, (uint32_t)58)); break;
+				case 5: chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, (uint32_t)74)) + 1; break;
+				case 6: chance = (uint32_t)((float)1.0 * std::min<uint32_t>(skill, (uint32_t)90)); break;
+				case 7: chance = (uint32_t)((float)1.0 * std::min<uint32_t>(skill, (uint32_t)90)); break;
 				default: chance = hitChance; break;
 			}
 		}
@@ -832,13 +832,13 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		{
 			switch(distance)
 			{
-				case 1: chance = (uint32_t)((float)1.35 * std::min(skill, (uint32_t)73)) + 1; break;
-				case 2: chance = (uint32_t)((float)3.2 * std::min(skill, (uint32_t)30)) + 4; break;
-				case 3: chance = (uint32_t)((float)2.05 * std::min(skill, (uint32_t)48)) + 2; break;
-				case 4: chance = (uint32_t)((float)1.5 * std::min(skill, (uint32_t)65)) + 2; break;
-				case 5: chance = (uint32_t)((float)1.35 * std::min(skill, (uint32_t)73)) + 1; break;
-				case 6: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)87)) - 4; break;
-				case 7: chance = (uint32_t)((float)1.1 * std::min(skill, (uint32_t)90)) + 1; break;
+				case 1: chance = (uint32_t)((float)1.35 * std::min<uint32_t>(skill, (uint32_t)73)) + 1; break;
+				case 2: chance = (uint32_t)((float)3.2 * std::min<uint32_t>(skill, (uint32_t)30)) + 4; break;
+				case 3: chance = (uint32_t)((float)2.05 * std::min<uint32_t>(skill, (uint32_t)48)) + 2; break;
+				case 4: chance = (uint32_t)((float)1.5 * std::min<uint32_t>(skill, (uint32_t)65)) + 2; break;
+				case 5: chance = (uint32_t)((float)1.35 * std::min<uint32_t>(skill, (uint32_t)73)) + 1; break;
+				case 6: chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, (uint32_t)87)) - 4; break;
+				case 7: chance = (uint32_t)((float)1.1 * std::min<uint32_t>(skill, (uint32_t)90)) + 1; break;
 				default: chance = hitChance; break;
 			}
 		}
@@ -899,7 +899,7 @@ void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) cons
 {
 	if(ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && random_range(1, 100) < breakChance)
 	{
-		int32_t newCount = std::max(0, item->getItemCount() - 1);
+		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		g_game.transformItem(item, item->getID(), newCount);
 	}
 	else

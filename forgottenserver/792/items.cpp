@@ -1011,7 +1011,7 @@ bool Items::loadFromXml()
 												if(tmpStrValue == "ticks")
 												{
 													if(readXMLInteger(fieldAttributesNode, "value", intValue))
-														ticks = std::max(0, intValue);
+														ticks = std::max<uint32_t>(0, intValue);
 												}
 
 												if(tmpStrValue == "count")

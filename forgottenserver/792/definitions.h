@@ -65,6 +65,8 @@ enum passwordType_t
 #  endif
 #endif
 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #if defined __WINDOWS__ || defined WIN32
 
 #if defined _MSC_VER && defined NDEBUG
@@ -92,7 +94,7 @@ enum passwordType_t
 //Windows XP	0x0501
 //Windows 2003	0x0502
 //Windows Vista	0x0600
-#define _WIN32_WINNT 0x0501
+#define _WIN32_WINNT 0x0601
 
 #ifdef __GNUC__
 	#include <ext/hash_map>
@@ -104,18 +106,19 @@ enum passwordType_t
 #else
 	typedef unsigned long long uint64_t;
 	
-	#define _WIN32_WINNT 0x0500
+	#define _WIN32_WINNT 0x0601
 
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif
 
-	#include <hash_map>
-	#include <hash_set>
+	#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
+	#include <unordered_map>
+	#include <unordered_set>
 	#include <limits>
 	#include <assert.h>
-	#define OTSERV_HASH_MAP stdext::hash_map
-	#define OTSERV_HASH_SET stdext::hash_set
+	#define OTSERV_HASH_MAP std::tr1::unordered_map
+	#define OTSERV_HASH_SET std::tr1::unordered_set
 
 	#include <cstring>
 	inline int strcasecmp(const char *s1, const char *s2)
@@ -128,12 +131,12 @@ enum passwordType_t
 		return ::_strnicmp(s1, s2, n);
 	}
 
-	typedef signed long long int64_t;
+	/*typedef signed long long int64_t;
 	typedef unsigned long uint32_t;
 	typedef signed long int32_t;
 	typedef unsigned short uint16_t;
 	typedef signed short int16_t;
-	typedef unsigned char uint8_t;
+	typedef unsigned char uint8_t;*/
 	
 	#define ATOI64 _atoi64
 

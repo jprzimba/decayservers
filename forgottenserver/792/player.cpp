@@ -599,13 +599,13 @@ int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 	{
 		case PLAYERINFO_LEVEL: return level; break;
 		case PLAYERINFO_LEVELPERCENT: return levelPercent; break;
-		case PLAYERINFO_MAGICLEVEL: return std::max((int32_t)0, ((int32_t)magLevel + varStats[STAT_MAGICPOINTS])); break;
+		case PLAYERINFO_MAGICLEVEL: return std::max<int32_t>((int32_t)0, ((int32_t)magLevel + varStats[STAT_MAGICPOINTS])); break;
 		case PLAYERINFO_MAGICLEVELPERCENT: return magLevelPercent; break;
 		case PLAYERINFO_HEALTH: return health; break;
-		case PLAYERINFO_MAXHEALTH: return std::max((int32_t)1, ((int32_t)healthMax + varStats[STAT_MAXHITPOINTS])); break;
+		case PLAYERINFO_MAXHEALTH: return std::max<int32_t>((int32_t)1, ((int32_t)healthMax + varStats[STAT_MAXHITPOINTS])); break;
 		case PLAYERINFO_MANA: return mana; break;
-		case PLAYERINFO_MAXMANA: return std::max((int32_t)0, ((int32_t)manaMax + varStats[STAT_MAXMANAPOINTS])); break;
-		case PLAYERINFO_SOUL: return std::max((int32_t)0, ((int32_t)soul + varStats[STAT_SOULPOINTS])); break;
+		case PLAYERINFO_MAXMANA: return std::max<int32_t>((int32_t)0, ((int32_t)manaMax + varStats[STAT_MAXMANAPOINTS])); break;
+		case PLAYERINFO_SOUL: return std::max<int32_t>((int32_t)0, ((int32_t)soul + varStats[STAT_SOULPOINTS])); break;
 		default: return 0; break;
 	}
 	return 0;
@@ -616,7 +616,7 @@ int32_t Player::getSkill(skills_t skilltype, skillsid_t skillinfo) const
 	int32_t n = skills[skilltype][skillinfo];
 	if(skillinfo == SKILL_LEVEL)
 		n += varSkills[skilltype];
-	return std::max((int32_t)0, (int32_t)n);
+	return std::max<int32_t>((int32_t)0, (int32_t)n);
 }
 
 void Player::addSkillAdvance(skills_t skill, uint32_t count)
@@ -2042,7 +2042,7 @@ void Player::death()
 			magLevel--;
 		}
 
-		manaSpent -= std::max((int32_t)0, (int32_t)lostMana);
+		manaSpent -= std::max<int32_t>((int32_t)0, (int32_t)lostMana);
 		magLevelPercent = Player::getPercentLevel(manaSpent, vocation->getReqMana(magLevel + 1));
 
 		//Skill loss
@@ -2073,7 +2073,7 @@ void Player::death()
 					break;
 				}
 			}
-			skills[i][SKILL_TRIES] = std::max((int32_t)0, (int32_t)(skills[i][SKILL_TRIES] - lostSkillTries));
+			skills[i][SKILL_TRIES] = std::max<int32_t>((int32_t)0, (int32_t)(skills[i][SKILL_TRIES] - lostSkillTries));
 		}
 		//
 
@@ -2150,9 +2150,9 @@ void Player::preSave()
 			while(level > 1 && experience < Player::getExpForLevel(level))
 			{
 				--level;
-				healthMax = std::max((int32_t)0, (healthMax - (int32_t)vocation->getHPGain()));
-				manaMax = std::max((int32_t)0, (manaMax - (int32_t)vocation->getManaGain()));
-				capacity = std::max((double)0, (capacity - (double)vocation->getCapGain()));
+				healthMax = std::max<int32_t>((int32_t)0, (healthMax - (int32_t)vocation->getHPGain()));
+				manaMax = std::max<int32_t>((int32_t)0, (manaMax - (int32_t)vocation->getManaGain()));
+				capacity = std::max<double>((double)0, (capacity - (double)vocation->getCapGain()));
 			}
 			blessings = 0;
 			mana = manaMax;
@@ -2813,7 +2813,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 		}
 		else
 		{
-			int newCount = std::max(0, (int32_t)(item->getItemCount() - count));
+			int newCount = std::max<int32_t>(0, (int32_t)(item->getItemCount() - count));
 			item->setItemCount(newCount);
 
 			const ItemType& it = Item::items[item->getID()];
@@ -3127,7 +3127,7 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 			uint32_t b = getLevel();
 			uint64_t c = getExperience();
 
-			uint64_t result = std::max((uint64_t)0, (uint64_t)std::floor(getDamageRatio(attacker) * std::max((double)0, ((double)(1 - (((double)a / b))))) * 0.05 * c));
+			uint64_t result = std::max<uint64_t>((uint64_t)0, (uint64_t)std::floor(getDamageRatio(attacker) * std::max<double>((double)0, ((double)(1 - (((double)a / b))))) * 0.05 * c));
 			return (result * g_config.getNumber(ConfigManager::RATE_EXPERIENCE));
 		}
 	}
@@ -3452,9 +3452,9 @@ void Player::changeMana(int32_t manaChange)
 void Player::changeSoul(int32_t soulChange)
 {
 	if(soulChange > 0)
-		soul += std::min(soulChange, soulMax - soul);
+		soul += std::min<int32_t>(soulChange, soulMax - soul);
 	else
-		soul = std::max((int32_t)0, soul + soulChange);
+		soul = std::max<int32_t>((int32_t)0, soul + soulChange);
 	sendStats();
 }
 

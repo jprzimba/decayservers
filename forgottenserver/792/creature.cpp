@@ -200,7 +200,7 @@ void Creature::onThink(uint32_t interval)
 
 	if(blockTicks >= 1000)
 	{
-		blockCount = std::min((uint32_t)blockCount + 1, (uint32_t)2);
+		blockCount = std::min<uint32_t>((uint32_t)blockCount + 1, (uint32_t)2);
 		blockTicks = 0;
 	}
 
@@ -581,7 +581,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 			{
 				const Position pos = (*cit)->getPosition();
 				if((std::abs(pos.z - newPos.z) > 2) || 
-					(std::max(std::abs((newPos.x) - pos.x), std::abs((newPos.y - 1) - pos.y)) > 30))
+					(std::max<int32_t>(std::abs((newPos.x) - pos.x), std::abs((newPos.y - 1) - pos.y)) > 30))
 				{
 					despawnList.push_back((*cit));
 				}
@@ -855,9 +855,9 @@ Item* Creature::getCorpse()
 void Creature::changeHealth(int32_t healthChange)
 {
 	if(healthChange > 0)
-		health += std::min(healthChange, getMaxHealth() - health);
+		health += std::min<int32_t>(healthChange, getMaxHealth() - health);
 	else
-		health = std::max((int32_t)0, health + healthChange);
+		health = std::max<int32_t>((int32_t)0, health + healthChange);
 
 	g_game.addCreatureHealth(this);
 }
@@ -865,9 +865,9 @@ void Creature::changeHealth(int32_t healthChange)
 void Creature::changeMana(int32_t manaChange)
 {
 	if(manaChange > 0)
-		mana += std::min(manaChange, getMaxMana() - mana);
+		mana += std::min<int32_t>(manaChange, getMaxMana() - mana);
 	else
-		mana = std::max((int32_t)0, mana + manaChange);
+		mana = std::max<int32_t>((int32_t)0, mana + manaChange);
 }
 
 void Creature::drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage)
@@ -1494,7 +1494,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 	if(fpp.clearSight && !g_game.isSightClear(testPos, targetPos, true))
 		return false;
 
-	int32_t testDist = std::max(std::abs(targetPos.x - testPos.x), std::abs(targetPos.y - testPos.y));
+	int32_t testDist = std::max<int32_t>(std::abs(targetPos.x - testPos.x), std::abs(targetPos.y - testPos.y));
 	if(fpp.maxTargetDist == 1)
 	{
 		if(testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist)
