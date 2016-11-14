@@ -16,6 +16,9 @@
 ]
 
 [v1
+	Server charges
+		* Game protocol 7.9x support with 7.92 items.
+
 	Revbattlesys
 		* New Formula of Armor/Defense
 		* Weapons configurable in XML and Lua, Wands, Rods, Burst Arrows and Poison Arrows

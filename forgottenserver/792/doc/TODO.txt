@@ -16,5 +16,8 @@
 ]
 
 [ LIST
-	* Add alot usefull TFS 0.3/0.4 features.
+	* Add latest TFS database (done)
+	* Updated data folder, removing non and outdated or not supported 7.9.
+	* Add alot usefull TFS 0.3/0.4 features
+	* Add stamina system
 ]
