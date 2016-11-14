@@ -881,7 +881,7 @@ bool Houses::payHouses()
 			}
 			else
 			{
-				if (house->getPayRentWarnings() < 7)
+				if(house->getPayRentWarnings() < 7)
 				{
 					int32_t daysLeft = 7 - house->getPayRentWarnings();
 					Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);

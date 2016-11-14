@@ -246,7 +246,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	DBQuery query;
 	DBResult* result;
 
-	query << "SELECT `id`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `redskulltime`, `redskull`, `guildnick`, `rank_id`, `town_id`, `balance` FROM `players` WHERE `name` " << db->getStringComparer() << db->escapePatternString(name) << " LIMIT 1;";
+	query << "SELECT `id`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `redskulltime`, `redskull`, `guildnick`, `rank_id`, `town_id`, `balance`, `stamina` FROM `players` WHERE `name` " << db->getStringComparer() << db->escapePatternString(name) << " LIMIT 1;";
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -274,6 +274,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	}
 
 	player->bankBalance = (uint64_t)result->getDataLong("balance");
+	player->staminaMinutes = result->getDataInt("stamina");
 
 	player->setSex((PlayerSex_t)result->getDataInt("sex"));
 	player->level = std::max<uint32_t>((uint32_t)1, (uint32_t)result->getDataInt("level"));
@@ -709,6 +710,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 	}
 	query << "`lastlogout` = " << player->getLastLogout() << ", ";
 	query << "`balance` = " << player->bankBalance << ", ";
+	query << "`stamina` = " << player->getStaminaMinutes() << ", ";
 	query << "`blessings` = " << player->blessings;
 	if(g_config.getBool(ConfigManager::INGAME_GUILD_SYSTEM))
 	{

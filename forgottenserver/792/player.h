@@ -151,6 +151,10 @@ class Player : public Creature, public Cylinder
 			return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level))/3ULL;
 		}
 
+		uint16_t getStaminaMinutes() const {return staminaMinutes;}
+		void regenerateStamina(int32_t offlineTime);
+		void useStamina();
+
 		uint32_t getGuildId() const {return guildId;}
 		void setGuildId(uint32_t newGuildId) {guildId = newGuildId;}
 
@@ -379,7 +383,7 @@ class Player : public Creature, public Cylinder
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onKilledCreature(Creature* target);
-		virtual void onGainExperience(uint64_t gainExperience);
+		virtual void onGainExperience(uint64_t gainExp, Creature* target);
 		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType);
 		virtual void onBlockHit(BlockType_t blockType);
 		virtual void onChangeZone(ZoneType_t zone);
@@ -565,7 +569,7 @@ class Player : public Creature, public Cylinder
 		void sendRuleViolationCancel(const std::string& name)
 			{if(client) client->sendRuleViolationCancel(name);}
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
-			{if (client) client->sendAddMarker(pos, markType, desc);}
+			{if(client) client->sendAddMarker(pos, markType, desc);}
 
 		void receivePing() {if(npings > 0) npings--;}
 
@@ -605,7 +609,8 @@ class Player : public Creature, public Cylinder
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
-		void addExperience(uint64_t exp);
+		void gainExperience(uint64_t exp, Creature* source);
+		void addExperience(Creature* source, uint64_t exp, bool applyStaminaChange = false, bool applyMultiplier = false);
 
 		void updateInventoryWeight();
 
@@ -711,6 +716,8 @@ class Player : public Creature, public Cylinder
 
 		time_t lastLoginSaved;
 		time_t lastLogout;
+		time_t nextUseStaminaTime;
+
 		Position loginPosition;
 		uint32_t lastIP;
 
@@ -759,6 +766,8 @@ class Player : public Creature, public Cylinder
 		LightInfo itemsLight;
 
 		OutfitList m_playerOutfits;
+		
+		uint16_t staminaMinutes;
 
 		//read/write storage data
 		uint32_t windowTextId;

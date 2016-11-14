@@ -59,6 +59,7 @@ class ConfigManager
 			AIMBOT_HOTKEY_ENABLED,
 			SHOW_GAMEMASTERS_ONLINE,
 			OPTIMIZE_DATABASE,
+			STAMINA_SYSTEM,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

@@ -298,7 +298,7 @@ class Creature : public AutoID, virtual public Thing
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onAttackedCreatureKilled(Creature* target);
 		virtual void onKilledCreature(Creature* target);
-		virtual void onGainExperience(uint64_t gainExperience);
+		virtual void onGainExperience(uint64_t gainExp, Creature* target);
 		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType);
 		virtual void onBlockHit(BlockType_t blockType);
 		virtual void onChangeZone(ZoneType_t zone);

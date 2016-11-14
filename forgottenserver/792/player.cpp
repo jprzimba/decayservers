@@ -180,6 +180,9 @@ Creature()
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	playerCount++;
 #endif
+
+	staminaMinutes = 3360;//2520
+	nextUseStaminaTime = 0;
 }
 
 Player::~Player()
@@ -1751,41 +1754,79 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(uint64_t exp)
+void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChange/* = false*/, bool applyMultiplier/* = false*/)
 {
-	experience += exp;
-	int32_t prevLevel = getLevel();
-	int32_t newLevel = getLevel();
-	while(experience >= Player::getExpForLevel(newLevel + 1))
+	uint64_t currLevelExp = Player::getExpForLevel(level);
+	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
+	uint64_t rawExp = exp;
+	if(currLevelExp >= nextLevelExp)
 	{
-		++newLevel;
+		//player has reached max level
+		levelPercent = 0;
+		sendStats();
+		return;
+	}
+
+	if(applyMultiplier)
+		exp *= g_game.getExperienceStage(level);
+
+	if(applyStaminaChange && g_config.getBool(ConfigManager::STAMINA_SYSTEM))
+	{
+		if(staminaMinutes > 3240)//2400 end of bonus stamina
+		{
+			if(isPremium())
+				exp *= 1.5;
+		}
+		else if(staminaMinutes <= 840)
+			exp *= 0.5;
+	}
+
+	if(exp == 0)
+		return;
+
+	experience += exp;
+	uint32_t prevLevel = level;
+	while (experience >= nextLevelExp)
+	{
+		++level;
 		healthMax += vocation->getHPGain();
 		health += vocation->getHPGain();
 		manaMax += vocation->getManaGain();
 		mana += vocation->getManaGain();
 		capacity += vocation->getCapGain();
+
+		currLevelExp = nextLevelExp;
+		nextLevelExp = Player::getExpForLevel(level + 1);
+		if(currLevelExp >= nextLevelExp)
+		{
+			//player has reached max level
+			break;
+		}
 	}
 
-	if(prevLevel != newLevel)
+	if(prevLevel != level)
 	{
-		level = newLevel;
-		updateBaseSpeed();
+		health = healthMax;
+		mana = manaMax;
 
-		int32_t newSpeed = getBaseSpeed();
-		setBaseSpeed(newSpeed);
+		updateBaseSpeed();
+		setBaseSpeed(getBaseSpeed());
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
 
-		char levelMsg[45];
-		sprintf(levelMsg, "You advanced from Level %d to Level %d.", prevLevel, newLevel);
-		sendTextMessage(MSG_EVENT_ADVANCE, levelMsg);
+		std::ostringstream ss;
+		ss << "You advanced from Level " << prevLevel << " to Level " << level << '.';
+		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 	}
 
-	uint64_t currLevelExp = Player::getExpForLevel(level);
-	uint32_t newPercent = Player::getPercentLevel(experience - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
-	if(newPercent != levelPercent)
+	if(nextLevelExp > currLevelExp)
+	{
+		uint32_t newPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
 		levelPercent = newPercent;
+	}
+	else 
+		levelPercent = 0;
 
 	sendStats();
 }
@@ -3392,26 +3433,40 @@ void Player::onKilledCreature(Creature* target)
 	}
 }
 
-void Player::onGainExperience(uint64_t gainExperience)
+void Player::gainExperience(uint64_t gainExp, Creature* source)
 {
-	if(hasFlag(PlayerFlag_NotGainExperience)){
-		gainExperience = 0;
+	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0) {
+		return;
 	}
 
-	Creature::onGainExperience(gainExperience);
+	uint64_t oldExperience = experience;
+	addExperience(source, gainExp, true, true);
 
-	if(gainExperience > 0)
-	{
-		//soul regeneration
-		if(gainExperience >= getLevel())
-		{
-			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
-			condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
-			condition->setParam(CONDITIONPARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
-			addCondition(condition);
+	//soul regeneration
+	// TODO: move to Lua script (onGainExperience event)
+	int64_t gainedExperience = experience - oldExperience;
+	if(gainedExperience >= level) {
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
+		condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
+		condition->setParam(CONDITIONPARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
+		addCondition(condition);
+	}
+}
+
+void Player::onGainExperience(uint64_t gainExp, Creature* target)
+{
+	if(hasFlag(PlayerFlag_NotGainExperience)) {
+		return;
+	}
+
+	if(target) {
+		if(gainExp > 0 && target->getMonster()) {
+			useStamina();
 		}
-		addExperience(gainExperience);
 	}
+
+	Creature::onGainExperience(gainExp, target);
+	gainExperience(gainExp, target);
 }
 
 bool Player::isImmune(CombatType_t type) const
@@ -4270,4 +4325,45 @@ Shields_t Player::getShieldClient(Player* player)
 			shield = SHIELD_INVITED;
 	}
 	return shield;
+}
+
+void Player::regenerateStamina(int32_t offlineTime)
+{
+	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM))
+		return;
+
+	offlineTime -= 600;
+	if(offlineTime < 180)
+		return;
+
+	int16_t regainStaminaMinutes = offlineTime / 180;
+	staminaMinutes += regainStaminaMinutes;
+}
+
+void Player::useStamina()
+{
+	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM) || staminaMinutes == 0)
+		return;
+
+	time_t currentTime = time(NULL);
+	if(currentTime > nextUseStaminaTime)
+	{
+		time_t timePassed = currentTime - nextUseStaminaTime;
+		if(timePassed > 60)
+		{
+			if(staminaMinutes > 2)
+				staminaMinutes -= 2;
+			else
+				staminaMinutes = 0;
+
+			nextUseStaminaTime = currentTime + 120;
+		}
+		else
+		{
+			--staminaMinutes;
+			nextUseStaminaTime = currentTime + 60;
+		}
+
+		sendStats();
+	}
 }

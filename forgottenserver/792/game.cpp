@@ -672,6 +672,15 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 	Player* player = creature->getPlayer();
 	if(player)
 	{
+		int32_t offlineTime;
+		if(player->getLastLogout() != 0)
+		{
+			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+			offlineTime = std::min<int32_t>(time(NULL) - player->getLastLogout(), 86400 * 21);
+		}
+		else
+			offlineTime = 0;
+
 		Condition* conditionMuted = player->getCondition(CONDITION_MUTED, CONDITIONID_DEFAULT);
 		if(conditionMuted && conditionMuted->getTicks() > 0)
 		{
@@ -713,6 +722,12 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 		}
 		else if(player->isPromoted())
 			player->setVocation(player->vocation->getFromVocation());
+
+		int16_t oldStaminaMinutes = player->getStaminaMinutes();
+		player->regenerateStamina(offlineTime);
+
+		if(player->getStaminaMinutes() != oldStaminaMinutes)
+			player->sendStats();
 	}
 
 	addCreatureCheck(creature);
@@ -4779,15 +4794,13 @@ bool Game::violationWindow(uint32_t playerId, std::string targetPlayerName, int3
 
 uint64_t Game::getExperienceStage(uint32_t level)
 {
-	if(stagesEnabled)
-	{
-		if(useLastStageLevel && level >= lastStageLevel)
-			return stages[lastStageLevel];
-		else
-			return stages[level];
-	}
-	else
+	if(!stagesEnabled)
 		return g_config.getNumber(ConfigManager::RATE_EXPERIENCE);
+
+	if(useLastStageLevel && level >= lastStageLevel)
+		return stages[lastStageLevel];
+
+	return stages[level];
 }
 
 bool Game::loadExperienceStages()

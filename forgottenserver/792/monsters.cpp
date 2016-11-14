@@ -28,6 +28,7 @@
 #include "luascript.h"
 #include "weapons.h"
 #include "configmanager.h"
+#include "game.h"
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -35,6 +36,7 @@
 extern Spells* g_spells;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
+extern Game g_game;
 
 MonsterType::MonsterType()
 {
@@ -129,24 +131,35 @@ uint32_t Monsters::getLootRandom()
 
 void MonsterType::createLoot(Container* corpse)
 {
-	for(LootItems::const_iterator it = lootItems.begin(); it != lootItems.end() && (corpse->capacity() - corpse->size() > 0); it++)
+	if(g_config.getNumber(ConfigManager::RATE_LOOT) == 0)
 	{
-		Item* tmpItem = createLootItem(*it);
-		if(tmpItem)
+		corpse->__startDecaying();
+		return;
+	}
+		
+	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
+	if(!owner || owner->getStaminaMinutes() > 840)
+	{
+		for(LootItems::const_iterator it = lootItems.begin(); it != lootItems.end() && (corpse->capacity() - corpse->size() > 0); it++)
 		{
-			//check containers
-			if(Container* container = tmpItem->getContainer())
+			Item* tmpItem = createLootItem(*it);
+			if(tmpItem)
 			{
-				createLootContainer(container, *it);
-				if(container->size() == 0)
-					delete container;
+				//check containers
+				if(Container* container = tmpItem->getContainer())
+				{
+					createLootContainer(container, *it);
+					if(container->size() == 0)
+						delete container;
+					else
+						corpse->__internalAddThing(tmpItem);
+				}
 				else
 					corpse->__internalAddThing(tmpItem);
 			}
-			else
-				corpse->__internalAddThing(tmpItem);
 		}
 	}
+
 	corpse->__startDecaying();
 }
 

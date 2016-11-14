@@ -1,13 +1,13 @@
 	-- The Forgotten Server Config
 
 	-- SQL Conneciton
-	sqlType = mysql
+	sqlType = "mysql"
 	passwordType = "plain"
-	mysqlHost = "localhost"
-	mysqlUser = "root"
+	mysqlHost = "127.0.0.1"
+	mysqlUser = "otserv"
 	mysqlPass = ""
 	mysqlPort = 3306
-	mysqlDatabase = "theforgottenserver"
+	mysqlDatabase = "otserv"
 	sqliteDatabase = "forgottenserver.s3db"
 	startupDatabaseOptimization = "yes"
 
@@ -22,7 +22,10 @@
 	newPlayerMagicLevel = 0
 	generateAccountNumber = "no"
 
-	-- Banishments
+	-- Skulls
+	killsToRedSkull = 3
+	timeToDecreaseFrags = 24 * 60 * 60 * 1000
+	whiteSkullTime = 15 * 60 * 1000
 	broadcastBanishments = "yes"
 	banDays = 7
 	finalBanDays = 30
@@ -32,14 +35,12 @@
 	worldType = "pvp"
 	hotkeyAimbotEnabled = "yes"
 	protectionLevel = 1
-	killsToRedSkull = 3
 	pzLocked = 60000
 	deathLosePercent = 10
 	criticalHitChance = 7
 	removeAmmoWhenUsingDistanceWeapon = "yes"
 	removeChargesFromRunes = "yes"
-	timeToDecreaseFrags = 24 * 60 * 60 * 1000
-	whiteSkullTime = 15 * 60 * 1000
+	useStaminaSystem = "yes"
 
 	-- Commands
 	displayGamemastersWithOnlineCommand = "no"
@@ -47,7 +48,7 @@
 	-- Connection Config
 	ip = "127.0.0.1"
 	port = 7171
-	loginTries = 5
+	loginTries = 0
 	retryTimeout = 30 * 1000
 	loginTimeout = 60 * 1000
 	maxPlayers = "1000"
@@ -71,9 +72,6 @@
 	housePriceEachSQM = 1000
 	houseRentPeriod = "never"
 
-	-- Idle
-	kickIdlePlayerAfterMinutes = 15
-
 	-- Item Usage
 	timeBetweenActions = 200
 	timeBetweenExActions = 1000
@@ -83,9 +81,6 @@
 	mapAuthor = "Xidaozu"
 	randomizeTiles = "yes"
 	mapStorageType = "relational"
-
-	-- Messaging
-	maxMessageBuffer = 4
 
 	-- Premium Account
 	freePremium = "no"
@@ -118,6 +113,10 @@
 	-- Startup
 	displayOnOrOffAtCharlist = "no"
 	defaultPriority = "high"
+
+	-- Misc
+	maxMessageBuffer = 4
+	kickIdlePlayerAfterMinutes = 15
 
 	-- Status
 	ownerName = ""

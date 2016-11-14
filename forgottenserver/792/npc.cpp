@@ -489,7 +489,7 @@ void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::
 			const Position& pos = creature->getPosition();
 			if(canSee(myPos))
 			{
-				if ((pos.x >= myPos.x - talkRadius) && (pos.x <= myPos.x + talkRadius) &&
+				if((pos.x >= myPos.x - talkRadius) && (pos.x <= myPos.x + talkRadius) &&
 					(pos.y >= myPos.y - talkRadius) && (pos.y <= myPos.y + talkRadius))
 				{
 					NpcState* npcState = getState(player);
@@ -774,9 +774,8 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	int32_t parameters = lua_gettop(L);
 
 	uint32_t delay = SCHEDULER_MINTICKS;
-	if (parameters > 1) {
+	if(parameters > 1)
 		delay = std::max<uint32_t>(delay, popNumber(L));
-	}
 
 	std::string msg(popString(L));
 	

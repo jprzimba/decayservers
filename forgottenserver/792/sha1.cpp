@@ -135,12 +135,12 @@ bool SHA1::Result(unsigned *message_digest_array)
 {
 	int i;									// Counter
 
-	if (Corrupted)
+	if(Corrupted)
 	{
 		return false;
 	}
 
-	if (!Computed)
+	if(!Computed)
 	{
 		PadMessage();
 		Computed = true;
@@ -175,12 +175,12 @@ bool SHA1::Result(unsigned *message_digest_array)
 void SHA1::Input(	const unsigned char	*message_array,
 					unsigned 			length)
 {
-	if (!length)
+	if(!length)
 	{
 		return;
 	}
 
-	if (Computed || Corrupted)
+	if(Computed || Corrupted)
 	{
 		Corrupted = true;
 		return;
@@ -192,17 +192,17 @@ void SHA1::Input(	const unsigned char	*message_array,
 
 		Length_Low += 8;
 		Length_Low &= 0xFFFFFFFF;				// Force it to 32 bits
-		if (Length_Low == 0)
+		if(Length_Low == 0)
 		{
 			Length_High++;
 			Length_High &= 0xFFFFFFFF;			// Force it to 32 bits
-			if (Length_High == 0)
+			if(Length_High == 0)
 			{
 				Corrupted = true;				// Message is too long
 			}
 		}
 
-		if (Message_Block_Index == 64)
+		if(Message_Block_Index == 64)
 		{
 			ProcessMessageBlock();
 		}
@@ -523,7 +523,7 @@ void SHA1::PadMessage()
 	 *	the initial padding bits and length.  If so, we will pad the
 	 *	block, process it, and then continue padding into a second block.
 	 */
-	if (Message_Block_Index > 55)
+	if(Message_Block_Index > 55)
 	{
 		Message_Block[Message_Block_Index++] = 0x80;
 		while(Message_Block_Index < 64)

@@ -1090,7 +1090,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	//negative offset means that the action taken place is on a lower floor than ourself
 	int32_t offsetz = myPos.z - z;
 
-	if ((x >= myPos.x - 8 + offsetz) && (x <= myPos.x + 9 + offsetz) &&
+	if((x >= myPos.x - 8 + offsetz) && (x <= myPos.x + 9 + offsetz) &&
 		(y >= myPos.y - 6 + offsetz) && (y <= myPos.y + 7 + offsetz))
 		return true;
 
@@ -2621,7 +2621,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage* msg)
 	msg->AddByte(player->getMagicLevel());
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
-	msg->AddU16(0xD20); //stamina minutes
+	msg->AddU16(player->getStaminaMinutes()); //stamina minutes 0xD20
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage* msg)

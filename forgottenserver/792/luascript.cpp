@@ -825,13 +825,13 @@ void LuaScriptInterface::executeTimerEvent(uint32_t eventIndex)
 int32_t LuaScriptInterface::luaErrorHandler(lua_State* L)
 {
 	lua_getfield(L, LUA_GLOBALSINDEX, "debug");
-	if (!lua_istable(L, -1))
+	if(!lua_istable(L, -1))
 	{
 		lua_pop(L, 1);
 		return 1;
 	}
 	lua_getfield(L, -1, "traceback");
-	if (!lua_isfunction(L, -1))
+	if(!lua_isfunction(L, -1))
 	{
 		lua_pop(L, 2);
 		return 1;
@@ -4164,7 +4164,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
 	{
 		if(exp > 0)
 		{
-			player->addExperience(exp);
+			player->addExperience(NULL, exp);
 			lua_pushboolean(L, true);
 		}
 		else

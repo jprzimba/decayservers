@@ -1063,8 +1063,7 @@ double Creature::getDamageRatio(Creature* attacker) const
 
 uint64_t Creature::getGainedExperience(Creature* attacker) const
 {
-	uint64_t lostExperience = getLostExperience();
-	return attacker->getPlayer() ? ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_game.getExperienceStage(attacker->getPlayer()->getLevel()))) : ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_config.getNumber(ConfigManager::RATE_EXPERIENCE)));
+	return std::floor(getDamageRatio(attacker) * getLostExperience());
 }
 
 bool Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
@@ -1148,7 +1147,7 @@ void Creature::onAttackedCreatureKilled(Creature* target)
 	if(target != this)
 	{
 		uint64_t gainExp = target->getGainedExperience(this);
-		onGainExperience(gainExp);
+		onGainExperience(gainExp, target);
 	}
 }
 
@@ -1163,14 +1162,14 @@ void Creature::onKilledCreature(Creature* target)
 		eventKill->executeOnKill(this, target);
 }
 
-void Creature::onGainExperience(uint64_t gainExp)
+void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 {
 	if(gainExp > 0)
 	{
 		if(getMaster())
 		{
 			gainExp = gainExp / 2;
-			getMaster()->onGainExperience(gainExp);
+			getMaster()->onGainExperience(gainExp, target);
 		}
 
 		std::stringstream strExp;
