@@ -104,6 +104,7 @@ s_defcommands Commands::defined_commands[] =
 	{"/serverdiag", &Commands::serverDiag},
 #endif
 	{"/ghost", &Commands::ghost},
+	{"/save",&Commands::saveGame},
 
 	//player commands - TODO: make them talkactions
 	{"!online", &Commands::whoIsOnline},
@@ -1515,5 +1516,17 @@ bool Commands::ghost(Creature* creature, const std::string& cmd, const std::stri
 		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
 		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 	}
+	return true;
+}
+
+bool Commands::saveGame(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+		
+	g_game.saveGameState(true);
+	if(player)
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Save server completed.");
 	return true;
 }
