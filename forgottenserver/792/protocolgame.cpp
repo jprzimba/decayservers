@@ -2621,7 +2621,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage* msg)
 	msg->AddByte(player->getMagicLevel());
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
-	msg->AddU16(player->getStaminaMinutes()); //stamina minutes 0xD20
+	msg->AddU16(0xD20); //stamina minutes 0xD20
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage* msg)
@@ -2648,7 +2648,7 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage* msg, const Creature* creatur
 	SpeakClasses type, std::string text, uint16_t channelId, uint32_t time /*= 0*/)
 {
 	msg->AddByte(0xAA);
-	msg->AddU32(0x00000000);
+	msg->AddU32(0);//0x00000000
 
 	//Do not add name for anonymous channel talk
 	if(type != SPEAK_CHANNEL_R2)

@@ -34,14 +34,6 @@
 	<rune name="Magic Wall" id="2293" allowfaruse="1" charges="3" lvl="32" maglv="9" exhaustion="1000" aggressive="0" blocktype="all" script="support/magic wall rune.lua"/>
 	<rune name="Paralyze" id="2278" allowfaruse="1" charges="1" lvl="54" maglv="18" exhaustion="2000" mana="1400" needtarget="1" blocktype="solid" script="support/paralyze rune.lua"/>
 
-	<!-- Custom Runes -->
-	<rune name="Polymorph" id="2270" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="custom/polymorph.lua"/>
-	<rune name="Combustion" id="2269" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="custom/combustion.lua"/>
-	<rune name="Energy Arrow" id="2281" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="attack/energy wave.lua"/>
-	<rune name="Magic Prison" id="2272" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="custom/magic prison.lua"/>
-	<rune name="Stealth" id="2283" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="support/invisible.lua"/>
-	<rune name="Drunkness" id="2267" charges="1" maglv="20" exhaustion="2000" blocktype="solid" allowfaruse="1" script="custom/drunk.lua"/>
-
 	<!-- Attack Spells -->
 	<instant name="Death Strike" words="exori mort" lvl="16" mana="20" prem="1" direction="1" exhaustion="2000" needlearn="0" script="attack/death strike.lua">
 		<vocation name="Sorcerer" /> 
