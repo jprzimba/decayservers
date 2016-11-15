@@ -60,7 +60,6 @@ class NpcScriptInterface : public LuaScriptInterface
 		static int32_t luaActionTurn(lua_State* L);
 		static int32_t luaActionFollow(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
-		static int32_t luaCreatureGetName2(lua_State* L);
 		static int32_t luaCreatureGetPos(lua_State* L);
 		static int32_t luaSelfGetPos(lua_State* L);
 		static int32_t luagetDistanceTo(lua_State* L);
@@ -299,7 +298,7 @@ class Npc : public Creature
 		virtual const std::string& getName() const {return name;}
 		virtual const std::string& getNameDescription() const {return name;}
 
-		void doSay(std::string msg, uint32_t addDelay);
+		void doSay(std::string msg);
 		void doMove(Direction dir);
 		void doTurn(Direction dir);
 		void doMoveTo(Position pos);
@@ -357,11 +356,11 @@ class Npc : public Creature
 		bool floorChange;
 		bool attackable;
 		bool isIdle;
-		bool hasBusyReply;
-		bool hasScriptedFocus;
 		int32_t talkRadius;
 		int32_t idleTime;
 		int32_t focusCreature;
+
+		uint32_t npcTalkEvent;
 
 		typedef std::map<std::string, std::list<ListItem> > ItemListMap;
 		ItemListMap itemListMap;

@@ -1,5 +1,8 @@
 function isPlayerPremiumCallback(cid)
-	return isPremium(cid) == TRUE and true or false
+	if getPlayerPremiumDays(cid) > 0 then
+		return true
+	end
+	return false
 end
 
 function msgcontains(message, keyword)

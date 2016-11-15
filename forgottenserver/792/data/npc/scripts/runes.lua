@@ -2,45 +2,89 @@ local keywordHandler = KeywordHandler:new()
 local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
+function onCreatureAppear(cid)		npcHandler:onCreatureAppear(cid)		end
+function onCreatureDisappear(cid)	npcHandler:onCreatureDisappear(cid)		end
 function onCreatureSay(cid, type, msg)	npcHandler:onCreatureSay(cid, type, msg)	end
-function onThink()						npcHandler:onThink()						end
+function onThink()			npcHandler:onThink()				end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
 
-shopModule:addBuyableItem({'wand of voodoo', 'voodoo'},			8828, 22000,	'wand of voodoo')
-shopModule:addBuyableItem({'wand of inferno', 'inferno'},		2187, 15000,	'wand of inferno')
-shopModule:addBuyableItem({'wand of decay', 'decay'},			2188, 5000,		'wand of decay')
-shopModule:addBuyableItem({'wand of draconia', 'plague'}, 		8827, 7500,		'wand of draconia')
-shopModule:addBuyableItem({'wand of starstorm', 'starstorm'},	8826, 18000,	'wand of starstorm')
-shopModule:addBuyableItem({'wand of cosmic energy', 'cosmic'},	2189, 10000,	'wand of cosmic energy')
-shopModule:addBuyableItem({'wand of vortex', 'vortex'},			2190, 500,		'wand of vortex')
-shopModule:addBuyableItem({'wand of dragonbreath', 'dragon'},	2191, 1000,		'wand of dragonbreath')
-shopModule:addBuyableItem({'northwind rod', 'northwind'},		8817, 7500,		'northwind rod')
-shopModule:addBuyableItem({'underworld rod', 'underworld'},		8816, 22000,	'underworld rod')
-shopModule:addBuyableItem({'hailstorm rod', 'hailstorm rod'},	2183, 15000,	'hailstorm rod')
-shopModule:addBuyableItem({'terra rod', 'terra'},				2181, 10000,	'terra rod')
-shopModule:addBuyableItem({'snakebite rod', 'snakebite'},		2182, 500,		'snakebite rod')
-shopModule:addBuyableItem({'necrotic rod', 'necrotic'},			2185, 5000,		'necrotic rod')
-shopModule:addBuyableItem({'moonlight rod', 'moonlight'},		2186, 1000,		'moonlight rod')
-shopModule:addBuyableItem({'springsprout rod', 'springsprout'},	8818, 18000,	'springsprout rod')
-shopModule:addBuyableItem({'ultimate health potion', 'uhp'},	8377, 310,		'ultimate health potion')
-shopModule:addBuyableItem({'great health potion', 'ghp'},		7591, 190,		'great health potion')
-shopModule:addBuyableItem({'strong health potion', 'shp'},		7588, 100,		'strong health potion')
-shopModule:addBuyableItem({'health potion', 'hp'},				7618, 45,		'health potion')
-shopModule:addBuyableItem({'great spirit potion', 'gsp'},		8376, 190,		'great spirit potion')
-shopModule:addBuyableItem({'great mana potion', 'gmp'},			7590, 120,		'great mana potion')
-shopModule:addBuyableItem({'strong mana potion', 'smp'},		7589, 80,		'strong mana potion')
-shopModule:addBuyableItem({'mana potion', 'mp'},				7620, 50,		'mana potion')
-shopModule:addBuyableItem({'light wand', 'lightwand'},			2163, 500,		'magic light wand')
-shopModule:addBuyableItem({'heavy magic missile', 'hmm'},		2311, 300,	20,	'heavy magic missile rune')
-shopModule:addBuyableItem({'great fireball', 'gfb'},			2304, 500,	20,	'great fireball rune')
-shopModule:addBuyableItem({'explo', 'xpl'},						2313, 800,	20,	'explosion rune')
-shopModule:addBuyableItem({'ultimate healing', 'uh'},			2273, 700,	20,	'ultimate healing rune')
-shopModule:addBuyableItem({'sudden death', 'sd'},				2268, 1000,	20,	'sudden death rune')
-shopModule:addBuyableItem({'blank', 'rune'},					2260, 10,		'blank rune')
-shopModule:addBuyableItem({'spellbook'}, 						2175, 150, 		'spellbook')
+shopModule:addBuyableItem({'light wand', 'lightwand'}, 		2163, 500, 		'magic light wand')
+shopModule:addBuyableItem({'mana fluid', 'manafluid'}, 		2006, 55, 	7, 	'mana fluid')
+shopModule:addBuyableItem({'life fluid', 'lifefluid'}, 		2006, 50, 	10,	'life fluid')
+shopModule:addBuyableItem({'blank'}, 				2260, 10, 		'blank rune')
 
+shopModule:addBuyableItem({'wand of inferno', 'inferno'}, 				2187, 15000, 	'wand of inferno')
+shopModule:addBuyableItem({'wand of plague', 'plague'}, 				2188, 5000, 	'wand of plague')
+shopModule:addBuyableItem({'wand of cosmic energy', 'cosmic energy'}, 			2189, 10000,	'wand of cosmic energy')
+shopModule:addBuyableItem({'wand of vortex', 'vortex'}, 				2190, 500, 	'wand of vortex')
+shopModule:addBuyableItem({'wand of dragonbreath', 'dragonbreath'}, 			2191, 1000, 	'wand of dragonbreath')
+
+shopModule:addBuyableItem({'quagmire rod', 'quagmire'}, 				2181, 10000, 	'quagmire rod')
+shopModule:addBuyableItem({'snakebite rod', 'snakebite'}, 				2182, 500, 	'snakebite rod')
+shopModule:addBuyableItem({'tempest rod', 'tempest'}, 					2183, 15000, 	'tempest rod')
+shopModule:addBuyableItem({'volcanic rod', 'volcanic'}, 				2185, 5000, 	'volcanic rod')
+shopModule:addBuyableItem({'moonlight rod', 'moonlight'}, 				2186, 1000,   	'moonlight rod')
+
+function creatureSayCallback(cid, type, msg)
+	if(npcHandler.focus ~= cid) then
+		return FALSE
+	end
+	if msgcontains(msg, 'runes') then
+		selfSay("I sell heavy magic missiles runes, explosion runes, great fireball runes, ultimate healing runes, sudden death runes, mana runes and blank runes.")
+		talk_state = 0
+	elseif msgcontains(msg, 'heavy magic missile') or msgcontains(msg, 'hmm') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 15*charges
+		selfSay('Do you want a heavy magic missile rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2311
+	elseif msgcontains(msg, 'great fireball') or msgcontains(msg, 'gfb') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 25*charges
+		selfSay('Do you want a great fireball rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2304
+	elseif msgcontains(msg, 'explosion') or msgcontains(msg, 'xpl') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 40*charges
+		selfSay('Do you want an explosion rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2313
+	elseif msgcontains(msg, 'ultimate healing') or msgcontains(msg, 'uh') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 35*charges
+		selfSay('Do you want an ultimate healing rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2273
+	elseif msgcontains(msg, 'sudden death') or msgcontains(msg, 'sd') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 50*charges
+		selfSay('Do you want a sudden death rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2268
+	elseif msgcontains(msg, 'mana') and ShopModule:getCount(msg) <= 100 then
+		charges = ShopModule:getCount(msg)
+		price = 50*charges
+		selfSay('Do you want a mana rune with '..charges..' charges for '..price..' gold coins?')
+		talk_state = 1
+		itemid = 2284
+	elseif msgcontains(msg, 'yes') and talk_state == 1 then
+		if doPlayerRemoveMoney(cid, price) == TRUE then
+			doPlayerGiveItem(cid, itemid, 1, charges)
+			selfSay("You have bought this rune.")
+			talk_state = 0
+		else
+			selfSay("You don't have enough money.")
+			talk_state = 0
+		end
+	elseif msgcontains(msg, 'no') and talk_state == 1 then
+		selfSay("Then not.")
+		talk_state = 0
+	end
+	return TRUE
+end
+
+npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

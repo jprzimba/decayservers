@@ -89,6 +89,7 @@ Npc::Npc(const std::string& _name) :
 
 Npc::~Npc()
 {
+	Scheduler::getScheduler().stopEvent(npcTalkEvent);
 	reset();
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -119,8 +120,6 @@ void Npc::reset()
 	walkTicks = 1500;
 	floorChange = false;
 	attackable = false;
-	hasBusyReply = false;
-	hasScriptedFocus = false;
 	focusCreature = 0;
 	isIdle = true;
 	talkRadius = 2;
@@ -525,10 +524,11 @@ void Npc::onThink(uint32_t interval)
 		m_npcEventHandler->onThink();
 }
 
-void Npc::doSay(std::string msg, uint32_t delay)
+void Npc::doSay(std::string msg)
 {
-	Scheduler::getScheduler().addEvent(createSchedulerTask(delay,
-		boost::bind(&Game::internalCreatureSay, &g_game, this, SPEAK_SAY, msg)));
+	if(npcTalkEvent)
+		Scheduler::getScheduler().stopEvent(npcTalkEvent);
+	npcTalkEvent = Scheduler::getScheduler().addEvent(createSchedulerTask(500, boost::bind(&Game::internalCreatureSay, &g_game, this, SPEAK_SAY, msg)));
 }
 
 void Npc::doMove(Direction dir)
@@ -706,25 +706,14 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
 	lua_register(m_luaState, "selfGetPosition", NpcScriptInterface::luaSelfGetPos);
 	lua_register(m_luaState, "creatureGetName", NpcScriptInterface::luaCreatureGetName);
-	lua_register(m_luaState, "creatureGetName2", NpcScriptInterface::luaCreatureGetName2);
 	lua_register(m_luaState, "creatureGetPosition", NpcScriptInterface::luaCreatureGetPos);
 	lua_register(m_luaState, "getDistanceTo", NpcScriptInterface::luagetDistanceTo);
 	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScriptInterface::luaSetNpcFocus);
 	lua_register(m_luaState, "getNpcCid", NpcScriptInterface::luaGetNpcCid);
 	lua_register(m_luaState, "getNpcPos", NpcScriptInterface::luaGetNpcPos);
 	lua_register(m_luaState, "getNpcState", NpcScriptInterface::luaGetNpcState);
-	lua_register(m_luaState, "setNpcState", NpcScriptInterface::luaSetNpcState);
 	lua_register(m_luaState, "getNpcName", NpcScriptInterface::luaGetNpcName);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
-}
-
-int32_t NpcScriptInterface::luaCreatureGetName2(lua_State* L)
-{
-	//creatureGetName2(name) - returns creature id
-	popString(L);
-	reportErrorFunc("Deprecated function.");
-	lua_pushnil(L);
-	return 1;
 }
 
 int32_t NpcScriptInterface::luaCreatureGetName(lua_State* L)
@@ -770,12 +759,8 @@ int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
 
 int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 {
-    //selfSay(words, <optional> delay)
+    //selfSay(words)
 	int32_t parameters = lua_gettop(L);
-
-	uint32_t delay = SCHEDULER_MINTICKS;
-	if(parameters > 1)
-		delay = std::max<uint32_t>(delay, popNumber(L));
 
 	std::string msg(popString(L));
 	
@@ -783,7 +768,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 
 	Npc* npc = env->getNpc();
 	if(npc)
-		npc->doSay(msg, delay);
+		npc->doSay(msg);
 
 	return 0;
 }
@@ -898,11 +883,6 @@ int32_t NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 	if(npc)
 	{
 		Creature* creature = env->getCreatureByUID(cid);
-		if(creature)
-			npc->hasScriptedFocus = true;
-		else
-			npc->hasScriptedFocus = false;
-
 		npc->setCreatureFocus(creature);
 	}
 	return 0;

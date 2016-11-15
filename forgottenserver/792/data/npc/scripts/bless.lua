@@ -45,11 +45,10 @@ function creatureSayCallback(cid, type, msg)
 			else
 				npcHandler:say("You need a premium account to buy blessings.")
 			end
-			talkState = 0
 		elseif msgcontains(msg, 'no') then
 			npcHandler:say("Then not.")
-			talkState = 0
 		end
+		talkState = 0
 	end
 	return TRUE
 end
