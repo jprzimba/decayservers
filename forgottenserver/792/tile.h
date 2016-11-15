@@ -189,6 +189,8 @@ class Tile : public Cylinder
 
 		virtual bool isRemoved() const {return false;}
 
+		int32_t onRemoveTileItem();
+
 	private:
 		void onAddTileItem(Item* item);
 		void onUpdateTileItem(uint32_t index, Item* oldItem,

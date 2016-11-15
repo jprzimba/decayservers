@@ -132,7 +132,9 @@ class QTreeNode
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
 		static QTreeLeafNode* getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y);
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
-		
+
+		virtual int32_t onRemoveTileItem();
+
 	protected:
 		bool m_isLeaf;
 		QTreeNode* m_child[4];
@@ -152,7 +154,9 @@ class QTreeLeafNode : public QTreeNode
 	
 		QTreeLeafNode* stepSouth(){return m_leafS;}
 		QTreeLeafNode* stepEast(){return m_leafE;}
-	
+
+		virtual int32_t onRemoveTileItem();
+
 	protected:
 		static bool newLeaf;
 		QTreeLeafNode* m_leafS;
@@ -260,6 +264,8 @@ class Map
 
 		bool getPathMatching(const Creature* creature, std::list<Direction>& dirList,
 			const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
+
+		int32_t onRemoveTileItem();
 
 		MapError_t getLastError() {return lasterrortype;}
 		int32_t getErrorCode() {return lasterrorcode;}

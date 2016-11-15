@@ -99,7 +99,7 @@ s_defcommands Commands::defined_commands[] =
 	{"/raid", &Commands::forceRaid},
 	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
-	{"/clean", &Commands::clean},
+	{"/clean", &Commands::cleanMap},
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	{"/serverdiag", &Commands::serverDiag},
 #endif
@@ -1405,16 +1405,13 @@ bool Commands::playerKills(Creature* creature, const std::string& cmd, const std
 	return false;
 }
 
-bool Commands::clean(Creature* creature, const std::string& cmd, const std::string& param)
+bool Commands::cleanMap(Creature* creature, const std::string& cmd, const std::string& param)
 {
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		uint32_t count = g_game.getMap()->clean();
-		char info[32];
-		sprintf(info, "Deleted %u item%s.", count, (count != 1 ? "s" : ""));
-		player->sendCancel(info);
-	}
+	std::stringstream info;
+	int32_t count = g_game.map->onRemoveTileItem();
+	info << "Clean completed. Collected " << count << (count==1? " item." : " items.") << std::endl;
+
+	g_game.broadcastMessage(info.str().c_str(), MSG_STATUS_WARNING);
 	return true;
 }
 

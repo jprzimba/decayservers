@@ -35,7 +35,9 @@
 #include "mailbox.h"
 #include "combat.h"
 #include "movement.h"
+#include "configmanager.h"
 
+extern ConfigManager g_config;
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
 
@@ -1417,4 +1419,42 @@ void Tile::updateTileFlags(Item* item, bool removing)
 		if(item->hasProperty(IMMOVABLENOFIELDBLOCKPATH) && !hasProperty(item, IMMOVABLENOFIELDBLOCKPATH))
 			resetFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
 	}
+}
+
+int32_t Tile::onRemoveTileItem()
+{
+	int32_t count = 0;        
+	if(hasFlag(TILESTATE_HOUSE))
+		return count;
+
+	if(!g_config.getBool(ConfigManager::CLEAN_PZ) && hasFlag(TILESTATE_PROTECTIONZONE))
+		return count;
+
+	int32_t downItemSize = downItems.size();
+	for(int32_t i = downItemSize - 1; i >= 0; --i)
+	{
+		Item* item = downItems[i];
+		if(item && item->isCleanable())
+		{
+			//onRemoveTileItem(i, item);
+			AutoList<Player>::listiterator it;
+			for(it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); it++)
+			{
+				if(const Container* container = item->getContainer())
+				{
+					uint32_t cid = (it->second)->getContainerID(container);
+					if(cid != -1)
+					{
+						(it->second)->onCloseContainer(container);
+						(it->second)->closeContainer(cid);
+					}
+				}
+			}
+			
+			count++;			
+			g_game.internalRemoveItem(item, item->getItemCount());
+		}
+	}
+	
+	return count;
 }

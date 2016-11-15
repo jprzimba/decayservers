@@ -1270,66 +1270,42 @@ Floor* QTreeLeafNode::createFloor(uint32_t z)
 	return m_array[z];
 }
 
-uint32_t Map::clean()
+int32_t Map::onRemoveTileItem()
 {
-	uint64_t start = OTSYS_TIME();
-	uint64_t count = 0;
-	Tile* tile = NULL;
-	Item *item = NULL;
+	return root.onRemoveTileItem();
+}
 
-	QTreeLeafNode* startLeaf;
-	QTreeLeafNode* leafE;
-	QTreeLeafNode* leafS;
-	Floor* floor;
-
-	startLeaf = getLeaf(0, 0);
-	leafS = startLeaf;
-
-	for(int32_t ny = 0; ny <= 0xFFFF; ny += FLOOR_SIZE)
+int32_t QTreeNode::onRemoveTileItem()
+{
+	int32_t count = 0;
+	for(int i=0; i < 4; i++)
 	{
-		leafE = leafS;
-		for(int32_t nx = 0; nx <= 0xFFFF; nx += FLOOR_SIZE)
-		{
-			if(leafE)
-			{
-				for(int32_t nz = 0; nz < MAP_MAX_LAYERS; ++nz)
-				{
-					if(leafE && (floor = leafE->getFloor(nz)))
-					{
-						for(int32_t ly = 0; ly < FLOOR_SIZE; ++ly)
-						{
-							for(int32_t lx = 0; lx < FLOOR_SIZE; ++lx)
-							{
-								if(floor && (tile = floor->tiles[(nx + lx) & FLOOR_MASK][(ny + ly) & FLOOR_MASK]))
-								{
-									if(!tile->hasFlag(TILESTATE_PROTECTIONZONE))
-									{
-										for(uint32_t i = 0; i < tile->getThingCount(); ++i)
-										{
-											item = tile->__getThing(i)->getItem();
-											if(item && !item->isLoadedFromMap() && !item->isNotMoveable())
-											{
-												g_game.internalRemoveItem(item);
-												i--;
-												count++;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				leafE = leafE->stepEast();
-			}
-			else
-				leafE = getLeaf(nx + FLOOR_SIZE, ny);
-		}
-		if(leafS)
-			leafS = leafS->stepSouth();
-		else
-			leafS = getLeaf(0, ny + FLOOR_SIZE);
+		QTreeNode* next = m_child[i];
+		if(next)
+			count += next->onRemoveTileItem();
 	}
-	std::cout << "> Cleaning time: " << (OTSYS_TIME() - start) / (1000.) << " seconds, collected " << count << " item" << (count != 1 ? "s" : "") << "." << std::endl;
+	
+	return count;
+}
+
+int32_t QTreeLeafNode::onRemoveTileItem()
+{
+	int32_t count = 0;
+	for(int i = 0; i < MAP_MAX_LAYERS; i++)
+	{
+		Floor* floor = m_array[i];
+		if(!floor)
+			continue;
+
+		for(int x = 0; x < FLOOR_SIZE; x++)
+		{
+			for(int y = 0; y < FLOOR_SIZE; y++)
+			{
+				if(floor->tiles[x][y])
+					count += floor->tiles[x][y]->onRemoveTileItem();
+			}
+		}
+	}
+	
 	return count;
 }

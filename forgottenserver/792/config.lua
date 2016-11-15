@@ -104,6 +104,9 @@
 	serverSaveEnabled = "yes"
 	serverSaveHour = 24
 	shutdownAtServerSave = "yes"
+
+	-- Clean System
+	cleanProtectedZones = "yes"
 	cleanMapAtServerSave = "yes"
 
 	-- Spawns

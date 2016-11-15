@@ -146,6 +146,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confBoolean[ON_OR_OFF_CHARLIST] = booleanString(getGlobalString(L, "displayOnOrOffAtCharlist", "no"));
 	m_confBoolean[ALLOW_CHANGEOUTFIT] = booleanString(getGlobalString(L, "allowChangeOutfit", "yes"));
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "useStaminaSystem", "yes"));
+	m_confBoolean[CLEAN_PZ] = booleanString(getGlobalString(L, "cleanProtectedZones", "yes"));
 
 	m_loaded = true;
 	lua_close(L);

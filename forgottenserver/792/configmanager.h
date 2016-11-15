@@ -60,6 +60,7 @@ class ConfigManager
 			SHOW_GAMEMASTERS_ONLINE,
 			OPTIMIZE_DATABASE,
 			STAMINA_SYSTEM,
+			CLEAN_PZ,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

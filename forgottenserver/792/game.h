@@ -583,5 +583,7 @@ class Game
 		bool useLastStageLevel;
 
 		std::vector<std::string> commandTags;
+
+		friend class Commands;
 };
 #endif

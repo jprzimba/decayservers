@@ -4431,7 +4431,7 @@ void Game::serverSave()
 
 		//clean map if configured to
 		if(g_config.getBool(ConfigManager::CLEAN_MAP_AT_SERVERSAVE))
-			map->clean();
+			map->onRemoveTileItem();
 
 		//reload highscores
 		reloadHighscores();
