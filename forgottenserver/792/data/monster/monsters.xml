@@ -134,6 +134,24 @@
 	<monster name="Witch" file="witch.xml"/>
 	<monster name="Wolf" file="wolf.xml"/>
 	<monster name="Yeti" file="yeti.xml"/>
+	<monster name="Quara Constrictor" file="quara constrictor.xml"/>
+	<monster name="Quara Constrictor Scout" file="quara constrictor scout.xml"/>
+	<monster name="Quara Hydromancer" file="quara hydromancer.xml"/>
+	<monster name="Quara Hydromancer Scout" file="quara hydromancer scout.xml"/>
+	<monster name="Quara Mantassin" file="quara mantassin.xml"/>
+	<monster name="Quara Mantassin Scout" file="quara mantassin scout.xml"/>
+	<monster name="Quara Pincher" file="quara pincher.xml"/>
+	<monster name="Quara Pincher Scout" file="quara pincher scout.xml"/>
+	<monster name="Quara Predator" file="quara predator.xml"/>
+	<monster name="Quara Predator Scout" file="quara predator scout.xml"/>
+	<monster name="Massive Water Elemental" file="massive water elemental.xml"/>
+	<monster name="Water Elemental" file="water elemental.xml"/>
+	<monster name="Pirate Buccaneer" file="pirate buccaneer.xml"/>
+	<monster name="Pirate Corsair" file="pirate corsair.xml"/>
+	<monster name="Pirate Cutthroat" file="pirate cutthroat.xml"/>
+	<monster name="Pirate Marauder" file="pirate marauder.xml"/>
+	<monster name="Pirate Ghost" file="pirate ghost.xml"/>
+	<monster name="Pirate Skeleton" file="pirate skeleton.xml"/>
 
 	<!-- Bosses -->
 	<monster name="Demodras" file="demodras.xml"/>
