@@ -3435,9 +3435,8 @@ void Player::onKilledCreature(Creature* target)
 
 void Player::gainExperience(uint64_t gainExp, Creature* source)
 {
-	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0) {
+	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0)
 		return;
-	}
 
 	uint64_t oldExperience = experience;
 	addExperience(source, gainExp, true, true);
@@ -3445,7 +3444,8 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 	//soul regeneration
 	// TODO: move to Lua script (onGainExperience event)
 	int64_t gainedExperience = experience - oldExperience;
-	if(gainedExperience >= level) {
+	if(gainedExperience >= level)
+	{
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
 		condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
 		condition->setParam(CONDITIONPARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
@@ -3455,14 +3455,13 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 
 void Player::onGainExperience(uint64_t gainExp, Creature* target)
 {
-	if(hasFlag(PlayerFlag_NotGainExperience)) {
+	if(hasFlag(PlayerFlag_NotGainExperience))
 		return;
-	}
 
-	if(target) {
-		if(gainExp > 0 && target->getMonster()) {
+	if(target)
+	{
+		if(gainExp > 0 && target->getMonster())
 			useStamina();
-		}
 	}
 
 	Creature::onGainExperience(gainExp, target);
@@ -3528,13 +3527,13 @@ bool Player::canLogout()
 	if(isConnecting)
 		return false;
 
-	if(hasCondition(CONDITION_INFIGHT))
-		return false;
-
 	if(getTile()->hasFlag(TILESTATE_NOLOGOUT))
 		return false;
 
-	return true;
+	if(getTile()->hasFlag(TILESTATE_PROTECTIONZONE))
+		return true;
+
+	return !isPzLocked() && !hasCondition(CONDITION_INFIGHT);
 }
 
 void Player::genReservedStorageRange()

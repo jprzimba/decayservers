@@ -6385,7 +6385,7 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 int32_t LuaScriptInterface::luaDoPlayerPopupFYI(lua_State* L)
 {
 	//doPlayerPopupFYI(cid, message)
-	std::string message = popString(L);
+	const std::string message = popString(L);
 	uint32_t cid = (uint32_t)popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
 	Player* player = env->getPlayerByUID(cid);

@@ -133,7 +133,7 @@ class Player : public Creature, public Cylinder
 
 		void manageAccount(const std::string &text);
 
-		void sendFYIBox(std::string message)
+		void sendFYIBox(const std::string& message)
 			{if(client) client->sendFYIBox(message);}
 
 		void setGUID(uint32_t _guid) {guid = _guid;}

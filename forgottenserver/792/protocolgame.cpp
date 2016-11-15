@@ -468,37 +468,34 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 
 	if(!player->isRemoved())
 	{
-		if(forced)
-			g_creatureEvents->playerLogout(player);
-		else
+		if(!forced)
 		{
-			bool flag = (player->getAccountType() == ACCOUNT_TYPE_GOD);
-			if(player->getTile()->hasFlag(TILESTATE_NOLOGOUT) && !flag)
+			if(!player->isAccessPlayer())
 			{
-				player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
-				return false;
-			}
+				if(player->getTile()->hasFlag(TILESTATE_NOLOGOUT))
+				{
+					player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
+					return false;
+				}
 
-			if(player->hasCondition(CONDITION_INFIGHT) && !flag)
-			{
-				player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
-				return false;
+				if(!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT))
+				{
+					player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
+					return false;
+				}
 			}
 
 			//scripting event - onLogout
-			if(!g_creatureEvents->playerLogout(player) && !flag)
+			if(!g_creatureEvents->playerLogout(player))
 			{
 				//Let the script handle the error message
 				return false;
 			}
 		}
+
+		if(displayEffect && player->getHealth() > 0)
+			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
-
-	if(player->isRemoved() || player->getHealth() <= 0)
-		displayEffect = false;
-
-	if(displayEffect)
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 
 	if(Connection* connection = getConnection())
 		connection->closeConnection();
@@ -1353,6 +1350,11 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	}
 
 	const std::string text = msg.GetString();
+	if(text.length() > 255) //client limit
+	{
+		player->sendFYIBox("Server protection against bots trying to down server!");
+		return;
+	}
 	addGameTask(&Game::playerSay, player->getID(), channelId, type, receiver, text);
 }
 
