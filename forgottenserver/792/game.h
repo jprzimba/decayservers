@@ -500,7 +500,7 @@ class Game
 		Map* getMap() { return map;}
 		const Map* getMap() const { return map;}
 
-		int getLightHour() {return light_hour;}
+		int32_t getLightHour() const {return lightHour;}
 
 		void addCommandTag(std::string tag);
 		void resetCommandTag();
@@ -535,6 +535,8 @@ class Game
 
 		std::vector<Thing*> ToReleaseThings;
 
+		uint32_t checkLightEvent;
+
 		//list of items that are in trading state, mapped to the player
 		std::map<Item*, uint32_t> tradeItems;
 
@@ -568,10 +570,10 @@ class Game
 		static const int32_t LIGHT_LEVEL_NIGHT = 40;
 		static const int32_t SUNSET = 1305;
 		static const int32_t SUNRISE = 430;
-		int32_t lightlevel;
-		LightState_t light_state;
-		int32_t light_hour;
-		int32_t light_hour_delta;
+		int32_t lightLevel;
+		LightState_t lightState;
+		int32_t lightHour;
+		int32_t lightHourDelta;
 
 		uint32_t maxPlayers;
 		uint32_t inFightTicks;

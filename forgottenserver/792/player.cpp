@@ -569,7 +569,7 @@ void Player::sendIcons() const
 {
 	if(client)
 	{
-		int icons = 0;
+		int32_t icons = 0;
 
 		ConditionList::const_iterator it;
 		for(it = conditions.begin(); it != conditions.end(); ++it)

@@ -280,9 +280,6 @@ class Item : virtual public Thing, public ItemAttributes
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
 
 		//serialization
-		virtual bool unserialize(xmlNodePtr p);
-		virtual xmlNodePtr serialize();
-
 		virtual bool readAttr(AttrTypes_t attr, PropStream& propStream);
 		virtual bool unserializeAttr(PropStream& propStream);
 		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);

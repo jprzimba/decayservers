@@ -608,26 +608,6 @@ Door::~Door()
 		delete accessList;
 }
 
-bool Door::unserialize(xmlNodePtr nodeItem)
-{
-	bool ret = Item::unserialize(nodeItem);
-
-	int32_t intValue;
-	if(readXMLInteger(nodeItem, "doorId", intValue))
-		setDoorId(intValue);
-	
-	return ret;
-}
-
-xmlNodePtr Door::serialize()
-{
-	xmlNodePtr xmlptr = xmlNewNode(NULL,(const xmlChar*)"item");
-	char buffer[10];
-	sprintf(buffer, "%d", getID());
-	xmlSetProp(xmlptr, (const xmlChar*)"id", (const xmlChar*)buffer);
-	return xmlptr;
-}
-
 bool Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if(ATTR_HOUSEDOORID == attr)

@@ -2587,7 +2587,7 @@ void ProtocolGame::AddCreature(NetworkMessage* msg, const Creature* creature, bo
 	LightInfo lightInfo;
 	creature->getCreatureLight(lightInfo);
 	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte(lightInfo.color);
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xD7 : lightInfo.color));
 
 	msg->AddU16(creature->getStepSpeed());
 	
@@ -2730,7 +2730,7 @@ void ProtocolGame::AddWorldLight(NetworkMessage* msg, const LightInfo& lightInfo
 {
 	msg->AddByte(0x82);
 	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte(lightInfo.color);
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xD7 : lightInfo.color));
 }
 
 void ProtocolGame::AddCreatureLight(NetworkMessage* msg, const Creature* creature)
@@ -2740,7 +2740,7 @@ void ProtocolGame::AddCreatureLight(NetworkMessage* msg, const Creature* creatur
 	msg->AddByte(0x8D);
 	msg->AddU32(creature->getID());
 	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte(lightInfo.color);
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xD7 : lightInfo.color));
 }
 
 //tile
