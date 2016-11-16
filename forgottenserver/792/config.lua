@@ -42,9 +42,6 @@
 	removeChargesFromRunes = "yes"
 	useStaminaSystem = "yes"
 
-	-- Commands
-	displayGamemastersWithOnlineCommand = "no"
-
 	-- Connection Config
 	ip = "127.0.0.1"
 	port = 7171
@@ -60,13 +57,11 @@
 	adminLogsEnabled = "no"
 	statusTimeout = 5 * 60 * 1000
 
-	-- Deathlist
-	deathListEnabled = "yes"
-	maxDeathRecords = 10
-
-	-- Highscores
+	-- Highscores and Deathlist
 	highscoreDisplayPlayers = 15
 	updateHighscoresAfterMinutes = 60
+	deathListEnabled = "yes"
+	maxDeathRecords = 10
 
 	-- Houses
 	housePriceEachSQM = 1000
@@ -118,6 +113,7 @@
 	defaultPriority = "high"
 
 	-- Misc
+	displayGamemastersWithOnlineCommand = "no"
 	maxMessageBuffer = 4
 	kickIdlePlayerAfterMinutes = 15
 
