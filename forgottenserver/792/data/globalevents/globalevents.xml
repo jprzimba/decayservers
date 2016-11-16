@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <globalevents>
 	<globalevent type="record" name="PlayerRecord" script="record.lua"/>
+
+	<globalevent name="Clean 00" time="00:00:00" script="clean.lua"/>
+	<globalevent name="Clean 02" time="02:00:00" script="clean.lua"/>
+	<globalevent name="Clean 04" time="04:00:00" script="clean.lua"/>
+	<globalevent name="Clean 06" time="06:00:00" script="clean.lua"/>
+	<globalevent name="Clean 08" time="08:00:00" script="clean.lua"/>
+	<globalevent name="Clean 10" time="10:00:00" script="clean.lua"/>
+	<globalevent name="Clean 12" time="12:00:00" script="clean.lua"/>
+	<globalevent name="Clean 14" time="14:00:00" script="clean.lua"/>
+	<globalevent name="Clean 16" time="16:00:00" script="clean.lua"/>
+	<globalevent name="Clean 18" time="18:00:00" script="clean.lua"/>
+	<globalevent name="Clean 20" time="20:00:00" script="clean.lua"/>
+	<globalevent name="Clean 22" time="22:00:00" script="clean.lua"/>
 	<!--
 	<globalevent name="timer_example" time="12:00:00" script="my_script.lua"/>
 	-->

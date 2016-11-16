@@ -1413,7 +1413,7 @@ bool Commands::playerKills(Creature* creature, const std::string& cmd, const std
 bool Commands::cleanMap(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	std::stringstream info;
-	int32_t count = g_game.map->onRemoveTileItem();
+	int32_t count = g_game.getMap()->onRemoveTileItem();
 	info << "Clean completed. Collected " << count << (count==1? " item." : " items.") << std::endl;
 
 	g_game.broadcastMessage(info.str().c_str(), MSG_STATUS_WARNING);

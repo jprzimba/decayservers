@@ -586,6 +586,7 @@ class LuaScriptInterface
 
 		static int32_t luaGetOnlinePlayers(lua_State* L);
 		static int32_t luaSaveServer(lua_State* L);
+		static int32_t luaDoCleanMap(lua_State* L);
 
 		static int32_t luaDoAddMark(lua_State* L);
 
@@ -663,6 +664,8 @@ class LuaScriptInterface
 		void executeTimerEvent(uint32_t eventIndex);
 
 		std::string m_interfaceName;
+
+		friend class Game;
 };
 
 #endif

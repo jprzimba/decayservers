@@ -1785,6 +1785,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getPartyMembers(leaderId)
 	lua_register(m_luaState, "getPartyMembers", LuaScriptInterface::luaGetPartyMembers);
+
+	//doCleanMap()
+	lua_register(m_luaState, "doCleanMap", LuaScriptInterface::luaDoCleanMap);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7397,5 +7400,13 @@ int32_t LuaScriptInterface::luaGetPartyMembers(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 
 	lua_pushboolean(L, false);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCleanMap(lua_State* L)
+{
+ 	//doCleanMap()
+	uint32_t count = g_game.getMap()->onRemoveTileItem();
+	lua_pushnumber(L, count);
 	return 1;
 }
