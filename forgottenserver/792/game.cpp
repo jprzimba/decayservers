@@ -591,6 +591,47 @@ Player* Game::getPlayerByName(const std::string& s)
 	return NULL; //just in case the player doesnt exist
 }
 
+ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
+{
+	player = NULL;
+
+	if(s.empty())
+		return RET_PLAYERWITHTHISNAMEISNOTONLINE;
+
+	if((*s.rbegin()) != '~')
+	{
+		player = getPlayerByName(s);
+		if(!player)
+			return RET_PLAYERWITHTHISNAMEISNOTONLINE;
+
+		return RET_NOERROR;
+	}
+
+	Player* lastFound = NULL;
+	std::string txt1 = asUpperCaseString(s.substr(0, s.length()-1));
+	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
+	{
+		if(!(*it).second->isRemoved())
+		{
+			std::string txt2 = asUpperCaseString((*it).second->getName());
+			if(txt2.substr(0, txt1.length()) == txt1)
+			{
+				if(lastFound == NULL)
+					lastFound = (*it).second;
+				else
+					return RET_NAMEISTOOAMBIGIOUS;
+			}
+		}
+	}
+
+	if(lastFound != NULL)
+	{
+		player = lastFound;
+		return RET_NOERROR;
+	}
+	return RET_PLAYERWITHTHISNAMEISNOTONLINE;
+}
+
 Player* Game::getPlayerByAccount(uint32_t acc)
 {
 	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
@@ -1072,19 +1113,19 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
 	const Position& mapToPos = toCylinder->getTile()->getPosition();
 	
-	if(playerPos.z > mapFromPos.z && !player->isAccessPlayer())
+	if(playerPos.z > mapFromPos.z && !player->hasFlag(PlayerFlag_CanMoveFromFar))
 	{
 		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
 		return false;
 	}
 	
-	if(playerPos.z < mapFromPos.z && !player->isAccessPlayer())
+	if(playerPos.z < mapFromPos.z && !player->hasFlag(PlayerFlag_CanMoveFromFar))
 	{
 		player->sendCancelMessage(RET_FIRSTGODOWNSTAIRS);
 		return false;
 	}
 
-	if(!Position::areInRange<1,1,0>(playerPos, mapFromPos) && !player->isAccessPlayer())
+	if(!Position::areInRange<1,1,0>(playerPos, mapFromPos) && !player->hasFlag(PlayerFlag_CanMoveFromFar))
 	{
 		//need to walk to the item first before using it
 		std::list<Direction> listDir;
@@ -1126,7 +1167,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			}
 		}
 
-		if(!Position::areInRange<1,1,0>(playerPos, mapToPos) && !player->isAccessPlayer())
+		if(!Position::areInRange<1,1,0>(playerPos, mapToPos) && !player->hasFlag(PlayerFlag_CanMoveFromFar))
 		{
 			Position walkPos = mapToPos;
 			if(toCylinder->getTile()->hasProperty(ISVERTICAL))
@@ -1182,7 +1223,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return false;
 	}
 	
-	if(!canThrowObjectTo(mapFromPos, mapToPos) && !player->isAccessPlayer())
+	if(!canThrowObjectTo(mapFromPos, mapToPos) && !player->hasFlag(PlayerFlag_CanMoveFromFar))
 	{
 		player->sendCancelMessage(RET_CANNOTTHROW);
 		return false;
@@ -2921,7 +2962,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 
 	std::stringstream ss;
 	ss << "You see " << thing->getDescription(lookDistance) << std::endl;
-	if(player->isAccessPlayer())
+	if(player->hasFlag(PlayerFlag_HasExtraLookDescription))
 	{
 		Item* item = thing->getItem();
 		if(item)

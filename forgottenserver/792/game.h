@@ -194,6 +194,14 @@ class Game
 		Player* getPlayerByName(const std::string& s);
 
 		/**
+		  * Returns a player based on a string name identifier, with support for the "~" wildcard.
+		  * \param s is the name identifier, with or without wildcard
+		  * \param player will point to the found player (if any)
+		  * \return "RET_PLAYERWITHTHISNAMEISNOTONLINE" or "RET_NAMEISTOOAMBIGIOUS"
+		  */
+		ReturnValue getPlayerByNameWildcard(const std::string& s, Player*& player);
+
+		/**
 		  * Returns a player based on an account number identifier
 		  * \param acc is the account identifier
 		  * \returns A Pointer to the player

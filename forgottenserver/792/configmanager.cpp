@@ -128,7 +128,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[AUTO_SAVE_EACH_MINUTES] = getGlobalNumber(L, "autoSaveEachMinutes", 0);
 
 
-	m_confBoolean[SHOW_GAMEMASTERS_ONLINE] = booleanString(getGlobalString(L, "displayGamemastersWithOnlineCommand", "no"));
 	m_confBoolean[CANNOT_ATTACK_SAME_LOOKFEET] = booleanString(getGlobalString(L, "noDamageToSameLookfeet", "no"));
 	m_confBoolean[AIMBOT_HOTKEY_ENABLED] = booleanString(getGlobalString(L, "hotkeyAimbotEnabled", "yes"));
 	m_confBoolean[REMOVE_AMMO] = booleanString(getGlobalString(L, "removeAmmoWhenUsingDistanceWeapon", "yes"));

@@ -35,8 +35,8 @@ CREATE TABLE `groups`
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-INSERT INTO `groups` VALUES (3, 'a god', 547104989178, 1, 0, 0);
-INSERT INTO `groups` VALUES (2, 'a gamemaster', 549252472826, 1, 0, 0);
+INSERT INTO `groups` VALUES (3, 'a god', 8793442197498, 5, 0, 0);
+INSERT INTO `groups` VALUES (2, 'a gamemaster', 3847787356154, 3, 0, 0);
 INSERT INTO `groups` VALUES (1, 'player', 0, 0, 0, 0);
 
 CREATE TABLE `accounts`

@@ -1,0 +1,77 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>The Forgotten Server Flags</title>
+	<script src="int.js"></script>
+	<script src="jscript.js"></script>
+</head>
+<body bgcolor="#000000" text="#FFFFFF">
+	<form name="flags">
+	<div align="center">
+	<table cellspacing="0" cellpadding="2" width="600" border="1">
+		<tr>
+			<td>Privileges</td>
+			<td>Limitations</td>
+		</tr>
+		<tr>
+			<td valign="top" width="300">
+				<input type="checkbox" name="groupflags" value="8"  id="PlayerFlag_CannotBeAttacked" onclick="calcFlags()"> Can not be attacked<br>
+				<input type="checkbox" name="groupflags" value="16"  id="PlayerFlag_CanConvinceAll" onclick="calcFlags()"> Can convince all monsters<br>
+				<input type="checkbox" name="groupflags" value="32"  id="PlayerFlag_CanSummonAll" onclick="calcFlags()"> Can summon all monsters<br>
+				<input type="checkbox" name="groupflags" value="64"  id="PlayerFlag_CanIllusionAll" onclick="calcFlags()"> Can illusion all monsters<br>
+				<input type="checkbox" name="groupflags" value="128"  id="PlayerFlag_CanSenseInvisibility" onclick="calcFlags()"> Can sense invisibility<br>
+				<input type="checkbox" name="groupflags" value="256"  id="PlayerFlag_IgnoredByMonsters" onclick="calcFlags()"> Ignored by monsters<br>
+				<input type="checkbox" name="groupflags" value="512"  id="PlayerFlag_NotGainInFight" onclick="calcFlags()"> Do not gain infight<br>
+				<input type="checkbox" name="groupflags" value="1024"  id="PlayerFlag_HasInfiniteMana" onclick="calcFlags()"> Has unlimited mana<br>
+				<input type="checkbox" name="groupflags" value="2048"  id="PlayerFlag_HasInfiniteSoul" onclick="calcFlags()"> Has unlimited soul<br>
+				<input type="checkbox" name="groupflags" value="4096"  id="PlayerFlag_HasNoExhaustion" onclick="calcFlags()"> Do no gain exhaustion<br>
+				<input type="checkbox" name="groupflags" value="32768"  id="PlayerFlag_CanAlwaysLogin" onclick="calcFlags()"> Can always login<br>
+				<input type="checkbox" name="groupflags" value="65536"  id="PlayerFlag_CanBroadcast" onclick="calcFlags()"> Can broadcast<br>
+				<input type="checkbox" name="groupflags" value="131072"  id="PlayerFlag_CanEditHouses" onclick="calcFlags()"> Can edit all house rights<br>
+				<input type="checkbox" name="groupflags" value="262144"  id="PlayerFlag_CannotBeBanned" onclick="calcFlags()"> Can not be banned<br>
+				<input type="checkbox" name="groupflags" value="524288"  id="PlayerFlag_CannotBePushed" onclick="calcFlags()"> Can not be pushed<br>
+				<input type="checkbox" name="groupflags" value="1048576"  id="PlayerFlag_HasInfiniteCapacity" onclick="calcFlags()"> Has unlimited capacity<br>
+				<input type="checkbox" name="groupflags" value="2097152"  id="PlayerFlag_CanPushAllCreatures" onclick="calcFlags()"> Can push all creatures<br>
+				<input type="checkbox" name="groupflags" value="4194304"  id="PlayerFlag_CanTalkRedPrivate" onclick="calcFlags()"> Talk red in private<br>
+				<input type="checkbox" name="groupflags" value="8388608"  id="PlayerFlag_CanTalkRedChannel" onclick="calcFlags()"> Talk red in channel<br>
+				<input type="checkbox" name="groupflags" value="16777216"  id="PlayerFlag_TalkOrangeHelpChannel" onclick="calcFlags()"> Talk orange in help-channel<br>
+				<input type="checkbox" name="groupflags" value="536870912"  id="PlayerFlag_SetMaxSpeed" onclick="calcFlags()"> Gain max speed<br>
+				<input type="checkbox" name="groupflags" value="1073741824"  id="PlayerFlag_SpecialVIP" onclick="calcFlags()"> Cannot be added to VIP<br>
+				<input type="checkbox" name="groupflags" value="4294967296"  id="PlayerFlag_CanTalkRedChannelAnonymous" onclick="calcFlags()"> Talk red anonymously<br>
+				<input type="checkbox" name="groupflags" value="8589934592"  id="PlayerFlag_IgnoreProtectionZone" onclick="calcFlags()"> Ignore protection-zone<br>
+				<input type="checkbox" name="groupflags" value="17179869184"  id="PlayerFlag_IgnoreSpellCheck" onclick="calcFlags()"> Skip spell usage checks<br>
+				<input type="checkbox" name="groupflags" value="34359738368"  id="PlayerFlag_IgnoreWeaponCheck" onclick="calcFlags()"> Skip equip usage checks<br>
+				<input type="checkbox" name="groupflags" value="68719476736"  id="PlayerFlag_CannotBeMuted" onclick="calcFlags()"> Can not be muted<br>
+				<input type="checkbox" name="groupflags" value="137438953472"  id="PlayerFlag_IsAlwaysPremium" onclick="calcFlags()"> Permanent premium account<br>
+				<input type="checkbox" name="groupflags" value="274877906944"  id="PlayerFlag_CanAnswerRuleViolations" onclick="calcFlags()"> Can answer rule violations<br>
+				<input type="checkbox" name="groupflags" value="549755813888"  id="PlayerFlag_CanMoveFromFar" onclick="calcFlags()"> Can move objects from far<br>
+				<input type="checkbox" name="groupflags" value="1099511627776"  id="PlayerFlag_HasExtraLookDescription" onclick="calcFlags()"> Has extra Look description<br>
+				<input type="checkbox" name="groupflags" value="2199023255552"  id="PlayerFlag_HasFullLight" onclick="calcFlags()"> Has full light<br>
+				<input type="checkbox" name="groupflags" value="4398046511104"  id="PlayerFlag_NotSearchable" onclick="calcFlags()"> Is Not Searchablet<br>
+			</td>
+			<td valign="top" width="300">
+				<input type="checkbox" name="groupflags" value="1"  id="PlayerFlag_CannotUseCombat" onclick="calcFlags()"> Can not use combat<br>
+				<input type="checkbox" name="groupflags" value="2"  id="PlayerFlag_CannotAttackPlayer" onclick="calcFlags()"> Can not attack players<br>
+				<input type="checkbox" name="groupflags" value="4"  id="PlayerFlag_CannotAttackMonster" onclick="calcFlags()"> Can not attack monsters<br>
+				<input type="checkbox" name="groupflags" value="8192"  id="PlayerFlag_CannotUseSpells" onclick="calcFlags()"> Cannot use spells<br>
+				<input type="checkbox" name="groupflags" value="16384"  id="PlayerFlag_CannotPickupItem" onclick="calcFlags()"> Cannot pickup items<br>
+				<input type="checkbox" name="groupflags" value="33554432"  id="PlayerFlag_NotGainExperience" onclick="calcFlags()"> Do not gain experience<br>
+				<input type="checkbox" name="groupflags" value="67108864"  id="PlayerFlag_NotGainMana" onclick="calcFlags()"> Do not gain mana<br>
+				<input type="checkbox" name="groupflags" value="134217728"  id="PlayerFlag_NotGainHealth" onclick="calcFlags()"> Do not gain health<br>
+				<input type="checkbox" name="groupflags" value="268435456"  id="PlayerFlag_NotGainSkill" onclick="calcFlags()"> Do not gain skill<br>
+				<input type="checkbox" name="groupflags" value="2147483648"  id="PlayerFlag_NotGenerateLoot" onclick="calcFlags()"> Can not gain loot<br>
+				<input type="checkbox" name="groupflags" value="4398046511104"  id="CannotMoveItems" onclick="calcFlags()"> Can not move items <br>
+				<input type="checkbox" name="groupflags" value="8796093022208"  id="CannotMoveCreatures" onclick="calcFlags()"> Can not move creatures <br>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="text" id="result" name="result" />
+				<input type="button" value="Update" onclick="calcCheckboxes()" />
+			</td>
+	</table>
+	</div>
+	</form>
+</body>
+</html>

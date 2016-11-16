@@ -1323,16 +1323,24 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 		LEVEL_SAME
 	};
 
-	Player* playerExiva = g_game.getPlayerByName(param);
-	if(playerExiva && !playerExiva->isAccessPlayer())
+	Player* playerExiva = NULL;
+	ReturnValue ret = g_game.getPlayerByNameWildcard(param, playerExiva);
+	if(playerExiva && ret == RET_NOERROR)
 	{
+		if(playerExiva->hasFlag(PlayerFlag_NotSearchable) && !player->hasFlag(PlayerFlag_NotSearchable))
+		{
+			player->sendCancelMessage(RET_PLAYERWITHTHISNAMEISNOTONLINE);
+			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
+			return false;
+		}
+
 		const Position lookPos = player->getPosition();
 		const Position searchPos = playerExiva->getPosition();
-		
+
 		int32_t dx = lookPos.x - searchPos.x;
 		int32_t dy = lookPos.y - searchPos.y;
 		int32_t dz = lookPos.z - searchPos.z;
-		
+
 		distance_t distance;
 		direction_t direction;
 		level_t level;
@@ -1395,7 +1403,7 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 			else
 				direction = DIR_S;
 		}
-		
+
 		std::stringstream ss;
 		ss << playerExiva->getName() << " ";
 		if(distance == DISTANCE_BESIDE)
@@ -1467,10 +1475,9 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 	}
 	else
 	{
-		player->sendCancelMessage(RET_PLAYERWITHTHISNAMEISNOTONLINE);
+		player->sendCancelMessage(ret);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
-
 	return false;
 }
 

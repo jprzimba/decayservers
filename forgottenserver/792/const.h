@@ -388,6 +388,10 @@ enum PlayerFlags
 	PlayerFlag_CannotBeMuted,               //2^36 = 68719476736
 	PlayerFlag_IsAlwaysPremium,             //2^37 = 137438953472
 	PlayerFlag_CanAnswerRuleViolations,     //2^38 = 274877906944
+	PlayerFlag_CanMoveFromFar,				//2^39 = 549755813888
+	PlayerFlag_HasExtraLookDescription,		//2^40 = 1099511627776
+	PlayerFlag_HasFullLight,				//2^41 = 2199023255552
+	PlayerFlag_NotSearchable,				//2^42 = 4398046511104
 
 	//add new flags here
 	PlayerFlag_LastFlag

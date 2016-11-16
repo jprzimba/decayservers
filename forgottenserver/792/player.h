@@ -140,7 +140,7 @@ class Player : public Creature, public Cylinder
 		void setGUID(uint32_t _guid) {guid = _guid;}
 		uint32_t getGUID() const {return guid;}
 		virtual uint32_t idRange() {return 0x10000000;}
-		virtual bool canSeeInvisibility() const {return hasFlag(PlayerFlag_CanSenseInvisibility) || accessLevel;}
+		virtual bool canSeeInvisibility() const {return hasFlag(PlayerFlag_CanSenseInvisibility);}
 		static AutoList<Player> listPlayer;
 		void removeList();
 		void addList();
@@ -234,15 +234,16 @@ class Player : public Creature, public Cylinder
 		bool isInGhostMode() const {return ghostMode;}
 		void switchGhostMode() {ghostMode = !ghostMode;}
 		bool canSeeGhost(const Creature* creature) const
-			{return (creature->getPlayer() && creature->getPlayer()->isAccessPlayer());}
+			{return (creature->getPlayer() && creature->getPlayer()->getAccessLevel() <= accessLevel);}
 
 		bool isAccountManager() const {return accountManager;}
 
 		uint32_t getAccount() const {return accountNumber;}
+		uint16_t getAccessLevel() const {return accessLevel;}
 		AccountType_t getAccountType() const {return accountType;}
+
 		uint32_t getLevel() const {return level;}
 		uint32_t getMagicLevel() const {return getPlayerInfo(PLAYERINFO_MAGICLEVEL);}
-		bool isAccessPlayer() const {return accessLevel;}
 		bool isPremium() const;
 
 		void setVocation(uint32_t vocId);
@@ -661,7 +662,7 @@ class Player : public Creature, public Cylinder
 		uint32_t levelPercent;
 		uint32_t magLevel;
 		uint32_t magLevelPercent;
-		bool accessLevel;
+		uint16_t accessLevel;
 		AccountType_t accountType;
 		int32_t premiumDays;
 		uint64_t experience;

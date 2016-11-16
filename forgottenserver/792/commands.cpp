@@ -252,7 +252,7 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 	Player* player = creature->getPlayer();
 	if(player && it->second->groupId > player->groupId || it->second->accountType > player->accountType || player->name == "Account Manager")
 	{
-		if(player->accessLevel)
+		if(player->getAccessLevel() > 0)
 			player->sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
 		return false;
 	}
@@ -262,7 +262,7 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 	(this->*cfunc)(creature, str_command, str_param);
 	if(player)
 	{
-		if(player->accessLevel)
+		if(player->getAccessLevel() > 0)
 		{
 			player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd.c_str());
 			time_t ticks = time(NULL);
@@ -733,7 +733,7 @@ bool Commands::getInfo(Creature* creature, const std::string& cmd, const std::st
 	Player* paramPlayer = g_game.getPlayerByName(param);
 	if(paramPlayer)
 	{
-		if(paramPlayer->isAccessPlayer() && player != paramPlayer)
+		if(player != paramPlayer && paramPlayer->getAccessLevel() >= player->getAccessLevel())
 		{
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You can not get info about this player.");
 			return true;
@@ -1025,26 +1025,11 @@ bool Commands::whoIsOnline(Creature* creature, const std::string &cmd, const std
 		std::stringstream ss;
 		ss << "Players online:" << std::endl;
 		bool first = true;
-		if(g_config.getString(ConfigManager::SHOW_GAMEMASTERS_ONLINE) == "no")
+		while (it != Player::listPlayer.list.end())
 		{
-			while (it != Player::listPlayer.list.end())
-			{
-				if(!(*it).second->accessLevel || player->accessLevel)
-				{
-					ss << (first ? "" : ", ") << (*it).second->name << " [" << (*it).second->level << "]";
-					first = false;
-				}
-				++it;
-			}
-		}
-		else
-		{
-			while (it != Player::listPlayer.list.end())
-			{
-				ss << (first ? "" : ", ") << (*it).second->name << " [" << (*it).second->level << "]";
-				first = false;
-				++it;
-			}
+			ss << (first ? "" : ", ") << (*it).second->name << " [" << (*it).second->level << "]";
+			first = false;
+			++it;
 		}
 		ss << ".";
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());

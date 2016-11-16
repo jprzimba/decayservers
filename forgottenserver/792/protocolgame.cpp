@@ -470,19 +470,16 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 	{
 		if(!forced)
 		{
-			if(!player->isAccessPlayer())
+			if(player->getTile()->hasFlag(TILESTATE_NOLOGOUT))
 			{
-				if(player->getTile()->hasFlag(TILESTATE_NOLOGOUT))
-				{
-					player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
-					return false;
-				}
+				player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
+				return false;
+			}
 
-				if(!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT))
-				{
-					player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
-					return false;
-				}
+			if(!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT))
+			{
+				player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
+				return false;
 			}
 
 			//scripting event - onLogout
@@ -2589,7 +2586,7 @@ void ProtocolGame::AddCreature(NetworkMessage* msg, const Creature* creature, bo
 
 	LightInfo lightInfo;
 	creature->getCreatureLight(lightInfo);
-	msg->AddByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
 	msg->AddByte(lightInfo.color);
 
 	msg->AddU16(creature->getStepSpeed());
@@ -2732,7 +2729,7 @@ void ProtocolGame::AddCreatureOutfit(NetworkMessage* msg, const Creature* creatu
 void ProtocolGame::AddWorldLight(NetworkMessage* msg, const LightInfo& lightInfo)
 {
 	msg->AddByte(0x82);
-	msg->AddByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
 	msg->AddByte(lightInfo.color);
 }
 
@@ -2742,7 +2739,7 @@ void ProtocolGame::AddCreatureLight(NetworkMessage* msg, const Creature* creatur
 	creature->getCreatureLight(lightInfo);
 	msg->AddByte(0x8D);
 	msg->AddU32(creature->getID());
-	msg->AddByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
+	msg->AddByte((player->hasFlag(PlayerFlag_HasFullLight) ? 0xFF : lightInfo.level));
 	msg->AddByte(lightInfo.color);
 }
 

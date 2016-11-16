@@ -1118,6 +1118,10 @@ void Player::sendCancelMessage(ReturnValue message) const
 			sendCancel("You need to split your spears first.");
 			break;
 
+		case RET_NAMEISTOOAMBIGIOUS:
+			sendCancel("Name is too ambigious.");
+			break;
+
 		case RET_NOTPOSSIBLE:
 		default:
 			sendCancel("Sorry, not possible.");
@@ -1639,7 +1643,7 @@ void Player::onThink(uint32_t interval)
 		addMessageBuffer();
 	}
 
-	if(!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !mayNotMove && !isAccessPlayer())
+	if(!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !mayNotMove && !hasFlag(PlayerFlag_NotGainInFight))
 	{
 		idleTime += interval;
 		if(idleTime > (g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES) * 60000) + 60000)
@@ -4265,7 +4269,7 @@ void Player::setGroupId(int32_t newId)
 		groupName = group->m_name;
 		toLowerCaseString(groupName);
 		setFlags(group->m_flags);
-		accessLevel = (group->m_access >= 1);
+		accessLevel = group->m_access;
 
 		if(group->m_maxdepotitems > 0)
 			maxDepotLimit = group->m_maxdepotitems;
