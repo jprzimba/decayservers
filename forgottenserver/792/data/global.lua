@@ -803,3 +803,22 @@ function db.getResult(query)
 	ret:create(query)
 	return ret
 end
+
+function doPlayerWithdrawMoney(cid, amount)
+	local balance = getPlayerBalance(cid)
+	if(amount > balance or not doPlayerAddMoney(cid, amount)) then
+		return false
+	end
+
+	doPlayerSetBalance(cid, balance - amount)
+	return true
+end
+
+function doPlayerDepositMoney(cid, amount)
+	if(not doPlayerRemoveMoney(cid, amount)) then
+		return false
+	end
+
+	doPlayerSetBalance(cid, getPlayerBalance(cid) + amount)
+	return true
+end
