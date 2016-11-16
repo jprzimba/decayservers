@@ -1,7 +1,7 @@
 [Project]
 FileName=TheForgottenServer.dev
 Name=TheForgottenServer
-UnitCount=154
+UnitCount=156
 Type=1
 Ver=1
 ObjFiles=
@@ -1539,28 +1539,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit155]
-FileName=..\waitlist.h
-CompileCpp=1
-Folder=TheForgottenServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit156]
-FileName=..\weapons.cpp
-CompileCpp=1
-Folder=TheForgottenServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit157]
-FileName=..\weapons.h
+FileName=..\globalevent.h
 CompileCpp=1
 Folder=TheForgottenServer
 Compile=1
@@ -1629,6 +1609,16 @@ BuildCmd=
 
 [Unit98]
 FileName=..\position.cpp
+CompileCpp=1
+Folder=TheForgottenServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit155]
+FileName=..\globalevent.cpp
 CompileCpp=1
 Folder=TheForgottenServer
 Compile=1
