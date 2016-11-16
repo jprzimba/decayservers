@@ -1023,7 +1023,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		}
 		else
 		{
-			for (iit = downItems.begin(); iit != downItems.end(); ++iit)
+			for(iit = downItems.begin(); iit != downItems.end(); ++iit)
 			{
 				if(*iit == item)
 				{

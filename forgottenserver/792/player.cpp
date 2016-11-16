@@ -4409,3 +4409,4 @@ void Player::useStamina()
 		sendStats();
 	}
 }
+

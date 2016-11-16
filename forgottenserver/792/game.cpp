@@ -1072,19 +1072,19 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
 	const Position& mapToPos = toCylinder->getTile()->getPosition();
 	
-	if(playerPos.z > mapFromPos.z)
+	if(playerPos.z > mapFromPos.z && !player->isAccessPlayer())
 	{
 		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
 		return false;
 	}
 	
-	if(playerPos.z < mapFromPos.z)
+	if(playerPos.z < mapFromPos.z && !player->isAccessPlayer())
 	{
 		player->sendCancelMessage(RET_FIRSTGODOWNSTAIRS);
 		return false;
 	}
 
-	if(!Position::areInRange<1,1,0>(playerPos, mapFromPos))
+	if(!Position::areInRange<1,1,0>(playerPos, mapFromPos) && !player->isAccessPlayer())
 	{
 		//need to walk to the item first before using it
 		std::list<Direction> listDir;
@@ -1126,7 +1126,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			}
 		}
 
-		if(!Position::areInRange<1,1,0>(playerPos, mapToPos))
+		if(!Position::areInRange<1,1,0>(playerPos, mapToPos) && !player->isAccessPlayer())
 		{
 			Position walkPos = mapToPos;
 			if(toCylinder->getTile()->hasProperty(ISVERTICAL))
@@ -1182,7 +1182,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return false;
 	}
 	
-	if(!canThrowObjectTo(mapFromPos, mapToPos))
+	if(!canThrowObjectTo(mapFromPos, mapToPos) && !player->isAccessPlayer())
 	{
 		player->sendCancelMessage(RET_CANNOTTHROW);
 		return false;

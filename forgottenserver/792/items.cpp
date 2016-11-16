@@ -149,11 +149,6 @@ void Items::clear()
 bool Items::reload()
 {
 	//TODO?
-	/*
-	for (ItemMap::iterator it = items.begin(); it != items.end(); it++)
-		delete it->second->condition;
-	return loadFromXml();
-	*/
 	return false;
 }
 
