@@ -67,12 +67,13 @@ bool ConfigManager::loadFile(const std::string& _filename)
 		#endif
 		m_confString[PASSWORDTYPE] = getGlobalString(L, "passwordType", "plain");
 		m_confInteger[PASSWORD_TYPE] = PASSWORD_TYPE_PLAIN;
-		m_confString[SERVERSAVE_ENABLED] = getGlobalString(L, "serverSaveEnabled", "yes");
 	
 		m_confInteger[PORT] = getGlobalNumber(L, "port", 7171);
 		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		m_confInteger[SERVERSAVE_H] = getGlobalNumber(L, "serverSaveHour", 3);
 
+		m_confBoolean[SERVERSAVE_ENABLED] = booleanString(getGlobalString(L, "serverSaveEnabled", "yes"));
+		m_confBoolean[SAVE_GLOBAL_STORAGE] = booleanString(getGlobalString(L, "saveGlobalStorage", "no"));
 		m_confBoolean[OPTIMIZE_DATABASE] = booleanString(getGlobalString(L, "startupDatabaseOptimization", "yes"));
 		m_confBoolean[INGAME_GUILD_SYSTEM] = booleanString(getGlobalString(L, "ingameGuildSystem", "yes"));
 	}
@@ -124,6 +125,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", 10);
 	m_confInteger[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5 * 60 * 1000);
 	m_confInteger[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
+	m_confInteger[AUTO_SAVE_EACH_MINUTES] = getGlobalNumber(L, "autoSaveEachMinutes", 0);
 
 
 	m_confBoolean[SHOW_GAMEMASTERS_ONLINE] = booleanString(getGlobalString(L, "displayGamemastersWithOnlineCommand", "no"));

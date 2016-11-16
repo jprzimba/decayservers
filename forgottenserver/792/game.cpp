@@ -172,7 +172,7 @@ void Game::setGameState(GameState_t newState)
 				}
 
 				Houses::getInstance().payHouses();
-				saveGameState(false);
+				saveGameState();
 
 				Dispatcher::getDispatcher().addTask(
 					createTask(boost::bind(&Game::shutdown, this)));
@@ -195,7 +195,7 @@ void Game::setGameState(GameState_t newState)
 				}
 
 				Houses::getInstance().payHouses();
-				saveGameState(false);
+				saveGameState();
 				break;
 			}
 			case GAME_STATE_STARTUP:
@@ -207,28 +207,23 @@ void Game::setGameState(GameState_t newState)
 	}
 }
 
-void Game::saveGameState(bool savePlayers)
+void Game::saveGameState()
 {
-	if(savePlayers)
+	std::cout << "Saving server..." << std::endl;
+	IOLoginData* ioLoginData = IOLoginData::getInstance();
+	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 	{
-		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
-		{
-			(*it).second->loginPosition = (*it).second->getPosition();
-			IOLoginData::getInstance()->savePlayer((*it).second, false);
-		}
+		(*it).second->loginPosition = (*it).second->getPosition();
+		ioLoginData->savePlayer((*it).second, false);
 	}
 
 	map->saveMap();
-#ifdef __GLOBAL_STORAGE__
 	ScriptEnvironment::saveGameState();
-#endif
 }
 
 void Game::loadGameState()
 {
-#ifdef __GLOBAL_STORAGE__
 	ScriptEnvironment::loadGameState();
-#endif
 }
 
 int32_t Game::loadMap(std::string filename)
@@ -4398,6 +4393,16 @@ void Game::removePremium(Account account)
 		std::cout << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
 }
 
+void Game::autoSave()
+{
+	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
+	if(autoSaveEachMinutes <= 0)
+		return;
+
+	Dispatcher::getDispatcher().addTask(createTask(boost::bind(&Game::saveGameState, this)));
+	Scheduler::getScheduler().addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, boost::bind(&Game::autoSave, this)));
+}
+
 void Game::prepareServerSave()
 {
 	if(!serverSaveMessage[0])
@@ -4449,7 +4454,7 @@ void Game::serverSave()
 		Scheduler::getScheduler().addEvent(createSchedulerTask(86100000, boost::bind(&Game::prepareServerSave, this)));
 
 		//open server
-		Dispatcher::getDispatcher().addTask(createTask(boost::bind(&Game::setGameState, this, GAME_STATE_NORMAL)));
+		setGameState(GAME_STATE_NORMAL);
 	}
 }
 

@@ -61,6 +61,8 @@ class ConfigManager
 			OPTIMIZE_DATABASE,
 			STAMINA_SYSTEM,
 			CLEAN_PZ,
+			SAVE_GLOBAL_STORAGE,
+			SERVERSAVE_ENABLED,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -85,7 +87,6 @@ class ConfigManager
 			MYSQL_PASS,
 			MYSQL_DB,
 			DEFAULT_PRIORITY,
-			SERVERSAVE_ENABLED,
 			SQLITE_DB,
 			#ifdef MULTI_SQL_DRIVERS
 			SQL_TYPE,
@@ -137,6 +138,7 @@ class ConfigManager
 			WHITE_SKULL_TIME,
 			BAN_DAYS,
 			FINAL_BAN_DAYS,
+			AUTO_SAVE_EACH_MINUTES,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

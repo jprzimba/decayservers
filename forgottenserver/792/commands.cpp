@@ -758,9 +758,7 @@ bool Commands::getInfo(Creature* creature, const std::string& cmd, const std::st
 
 bool Commands::closeServer(Creature* creature, const std::string& cmd, const std::string& param)
 {
-	Dispatcher::getDispatcher().addTask(
-		createTask(boost::bind(&Game::setGameState, &g_game, GAME_STATE_CLOSED)));
-
+	g_game.setGameState(GAME_STATE_CLOSED);
 	if(creature->getPlayer())
 		creature->getPlayer()->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Server is now closed.");
 
@@ -769,9 +767,7 @@ bool Commands::closeServer(Creature* creature, const std::string& cmd, const std
 
 bool Commands::openServer(Creature* creature, const std::string& cmd, const std::string& param)
 {
-	Dispatcher::getDispatcher().addTask(
-		createTask(boost::bind(&Game::setGameState, &g_game, GAME_STATE_NORMAL)));
-
+	g_game.setGameState(GAME_STATE_NORMAL);
 	if(creature->getPlayer())
 		creature->getPlayer()->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Server is now open.");
 
@@ -1533,7 +1529,7 @@ bool Commands::saveGame(Creature* creature, const std::string& cmd, const std::s
 	if(!player)
 		return false;
 		
-	g_game.saveGameState(true);
+	g_game.saveGameState();
 	if(player)
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Save server completed.");
 	return true;

@@ -87,10 +87,8 @@ class ScriptEnvironment
 		void resetEnv();
 		void resetCallback() {m_callbackId = 0;}
 
-#ifdef __GLOBAL_STORAGE__
 		static bool saveGameState();
 		static bool loadGameState();
-#endif
 
 		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface)
 			{m_scriptId = scriptId; m_interface = scriptInterface;}
@@ -587,7 +585,7 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerPremiumDays(lua_State* L);
 
 		static int32_t luaGetOnlinePlayers(lua_State* L);
-		static int32_t luaSaveData(lua_State* L);
+		static int32_t luaSaveServer(lua_State* L);
 
 		static int32_t luaDoAddMark(lua_State* L);
 

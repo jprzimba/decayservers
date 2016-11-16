@@ -95,10 +95,17 @@
 	rateMagic = 3
 	rateSpawn = 1
 
-	-- Global Save
-	serverSaveEnabled = "yes"
+	-- Real Server Save
+	-- note: serverSaveHour means like 24:00, not that it will save every 24 hours,
+	-- if you want such a system use autoSaveEachMinutes. this serversave method
+	-- may be unstable, we recommend using otadmin if you want real serversaves.
+	serverSaveEnabled = "no"
 	serverSaveHour = 24
 	shutdownAtServerSave = "yes"
+
+	-- Server saving
+	autoSaveEachMinutes = 15
+	saveGlobalStorage = "no"
 
 	-- Clean System
 	cleanProtectedZones = "yes"

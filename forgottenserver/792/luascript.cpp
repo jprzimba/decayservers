@@ -122,61 +122,49 @@ void ScriptEnvironment::resetEnv()
 	m_realPos.z = 0;
 }
 
-#ifdef __GLOBAL_STORAGE__
 bool ScriptEnvironment::saveGameState()
 {
+	if(!g_config.getBool(ConfigManager::SAVE_GLOBAL_STORAGE))
+		return true;
+
 	Database* db = Database::getInstance();
-	if(!db->connect())
-		return false;
 
 	DBQuery query;
-	query << "DELETE FROM `global_storage`";
-	if(!db->executeQuery(query))
+	if(!db->executeQuery("DELETE FROM `global_storage`;"))
 		return false;
 
-	DBSplitInsert query_insert(db);
-	query_insert.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
-	query.str("");
+	DBInsert stmt(db);
+	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
 	for(StorageMap::const_iterator it = m_globalStorageMap.begin(); it != m_globalStorageMap.end(); ++it)
 	{
-		query << "(" << it->first << ", " << it->second << ")";
-		if(!query_insert.addRow(query.str()))
+		query << it->first << "," << it->second;
+		if(!stmt.addRow(query))
 			return false;
-
-		query.str("");
 	}
-	if(!query_insert.executeQuery())
-		return false;
-
-	return true;
+	return stmt.execute();
 }
 
 bool ScriptEnvironment::loadGameState()
 {
+	if(!g_config.getBool(ConfigManager::SAVE_GLOBAL_STORAGE))
+		return true;
+
 	Database* db = Database::getInstance();
-	if(!db->connect())
-		return false;
 
 	DBQuery query;
-	DBResult result;
-	query << "SELECT `key`, `value` FROM `global_storage`";
-	if(db->storeQuery(query, result))
+	DBResult* result;
+	query << "SELECT `key`, `value` FROM `global_storage`;";
+	if((result = db->storeQuery(query.str())))
 	{
-		if(result.getNumRows() == 0)
-			return false;
-
-		for(uint32_t i = 0; i < result.getNumRows(); ++i)
+		do
 		{
-			int32_t key = result.getDataInt("key", i);
-			int32_t value = result.getDataInt("value", i);
-
-			m_globalStorageMap[key] = value;
+			m_globalStorageMap[result->getDataInt("key")] = result->getDataInt("value");
 		}
+		while(result->next());
+		db->freeResult(result);
 	}
-
 	return true;
 }
-#endif
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
 {
@@ -1756,8 +1744,10 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerAddBlessing(cid, blessing)
 	lua_register(m_luaState, "doPlayerAddBlessing", LuaScriptInterface::luaDoPlayerAddBlessing);
 
+	//saveServer()
 	//saveData()
-	lua_register(m_luaState, "saveData", LuaScriptInterface::luaSaveData);
+	lua_register(m_luaState, "saveServer", LuaScriptInterface::luaSaveServer);
+	lua_register(m_luaState, "saveData", LuaScriptInterface::luaSaveServer);
 
 	//getPlayersByAccountNumber(accountNumber)
 	lua_register(m_luaState, "getPlayersByAccountNumber", LuaScriptInterface::luaGetPlayersByAccountNumber);
@@ -7042,9 +7032,12 @@ int32_t LuaScriptInterface::luaGetCreatureMaxHealth(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaSaveData(lua_State* L)
+int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 {
-	g_game.saveGameState(true);
+	Dispatcher::getDispatcher().addTask(
+		createTask(boost::bind(&Game::saveGameState, &g_game)));
+	lua_pushboolean(L, true);
+
 	return 1;
 }
 

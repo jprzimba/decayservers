@@ -119,6 +119,7 @@ class Game
 		bool reloadHighscores();
 		std::string getHighscoreString(unsigned short skill);
 
+		void autoSave();
 		void prepareServerSave();
 		void serverSave();
 
@@ -457,7 +458,7 @@ class Game
 
 		GameState_t getGameState();
 		void setGameState(GameState_t newState);
-		void saveGameState(bool savePlayers);
+		void saveGameState();
 		void loadGameState();
 		void refreshMap();
 
