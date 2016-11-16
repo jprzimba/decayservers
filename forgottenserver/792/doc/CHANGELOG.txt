@@ -18,44 +18,46 @@
 [v1
 	Server charges
 		* Game protocol 7.9x support with 7.92 items.
+		* Global events from TFS 0.2.15.
+		* GOD's ca move items from far.
 
 	Revbattlesys
-		* New Formula of Armor/Defense
-		* Weapons configurable in XML and Lua, Wands, Rods, Burst Arrows and Poison Arrows
-		* Drunk and Paralyze System
-		* Creatures can move diagonally
-		* New Lua Interface (Actions, NPCs)
-		* Big Changes in Spells
-		* New Decay System
-		* Rings and Amulets
-		* New Monster AI
-		* Vocations configurable in XML
-    		* Players can summon monsters (utevo res)
-		* Check if the player knows the spell
-		* Soul Points
-		* Last Writer of letters
+		* New Formula of Armor/Defense.
+		* Weapons configurable in XML and Lua, Wands, Rods, Burst Arrows and Poison Arrows.
+		* Drunk and Paralyze System.
+		* Creatures can move diagonally.
+		* New Lua Interface (Actions, NPCs).
+		* Big Changes in Spells.
+		* New Decay System.
+		* Rings and Amulets.
+		* New Monster AI.
+		* Vocations configurable in XML.
+    		* Players can summon monsters (utevo res).
+		* Check if the player knows the spell.
+		* Soul Points.
+		* Last Writer of letters.
 
 	Revdbsys
-		* Code cleaned up
-		* Flexible interface for database drivers
-		* Transparent database drivers
-		* Speed up
-		* Much less memory used (even 1000 times less for database queries!)
-		* Code optimization
+		* Code cleaned up.
+		* Flexible interface for database drivers.
+		* Transparent database drivers.
+		* Speed up.
+		* Much less memory used (even 1000 times less for database queries!).
+		* Code optimization.
 
-	SVN and Forgottenn Server features.
-		* Skull System
-		* Party System
-		* Bed System
-		* Save System
-		* Mute System
-		* Rule Violations Report system (ctrl + r)
-		* Bug report system (ctrl + z)
-		* Violation window system (ctrl + y)
-		* Walk to item
-    		* Push, death, walk delays
-    		* Magic effect displayed on air
-		* Wildcard~ for spells with params
-		* Fhost system (bug if you use utana vid with ghost)
+	SVN and Forgottenn Server features
+		* Skull System.
+		* Party System.
+		* Bed System.
+		* Save System.
+		* Mute System.
+		* Rule Violations Report system (ctrl + r).
+		* Bug report system (ctrl + z).
+		* Violation window system (ctrl + y).
+		* Walk to item.
+    		* Push, death, walk delays.
+    		* Magic effect displayed on air.
+		* Wildcard~ for spells with params.
+		* Ghost system (bug if you use utana vid with ghost).
     		* many many more...
 ]

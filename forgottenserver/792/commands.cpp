@@ -23,6 +23,9 @@
 #include <fstream>
 #include <utility>
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+
 #include "commands.h"
 #include "player.h"
 #include "npc.h"
@@ -49,8 +52,7 @@
 #include "status.h"
 #include "protocollogin.h"
 #endif
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "globalevent.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -63,6 +65,7 @@ extern Weapons* g_weapons;
 extern Game g_game;
 extern Chat g_chat;
 extern CreatureEvents* g_creatureEvents;
+extern GlobalEvents* g_globalEvents;
 
 extern bool readXMLInteger(xmlNodePtr p, const char *tag, int32_t &value);
 
@@ -608,6 +611,11 @@ bool Commands::reloadInfo(Creature* creature, const std::string& cmd, const std:
 		{
 			g_creatureEvents->reload();
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded creaturescripts.");
+		}
+		else if(tmpParam == "globalevent" || tmpParam == "globalevents")
+		{
+			g_globalEvents->reload();
+			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded global events.");
 		}
 		else if(tmpParam == "highscore" || tmpParam == "highscores")
 		{

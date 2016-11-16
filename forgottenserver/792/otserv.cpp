@@ -44,6 +44,7 @@
 #include "vocation.h"
 #include "scriptmanager.h"
 #include "configmanager.h"
+#include "globalevent.h"
 
 #include "tools.h"
 #include "ban.h"
@@ -77,7 +78,6 @@ OTSYS_THREAD_LOCK_CLASS::LogList OTSYS_THREAD_LOCK_CLASS::loglist;
 
 IPList serverIPs;
 
-extern AdminProtocolConfig* g_adminConfig;
 Ban g_bans;
 Game g_game;
 Commands commands;
@@ -87,10 +87,12 @@ Monsters g_monsters;
 Vocations g_vocations;
 
 extern Actions* g_actions;
+extern AdminProtocolConfig* g_adminConfig;
 extern CreatureEvents* g_creatureEvents;
 extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
 extern TalkActions* g_talkActions;
+extern GlobalEvents* g_globalEvents;
 
 RSA* g_otservRSA = NULL;
 Server* g_server = NULL;
