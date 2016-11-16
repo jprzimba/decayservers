@@ -286,13 +286,13 @@ enum Skulls_t
 	SKULL_RED = 4
 };
 
-enum Shields_t
+enum PartyShields_t
 {
 	SHIELD_NONE = 0,
-	SHIELD_INVITED = 1,
-	SHIELD_HALF = 2,
-	SHIELD_MEMBER = 3,
-	SHIELD_LEADER = 4
+	SHIELD_WHITEYELLOW = 1,
+	SHIELD_WHITEBLUE = 2,
+	SHIELD_BLUE = 3,
+	SHIELD_YELLOW = 4
 };
 
 enum item_t

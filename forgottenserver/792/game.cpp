@@ -4536,7 +4536,7 @@ void Game::checkPlayersRecord()
 		lastPlayersRecord = getPlayersOnline();
 		char buffer[50];
 		sprintf(buffer, "New record: %d players are logged in.", lastPlayersRecord);
-		broadcastMessage(buffer, MSG_STATUS_DEFAULT);
+		broadcastMessage(buffer, MSG_STATUS_WARNING);
 		savePlayersRecord();
 	}
 }
@@ -4862,110 +4862,101 @@ bool Game::loadExperienceStages()
 	return true;
 }
 
-bool Game::playerInviteToParty(uint32_t playerId, uint32_t targetId)
+bool Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
 		return false;
 
-	Player* target = getPlayerByID(targetId);
-	if(!target || target->isRemoved())
+	Player* invitedPlayer = getPlayerByID(invitedId);
+	if(!invitedPlayer || invitedPlayer->isRemoved() || invitedPlayer->isInviting(player))
 		return false;
 
-	if(!player->canSee(target->getPosition()))
+	if(invitedPlayer->getParty())
+	{
+		std::ostringstream ss;
+		ss << invitedPlayer->getName() << " is already in a party.";
+		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		return false;
+	}
+
+	Party* party = player->getParty();
+	if(!party)
+		party = new Party(player);
+	else if(party->getLeader() != player)
 		return false;
 
-	if(!target->getParty())
-	{
-		Party* party = player->getParty();
-		if(!party)
-		{
-			party = new Party(player, target);
-			return true;
-		}
-		else if(player == party->getLeader())
-		{
-			if(!party->isInvited(target))
-			{
-				party->invitePlayer(target);
-				return true;
-			}
-		}
-	}
-	else
-	{
-		char buffer[70];
-		sprintf(buffer, "%s is already in a party.", target->getName().c_str());
-		player->sendTextMessage(MSG_INFO_DESCR, buffer);
-	}
-	return false;
+	return party->invitePlayer(invitedPlayer);
 }
 
-bool Game::playerJoinParty(uint32_t playerId, uint32_t targetId)
-{
-	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved() || player->getParty())
-		return false;
-
-	Player* target = getPlayerByID(targetId);
-	if(!target || target->isRemoved())
-		return false;
-
-	Party* party = target->getParty();
-	if(!party || !player->canSee(target->getPosition()) ||
-		target != party->getLeader() || !party->isInvited(player))
-			return false;
-
-	party->acceptInvitation(player);
-	return true;
-}
-
-bool Game::playerRevokePartyInvitation(uint32_t playerId, uint32_t targetId)
+bool Game::playerJoinParty(uint32_t playerId, uint32_t leaderId)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
 		return false;
 
-	Player* target = getPlayerByID(targetId);
-	if(!target || target->isRemoved())
+	Player* leader = getPlayerByID(leaderId);
+	if(!leader || leader->isRemoved() || !leader->isInviting(player))
+		return false;
+
+	Party* party = leader->getParty();
+	if(!party || party->getLeader() != leader)
+		return false;
+
+	if(player->getParty())
+	{
+		player->sendTextMessage(MSG_INFO_DESCR, "You are already in a party.");
+		return false;
+	}
+	return party->joinParty(player);
+}
+
+bool Game::playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
 		return false;
 
 	Party* party = player->getParty();
-	if(!party || !player->canSee(target->getPosition()) ||
-		player != party->getLeader() || !party->isInvited(target))
-			return false;
+	if(!party || party->getLeader() != player)
+		return false;
 
-	party->revokeInvitation(target);
+	Player* invitedPlayer = getPlayerByID(invitedId);
+	if(!invitedPlayer || invitedPlayer->isRemoved() || !player->isInviting(invitedPlayer))
+		return false;
+
+	party->revokeInvitation(invitedPlayer);
 	return true;
 }
 
-bool Game::playerPassPartyLeadership(uint32_t playerId, uint32_t targetId)
+bool Game::playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
 		return false;
 
-	Player* target = getPlayerByID(targetId);
-	if(!target || target->isRemoved() || !target->getParty())
+	Party* party = player->getParty();
+	if(!party || party->getLeader() != player)
 		return false;
 
-	Party* party = player->getParty();
-	if(!party || !player->canSee(target->getPosition()) ||
-		player != party->getLeader() || party != target->getParty())
-			return false;
+	Player* newLeader = getPlayerByID(newLeaderId);
+	if(!newLeader || newLeader->isRemoved() || !player->isPartner(newLeader))
+		return false;
 
-	party->passLeadership(target);
-	return true;
+	return party->passPartyLeadership(newLeader);
 }
 
 bool Game::playerLeaveParty(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved() || !player->getParty() || player->hasCondition(CONDITION_INFIGHT))
+	if(!player || player->isRemoved())
 		return false;
 
-	player->getParty()->leave(player);
-	return true;
+	Party* party = player->getParty();
+	if(!party || player->hasCondition(CONDITION_INFIGHT))
+		return false;
+
+	return party->leaveParty(player);
 }
 
 void Game::sendGuildMotd(uint32_t playerId, uint32_t guildId)

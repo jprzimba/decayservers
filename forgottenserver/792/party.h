@@ -25,27 +25,41 @@
 
 typedef std::vector<Player*> PlayerVector;
 
+class Player;
+class Party;
+
 class Party
 {
 	public:
-		Party(Player* player, Player* target);
-		~Party();
-		
-		void invitePlayer(Player* player);
-		void acceptInvitation(Player* player);
-		void revokeInvitation(Player* player);
-		void passLeadership(Player* player);
-		bool isInvited(Player* player);
-		void leave(Player* player);
-		bool canOpenCorpse(uint32_t ownerId);		
+		Party(Player* _leader);
+		virtual ~Party();
 
 		Player* getLeader() const {return leader;}
-		void setLeader(Player* player) {leader = player;}
+		void setLeader(Player* _leader) {leader = _leader;}
+		PlayerVector getMembers() {return memberList;}
+
+		void disband();
+		bool invitePlayer(Player* player);
+		bool joinParty(Player* player);
+		void revokeInvitation(Player* player);
+		bool passPartyLeadership(Player* player);
+		bool leaveParty(Player* player);
+		bool removeInvite(Player* player);
+
+		bool isPlayerMember(const Player* player) const;
+		bool isPlayerInvited(const Player* player) const;
+		void updateAllPartyIcons();
+		void updatePartyIcons(Player* player);
+		void broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations = false);
+		bool disbandParty() {return (memberList.empty() && inviteList.empty());}
+		bool canOpenCorpse(uint32_t ownerId);
 
 	protected:
-		Player* leader;
 
-		PlayerVector members;
-		PlayerVector invitations;
+		Player* leader;
+		PlayerVector memberList;
+		PlayerVector inviteList;
+
 };
+
 #endif

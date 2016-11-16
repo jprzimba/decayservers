@@ -1786,6 +1786,15 @@ void LuaScriptInterface::registerFunctions()
 
 	//isPlayerGhost(cid)
 	lua_register(m_luaState, "isPlayerGhost", LuaScriptInterface::luaIsPlayerGhost);
+
+	//getPlayerParty(cid)
+	lua_register(m_luaState, "getPlayerParty", LuaScriptInterface::luaGetPlayerParty);
+
+	//doPlayerJoinParty(cid, leaderId)
+	lua_register(m_luaState, "doPlayerJoinParty", LuaScriptInterface::luaDoPlayerJoinParty);
+
+	//getPartyMembers(leaderId)
+	lua_register(m_luaState, "getPartyMembers", LuaScriptInterface::luaGetPartyMembers);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7315,5 +7324,85 @@ int32_t LuaScriptInterface::luaResultFree(lua_State* L)
 int32_t LuaScriptInterface::luaDatabaseTableExists(lua_State* L)
 {
 	lua_pushboolean(L, DatabaseManager::getInstance()->tableExists(popString(L)));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPlayerParty(lua_State* L)
+{
+	//getPlayerParty(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnvironment* env = getScriptEnv();
+	if(Player* player = env->getPlayerByUID(cid))
+	{
+		if(Party* party = player->getParty())
+			lua_pushnumber(L, env->addThing(party->getLeader()));
+		else
+			lua_pushnil(L);
+	}
+	else
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoPlayerJoinParty(lua_State* L)
+{
+	//doPlayerJoinParty(cid, lid)
+	ScriptEnvironment* env = getScriptEnv();
+
+	uint32_t cid = popNumber(L);
+	Player* leader = env->getPlayerByUID(cid);
+	if(!leader)
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	Player* player = env->getPlayerByUID(cid);
+	if(!player)
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	g_game.playerJoinParty(player->getID(), leader->getID());
+	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPartyMembers(lua_State* L)
+{
+	//getPartyMembers(leaderId)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnvironment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
+	if(player)
+	{
+		Party* party = player->getParty();
+		if(party)
+		{
+			PlayerVector list = party->getMembers();
+			list.push_back(party->getLeader());
+
+			PlayerVector::const_iterator it = list.begin();
+			lua_newtable(L);
+			for(uint32_t i = 1; it != list.end(); ++it, ++i)
+			{
+				lua_pushnumber(L, i);
+				lua_pushnumber(L, (*it)->getID());
+				lua_settable(L, -3);
+			}
+			return 1;
+		}
+	}
+	else
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+
+	lua_pushboolean(L, false);
 	return 1;
 }

@@ -108,6 +108,7 @@ typedef std::set<uint32_t> VIPListSet;
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
 typedef std::list<std::string> LearnedInstantSpellList;
 typedef std::list<uint32_t> InvitedToGuildsList;
+typedef std::list<Party*> PartyList;
 
 #define PLAYER_MAX_SPEED 1500
 #define PLAYER_MIN_SPEED 10
@@ -172,13 +173,20 @@ class Player : public Creature, public Cylinder
 
 		Vocation* getVocation() const {return vocation;}
 
+		void setParty(Party* _party) {party = _party;}
+		Party* getParty() const {return party;}
+		PartyShields_t getPartyShield(const Player* player) const;
+		bool isInviting(const Player* player) const;
+		bool isPartner(const Player* player) const;
+		void sendPlayerPartyIcons(Player* player);
+		bool addPartyInvitation(Party* party);
+		bool removePartyInvitation(Party* party);
+		void clearPartyInvitations();
+
 		OperatingSystem_t getOperatingSystem() const {return operatingSystem;}
 		void setOperatingSystem(OperatingSystem_t clientos) {operatingSystem = clientos;}
 
 		secureMode_t getSecureMode() const {return secureMode;}
-
-		Party* getParty() const {return party;}
-		void setParty(Party* _party) {party = _party;}
 
 		uint64_t getSpentMana() const {return manaSpent;}
 		const std::string& getGuildName() const {return guildName;}
@@ -396,10 +404,8 @@ class Player : public Creature, public Cylinder
 		Skulls_t getSkull() const;
 		Skulls_t getSkullClient(const Player* player) const;
 
-		Shields_t getShieldClient(Player* player);
 		void sendCreatureShield(const Creature* creature)
 			{if(client) client->sendCreatureShield(creature);}
-		bool isPartner(const Player* player) const;
 		
 		bool hasAttacked(const Player* attacked) const;
 		void addAttacked(const Player* attacked);
@@ -650,7 +656,6 @@ class Player : public Creature, public Cylinder
 
 	protected:
 		ProtocolGame* client;
-		Party* party;
 
 		uint32_t level;
 		uint32_t levelPercent;
@@ -720,6 +725,10 @@ class Player : public Creature, public Cylinder
 
 		Position loginPosition;
 		uint32_t lastIP;
+
+		//Party variables
+		Party* party;
+		PartyList invitePartyList;
 
 		//account variables
 		uint32_t accountNumber;

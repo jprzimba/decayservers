@@ -149,12 +149,12 @@ bool ChatChannel::addUser(Player* player)
 			break;
 
 		case 0x05:
-			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == 0)
+			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
 				return false;
 			break;
 
 		case 0x06:
-			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() != 0)
+			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() != VOCATION_NONE)
 				return false;
 			break;
 	}
@@ -948,7 +948,7 @@ ChannelList Chat::getChannelList(Player* player)
 				break;
 
 			case 0x05:
-				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == 0)
+				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
 					skip = true;
 				break;
 
@@ -1017,7 +1017,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 				break;
 
 			case 0x05:
-				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == 0)
+				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
 					return NULL;
 				break;
 

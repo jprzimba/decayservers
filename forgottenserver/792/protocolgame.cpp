@@ -1620,10 +1620,7 @@ void ProtocolGame::sendCreatureShield(const Creature* creature)
 		{
 			msg->AddByte(0x91);
 			msg->AddU32(creature->getID());
-			if(const Player* shieldPlayer = creature->getPlayer())
-				msg->AddByte(player->getShieldClient(const_cast<Player*>(shieldPlayer)));
-			else
-				msg->AddByte(SHIELD_NONE);
+			msg->AddByte(player->getPartyShield(creature->getPlayer()));
 		}
 	}
 }
@@ -2598,10 +2595,7 @@ void ProtocolGame::AddCreature(NetworkMessage* msg, const Creature* creature, bo
 	msg->AddU16(creature->getStepSpeed());
 	
 	msg->AddByte(player->getSkullClient(creature->getPlayer()));
-	if(const Player* shieldPlayer = creature->getPlayer())
-		msg->AddByte(player->getShieldClient(const_cast<Player*>(shieldPlayer)));
-	else
-		msg->AddByte(SHIELD_NONE);
+	msg->AddByte(player->getPartyShield(creature->getPlayer()));
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage* msg)

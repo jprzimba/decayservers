@@ -761,7 +761,7 @@ void Player::closeContainer(uint32_t cid)
 
 bool Player::canOpenCorpse(uint32_t ownerId)
 {
-	return (getID() == ownerId) || (party && party->canOpenCorpse(ownerId));
+	return getID() == ownerId || (party && party->canOpenCorpse(ownerId));
 }
 
 uint16_t Player::getLookCorpse() const
@@ -1404,19 +1404,9 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 
 		g_chat.removeUserFromAllChannels(this);
 
-		if(party)
-			party->leave(this);
-		else
-		{
-			for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
-			{
-				if((*it).second->party)
-				{
-					if((*it).second->party->isInvited(this))
-						(*it).second->party->revokeInvitation(this);
-				}
-			}
-		}
+		clearPartyInvitations();
+		if(getParty())
+			getParty()->leaveParty(this);
 
 		g_game.cancelRuleViolation(this);
 
@@ -4289,42 +4279,95 @@ void Player::setGroupId(int32_t newId)
 	}
 }
 
-bool Player::isPartner(const Player* player) const
+PartyShields_t Player::getPartyShield(const Player* player) const
 {
-	if(!player || !party || !player->party)
+	if(!player)
+		return SHIELD_NONE;
+	
+
+	if(getParty())
+    {
+		if(getParty()->getLeader() == player)
+			return SHIELD_YELLOW;
+
+		if(getParty()->isPlayerMember(player))
+			return SHIELD_BLUE;
+		
+		if(isInviting(player))
+			return SHIELD_WHITEBLUE;
+		
+	}
+	else if(player->isInviting(this))
+		return SHIELD_WHITEYELLOW;
+	
+
+	return SHIELD_NONE;
+}
+
+bool Player::isInviting(const Player* player) const
+{
+	if(!player || !getParty() || getParty()->getLeader() != this)
 		return false;
 
-	return (party == player->party);
+	return getParty()->isPlayerInvited(player);
 }
 
-Shields_t Player::getShieldClient(Player* player)
+bool Player::isPartner(const Player* player) const
 {
-	Shields_t shield = SHIELD_NONE;
-	if(!player)
-		return shield;
-	
-	if(party)
-	{
-		if(player->party)
-		{
-			if(party == player->party)
-			{
-				if(player == party->getLeader())
-					shield = SHIELD_LEADER;
-				else
-					shield = SHIELD_MEMBER;
-			}
-		}
-		else if(this == party->getLeader() && party->isInvited(player))
-			shield = SHIELD_HALF;
-	}
-	else if(player->party)
-	{
-		if(player->party->getLeader() == player && player->party->isInvited(this))
-			shield = SHIELD_INVITED;
-	}
-	return shield;
+	if(!player || !getParty() || !player->getParty())
+		return false;
+
+	return (getParty() == player->getParty());
 }
+
+void Player::sendPlayerPartyIcons(Player* player)
+{
+	sendCreatureShield(player);
+	sendCreatureSkull(player);
+}
+
+bool Player::addPartyInvitation(Party* party)
+{
+	if(!party)
+		return false;
+
+	PartyList::iterator it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
+	if(it != invitePartyList.end())
+		return false;
+
+	invitePartyList.push_back(party);
+	return true;
+}
+
+bool Player::removePartyInvitation(Party* party)
+{
+	if(!party)
+		return false;
+
+	PartyList::iterator it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
+	if(it != invitePartyList.end())
+	{
+		invitePartyList.erase(it);
+		return true;
+	}
+	return false;
+}
+
+void Player::clearPartyInvitations()
+{
+	if(!invitePartyList.empty())
+	{
+		PartyList list;
+		for(PartyList::iterator it = invitePartyList.begin(); it != invitePartyList.end(); ++it)
+			list.push_back(*it);
+
+		invitePartyList.clear();
+
+		for(PartyList::iterator it = list.begin(); it != list.end(); ++it)
+			(*it)->removeInvite(this);
+	}
+}
+
 
 void Player::regenerateStamina(int32_t offlineTime)
 {
