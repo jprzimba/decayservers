@@ -335,7 +335,7 @@ uint32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 		lua_pushnumber(L, current);
 		lua_pushnumber(L, old);
 
-		bool result = m_scriptInterface->callFunction(2);
+		bool result = m_scriptInterface->callFunction(2) != 0;
 		m_scriptInterface->releaseScriptEnv();
 
 		return result;
@@ -364,7 +364,7 @@ uint32_t GlobalEvent::executeEvent()
 			params = 1;
 		}
 
-		bool result = m_scriptInterface->callFunction(params);
+		bool result = m_scriptInterface->callFunction(params) != 0;
 		m_scriptInterface->releaseScriptEnv();
 		return result;
 	}

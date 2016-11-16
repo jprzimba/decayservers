@@ -142,7 +142,7 @@ bool Condition::executeCondition(Creature* creature, int32_t interval)
 	if(ticks == -1)
 		return true;
 
-	int32_t newTicks = std::max(((int32_t)0), ((int32_t)getTicks() - interval));
+	int32_t newTicks = std::max<int32_t>(((int32_t)0), ((int32_t)getTicks() - interval));
 	//Not using set ticks here since it would reset endTime
 	ticks = newTicks;
 	return (getEndTime() >= OTSYS_TIME());
