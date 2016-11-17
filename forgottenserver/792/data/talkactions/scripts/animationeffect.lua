@@ -53,4 +53,5 @@ function onSay(cid, words, param)
 		doSendDistanceShoot(position, {x = position.x + 5, y = position.y + 5, z = position.z}, param)
 		doSendDistanceShoot(position, {x = position.x + 6, y = position.y + 5, z = position.z}, param)
 	end
+	return false
 end

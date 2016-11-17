@@ -22,4 +22,5 @@ function onSay(cid, words, param)
 			doSendMagicEffect(getPlayerPosition(cid), CONST_ME_POFF)
 		end
 	end
+	return false
 end

@@ -43,4 +43,5 @@ function onSay(cid, words, param)
 	end
 	con:close()
 	env:close()
+	return false
 end

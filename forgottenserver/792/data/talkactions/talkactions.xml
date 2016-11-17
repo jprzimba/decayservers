@@ -5,7 +5,7 @@
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
-	<talkaction words="!deathlist" script="deathlist.lua"/>
+	<talkaction words="!deathlist" filter="first word" script="deathlist.lua"/>
 	
 	<!-- test talkactions -->
 	<talkaction words="!z" access="5" filter="first word" script="magiceffect.lua"/>
