@@ -1981,7 +1981,7 @@ bool Game::playerCreatePrivateChannel(uint32_t playerId)
 	if(!player || player->isRemoved() || !player->isPremium())
 		return false;
 
-	ChatChannel* channel = g_chat.createChannel(player, 0xFFFF);
+	ChatChannel* channel = g_chat.createChannel(player, CHANNEL_PRIVATE);
 	if(!channel)
 		return false;
 
@@ -2051,7 +2051,7 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 	if(!channel)
 		return false;
 
-	if(channel->getId() != 0x03)
+	if(channel->getId() != CHANNEL_RVR)
 		player->sendChannel(channel->getId(), channel->getName());
 	else
 		player->sendRuleViolationsChannel(channel->getId());
@@ -2107,7 +2107,7 @@ bool Game::playerProcessRuleViolation(uint32_t playerId, const std::string& name
 	rvr.isOpen = false;
 	rvr.gamemaster = player;
 
-	ChatChannel* channel = g_chat.getChannelById(0x03);
+	ChatChannel* channel = g_chat.getChannelById(CHANNEL_RVR);
 	if(channel)
 	{
 		for(UsersMap::const_iterator it = channel->getUsers().begin(); it != channel->getUsers().end(); ++it)
@@ -3422,7 +3422,7 @@ bool Game::playerReportRuleViolation(Player* player, const std::string& text)
 
 	ruleViolations[player->getID()] = rvr;
 
-	ChatChannel* channel = g_chat.getChannelById(0x03); //Rule Violations channel
+	ChatChannel* channel = g_chat.getChannelById(CHANNEL_RVR); //Rule Violations channel
 	if(channel)
 	{
 		channel->talk(player, SPEAK_RVR_CHANNEL, text, rvr->time);
@@ -4202,7 +4202,7 @@ bool Game::cancelRuleViolation(Player* player)
 	else
 	{
 		//Send to channel
-		ChatChannel* channel = g_chat.getChannelById(0x03);
+		ChatChannel* channel = g_chat.getChannelById(CHANNEL_RVR);
 		if(channel)
 		{
 			for(UsersMap::const_iterator ut = channel->getUsers().begin(); ut != channel->getUsers().end(); ++ut)
@@ -4227,7 +4227,7 @@ bool Game::closeRuleViolation(Player* player)
 	ruleViolations.erase(it);
 	player->sendLockRuleViolation();
 
-	ChatChannel* channel = g_chat.getChannelById(0x03);
+	ChatChannel* channel = g_chat.getChannelById(CHANNEL_RVR);
 	if(channel)
 	{
 		for(UsersMap::const_iterator ut = channel->getUsers().begin(); ut != channel->getUsers().end(); ++ut)

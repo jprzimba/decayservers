@@ -1698,7 +1698,7 @@ void ProtocolGame::sendClosePrivate(uint16_t channelId)
 	TRACK_MESSAGE(msg);
 	if(msg)
 	{
-		if(channelId == 0x00)
+		if(channelId == CHANNEL_GUILD)
 			g_chat.removeUserFromChannel(player, channelId);
 		msg->AddByte(0xB3);
 		msg->AddU16(channelId);

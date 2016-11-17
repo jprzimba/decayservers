@@ -1227,7 +1227,7 @@ bool Commands::joinGuild(Creature* creature, const std::string& cmd, const std::
 				{
 					player->sendTextMessage(MSG_INFO_DESCR, "You have joined the guild.");
 					IOGuild::getInstance()->joinGuild(player, guildId);
-					ChatChannel* guildChannel = g_chat.getChannel(player, 0x00);
+					ChatChannel* guildChannel = g_chat.getChannel(player, CHANNEL_GUILD);
 					char buffer[55];
 					sprintf(buffer, "%s has joined the guild.", player->name.c_str());
 					if(guildChannel)
