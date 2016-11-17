@@ -300,4 +300,38 @@ class Items
 		Array<ItemType*> items;
 };
 
+template<typename A>
+Array<A>::Array(uint32_t n)
+{
+	m_data = (A*)malloc(sizeof(A) * n);
+	memset(m_data, 0, sizeof(A)*n);
+	m_size = n;
+}
+
+template<typename A>
+Array<A>::~Array()
+{
+	free(m_data);
+}
+
+template<typename A>
+A Array<A>::getElement(uint32_t id)
+{
+	if (id < m_size) {
+		return m_data[id];
+	}
+
+	return 0;
+}
+
+template<typename A>
+const A Array<A>::getElement(uint32_t id) const
+{
+	if (id < m_size) {
+		return m_data[id];
+	}
+
+	return 0;
+}
+
 #endif
