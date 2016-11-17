@@ -617,7 +617,7 @@ class Player : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 		void gainExperience(uint64_t exp, Creature* source);
-		void addExperience(Creature* source, uint64_t exp, bool applyStaminaChange = false, bool applyMultiplier = false);
+		void addExperience(Creature* source, uint64_t exp, bool applyStaminaChange = false);
 
 		void updateInventoryWeight();
 

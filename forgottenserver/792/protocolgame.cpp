@@ -2708,7 +2708,8 @@ void ProtocolGame::AddCreatureInvisible(NetworkMessage* msg, const Creature* cre
 {
 	if(player->canSeeInvisibility())
 		AddCreatureOutfit(msg, creature, creature->getCurrentOutfit());
-	else {
+	else
+	{
 	    msg->AddU16(0);
 	    msg->AddU16(0);
 	}

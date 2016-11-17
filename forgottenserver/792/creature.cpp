@@ -1063,7 +1063,8 @@ double Creature::getDamageRatio(Creature* attacker) const
 
 uint64_t Creature::getGainedExperience(Creature* attacker) const
 {
-	return std::floor(getDamageRatio(attacker) * getLostExperience());
+	uint64_t lostExperience = getLostExperience();
+	return attacker->getPlayer() ? ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_game.getExperienceStage(attacker->getPlayer()->getLevel()))) : ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_config.getNumber(ConfigManager::RATE_EXPERIENCE)));
 }
 
 bool Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)

@@ -46,14 +46,10 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 		{
 			ticks = value;
 			return true;
-			break;
 		}
 
 		default:
-		{
 			return false;
-			break;
-		}
 	}
 	return false;
 }
@@ -81,7 +77,6 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 
 			conditionType = (ConditionType_t)value;
 			return true;
-			break;
 		}
 
 		case CONDITIONATTR_ID:
@@ -92,7 +87,6 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 
 			id = (ConditionId_t)value;
 			return true;
-			break;
 		}
 
 		case CONDITIONATTR_TICKS:
@@ -103,7 +97,6 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 
 			ticks = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONATTR_END:
@@ -114,7 +107,6 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 
 		default:
 			return false;
-			break;
 	}
 }
 
@@ -299,20 +291,17 @@ uint32_t ConditionGeneric::getIcons() const
 	switch(conditionType)
 	{
 		case CONDITION_MANASHIELD:
-		{
 			icons |= ICON_MANASHIELD;
 			break;
-		}
+
 		case CONDITION_INFIGHT:
-		{
 			icons |= ICON_SWORDS;
 			break;
-		}
+
 		case CONDITION_DRUNK:
-		{
 			icons |= ICON_DRUNK;
 			break;
-		}
+
 		default:
 			break;
 	}
@@ -521,84 +510,72 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			skills[SKILL_AXE] = value;
 			skills[SKILL_SWORD] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_FIST:
 		{
 			skills[SKILL_FIST] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_CLUB:
 		{
 			skills[SKILL_CLUB] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_SWORD:
 		{
 			skills[SKILL_SWORD] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_AXE:
 		{
 			skills[SKILL_AXE] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_DISTANCE:
 		{
 			skills[SKILL_DIST] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_SHIELD:
 		{
 			skills[SKILL_SHIELD] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_SKILL_FISHING:
 		{
 			skills[SKILL_FISH] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAXHITPOINTS:
 		{
 			stats[STAT_MAXHITPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAXMANAPOINTS:
 		{
 			stats[STAT_MAXMANAPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_SOULPOINTS:
 		{
 			stats[STAT_SOULPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAGICPOINTS:
 		{
 			stats[STAT_MAGICPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAXHITPOINTSPERCENT:
@@ -608,7 +585,6 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 			statsPercent[STAT_MAXHITPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAXMANAPOINTSPERCENT:
@@ -618,7 +594,6 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 			statsPercent[STAT_MAXMANAPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_SOULPOINTSPERCENT:
@@ -628,7 +603,6 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 			statsPercent[STAT_SOULPOINTS] = value;
 			return true;
-			break;
 		}
 
 		case CONDITIONPARAM_STAT_MAGICPOINTSPERCENT:
@@ -638,14 +612,10 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 			statsPercent[STAT_MAGICPOINTS] = value;
 			return true;
-			break;
 		}
 
 		default:
-		{
 			return false;
-			break;
-		}
 	}
 
 	return ret;
@@ -769,38 +739,23 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 	switch(param)
 	{
 		case CONDITIONPARAM_HEALTHGAIN:
-		{
 			healthGain = value;
 			return true;
-			break;
-		}
 
 		case CONDITIONPARAM_HEALTHTICKS:
-		{
 			healthTicks = value;
 			return true;
-			break;
-		}
 
 		case CONDITIONPARAM_MANAGAIN:
-		{
 			manaGain = value;
 			return true;
-			break;
-		}
 
 		case CONDITIONPARAM_MANATICKS:
-		{
 			manaTicks = value;
 			return true;
-			break;
-		}
 
 		default:
-		{
 			return false;
-			break;
-		}
 	}
 	return ret;
 }
@@ -888,24 +843,15 @@ bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 	switch(param)
 	{
 		case CONDITIONPARAM_SOULGAIN:
-		{
 			soulGain = value;
 			return true;
-			break;
-		}
 
 		case CONDITIONPARAM_SOULTICKS:
-		{
 			soulTicks = value;
 			return true;
-			break;
-		}
 
 		default:
-		{
 			return false;
-			break;
-		}
 	}
 
 	return ret;
@@ -931,61 +877,39 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 	switch(param)
 	{
 		case CONDITIONPARAM_OWNER:
-		{
 			owner = value;
 			return true;
-			break;
-		}
 		
 		case CONDITIONPARAM_FORCEUPDATE:
-		{
 			forceUpdate = (value != 0);
 			return true;
-			break;
-		}
 		
 		case CONDITIONPARAM_DELAYED:
-		{
 			delayed = (value != 0);
 			return true;
-			break;
-		}
 
 		case CONDITIONPARAM_MAXVALUE:
-		{
 			maxDamage = std::abs(value);
 			break;
-		}
 
 		case CONDITIONPARAM_MINVALUE:
-		{
 			minDamage = std::abs(value);
 			break;
-		}
 
 		case CONDITIONPARAM_STARTVALUE:
-		{
 			startDamage = std::abs(value);
 			break;
-		}
 
 		case CONDITIONPARAM_TICKINTERVAL:
-		{
 			tickInterval = std::abs(value);
 			break;
-		}
 
 		case CONDITIONPARAM_PERIODICDAMAGE:
-		{
 			periodDamage = value;
 			break;
-		}
 
 		default:
-		{
 			return false;
-			break;
-		}
 	}
 	return ret;
 }

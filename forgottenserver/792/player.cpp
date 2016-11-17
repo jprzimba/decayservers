@@ -1755,7 +1755,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChange/* = false*/, bool applyMultiplier/* = false*/)
+void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChange/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1767,9 +1767,6 @@ void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChan
 		sendStats();
 		return;
 	}
-
-	if(applyMultiplier)
-		exp *= g_game.getExperienceStage(level);
 
 	if(applyStaminaChange && g_config.getBool(ConfigManager::STAMINA_SYSTEM))
 	{
@@ -3436,13 +3433,10 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0)
 		return;
 
-	uint64_t oldExperience = experience;
-	addExperience(source, gainExp, true, true);
+	addExperience(source, gainExp, true);
 
 	//soul regeneration
-	// TODO: move to Lua script (onGainExperience event)
-	int64_t gainedExperience = experience - oldExperience;
-	if(gainedExperience >= level)
+	if(gainExp >= getLevel())
 	{
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
 		condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
