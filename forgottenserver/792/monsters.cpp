@@ -138,7 +138,7 @@ void MonsterType::createLoot(Container* corpse)
 	}
 		
 	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
-	if(!owner || owner->getStaminaMinutes() > 840)
+	if(owner)
 	{
 		for(LootItems::const_iterator it = lootItems.begin(); it != lootItems.end() && (corpse->capacity() - corpse->size() > 0); it++)
 		{

@@ -1199,7 +1199,7 @@ bool Commands::addSkill(Creature* creature, const std::string& cmd, const std::s
 		if(paramPlayer)
 		{
 			if(param2[0] == 'l' || param2[0] == 'e')
-				paramPlayer->addExperience(paramPlayer, Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false);
+				paramPlayer->addExperience(paramPlayer, Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience);
 			else if(param2[0] == 'm')
 				paramPlayer->addManaSpent(player->vocation->getReqMana(paramPlayer->getMagicLevel() + 1) - paramPlayer->manaSpent);
 			else

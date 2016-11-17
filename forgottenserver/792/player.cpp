@@ -180,9 +180,6 @@ Creature()
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	playerCount++;
 #endif
-
-	staminaMinutes = 3360;//2520
-	nextUseStaminaTime = 0;
 }
 
 Player::~Player()
@@ -1755,7 +1752,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChange/* = false*/)
+void Player::addExperience(Creature* source, uint64_t exp)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1766,17 +1763,6 @@ void Player::addExperience(Creature* source, uint64_t exp, bool applyStaminaChan
 		levelPercent = 0;
 		sendStats();
 		return;
-	}
-
-	if(applyStaminaChange && g_config.getBool(ConfigManager::STAMINA_SYSTEM))
-	{
-		if(staminaMinutes > 3240)//2400 end of bonus stamina
-		{
-			if(isPremium())
-				exp *= 1.5;
-		}
-		else if(staminaMinutes <= 840)
-			exp *= 0.5;
 	}
 
 	if(exp == 0)
@@ -3430,10 +3416,10 @@ void Player::onKilledCreature(Creature* target)
 
 void Player::gainExperience(uint64_t gainExp, Creature* source)
 {
-	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0)
+	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0)
 		return;
 
-	addExperience(source, gainExp, true);
+	addExperience(source, gainExp);
 
 	//soul regeneration
 	if(gainExp >= getLevel())
@@ -3449,12 +3435,6 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 {
 	if(hasFlag(PlayerFlag_NotGainExperience))
 		return;
-
-	if(target)
-	{
-		if(gainExp > 0 && target->getMonster())
-			useStamina();
-	}
 
 	Creature::onGainExperience(gainExp, target);
 	gainExperience(gainExp, target);
@@ -4369,46 +4349,3 @@ void Player::clearPartyInvitations()
 			(*it)->removeInvite(this);
 	}
 }
-
-
-void Player::regenerateStamina(int32_t offlineTime)
-{
-	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM))
-		return;
-
-	offlineTime -= 600;
-	if(offlineTime < 180)
-		return;
-
-	int16_t regainStaminaMinutes = offlineTime / 180;
-	staminaMinutes += regainStaminaMinutes;
-}
-
-void Player::useStamina()
-{
-	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM) || staminaMinutes == 0)
-		return;
-
-	time_t currentTime = time(NULL);
-	if(currentTime > nextUseStaminaTime)
-	{
-		time_t timePassed = currentTime - nextUseStaminaTime;
-		if(timePassed > 60)
-		{
-			if(staminaMinutes > 2)
-				staminaMinutes -= 2;
-			else
-				staminaMinutes = 0;
-
-			nextUseStaminaTime = currentTime + 120;
-		}
-		else
-		{
-			--staminaMinutes;
-			nextUseStaminaTime = currentTime + 60;
-		}
-
-		sendStats();
-	}
-}
-

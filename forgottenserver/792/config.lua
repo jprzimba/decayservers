@@ -40,7 +40,6 @@
 	criticalHitChance = 7
 	removeAmmoWhenUsingDistanceWeapon = "yes"
 	removeChargesFromRunes = "yes"
-	useStaminaSystem = "yes"
 
 	-- Connection Config
 	ip = "127.0.0.1"

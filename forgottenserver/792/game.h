@@ -101,7 +101,7 @@ typedef std::map< uint32_t, shared_ptr<RuleViolation> > RuleViolationsMap;
 #define EVENT_LIGHTINTERVAL 10000
 #define EVENT_DECAYINTERVAL 10000
 
-typedef std::vector< std::pair<std::string, unsigned int> > Highscore;
+typedef std::vector< std::pair<std::string, uint16_t> > Highscore;
 
 /**
   * Main Game class.

@@ -152,10 +152,6 @@ class Player : public Creature, public Cylinder
 			return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level))/3ULL;
 		}
 
-		uint16_t getStaminaMinutes() const {return staminaMinutes;}
-		void regenerateStamina(int32_t offlineTime);
-		void useStamina();
-
 		uint32_t getGuildId() const {return guildId;}
 		void setGuildId(uint32_t newGuildId) {guildId = newGuildId;}
 
@@ -617,7 +613,7 @@ class Player : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 		void gainExperience(uint64_t exp, Creature* source);
-		void addExperience(Creature* source, uint64_t exp, bool applyStaminaChange = false);
+		void addExperience(Creature* source, uint64_t exp);
 
 		void updateInventoryWeight();
 
@@ -722,7 +718,6 @@ class Player : public Creature, public Cylinder
 
 		time_t lastLoginSaved;
 		time_t lastLogout;
-		time_t nextUseStaminaTime;
 
 		Position loginPosition;
 		uint32_t lastIP;
@@ -776,8 +771,6 @@ class Player : public Creature, public Cylinder
 		LightInfo itemsLight;
 
 		OutfitList m_playerOutfits;
-		
-		uint16_t staminaMinutes;
 
 		//read/write storage data
 		uint32_t windowTextId;
