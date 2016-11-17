@@ -1534,6 +1534,9 @@ ConditionGeneric(_id, _type, _ticks)
 
 bool ConditionInvisible::startCondition(Creature* creature)
 {
+	if(!Condition::startCondition(creature))
+		return false;
+
 	g_game.internalCreatureChangeVisible(creature, false);
 	return true;
 }
@@ -1542,6 +1545,7 @@ void ConditionInvisible::endCondition(Creature* creature, ConditionEnd_t reason)
 {
 	if(!creature->isInvisible())
 		g_game.internalCreatureChangeVisible(creature, true);
+
 }
 
 ConditionOutfit::ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32_t _ticks) :
@@ -1584,6 +1588,9 @@ bool ConditionOutfit::serialize(PropWriteStream& propWriteStream)
 
 bool ConditionOutfit::startCondition(Creature* creature)
 {
+	if(!Condition::startCondition(creature))
+		return false;
+
 	changeOutfit(creature);
 	return true;
 }
@@ -1614,7 +1621,7 @@ void ConditionOutfit::addCondition(Creature* creature, const Condition* addCondi
 {
 	if(updateCondition(addCondition))
 	{
-		ticks = addCondition->getTicks();
+		setTicks(addCondition->getTicks());
 
 		const ConditionOutfit& conditionOutfit = static_cast<const ConditionOutfit&>(*addCondition);
 		outfits = conditionOutfit.outfits;
