@@ -1,5 +1,5 @@
 function onSay(cid, words, param)
-	if isPlayer(cid) == TRUE and param ~= "" and getPlayerAccess(cid) > 0 then
+	if isPlayer(cid) == TRUE and param ~= "" then
 		local position = getCreaturePosition(cid)
 		doSendDistanceShoot(position, {x = position.x - 7, y = position.y - 4, z = position.z}, param)
 		doSendDistanceShoot(position, {x = position.x - 7, y = position.y - 3, z = position.z}, param)

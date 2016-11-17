@@ -3151,6 +3151,11 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return false;
 	}
 
+	TalkActionResult_t result;
+	result = g_talkActions->onPlayerSpeak(player, type, text);
+	if(result == TALKACTION_BREAK)
+		return true;
+
 	if(playerSayCommand(player, type, text))
 		return true;
 
@@ -3223,10 +3228,6 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 		return internalCreatureSay(player, SPEAK_SAY, text);
 
 	TalkActionResult_t result;
-	result = g_talkActions->playerSaySpell(player, type, text);
-	if(result == TALKACTION_BREAK)
-		return true;
-
 	result = g_spells->playerSaySpell(player, type, text);
 	if(result == TALKACTION_BREAK)
 		return internalCreatureSay(player, SPEAK_SAY, text);

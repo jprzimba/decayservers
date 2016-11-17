@@ -8,6 +8,6 @@
 	<talkaction words="!deathlist" script="deathlist.lua"/>
 	
 	<!-- test talkactions -->
-	<talkaction words="!z" script="magiceffect.lua"/>
-	<talkaction words="!x" script="animationeffect.lua"/>
+	<talkaction words="!z" access="5" filter="first word" script="magiceffect.lua"/>
+	<talkaction words="!x" access="5" filter="first word" script="animationeffect.lua"/>
 </talkactions>

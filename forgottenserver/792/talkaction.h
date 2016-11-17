@@ -30,9 +30,16 @@
 
 enum TalkActionResult_t
 {
+	//TALKACTION_NOTFOUND,
 	TALKACTION_CONTINUE,
 	TALKACTION_BREAK,
-	TALKACTION_FAILED
+	TALKACTION_FAILED,
+};
+
+enum TalkActionFilterType
+{
+	TALKACTION_MATCH_QUOTATION,
+	TALKACTION_MATCH_FIRST_WORD,
 };
 
 class TalkAction;
@@ -42,19 +49,19 @@ class TalkActions : public BaseEvents
 	public:
 		TalkActions();
 		virtual ~TalkActions();
-
-		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words);
-
+	
+		TalkActionResult_t onPlayerSpeak(Player* player, SpeakClasses type, const std::string& words);
+	
 	protected:
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
 		virtual bool registerEvent(Event* event, xmlNodePtr p);
 		virtual void clear();
-
+	
 		typedef std::list< std::pair<std::string, TalkAction* > > TalkActionList;
 		TalkActionList wordsMap;
-
+	
 		LuaScriptInterface m_scriptInterface;
 };
 
@@ -63,19 +70,26 @@ class TalkAction : public Event
 	public:
 		TalkAction(LuaScriptInterface* _interface);
 		virtual ~TalkAction();
-
+		
 		virtual bool configureEvent(xmlNodePtr p);
-
-		std::string getWords() const {return m_words;}
-
+	
+		std::string getWords() const {return commandString;}
+		int32_t getAccess() const {return access;}
+		bool getLog() const {return registerlog;}
+		bool isCaseSensitive() const {return casesensitive;}
+		TalkActionFilterType getFilterType() const {return filterType;}
 		//scripting
-		int32_t executeSay(Creature* creature, const std::string& words, const std::string& param);
+		uint32_t executeSay(Creature* creature, const std::string& words, const std::string& param);
 		//
-
+	
 	protected:
 		virtual std::string getScriptEventName();
-
-		std::string m_words;
+	
+		std::string commandString;
+		int32_t access;
+		bool registerlog;
+		bool casesensitive;
+		TalkActionFilterType filterType;
 };
 
 #endif
