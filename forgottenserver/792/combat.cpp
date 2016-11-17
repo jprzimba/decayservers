@@ -1179,7 +1179,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 				angle = 0;
 				break;
 		}
-		double angleRad = 3.1416 * angle / 180.0;
+
+		double angleRad = M_PI * angle / 180.0;
 
 		float a = std::cos(angleRad);
 		float b = -std::sin(angleRad);
