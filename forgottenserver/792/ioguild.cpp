@@ -83,7 +83,7 @@ std::string IOGuild::getRankName(int16_t guildLevel, uint32_t guildId)
 
 	query << "SELECT `name` FROM `guild_ranks` WHERE `level` = " << guildLevel << " AND `guild_id` = " << guildId;
 	if(!(result = db->storeQuery(query.str())))
-		return false;
+		return NULL;
 
 	const std::string name = result->getDataString("name");
 	db->freeResult(result);

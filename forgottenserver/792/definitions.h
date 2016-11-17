@@ -23,7 +23,7 @@
 
 #include "exception.h"
 
-#ifdef XML_GCC_FREE
+#ifdef __XML_GCC_FREE__
 	#define xmlFreeOTSERV(s)	free(s)
 #else
 	#define xmlFreeOTSERV(s)	xmlFree(s)
@@ -97,12 +97,20 @@ enum passwordType_t
 #define _WIN32_WINNT 0x0601
 
 #ifdef __GNUC__
-	#include <ext/hash_map>
-	#include <ext/hash_set>
 	#include <assert.h>
-	#define OTSERV_HASH_MAP __gnu_cxx::hash_map
-	#define OTSERV_HASH_SET __gnu_cxx::hash_set
 	#define ATOI64 atoll
+	
+	#if defined(__XML_GCC_FREE__)
+		#include <unordered_map>
+		#include <unordered_set>
+		#define OTSERV_HASH_MAP std::unordered_map
+		#define OTSERV_HASH_SET std::unordered_set
+	#else
+		#include <ext/hash_map>
+		#include <ext/hash_set>
+		#define OTSERV_HASH_MAP __gnu_cxx::hash_map
+		#define OTSERV_HASH_SET __gnu_cxx::hash_set
+	#endif
 #else
 	typedef unsigned long long uint64_t;
 	
@@ -164,6 +172,11 @@ enum passwordType_t
 	
 	#define ATOI64 atoll
 	
+#endif
+
+#if defined(WIN32) && !defined(_MSC_VER)
+	#include <stdint.h>
+	#include <vector>
 #endif
 
 #endif
