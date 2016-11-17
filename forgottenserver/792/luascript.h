@@ -201,10 +201,7 @@ enum PlayerInfo_t
 	PlayerInfoAccess,
 	PlayerInfoLevel,
 	PlayerInfoMagLevel,
-	PlayerInfoMana,
-	PlayerInfoMaxMana,
 	PlayerInfoName,
-	PlayerInfoPosition,
 	PlayerInfoVocation,
 	PlayerInfoMasterPos,
 	PlayerInfoTown,
@@ -388,6 +385,7 @@ class LuaScriptInterface
 		static int32_t luaDoSetCreatureDropLoot(lua_State* L);
 		static int32_t luaGetPlayerSkullType(lua_State* L);
 		static int32_t luaGetPlayerBankBalance(lua_State* L);
+		static int32_t luaDoPlayerSetGuildId(lua_State* L);
 
 		//queries
 		static int32_t luaGetPlayerByName(lua_State* L);
@@ -436,8 +434,8 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerAccess(lua_State* L);
 		static int32_t luaGetPlayerLevel(lua_State* L);
 		static int32_t luaGetPlayerMagLevel(lua_State* L);
-		static int32_t luaGetPlayerMana(lua_State* L);
-		static int32_t luaGetPlayerMaxMana(lua_State* L);
+		static int32_t luaGetCreatureMana(lua_State* L);
+		static int32_t luaGetCreatureMaxMana(lua_State* L);
 		static int32_t luaGetCreatureHealth(lua_State* L);
 		static int32_t luaGetCreatureMaxHealth(lua_State* L);
 		static int32_t luaGetCreatureMaster(lua_State* L);
@@ -447,7 +445,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerName(lua_State* L);
-		static int32_t luaGetPlayerPosition(lua_State* L);
 		static int32_t luaGetPlayerSkill(lua_State* L);
 		static int32_t luaGetPlayerVocation(lua_State* L);
 		static int32_t luaGetPlayerMasterPos(lua_State* L);
@@ -502,6 +499,7 @@ class LuaScriptInterface
 		static int32_t luaGetWorldCreatures(lua_State* L);
 		static int32_t luaGetWorldUpTime(lua_State* L);
 		static int32_t luaBroadcastMessage(lua_State* L);
+		static int32_t luaDoPlayerBroadcastMessage(lua_State* L);
 		static int32_t luaGetGuildId(lua_State* L);
 
 		//type validation
@@ -596,7 +594,7 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerPremiumDays(lua_State* L);
 
 		static int32_t luaGetOnlinePlayers(lua_State* L);
-		static int32_t luaSaveServer(lua_State* L);
+		static int32_t luaDoSaveServer(lua_State* L);
 		static int32_t luaDoCleanMap(lua_State* L);
 
 		static int32_t luaDoAddMark(lua_State* L);

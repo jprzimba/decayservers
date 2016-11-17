@@ -376,7 +376,7 @@ class Game
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		bool internalCloseTrade(Player* player);
-		bool playerBroadcastMessage(Player* player, const std::string& text);
+		bool playerBroadcastMessage(Player* player, const std::string& text, SpeakClasses type);
 		bool broadcastMessage(const std::string& text, MessageClasses type);
 
 		//Implementation of player invoked events

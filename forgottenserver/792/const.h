@@ -103,7 +103,8 @@ enum ShootType_t
 
 enum SpeakClasses
 {
-	SPEAK_SAY		= 0x01,
+	SPEAK_CLASS_FIRST 	= 0x01,
+	SPEAK_SAY		= SPEAK_CLASS_FIRST,
 	SPEAK_WHISPER		= 0x02,
 	SPEAK_YELL		= 0x03,
 	SPEAK_PRIVATE_PN	= 0x04,
@@ -121,7 +122,8 @@ enum SpeakClasses
 	SPEAK_CHANNEL_R2	= 0x10,	//red anonymous - #d text
 	SPEAK_UNKNOWN_2		= 0x11,
 	SPEAK_MONSTER_SAY	= 0x12,
-	SPEAK_MONSTER_YELL	= 0x13
+	SPEAK_MONSTER_YELL	= 0x13,
+	SPEAK_CLASS_LAST 	= SPEAK_MONSTER_YELL
 };
 
 enum MessageClasses

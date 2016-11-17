@@ -373,7 +373,7 @@ bool Commands::broadcastMessage(Creature* creature, const std::string& cmd, cons
 	if(!player)
 		return false;
 
-	return g_game.playerBroadcastMessage(player, param);
+	return g_game.playerBroadcastMessage(player, param, SPEAK_BROADCAST);
 }
 
 bool Commands::banPlayer(Creature* creature, const std::string& cmd, const std::string& param)

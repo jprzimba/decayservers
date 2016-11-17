@@ -1964,15 +1964,19 @@ bool Game::playerMove(uint32_t playerId, Direction direction)
 	return (internalMoveCreature(player, direction) == RET_NOERROR);
 }
 
-bool Game::playerBroadcastMessage(Player* player, const std::string& text)
+bool Game::playerBroadcastMessage(Player* player, const std::string& text, SpeakClasses type)
 {
 	if(!player->hasFlag(PlayerFlag_CanBroadcast))
 		return false;
 
-	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
-	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
-		(*it).second->sendCreatureSay(player, SPEAK_BROADCAST, text);
-	return true;
+	if(type >= SPEAK_CLASS_FIRST && type <= SPEAK_CLASS_LAST)
+	{
+		std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
+		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
+			(*it).second->sendCreatureSay(player, type, text);
+		return true;
+	}
+	return false;
 }
 
 bool Game::playerCreatePrivateChannel(uint32_t playerId)
@@ -3190,7 +3194,7 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 			return playerSpeakToNpc(player, text);
 			break;
 		case SPEAK_BROADCAST:
-			return playerBroadcastMessage(player, text);
+			return playerBroadcastMessage(player, text, SPEAK_BROADCAST);
 			break;
 		case SPEAK_RVR_CHANNEL:
 			return playerReportRuleViolation(player, text);
