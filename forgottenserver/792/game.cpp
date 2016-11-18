@@ -3175,9 +3175,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case SPEAK_CHANNEL_R2:
 			return playerTalkToChannel(player, type, text, channelId);
 			break;
-		case SPEAK_PRIVATE_PN:
-			return playerSpeakToNpc(player, text);
-			break;
 		case SPEAK_BROADCAST:
 			return playerBroadcastMessage(player, text, SPEAK_BROADCAST);
 			break;
@@ -3343,30 +3340,8 @@ bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::str
 	return true;
 }
 
-bool Game::playerSpeakToNpc(Player* player, const std::string& text)
-{
-	SpectatorVec list;
-	SpectatorVec::iterator it;
-	getSpectators(list, player->getPosition());
-
-	//send to npcs only
-	Npc* tmpNpc = NULL;
-	for(it = list.begin(); it != list.end(); ++it)
-	{
-		if((tmpNpc = (*it)->getNpc()))
-			(*it)->onCreatureSay(player, SPEAK_PRIVATE_PN, text);
-	}
-	return true;
-}
-
 bool Game::npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize)
 {
-	if(player != NULL)
-	{
-		player->sendCreatureSay(npc, SPEAK_PRIVATE_NP, text);
-		player->onCreatureSay(npc, SPEAK_PRIVATE_NP, text);
-	}
-
 	if(publicize)
 	{
 		SpectatorVec list;

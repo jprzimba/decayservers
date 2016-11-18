@@ -2673,7 +2673,6 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage* msg, const Creature* creatur
 		case SPEAK_YELL:
 		case SPEAK_MONSTER_SAY:
 		case SPEAK_MONSTER_YELL:
-		case SPEAK_PRIVATE_NP:
 			msg->AddPosition(creature->getPosition());
 			break;
 
