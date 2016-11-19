@@ -114,4 +114,9 @@ bool booleanString(std::string);
 
 std::string convertIPToString(uint32_t ip);
 std::string formatDateShort(time_t time);
+
+CombatType_t getCombatType(const std::string& strValue);
+std::string getCombatName(CombatType_t combatType);
+CombatType_t indexToCombatType(uint32_t v);
+uint32_t combatTypeToIndex(CombatType_t combatType);
 #endif

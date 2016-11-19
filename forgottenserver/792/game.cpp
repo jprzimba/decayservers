@@ -1361,11 +1361,20 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 }
 
 ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index /*= INDEX_WHEREEVER*/,
-	uint32_t flags /*= 0*/, bool test /*= false*/)
+	uint32_t flags/* = 0*/, bool test/* = false*/)
 {
+	uint32_t remainderCount = 0;
+	return internalAddItem(toCylinder, item, index, flags, test, remainderCount);
+}
+
+ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index,
+	uint32_t flags, bool test, uint32_t& remainderCount)
+{
+	remainderCount = 0;
 	if(toCylinder == NULL || item == NULL)
 		return RET_NOTPOSSIBLE;
 
+	Cylinder* destCylinder = toCylinder;
 	Item* toItem = NULL;
 	toCylinder = toCylinder->__queryDestination(index, item, &toItem, flags);
 
@@ -1374,59 +1383,68 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	if(ret != RET_NOERROR)
 		return ret;
 
-	//check how much we can move
+	/*
+	Check if we can move add the whole amount, we do this by checking against the original cylinder,
+	since the queryDestination can return a cylinder that might only hold a part of the full amount.
+	*/
 	uint32_t maxQueryCount = 0;
-	ret = toCylinder->__queryMaxCount(index, item, item->getItemCount(), maxQueryCount, flags);
-
+	ret = destCylinder->__queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
 	if(ret != RET_NOERROR)
 		return ret;
 
-	uint32_t m = 0;
-	uint32_t n = 0;
+	if(test)
+		return RET_NOERROR;
 
-	if(item->isStackable())
-		m = std::min<uint32_t>((uint32_t)item->getItemCount(), maxQueryCount);
-	else
-		m = maxQueryCount;
-
-	if(!test)
+	if(item->isStackable() && toItem && toItem->getID() == item->getID())
 	{
-		Item* moveItem = item;
+		uint32_t m = std::min((uint32_t)item->getItemCount(), maxQueryCount);
+		uint32_t n = 0;
 
-		//update item(s)
-		if(item->isStackable())
+		if(toItem->getID() == item->getID())
 		{
-			if(toItem && toItem->getID() == item->getID())
+			n = std::min((uint32_t)100 - toItem->getItemCount(), m);
+			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
+		}
+
+		int32_t count = m - n;
+		if(count > 0)
+		{
+			if(item->getItemCount() != count)
 			{
-				n = std::min<uint32_t>((uint32_t)100 - toItem->getItemCount(), m);
-				toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
-			}
-			
-			if(m - n > 0)
-			{
-				if(m - n != item->getItemCount())
-					moveItem = Item::CreateItem(item->getID(), m - n);
+				Item* remainderItem = Item::CreateItem(item->getID(), count);
+				if(internalAddItem(destCylinder, remainderItem, INDEX_WHEREEVER, flags, false) != RET_NOERROR)
+				{
+					FreeThing(remainderItem);
+					remainderCount = count;
+				}
 			}
 			else
 			{
-				moveItem = NULL;
-				FreeThing(item);
-			}
-		}
+				toCylinder->__addThing(index, item);
 
-		if(moveItem)
-		{
-			toCylinder->__addThing(index, moveItem);
-			int32_t moveItemIndex = toCylinder->__getIndexOfThing(moveItem);
-			if(moveItemIndex != -1)
-				toCylinder->postAddNotification(moveItem, moveItemIndex);
+				int32_t itemIndex = toCylinder->__getIndexOfThing(item);
+				if(itemIndex != -1)
+					toCylinder->postAddNotification(item, itemIndex);
+			}
 		}
 		else
 		{
-			int32_t itemIndex = toCylinder->__getIndexOfThing(item);
+			//fully merged with toItem, item will be destroyed
+			item->onRemoved();
+			FreeThing(item);
+
+			int32_t itemIndex = toCylinder->__getIndexOfThing(toItem);
 			if(itemIndex != -1)
-				toCylinder->postAddNotification(item, itemIndex);
+				toCylinder->postAddNotification(toItem, itemIndex);
 		}
+	}
+	else
+	{
+		toCylinder->__addThing(index, item);
+
+		int32_t itemIndex = toCylinder->__getIndexOfThing(item);
+		if(itemIndex != -1)
+			toCylinder->postAddNotification(item, itemIndex);
 	}
 	return RET_NOERROR;
 }
@@ -1462,12 +1480,22 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 		}
 		cylinder->postRemoveNotification(item, index, isCompleteRemoval);
 	}
+	item->onRemoved();
 	return RET_NOERROR;
 }
 
-ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnMap /*= true*/)
+ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnMap /*= true*/, slots_t slot /*= SLOT_WHEREEVER*/)
 {
-	ReturnValue ret = internalAddItem(player, item);
+	uint32_t remainderCount = 0;
+	ReturnValue ret = internalAddItem(player, item, (int32_t)slot, 0, false, remainderCount);
+	if(remainderCount > 0)
+	{
+		Item* remainderItem = Item::CreateItem(item->getID(), remainderCount);
+		ReturnValue remaindRet = internalAddItem(player->getTile(), remainderItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		if(remaindRet != RET_NOERROR)
+			FreeThing(remainderItem);
+	}
+
 	if(ret != RET_NOERROR && dropOnMap)
 		ret = internalAddItem(player->getTile(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 
@@ -1778,7 +1806,7 @@ void Game::addMoney(Cylinder* cylinder, int32_t money, uint32_t flags /*= 0*/)
 
 Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 {
-	if(item->getID() == newId && (newCount == -1 || newCount == item->getSubType()))
+	if(item->getID() == newId && (newCount == -1 || (newCount == item->getSubType() && newCount != 0))) //chargeless item placed on map = infinite
 		return item;
 
 	Cylinder* cylinder = item->getParent();
@@ -1813,6 +1841,16 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			newItem = Item::CreateItem(newId);
 		else
 			newItem = Item::CreateItem(newId, newCount);
+
+		if(newItem == NULL)
+		{
+			#ifdef __DEBUG__
+			std::cout << "Error: [Game::transformItem] Item of type " << item->getID() << " transforming into invalid type " << newId << std::endl;
+			#endif
+			return NULL;
+		}
+
+		newItem->copyAttributes(item);
 
 		ret = internalAddItem(cylinder, newItem, INDEX_WHEREEVER);
 		if(ret != RET_NOERROR)

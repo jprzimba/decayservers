@@ -28,6 +28,9 @@
 #include "position.h"
 #include <map>
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+
 #define SLOTP_WHEREEVER 0xFFFFFFFF
 #define SLOTP_HEAD 1
 #define	SLOTP_NECKLACE 2
@@ -60,19 +63,10 @@ struct Abilities
 {
 	Abilities()
 	{
-		absorbPercentAll = 0;
-		absorbPercentPhysical = 0;
-		absorbPercentFire = 0;
-		absorbPercentEnergy = 0;
-		absorbPercentPoison = 0;
-		absorbPercentLifeDrain = 0;
-		absorbPercentManaDrain = 0;
-		absorbPercentDrown = 0;
-
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
 		memset(skills, 0, sizeof(skills));
-
+		memset(absorbPercent, 0, sizeof(absorbPercent));
 		memset(stats, 0 , sizeof(stats));
 		memset(statsPercent, 0, sizeof(statsPercent));
 
@@ -91,14 +85,7 @@ struct Abilities
 	};
 
 	//damage abilities modifiers
-	int16_t absorbPercentAll;
-	int16_t absorbPercentPhysical;
-	int16_t absorbPercentFire;
-	int16_t absorbPercentEnergy;
-	int16_t absorbPercentPoison;
-	int16_t absorbPercentLifeDrain;
-	int16_t absorbPercentManaDrain;
-	int16_t absorbPercentDrown;
+	int16_t absorbPercent[COMBAT_COUNT + 1];
 
 	//elemental damage
 	CombatType_t elementType;
@@ -156,6 +143,20 @@ class ItemType
 		bool isLevelDoor() const {return id == 1227 || id == 1229 || id == 1245 || id == 1247 || id == 1259 || id == 1261 || id == 3540 || id == 3549 || id == 5103 || id == 5112 || id == 5121 || id == 5130 || id == 5292 || id == 5294 || id == 6206 || id == 6208 || id == 6263 || id == 6265 || id == 6896 || id == 6905 || id == 7038 || id == 7047 || id == 8459 || id == 8461;}
 		bool hasSubType() const {return (isFluidContainer() || isSplash() || stackable || charges != 0);}
 
+		Abilities* getAbilities() { if(abilities == NULL) { abilities = new Abilities(); } return abilities; }
+
+		std::string getPluralName() const
+		{
+			std::string str = pluralName;
+			if(str.size() == 0 && name.size() != 0)
+			{
+				str = name;
+				if(showCount != 0)
+					str += "s";
+			}
+			return str;
+		}
+
 		Direction bedPartnerDir;
 		uint16_t transformToOnUse[2];
 		uint16_t transformToFree;
@@ -179,6 +180,7 @@ class ItemType
 		int32_t extraDefense;
 		int32_t armor;
 		uint16_t slot_position;
+		uint32_t levelDoor;
 		bool isVertical;
 		bool isHorizontal;
 		bool isHangable;
@@ -231,6 +233,7 @@ class ItemType
 		unsigned short transformDeEquipTo;
 		bool showDuration;
 		bool showCharges;
+		bool showAttributes;
 		uint32_t charges;
 		int32_t breakChance;
 		int32_t hitChance;
@@ -239,7 +242,7 @@ class ItemType
 		AmmoAction_t ammoAction;
 		FluidTypes_t fluidSource;
 
-		Abilities abilities;
+		Abilities* abilities;
 
 		Condition* condition;
 		CombatType_t combatType;
@@ -252,17 +255,20 @@ class Array
 	public:
 		Array(uint32_t n);
 		~Array();
-		
+
 		A getElement(uint32_t id);
 		const A getElement(uint32_t id) const;
 		void addElement(A a, uint32_t pos);
-		
+
+		void reset();
+
 		uint32_t size() {return m_size;}
-	
+
 	private:
 		A* m_data;
 		uint32_t m_size;
 };
+
 
 class Items
 {
@@ -287,17 +293,73 @@ class Items
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
+		bool parseItemNode(xmlNodePtr itemNode, uint32_t id);
 
 		void addItemType(ItemType* iType);
 
-		const ItemType* getElement(uint32_t id) const {return items.getElement(id);}
-		uint32_t size() {return items.size();}
+		const ItemType* getElement(uint32_t id) const {return items->getElement(id);}
+		uint32_t size() {return items->size();}
 
 	protected:
 		typedef std::map<int32_t, int32_t> ReverseItemMap;
 		ReverseItemMap reverseItemMap;
 
-		Array<ItemType*> items;
+		Array<ItemType*>* items;
 };
 
+template<typename A>
+Array<A>::Array(uint32_t n)
+{
+	m_data = (A*)malloc(sizeof(A)*n);
+	memset(m_data, 0, sizeof(A)*n);
+	m_size = n;
+}
+
+template<typename A>
+Array<A>::~Array()
+{
+	free(m_data);
+}
+
+template<typename A>
+A Array<A>::getElement(uint32_t id)
+{
+	if(id < m_size)
+		return m_data[id];
+
+	return 0;
+}
+
+template<typename A>
+const A Array<A>::getElement(uint32_t id) const
+{
+	if(id < m_size)
+		return m_data[id];
+
+	return 0;
+}
+
+template<typename A>
+void Array<A>::addElement(A a, uint32_t pos)
+{
+	#define INCREMENT 5000
+	if(pos >= m_size)
+	{
+		m_data = (A*)realloc(m_data, sizeof(A) * (pos + INCREMENT));
+		memset(m_data + m_size, 0, sizeof(A) * (pos + INCREMENT - m_size));
+		m_size = pos + INCREMENT;
+	}
+	m_data[pos] = a;
+}
+
+template<typename A>
+void Array<A>::reset()
+{
+	for(uint32_t i = 0; i < m_size; i++)
+	{
+		delete m_data[i];
+		m_data[i] = NULL;
+	}
+	memset(this->m_data, 0, sizeof(A) * this->m_size);
+}
 #endif

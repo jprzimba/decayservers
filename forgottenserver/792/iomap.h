@@ -82,13 +82,6 @@ struct OTBM_root_header
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_TeleportDest
-{
-	uint16_t _x;
-	uint16_t _y;
-	uint8_t _z;
-};
-
 struct OTBM_Tile_area_coords
 {
 	uint16_t _x;
@@ -157,6 +150,19 @@ class IOMap
 			}
 			return Houses::getInstance().loadHousesXML(map->housefile);
 		}
+
+		const std::string& getLastErrorString() const
+		{
+			return errorString;
+		}
+
+		void setLastErrorString(const std::string& _errorString)
+		{
+			errorString = _errorString;
+		}
+
+	protected:
+		std::string errorString;
 };
 
 #endif

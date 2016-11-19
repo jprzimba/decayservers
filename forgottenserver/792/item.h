@@ -76,8 +76,7 @@ enum ItemDecayState_t
 #pragma pack(1)
 struct TeleportDest
 {
-	uint16_t _x;
-	uint16_t _y;
+	uint16_t _x, _y;
 	uint8_t _z;
 };
 #pragma pack()
@@ -106,6 +105,13 @@ enum AttrTypes_t
 	ATTR_SLEEPERGUID = 20,
 	ATTR_SLEEPSTART = 21,
 	ATTR_CHARGES = 22
+};
+
+enum Attr_ReadValue
+{
+	ATTR_READ_CONTINUE,
+	ATTR_READ_ERROR,
+	ATTR_READ_END
 };
 
 class ItemAttributes
@@ -185,7 +191,8 @@ class ItemAttributes
 			ATTR_ITEM_DECAYING = 262144,
 			ATTR_ITEM_CORPSEOWNER = 524288,
 			ATTR_ITEM_CHARGES = 1048576,
-			ATTR_ITEM_FLUIDTYPE = 2097152
+			ATTR_ITEM_FLUIDTYPE = 2097152,
+			ATTR_ITEM_DOORID = 4194304
 		};
 
 		bool hasAttribute(itemAttrTypes type) const;
@@ -255,6 +262,7 @@ class Item : virtual public Thing, public ItemAttributes
 		Item(const uint16_t _type, uint16_t _count = 0);
 		Item(const Item &i);
 		virtual Item* clone() const;
+		virtual void copyAttributes(Item* item);
 
 		virtual ~Item();
 
@@ -275,12 +283,16 @@ class Item : virtual public Thing, public ItemAttributes
 		virtual BedItem* getBed() {return NULL;}
 		virtual const BedItem* getBed() const {return NULL;}
 
-		static std::string getDescription(const ItemType& it, int32_t lookDistance,
-			const Item* item = NULL, int32_t subType = -1);
+		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
+		static std::string getNameDescription(const ItemType& it, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
 
+		virtual std::string getDescription(int32_t lookDistance) const;
+		std::string getNameDescription() const;
+		std::string getWeightDescription() const;
+
 		//serialization
-		virtual bool readAttr(AttrTypes_t attr, PropStream& propStream);
+		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
 		virtual bool unserializeAttr(PropStream& propStream);
 		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
 		//virtual bool serializeItemNode();
@@ -289,9 +301,6 @@ class Item : virtual public Thing, public ItemAttributes
 
 		virtual bool isPushable() const {return !isNotMoveable();}
 		virtual int32_t getThrowRange() const {return (isPickupable() ? 15 : 2);}
-
-		virtual std::string getDescription(int32_t lookDistance) const;
-		std::string getWeightDescription() const;
 
 		uint16_t getID() const {return id;}
 		uint16_t getClientID() const {return items[id].clientId;}
@@ -367,6 +376,7 @@ class Item : virtual public Thing, public ItemAttributes
 
 		virtual bool canRemove() const {return true;}
 		virtual bool canTransform() const {return true;}
+		virtual void onRemoved();
 		virtual bool onTradeEvent(TradeEvents_t event, Player* owner){return true;}
 
 		virtual void __startDecaying();

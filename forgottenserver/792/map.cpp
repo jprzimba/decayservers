@@ -64,41 +64,9 @@ Map::~Map()
 bool Map::loadMap(const std::string& identifier)
 {
 	IOMap* loader = new IOMap();
-
-	bool loadMapSuccess = loader->loadMap(this, identifier);
-	if(!loadMapSuccess)
+	if(!loader->loadMap(this, identifier))
 	{
-		switch(getLastError())
-		{
-			case LOADMAPERROR_CANNOTOPENFILE:
-				std::cout << "> FATAL: Could not open the map stream." << std::endl;
-				break;
-			case LOADMAPERROR_GETPROPFAILED:
-				std::cout << "> FATAL: Failed to read stream properties. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_OUTDATEDHEADER:
-				std::cout << "> FATAL: Header information is outdated. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_GETROOTHEADERFAILED:
-				std::cout << "> FATAL: Failed to read header information. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_FAILEDTOCREATEITEM:
-				std::cout << "> FATAL: Failed to create an object. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_FAILEDUNSERIALIZEITEM:
-				std::cout << "> FATAL: Failed to unserialize an object. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_FAILEDTOREADCHILD:
-				std::cout << "> FATAL: Failed to read child stream. Code: " << getErrorCode() << std::endl;
-				break;
-			case LOADMAPERROR_UNKNOWNNODETYPE:
-				std::cout << "> FATAL: Unknown stream node found. Code: " << getErrorCode() << std::endl;
-				break;
-			default:
-				std::cout << "> FATAL: Unknown error!" << std::endl;
-				break;
-		}
-		getchar();
+		std::cout << "FATAL: [OTBM loader] " << loader->getLastErrorString() << std::endl;
 		return false;
 	}
 

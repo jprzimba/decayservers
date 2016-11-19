@@ -1062,7 +1062,7 @@ int32_t IOLoginData::getLevel(uint32_t guid)
 
 bool IOLoginData::isPremium(uint32_t guid)
 {
-	if(g_config.getString(ConfigManager::FREE_PREMIUM) == "yes")
+	if(g_config.getBool(ConfigManager::FREE_PREMIUM))
 		return true;
 
 	Database* db = Database::getInstance();

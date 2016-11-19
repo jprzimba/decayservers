@@ -14,8 +14,8 @@
 	-- Account Manager
 	accountManager = "yes"
 	newPlayerChooseVoc = "yes"
-	newPlayerSpawnPosX = 95
-	newPlayerSpawnPosY = 117
+	newPlayerSpawnPosX = 1000
+	newPlayerSpawnPosY = 1000
 	newPlayerSpawnPosZ = 7
 	newPlayerTownId = 1
 	newPlayerLevel = 8

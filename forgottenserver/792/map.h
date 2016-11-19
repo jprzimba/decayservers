@@ -267,22 +267,8 @@ class Map
 
 		int32_t onRemoveTileItem();
 
-		MapError_t getLastError() {return lasterrortype;}
-		int32_t getErrorCode() {return lasterrorcode;}
-
-		void setLastError(MapError_t errtype, NODE _code = 0)
-		{
-			if(_code)
-				lasterrorcode = _code->start;
-			else
-				lasterrorcode = 0;
-			lasterrortype = errtype;
-		}
-
 	protected:
 		uint32_t mapWidth, mapHeight;
-		MapError_t lasterrortype;
-		uint32_t lasterrorcode;
 		std::string spawnfile;
 		std::string housefile;
 		SpectatorCache spectatorCache;

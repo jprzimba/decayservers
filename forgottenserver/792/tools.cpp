@@ -711,6 +711,12 @@ struct AmmoActionNames
 	AmmoAction_t ammoAction;
 };
 
+struct CombatTypeNames
+{
+	const char* name;
+	CombatType_t combat;
+};
+
 MagicEffectNames magicEffectNames[] =
 {
 	{"redspark",		NM_ME_DRAW_BLOOD},
@@ -767,6 +773,19 @@ ShootTypeNames shootTypeNames[] =
 	{"powerbolt",		NM_SHOOT_POWERBOLT},
 	{"poison",		NM_SHOOT_POISONFIELD},
 	{"infernalbolt",	NM_SHOOT_INFERNALBOLT},
+};
+
+CombatTypeNames combatTypeNames[] =
+{
+	{"physical",		COMBAT_PHYSICALDAMAGE},
+	{"energy",		COMBAT_ENERGYDAMAGE},
+	{"poison",		COMBAT_POISONDAMAGE},
+	{"fire",		COMBAT_FIREDAMAGE},
+	{"undefined",		COMBAT_UNDEFINEDDAMAGE},
+	{"lifedrain",		COMBAT_LIFEDRAIN},
+	{"manadrain",		COMBAT_MANADRAIN},
+	{"healing",		COMBAT_HEALING},
+	{"drown",		COMBAT_DROWNDAMAGE},
 };
 
 AmmoTypeNames ammoTypeNames[] =
@@ -1000,4 +1019,50 @@ std::string formatDateShort(time_t time)
 			return "";
 	}
 	return buffer;
+}
+
+CombatType_t indexToCombatType(uint32_t v)
+{
+	if(v == 0)
+		return COMBAT_FIRST;
+
+	return (CombatType_t)(1 << (v - 1));
+}
+
+CombatType_t getCombatType(const std::string& strValue)
+{
+	for(uint32_t i = 0; i < sizeof(combatTypeNames) / sizeof(CombatTypeNames); ++i)
+	{
+		if(strcasecmp(strValue.c_str(), combatTypeNames[i].name) == 0)
+			return combatTypeNames[i].combat;
+	}
+	return COMBAT_NONE;
+}
+
+std::string getCombatName(CombatType_t combatType)
+{
+	for(uint32_t i = 0; i < sizeof(combatTypeNames) / sizeof(CombatTypeNames); ++i)
+	{
+		if(combatTypeNames[i].combat == combatType)
+			return combatTypeNames[i].name;
+	}
+	return "unknown";
+}
+
+uint32_t combatTypeToIndex(CombatType_t combatType)
+{
+	switch(combatType)
+	{
+		case COMBAT_NONE: return 0;
+		case COMBAT_PHYSICALDAMAGE: return 1;
+		case COMBAT_ENERGYDAMAGE: return 2;
+		case COMBAT_POISONDAMAGE: return 3;
+		case COMBAT_FIREDAMAGE: return 4;
+		case COMBAT_UNDEFINEDDAMAGE: return 5;
+		case COMBAT_LIFEDRAIN: return 6;
+		case COMBAT_MANADRAIN: return 7;
+		case COMBAT_HEALING: return 8;
+		case COMBAT_DROWNDAMAGE: return 9;
+		default: return 0;
+	}
 }

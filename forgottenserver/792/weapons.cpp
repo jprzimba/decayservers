@@ -180,7 +180,6 @@ Weapon::~Weapon()
 
 void Weapon::setCombatParam(const CombatParams& _params)
 {
-	m_scripted = false;
 	params = _params;
 }
 
@@ -308,6 +307,9 @@ bool Weapon::loadFunction(const std::string& functionName)
 		if(configureWeapon(Item::items[getID()]))
 			return true;
 	}
+	else if(tmpFunctionName == "script")
+		m_scripted = true;
+
 	return false;
 }
 
@@ -567,9 +569,11 @@ bool WeaponMelee::configureEvent(xmlNodePtr p)
 
 bool WeaponMelee::configureWeapon(const ItemType& it)
 {
-	m_scripted = false;
-	elementType = it.abilities.elementType;
-	elementDamage = it.abilities.elementDamage;
+	if(it.abilities)
+	{
+		elementType = it.abilities->elementType;
+		elementDamage = it.abilities->elementDamage;
+	}
 	return Weapon::configureWeapon(it);
 }
 
@@ -738,8 +742,6 @@ bool WeaponDistance::configureEvent(xmlNodePtr p)
 
 bool WeaponDistance::configureWeapon(const ItemType& it)
 {
-	m_scripted = false;
-
 	//default values
 	if(it.ammoType != AMMO_NONE)
 	{

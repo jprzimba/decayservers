@@ -209,7 +209,7 @@ class PropStream
 		template <typename T>
 		inline bool GET_STRUCT(T* &ret)
 		{
-			if(size() < (long)sizeof(T))
+			if(size() < (int32_t)sizeof(T))
 			{
 				ret = NULL;
 				return false;

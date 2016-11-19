@@ -75,11 +75,11 @@ class Door : public Item
 		House* getHouse(){return house;}
 		
 		//serialization
-		virtual bool readAttr(AttrTypes_t attr, PropStream& propStream);
+		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
 		virtual bool serializeAttr(PropWriteStream& propWriteStream);
 	
-		void setDoorId(uint32_t _doorId){ doorId = _doorId;}
-		uint32_t getDoorId() const{ return doorId;}
+		void setDoorId(uint32_t _doorId){ setIntAttr(ATTR_ITEM_DOORID, (uint32_t)_doorId); }
+		uint32_t getDoorId() const{ return getIntAttr(ATTR_ITEM_DOORID); }
 		
 		bool canUse(const Player* player);
 		
@@ -87,7 +87,8 @@ class Door : public Item
 		bool getAccessList(std::string& list) const;
 	
 		//overrides
-		virtual bool canRemove() const {return (house == NULL);}
+		virtual void onRemoved();
+		void copyAttributes(Item* item);
 	
 	protected:
 		void setHouse(House* _house);
@@ -141,6 +142,7 @@ class House
 		~House();
 
 		void addTile(HouseTile* tile);
+		void updateDoorDescription();
 
 		bool canEditAccessList(uint32_t listId, const Player* player);
 		// listId special values:
@@ -178,6 +180,7 @@ class House
 		uint32_t getHouseId() const {return houseid;}
 
 		void addDoor(Door* door);
+		void removeDoor(Door* door);
 		Door* getDoorByNumber(uint32_t doorId);
 		Door* getDoorByNumber(uint32_t doorId) const;
 		Door* getDoorByPosition(const Position& pos);
@@ -203,6 +206,7 @@ class House
 		bool isLoaded;
 		uint32_t houseid;
 		uint32_t houseOwner;
+		std::string houseOwnerName;
 		HouseTileList houseTiles;
 		HouseDoorList doorList;
 		HouseBedItemList bedsList;

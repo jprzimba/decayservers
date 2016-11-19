@@ -70,6 +70,8 @@ uint32_t ScriptEnvironment::m_lastResultId = 0;
 
 ScriptEnvironment::StorageMap ScriptEnvironment::m_globalStorageMap;
 
+ScriptEnvironment::TempItemListMap ScriptEnvironment::m_tempItems;
+
 ScriptEnvironment::ScriptEnvironment()
 {
 	resetEnv();
@@ -99,10 +101,14 @@ void ScriptEnvironment::resetEnv()
 	m_interface = NULL;
 	m_localMap.clear();
 
-	for(std::list<Item*>::iterator it = m_tempItems.begin(); it != m_tempItems.end(); ++it)
+	for(TempItemListMap::iterator mit = m_tempItems.begin(); mit != m_tempItems.end(); ++mit)
 	{
-		if((*it)->getParent() == VirtualCylinder::virtualCylinder)
-			delete *it;
+		ItemList& itemList = mit->second;
+		for(ItemList::iterator it = itemList.begin(); it != itemList.end(); ++it)
+		{
+			if((*it)->getParent() == VirtualCylinder::virtualCylinder)
+				g_game.FreeThing(*it);
+		}
 	}
 	m_tempItems.clear();
 
@@ -406,9 +412,23 @@ Condition* ScriptEnvironment::getConditionObject(uint32_t conditionId)
 	return NULL;
 }
 
-void ScriptEnvironment::addTempItem(Item* item)
+void ScriptEnvironment::addTempItem(ScriptEnvironment* env, Item* item)
 {
-	m_tempItems.push_back(item);
+	m_tempItems[env].push_back(item);
+}
+
+void ScriptEnvironment::removeTempItem(Item* item)
+{
+	for(TempItemListMap::iterator mit = m_tempItems.begin(); mit != m_tempItems.end(); ++mit)
+	{
+		ItemList& itemList = mit->second;
+		ItemList::iterator it = std::find(itemList.begin(), itemList.end(), item);
+		if(it != itemList.end())
+		{
+			itemList.erase(it);
+			break;
+		}
+	}
 }
 
 DBResult* ScriptEnvironment::getResultByID(uint32_t id)
@@ -3447,7 +3467,7 @@ int32_t LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
 	}
 
 	newItem->setParent(VirtualCylinder::virtualCylinder);
-	env->addTempItem(newItem);
+	env->addTempItem(env, newItem);
 
 	uint32_t uid = env->addThing(newItem);
 	lua_pushnumber(L, uid);
@@ -6601,7 +6621,8 @@ int32_t LuaScriptInterface::luaGetItemDescriptions(lua_State* L)
 	lua_newtable(L);
 	setField(L, "name", it.name.c_str());
 	setField(L, "article", it.article.c_str());
-	setField(L, "plural", it.pluralName.c_str());
+	setField(L, "plural", it.getPluralName().c_str());
+	setField(L, "description", it.description.c_str());
 	return 1;
 }
 
