@@ -1397,12 +1397,12 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 
 	if(item->isStackable() && toItem && toItem->getID() == item->getID())
 	{
-		uint32_t m = std::min((uint32_t)item->getItemCount(), maxQueryCount);
+		uint32_t m = std::min<uint32_t>((uint32_t)item->getItemCount(), maxQueryCount);
 		uint32_t n = 0;
 
 		if(toItem->getID() == item->getID())
 		{
-			n = std::min((uint32_t)100 - toItem->getItemCount(), m);
+			n = std::min<uint32_t>((uint32_t)100 - toItem->getItemCount(), m);
 			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 		}
 

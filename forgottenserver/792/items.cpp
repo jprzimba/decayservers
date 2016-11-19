@@ -1070,19 +1070,19 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 								if(tmpStrValue == "ticks")
 								{
 									if(readXMLInteger(fieldAttributesNode, "value", intValue))
-										ticks = std::max(0, intValue);
+										ticks = std::max<uint32_t>(0, intValue);
 								}
 
 								if(tmpStrValue == "count")
 								{
 									if(readXMLInteger(fieldAttributesNode, "value", intValue))
-										count = std::max(1, intValue);
+										count = std::max<int32_t>(1, intValue);
 								}
 
 								if(tmpStrValue == "start")
 								{
 									if(readXMLInteger(fieldAttributesNode, "value", intValue))
-										start = std::max(0, intValue);
+										start = std::max<int32_t>(0, intValue);
 								}
 
 								if(tmpStrValue == "damage")

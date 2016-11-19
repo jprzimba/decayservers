@@ -532,7 +532,7 @@ class Game
 		Highscore highscoreStorage[9];
 		time_t lastHSUpdate;
 
-		bool serverSaveMessage[2];
+		bool serverSaveMessage[3];
 
 		std::vector<Thing*> ToReleaseThings;
 

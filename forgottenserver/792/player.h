@@ -686,7 +686,7 @@ class Player : public Creature, public Cylinder
 		int32_t groupId;
 		OperatingSystem_t operatingSystem;
 
-		bool talkState[13], accountManager;
+		bool talkState[14], accountManager;
 		int32_t newVocation;
 		PlayerSex_t _newSex;
 		uint32_t realAccount, newAccount;
