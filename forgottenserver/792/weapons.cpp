@@ -981,6 +981,19 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		maxChange = pugi::cast<int32_t>(attr.value());
 	}
 
+	if (attr = node.attribute("type")) {
+		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		if (tmpStrValue == "earth" || tmpStrValue == "poison") {
+			params.combatType = COMBAT_POISONDAMAGE;
+		} else if (tmpStrValue == "energy") {
+			params.combatType = COMBAT_ENERGYDAMAGE;
+		} else if (tmpStrValue == "fire") {
+			params.combatType = COMBAT_FIREDAMAGE;
+		} else {
+			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
+		}
+	}
+
 	return true;
 }
 

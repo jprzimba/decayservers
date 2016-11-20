@@ -205,7 +205,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	m_words = wordsAttribute.as_string();
+	commandString = wordsAttribute.as_string();
 	return true;
 }
 
