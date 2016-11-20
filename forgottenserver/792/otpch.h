@@ -15,6 +15,8 @@
 #include <winerror.h>
 #endif
 
+//pugixml
+#include <pugixml.hpp>
 //libxml
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

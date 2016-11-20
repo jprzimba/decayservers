@@ -23,6 +23,10 @@
 
 #include "exception.h"
 
+//pugixml
+#include "pugicast.h"
+#include <pugixml.hpp>
+
 #ifdef __XML_GCC_FREE__
 	#define xmlFreeOTSERV(s)	free(s)
 #else

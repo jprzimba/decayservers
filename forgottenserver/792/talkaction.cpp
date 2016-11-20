@@ -77,7 +77,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool TalkActions::registerEvent(Event* event, xmlNodePtr p)
+bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	TalkAction* talkAction = dynamic_cast<TalkAction*>(event);
 	if(!talkAction)
@@ -197,35 +197,15 @@ TalkAction::~TalkAction()
 	//
 }
 
-bool TalkAction::configureEvent(xmlNodePtr p)
+bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
-	std::string strValue;
-	int32_t intValue;
-	if(readXMLString(p, "words", strValue))
-		commandString = strValue;
-	else
-	{
-		std::cout << "Error: [TalkAction::configureEvent] No words for TalkAction or Spell." << std::endl;
+	pugi::xml_attribute wordsAttribute = node.attribute("words");
+	if (!wordsAttribute) {
+		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
 		return false;
 	}
 
-	if(readXMLString(p, "filter", strValue))
-	{
-		if(strValue == "quotation")
-			filterType = TALKACTION_MATCH_QUOTATION;
-		else if(strValue == "first word")
-			filterType = TALKACTION_MATCH_FIRST_WORD;
-	}
-
-	if(readXMLString(p, "registerlog", strValue))
-		registerlog = booleanString(strValue);
-		
-	if(readXMLString(p, "case-sensitive", strValue) || readXMLString(p, "sensitive", strValue))
-		casesensitive = booleanString(strValue);
-
-	if(readXMLInteger(p, "access", intValue))
-		access = intValue;
-
+	m_words = wordsAttribute.as_string();
 	return true;
 }
 

@@ -61,7 +61,7 @@ class Spells : public BaseEvents
 		virtual void clear();
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
 		RunesMap runes;
 		InstantsMap instants;
@@ -92,7 +92,7 @@ class CombatSpell : public Event, public BaseSpell
 
 		virtual bool castSpell(Creature* creature);
 		virtual bool castSpell(Creature* creature, Creature* target);
-		virtual bool configureEvent(xmlNodePtr p) {return true;}
+		virtual bool configureEvent(const pugi::xml_node& node) {return true;}
 
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
@@ -114,7 +114,7 @@ class Spell : public BaseSpell
 		Spell();
 		virtual ~Spell(){}
 
-		bool configureSpell(xmlNodePtr xmlspell);
+		bool configureSpell(const pugi::xml_node& node);
 		const std::string& getName() const {return name;}
 
 		void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
@@ -171,7 +171,7 @@ class InstantSpell : public TalkAction, public Spell
 		InstantSpell(LuaScriptInterface* _interface);
 		virtual ~InstantSpell();
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 
 		virtual bool playerCastInstant(Player* player, const std::string& param);
@@ -216,7 +216,7 @@ class ConjureSpell : public InstantSpell
 		ConjureSpell(LuaScriptInterface* _interface);
 		virtual ~ConjureSpell();
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 
 		virtual bool playerCastInstant(Player* player, const std::string& param);
@@ -253,7 +253,7 @@ class RuneSpell : public Action, public Spell
 		RuneSpell(LuaScriptInterface* _interface);
 		virtual ~RuneSpell();
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 
 		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);

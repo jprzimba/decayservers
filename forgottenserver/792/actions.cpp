@@ -33,6 +33,7 @@
 #include "tasks.h"
 #include "tools.h"
 #include "spells.h"
+#include "pugicast.h"
 #include "configmanager.h"
 #include "beds.h"
 
@@ -95,36 +96,57 @@ Event* Actions::getEvent(const std::string& nodeName)
 		return NULL;
 }
 
-bool Actions::registerEvent(Event* event, xmlNodePtr p)
+bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	Action* action = dynamic_cast<Action*>(event);
 	if(!action)
 		return false;
 
-	int32_t id, id2;
-	if(readXMLInteger(p, "itemid", id))
+	pugi::xml_attribute attr;
+	if ((attr = node.attribute("itemid"))){
+		uint16_t id = pugi::cast<uint16_t>(attr.value());
 		useItemMap[id] = action;
-	else if(readXMLInteger(p, "fromid", id) && readXMLInteger(p, "toid", id2))
-	{
-		useItemMap[id] = action;
-		while(id < id2)
-			useItemMap[++id] = new Action(action);
 	}
-	else if(readXMLInteger(p, "uniqueid", id))
-		uniqueItemMap[id] = action;
-	else if(readXMLInteger(p, "fromuid", id) && readXMLInteger(p, "touid", id2))
+	else if ((attr = node.attribute("fromid")) && (attr = node.attribute("toid")))
 	{
-		uniqueItemMap[id] = action;
-		while(id < id2)
-			uniqueItemMap[++id] = new Action(action);
+		pugi::xml_attribute toIdAttribute = node.attribute("toid");
+		uint16_t fromId = pugi::cast<uint16_t>(attr.value());
+		uint16_t iterId = fromId;
+		uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
+		useItemMap[iterId] = action;	
+		while(++iterId <= toId)
+			useItemMap[iterId] = new Action(action);
 	}
-	else if(readXMLInteger(p, "actionid", id))
-		actionItemMap[id] = action;
-	else if(readXMLInteger(p, "fromaid", id) && readXMLInteger(p, "toaid", id2))
+	else if ((attr = node.attribute("uniqueid")))
 	{
-		actionItemMap[id] = action;
-		while(id < id2)
-			actionItemMap[++id] = new Action(action);
+		uint16_t uid = pugi::cast<uint16_t>(attr.value());
+		uniqueItemMap[uid] = action;
+
+	}
+	else if ((attr = node.attribute("fromuid")) && (attr = node.attribute("touid")))
+	{
+		pugi::xml_attribute toUidAttribute = node.attribute("touid");
+		uint16_t fromUid = pugi::cast<uint16_t>(attr.value());
+		uint16_t iterUid = fromUid;
+		uint16_t toUid = pugi::cast<uint16_t>(toUidAttribute.value());
+		uniqueItemMap[iterUid] = action;
+		while(++iterUid <= toUid)
+			uniqueItemMap[iterUid] = new Action(action);
+	}
+	else if ((attr = node.attribute("actionid")))
+	{
+		uint16_t aid = pugi::cast<uint16_t>(attr.value());
+		actionItemMap[aid] = action;
+	}
+	else if ((attr = node.attribute("fromaid")) && (attr = node.attribute("toaid")))
+	{
+		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
+		uint16_t fromAid = pugi::cast<uint16_t>(attr.value());
+		uint16_t iterAid = fromAid;
+		uint16_t toAid = pugi::cast<uint16_t>(toAidAttribute.value());
+		actionItemMap[iterAid] = action;
+		while(++iterAid <= toAid)
+			actionItemMap[iterAid] = new Action(action);
 	}
 	else
 		return false;
@@ -430,19 +452,16 @@ Action::~Action()
 	//
 }
 
-bool Action::configureEvent(xmlNodePtr p)
+bool Action::configureEvent(const pugi::xml_node& node)
 {
-	int32_t intValue;
-	if(readXMLInteger(p, "allowfaruse", intValue))
-	{
-		if(intValue != 0)
-			setAllowFarUse(true);
+	pugi::xml_attribute allowFarUseAttr = node.attribute("allowfaruse");
+	if (allowFarUseAttr) {
+			setAllowFarUse(allowFarUseAttr.as_bool());
 	}
 
-	if(readXMLInteger(p, "blockwalls", intValue))
-	{
-		if(intValue == 0)
-			setCheckLineOfSight(false);
+	pugi::xml_attribute blockWallsAttr = node.attribute("blockwalls");
+		if (blockWallsAttr) {
+			setCheckLineOfSight(blockWallsAttr.as_bool());
 	}
 	return true;
 }
