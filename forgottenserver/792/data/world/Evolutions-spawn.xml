@@ -389,6 +389,9 @@
     <monster name="wolf" x="0" y="0" z="7" spawntime="60"/>
     <monster name="wolf" x="1" y="0" z="7" spawntime="60"/>
   </spawn>
+  <spawn centerx="970" centery="1030" centerz="7" radius="2">
+    <npc name="Alice" x="0" y="-1" z="7" spawntime="60"/>
+  </spawn>
   <spawn centerx="953" centery="1032" centerz="7" radius="5">
     <monster name="bear" x="0" y="-3" z="7" spawntime="60"/>
     <monster name="bear" x="3" y="-1" z="7" spawntime="60"/>
