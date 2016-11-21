@@ -25,9 +25,6 @@
 #include <sstream>
 #include <fstream>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h> 
-
 #include "talkaction.h"
 #include "game.h"
 #include "configmanager.h"
@@ -199,14 +196,36 @@ TalkAction::~TalkAction()
 
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
-	pugi::xml_attribute wordsAttribute = node.attribute("words");
-	if (!wordsAttribute) {
+	pugi::xml_attribute attr;
+	if (!(attr = node.attribute("words"))) {
 		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
 		return false;
 	}
+	
+	commandString = attr.as_string();
 
-	commandString = wordsAttribute.as_string();
-	return true;
+	if ((attr = node.attribute("filter"))) {
+		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		if (tmpStrValue == "quotation") {
+			filterType = TALKACTION_MATCH_QUOTATION;
+		} else if (tmpStrValue == "first word") {
+			filterType = TALKACTION_MATCH_FIRST_WORD;
+		}
+	}
+	
+	if ((attr = node.attribute("registerlog"))) {
+		registerlog = attr.as_string();
+	}
+
+	if ((attr = node.attribute("case-sensitive"))) {
+		casesensitive = attr.as_string();
+	}
+		
+	if ((attr = node.attribute("access"))) {
+		access = pugi::cast<int32_t>(attr.value());
+	}
+	
+	return true;	
 }
 
 std::string TalkAction::getScriptEventName()

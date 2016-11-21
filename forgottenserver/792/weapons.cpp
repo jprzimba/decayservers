@@ -25,9 +25,6 @@
 #include "tools.h"
 #include "configmanager.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 extern Game g_game;
 extern Vocations g_vocations;
 extern ConfigManager g_config;
@@ -192,7 +189,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 	id = pugi::cast<uint16_t>(attr.value());
 
-	if (attr = node.attribute("level")) {
+	if ((attr = node.attribute("level"))) {
 		level = pugi::cast<int32_t>(attr.value());
 	}
 
@@ -200,31 +197,31 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 		magLevel = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("mana")) {
+	if ((attr = node.attribute("mana"))) {
 		mana = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("manapercent")) {
+	if ((attr = node.attribute("manapercent"))) {
 		manaPercent = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("soul")) {
+	if ((attr = node.attribute("soul"))) {
 		soul = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("exhaustion")) {
+	if ((attr = node.attribute("exhaustion"))) {
 		exhaustion = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("prem")) {
+	if ((attr = node.attribute("prem"))) {
 		premium = attr.as_bool();
 	}
 
-	if (attr = node.attribute("enabled")) {
+	if ((attr = node.attribute("enabled"))) {
 		enabled = attr.as_bool();
 	}
 
-	if (attr = node.attribute("unproperly")) {
+	if ((attr = node.attribute("unproperly"))) {
 		wieldUnproperly = attr.as_bool();
 	}
 
@@ -973,15 +970,15 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 	}
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("min")) {
+	if ((attr = node.attribute("min"))) {
 		minChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("max")) {
+	if ((attr = node.attribute("max"))) {
 		maxChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("type")) {
+	if ((attr = node.attribute("type"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if (tmpStrValue == "earth" || tmpStrValue == "poison") {
 			params.combatType = COMBAT_POISONDAMAGE;

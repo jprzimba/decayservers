@@ -30,9 +30,6 @@
 #include "configmanager.h"
 #include "const.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
@@ -441,27 +438,27 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 
-	if (attr = node.attribute("lvl")) {
+	if ((attr = node.attribute("lvl"))) {
 		level = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("maglv")) {
+	if ((attr = node.attribute("maglv"))) {
 		magLevel = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("mana")) {
+	if ((attr = node.attribute("mana"))) {
 		mana = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("manapercent")) {
+	if ((attr = node.attribute("manapercent"))) {
 		manaPercent = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("soul")) {
+	if ((attr = node.attribute("soul"))) {
 		soul = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("range")) {
+	if ((attr = node.attribute("range"))) {
 		range = pugi::cast<int32_t>(attr.value());
 	}
 
@@ -469,36 +466,36 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		exhaustion = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("prem")) {
+	if ((attr = node.attribute("prem"))) {
 		premium = attr.as_bool();
 	}
 
-	if (attr = node.attribute("enabled")) {
+	if ((attr = node.attribute("enabled"))) {
 		enabled = attr.as_bool();
 	}
 
-	if (attr = node.attribute("needtarget")) {
+	if ((attr = node.attribute("needtarget"))) {
 		needTarget = attr.as_bool();
 	}
 
-	if (attr = node.attribute("needweapon")) {
+	if ((attr = node.attribute("needweapon"))) {
 		needWeapon = attr.as_bool();
 	}
 
-	if (attr = node.attribute("selftarget")) {
+	if ((attr = node.attribute("selftarget"))) {
 		selfTarget = attr.as_bool();
 	}
 
-	if (attr = node.attribute("needlearn")) {
+	if ((attr = node.attribute("needlearn"))) {
 		learnable = attr.as_bool();
 	}
 
-	if (attr = node.attribute("blocking")) {
+	if ((attr = node.attribute("blocking"))) {
 		blockingSolid = attr.as_bool();
 		blockingCreature = blockingSolid;
 	}
 
-	if (attr = node.attribute("blocktype")) {
+	if ((attr = node.attribute("blocktype"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if (tmpStrValue == "all") {
 			blockingSolid = true;
@@ -512,7 +509,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		}
 	}
 
-	if (attr = node.attribute("aggressive")) {
+	if ((attr = node.attribute("aggressive"))) {
 		isAggressive = booleanString(attr.as_string());
 	}
 
@@ -930,17 +927,17 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	}
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("params")) {
+	if ((attr = node.attribute("params"))) {
 		hasParam = attr.as_bool();
 	}
 
-	if (attr = node.attribute("direction")) {
+	if ((attr = node.attribute("direction"))) {
 		needDirection = attr.as_bool();
-	} else if (attr = node.attribute("casterTargetOrDirection")) {
+	} else if ((attr = node.attribute("casterTargetOrDirection"))) {
 		casterTargetOrDirection = attr.as_bool();
 	}
 
-	if (attr = node.attribute("blockwalls")) {
+	if ((attr = node.attribute("blockwalls"))) {
 		checkLineOfSight = attr.as_bool();
 	}
 	return true;
@@ -1665,11 +1662,11 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 	}
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("conjureId")) {
+	if ((attr = node.attribute("conjureId"))) {
 		conjureId = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (attr = node.attribute("conjureCount")) {
+	if ((attr = node.attribute("conjureCount"))) {
 		conjureCount = pugi::cast<uint32_t>(attr.value());
 	} else if (conjureId != 0) {
 		// load default charges from items.xml
@@ -1679,7 +1676,7 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 		}
 	}
 
-	if (attr = node.attribute("reagentId")) {
+	if ((attr = node.attribute("reagentId"))) {
 		conjureReagentId = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -1899,7 +1896,7 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	runeId = pugi::cast<uint32_t>(attr.value());
 
 	uint32_t charges;
-	if (attr = node.attribute("charges")) {
+	if ((attr = node.attribute("charges"))) {
 		charges = pugi::cast<uint32_t>(attr.value());
 	} else {
 		charges = 0;

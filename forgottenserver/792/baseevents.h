@@ -23,7 +23,6 @@
 #define __BASEEVENTS_H__
 
 #include "luascript.h"
-#include <libxml/parser.h>
 
 class Event;
 

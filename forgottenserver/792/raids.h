@@ -27,9 +27,6 @@
 #include "position.h"
 #include "baseevents.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 enum RaidState_t
 {
 	RAIDSTATE_IDLE = 0,

@@ -19,7 +19,6 @@
 //////////////////////////////////////////////////////////////////////
 #include "otpch.h"
 
-#include <libxml/xmlmemory.h>
 #include "tools.h"
 
 #include "baseevents.h"

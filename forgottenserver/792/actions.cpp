@@ -33,13 +33,8 @@
 #include "tasks.h"
 #include "tools.h"
 #include "spells.h"
-#include "pugicast.h"
 #include "configmanager.h"
 #include "beds.h"
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h> 
-
 #include "actions.h"
 
 extern Game g_game;
@@ -99,58 +94,119 @@ Event* Actions::getEvent(const std::string& nodeName)
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	Action* action = dynamic_cast<Action*>(event);
-	if(!action)
+	if (!action) {
 		return false;
+	}
 
 	pugi::xml_attribute attr;
-	if ((attr = node.attribute("itemid"))){
+	if ((attr = node.attribute("itemid"))) {
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
+		if (useItemMap.find(id) != useItemMap.end()) {
+			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
+			return false;
+		}
 		useItemMap[id] = action;
-	}
-	else if ((attr = node.attribute("fromid")) && (attr = node.attribute("toid")))
-	{
+	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
-		uint16_t fromId = pugi::cast<uint16_t>(attr.value());
-		uint16_t iterId = fromId;
-		uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
-		useItemMap[iterId] = action;	
-		while(++iterId <= toId)
-			useItemMap[iterId] = new Action(action);
-	}
-	else if ((attr = node.attribute("uniqueid")))
-	{
+		if (toIdAttribute) {
+			uint16_t fromId = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterId = fromId;
+			uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
+
+			bool success = false;
+			if (useItemMap.find(iterId) != useItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+			} else {
+				useItemMap[iterId] = action;
+				success = true;
+			}
+
+			while (++iterId <= toId) {
+				if (useItemMap.find(iterId) != useItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+					continue;
+				}
+				useItemMap[iterId] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
+			return false;
+		}
+	} else if ((attr = node.attribute("uniqueid"))) {
 		uint16_t uid = pugi::cast<uint16_t>(attr.value());
+		if (uniqueItemMap.find(uid) != uniqueItemMap.end()) {
+			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
+			return false;
+		}
 		uniqueItemMap[uid] = action;
-
-	}
-	else if ((attr = node.attribute("fromuid")) && (attr = node.attribute("touid")))
-	{
+	} else if ((attr = node.attribute("fromuid"))) {
 		pugi::xml_attribute toUidAttribute = node.attribute("touid");
-		uint16_t fromUid = pugi::cast<uint16_t>(attr.value());
-		uint16_t iterUid = fromUid;
-		uint16_t toUid = pugi::cast<uint16_t>(toUidAttribute.value());
-		uniqueItemMap[iterUid] = action;
-		while(++iterUid <= toUid)
-			uniqueItemMap[iterUid] = new Action(action);
-	}
-	else if ((attr = node.attribute("actionid")))
-	{
-		uint16_t aid = pugi::cast<uint16_t>(attr.value());
-		actionItemMap[aid] = action;
-	}
-	else if ((attr = node.attribute("fromaid")) && (attr = node.attribute("toaid")))
-	{
-		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
-		uint16_t fromAid = pugi::cast<uint16_t>(attr.value());
-		uint16_t iterAid = fromAid;
-		uint16_t toAid = pugi::cast<uint16_t>(toAidAttribute.value());
-		actionItemMap[iterAid] = action;
-		while(++iterAid <= toAid)
-			actionItemMap[iterAid] = new Action(action);
-	}
-	else
-		return false;
+		if (toUidAttribute) {
+			uint16_t fromUid = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterUid = fromUid;
+			uint16_t toUid = pugi::cast<uint16_t>(toUidAttribute.value());
 
+			bool success = false;
+			if (uniqueItemMap.find(iterUid) != uniqueItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+			} else {
+				uniqueItemMap[iterUid] = action;
+				success = true;
+			}
+
+			while (++iterUid <= toUid) {
+				if (uniqueItemMap.find(iterUid) != uniqueItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+					continue;
+				}
+				uniqueItemMap[iterUid] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing touid in fromuid: " << attr.as_string() << std::endl;
+			return false;
+		}
+	} else if ((attr = node.attribute("actionid"))) {
+		uint16_t aid = pugi::cast<uint16_t>(attr.value());
+		if (actionItemMap.find(aid) != actionItemMap.end()) {
+			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
+			return false;
+		}
+		actionItemMap[aid] = action;
+	} else if ((attr = node.attribute("fromaid"))) {
+		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
+		if (toAidAttribute) {
+			uint16_t fromAid = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterAid = fromAid;
+			uint16_t toAid = pugi::cast<uint16_t>(toAidAttribute.value());
+
+			bool success = false;
+			if (actionItemMap.find(iterAid) != actionItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+			} else {
+				actionItemMap[iterAid] = action;
+				success = true;
+			}
+
+			while (++iterAid <= toAid) {
+				if (actionItemMap.find(iterAid) != actionItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+					continue;
+				}
+				actionItemMap[iterAid] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing toaid in fromaid: " << attr.as_string() << std::endl;
+			return false;
+		}
+	} else {
+		return false;
+	}
 	return true;
 }
 
