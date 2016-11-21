@@ -72,8 +72,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/b", &Commands::banPlayer},
 	{"/t", &Commands::teleportMasterPos},
 	{"/c", &Commands::teleportHere},
-	{"/i", &Commands::createItemById},
-	{"/n", &Commands::createItemByName},
 	{"/q", &Commands::subtractMoney},
 	{"/reload", &Commands::reloadInfo},
 	{"/goto", &Commands::teleportTo},
@@ -93,7 +91,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/raid", &Commands::forceRaid},
 	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
-	{"/clean", &Commands::cleanMap},
 	{"/ghost", &Commands::ghost},
 	{"/save",&Commands::saveGame},
 
@@ -435,99 +432,6 @@ bool Commands::teleportHere(Creature* creature, const std::string& cmd, const st
 			player->sendCancel("A creature with that name could not be found.");
 	}
 	return false;
-}
-
-bool Commands::createItemById(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	std::string tmp = param;
-	
-	std::string::size_type pos = tmp.find(' ', 0);
-	if(pos == std::string::npos)
-		pos = tmp.size();
-	
-	int32_t type = atoi(tmp.substr(0, pos).c_str());
-	int32_t count = 1;
-	if(pos < tmp.size())
-	{
-		tmp.erase(0, pos+1);
-		count = std::max<int32_t>(1, std::min<int32_t>(atoi(tmp.c_str()), 100));
-	}
-	
-	Item* newItem = Item::CreateItem(type, count);
-	if(!newItem)
-		return false;
-
-	ReturnValue ret = g_game.internalAddItem(player, newItem);
-	if(ret != RET_NOERROR)
-	{
-		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		if(ret != RET_NOERROR)
-		{
-			delete newItem;
-			return false;
-		}
-	}
-
-	g_game.startDecay(newItem);
-	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-	return true;
-}
-
-bool Commands::createItemByName(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	std::string::size_type pos1 = param.find("\"");
-	pos1 = (std::string::npos == pos1 ? 0 : pos1 + 1);
-
-	std::string::size_type pos2 = param.rfind("\"");
-	if(pos2 == pos1 || pos2 == std::string::npos)
-	{
-		pos2 = param.rfind(' ');
-		if(pos2 == std::string::npos)
-			pos2 = param.size();
-	}
-	
-	std::string itemName = param.substr(pos1, pos2 - pos1);
-
-	int32_t count = 1;
-	if(pos2 < param.size())
-	{
-		std::string itemCount = param.substr(pos2 + 1, param.size() - (pos2 + 1));
-		count = std::min<int32_t>(atoi(itemCount.c_str()), 100);
-	}
-
-	int32_t itemId = Item::items.getItemIdByName(itemName);
-	if(itemId == -1)
-	{
-		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, "Item could not be summoned.");
-		return false;
-	}
-				
-	Item* newItem = Item::CreateItem(itemId, count);
-	if(!newItem)
-		return false;
-
-	ReturnValue ret = g_game.internalAddItem(player, newItem);
-	if(ret != RET_NOERROR)
-	{
-		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		if(ret != RET_NOERROR)
-		{
-			delete newItem;
-			return false;
-		}
-	}
-
-	g_game.startDecay(newItem);
-	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-	return true;
 }
 
 bool Commands::subtractMoney(Creature* creature, const std::string& cmd, const std::string& param)
@@ -1366,16 +1270,6 @@ bool Commands::playerKills(Creature* creature, const std::string& cmd, const std
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
 	}
 	return false;
-}
-
-bool Commands::cleanMap(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	std::stringstream info;
-	int32_t count = g_game.getMap()->onRemoveTileItem();
-	info << "Clean completed. Collected " << count << (count==1? " item." : " items.") << std::endl;
-
-	g_game.broadcastMessage(info.str().c_str(), MSG_STATUS_WARNING);
-	return true;
 }
 
 bool Commands::ghost(Creature* creature, const std::string& cmd, const std::string& param)

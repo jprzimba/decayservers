@@ -1236,20 +1236,20 @@ const ItemType& Items::getItemIdByClientId(int32_t spriteId) const
 
 int32_t Items::getItemIdByName(const std::string& name)
 {
-	if(name.empty())
-		return -1;
-
-	const char* tmpName = name.c_str();
-
-	uint32_t i = 100;
-	ItemType* iType = items->getElement(i);
-	while(iType)
+	if(!name.empty())
 	{
-		if(strcasecmp(tmpName, iType->name.c_str()) == 0)
-			return i;
+		uint32_t i = 100;
+		ItemType* iType = NULL;
+		do
+		{
+			if((iType = items->getElement(i)) && !strcasecmp(name.c_str(), iType->name.c_str()))
+				return i;
 
-		iType = items->getElement(++i);
+			i++;
+		}
+		while(iType);
 	}
+
 	return -1;
 }
 

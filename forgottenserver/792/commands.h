@@ -54,8 +54,6 @@ class Commands
 		bool teleportHere(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportToTown(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportTo(Creature* creature, const std::string& cmd, const std::string& param);
-		bool createItemById(Creature* creature, const std::string& cmd, const std::string& param);
-		bool createItemByName(Creature* creature, const std::string& cmd, const std::string& param);
 		bool subtractMoney(Creature* creature, const std::string& cmd, const std::string& param);
 		bool reloadInfo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getInfo(Creature* creature, const std::string& cmd, const std::string& param);
@@ -79,7 +77,6 @@ class Commands
 		bool unban(Creature* creature, const std::string& cmd, const std::string& param);
 		bool joinGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool createGuild(Creature* creature, const std::string& cmd, const std::string& param);
-		bool cleanMap(Creature* creature, const std::string& cmd, const std::string& param);
 		bool ghost(Creature* creature, const std::string& cmd, const std::string& param);
 		bool saveGame(Creature* creature, const std::string& cmd, const std::string& param);
 

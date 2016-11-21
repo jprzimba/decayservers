@@ -1,3 +1,48 @@
+function getCreatureLookPosition(cid)
+	return getPosByDir(getThingPos(cid), getCreatureLookDirection(cid))
+end
+
+function getPositionByDirection(position, direction, size)
+	local n = size or 1
+	if(direction == NORTH) then
+		position.y = position.y - n
+	elseif(direction == SOUTH) then
+		position.y = position.y + n
+	elseif(direction == WEST) then
+		position.x = position.x - n
+	elseif(direction == EAST) then
+		position.x = position.x + n
+	elseif(direction == NORTHWEST) then
+		position.y = position.y - n
+		position.x = position.x - n
+	elseif(direction == NORTHEAST) then
+		position.y = position.y - n
+		position.x = position.x + n
+	elseif(direction == SOUTHWEST) then
+		position.y = position.y + n
+		position.x = position.x - n
+	elseif(direction == SOUTHEAST) then
+		position.y = position.y + n
+		position.x = position.x + n
+	end
+
+	return position
+end
+
+function getBooleanFromString(input)
+	local tmp = type(input)
+	if(tmp == 'boolean') then
+		return input
+	end
+
+	if(tmp == 'number') then
+		return input > 0
+	end
+
+	local str = string.lower(tostring(input))
+	return (str == "yes" or str == "true" or (tonumber(str) ~= nil and tonumber(str) > 0))
+end
+
 function doPlayerGiveItem(cid, itemid, count, charges)
 	local hasCharges = (isItemRune(itemid) == TRUE or isItemFluidContainer(itemid) == TRUE)
 	if(hasCharges and charges == nil) then

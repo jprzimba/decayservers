@@ -1134,6 +1134,9 @@ void LuaScriptInterface::registerFunctions()
 	//getCreatureMaxMana(cid)
 	lua_register(m_luaState, "getCreatureMaxMana", LuaScriptInterface::luaGetCreatureMaxMana);
 
+	//getCreatureLookDirection(cid)
+	lua_register(m_luaState, "getCreatureLookDirection", LuaScriptInterface::luaGetCreatureLookDirection);
+
 	//getPlayerLevel(cid)
 	lua_register(m_luaState, "getPlayerLevel", LuaScriptInterface::luaGetPlayerLevel);
 
@@ -1813,7 +1816,10 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "getPlayerIp", LuaScriptInterface::luaGetPlayerIp);
 
 	//getPlayerMasterPososition(cid)
-	lua_register(m_luaState, "getPlayerMasterPososition", LuaScriptInterface::luaGetPlayerMasterPos);	
+	lua_register(m_luaState, "getPlayerMasterPososition", LuaScriptInterface::luaGetPlayerMasterPos);
+
+	//isValidItemId(itemid)
+	lua_register(m_luaState, "isValidItemId", LuaScriptInterface::luaIsValidItemId);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -6768,14 +6774,16 @@ int32_t LuaScriptInterface::luaGetItemIdByName(lua_State* L)
 	//getItemIdByName(name)
 	std::string name = popString(L);
 
-	int32_t itemid = Item::items.getItemIdByName(name);
-	if(itemid == -1)
+	int32_t itemId = Item::items.getItemIdByName(name);
+	if(itemId == -1)
 	{
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+
 		lua_pushboolean(L, false);
-		return 1;
 	}
-	lua_pushnumber(L, itemid);
+	else
+		lua_pushnumber(L, itemId);
+
 	return 1;
 }
 
@@ -7610,5 +7618,32 @@ int32_t LuaScriptInterface::luaDoPlayerSetGuildId(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetCreatureLookDirection(lua_State* L)
+{
+	//getCreatureLookDirection(cid)
+	ScriptEnvironment* env = getScriptEnv();
+
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+		lua_pushnumber(L, creature->getDirection());
+	else
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaIsValidItemId(lua_State* L)
+{
+	//isValidItemId(itemid)
+	uint32_t itemId = popNumber(L);
+	const ItemType& it = Item::items[itemId];
+	if (it.id == 0)
+		lua_pushboolean(L, false);
+	else
+		lua_pushboolean(L, true);
 	return 1;
 }

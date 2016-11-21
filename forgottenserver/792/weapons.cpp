@@ -107,9 +107,7 @@ bool Weapons::loadDefaults()
 					break;
 				}
 				default:
-				{
 					break;
-				}
 			}
 		}
 	}
