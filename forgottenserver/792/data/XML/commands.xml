@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands>
 	<command cmd="/b" group="2" acctype="5"/>
-	<command cmd="/i" group="2" acctype="5"/>
-	<command cmd="/n" group="2" acctype="5"/>
 	<command cmd="/reload" group="1" acctype="5"/>
 	<command cmd="/s" group="2" acctype="5"/>
 	<command cmd="/openserver" group="1" acctype="5"/>

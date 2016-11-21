@@ -1,6 +1,7 @@
 dofile('data/lib/compat.lua')
 dofile('data/lib/database.lua')
 dofile('data/lib/functions.lua')
+dofile('data/lib/string.lua')
 
 TRUE = true
 FALSE = false

@@ -16,3 +16,5 @@ cleanMap = doCleanMap
 getPlayerAccountBalance = getPlayerBalance
 doPlayerSetBankBalance = doPlayerSetBalance
 getPlayerMasterPos = getPlayerMasterPososition
+getThingfromPosition = getThingfromPos
+getPosByDir = getPositionByDirection
