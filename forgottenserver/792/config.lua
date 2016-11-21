@@ -53,7 +53,6 @@
 	allowClones = "no"
 	serverName = "Forgotten"
 	loginMessage = "Welcome to the Forgotten Server!"
-	adminLogsEnabled = "no"
 	statusTimeout = 5 * 60 * 1000
 
 	-- Highscores and Deathlist

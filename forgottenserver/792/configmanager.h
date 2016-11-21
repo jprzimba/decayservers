@@ -48,7 +48,6 @@ class ConfigManager
 			ONE_PLAYER_ON_ACCOUNT,
 			GENERATE_ACCOUNT_NUMBER,
 			BROADCAST_BANISHMENTS,
-			ADMIN_LOGS_ENABLED,
 			SHUTDOWN_AT_SERVERSAVE,
 			CLEAN_MAP_AT_SERVERSAVE,
 			EXPERIENCE_FROM_PLAYERS,
@@ -67,7 +66,6 @@ class ConfigManager
 		enum string_config_t 
 		{
 			DUMMY_STR = 0,
-			CONFIG_FILE,
 			MAP_NAME,
 			HOUSE_RENT_PERIOD,
 			LOGIN_MSG,
@@ -140,7 +138,7 @@ class ConfigManager
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 
-		bool loadFile(const std::string& _filename);
+		bool load();
 		bool reload();
 		bool isLoaded() const {return m_loaded;}
 

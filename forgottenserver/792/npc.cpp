@@ -46,10 +46,6 @@ AutoList<Npc> Npc::listNpc;
 
 NpcScriptInterface* Npc::m_scriptInterface = NULL;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Npc::npcCount = 0;
-#endif
-
 void Npcs::reload()
 {
 	delete Npc::m_scriptInterface;
@@ -81,20 +77,12 @@ Npc::Npc(const std::string& _name) :
 
 	m_npcEventHandler = NULL;
 	reset();
-
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	npcCount++;
-#endif
 }
 
 Npc::~Npc()
 {
 	Scheduler::getScheduler().stopEvent(npcTalkEvent);
 	reset();
-
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	npcCount--;
-#endif
 }
 
 bool Npc::load()

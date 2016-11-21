@@ -36,15 +36,17 @@ ConfigManager::~ConfigManager()
 	//
 }
 
-bool ConfigManager::loadFile(const std::string& _filename)
+bool ConfigManager::load()
 {
-	lua_State* L = lua_open();
+	lua_State* L = luaL_newstate();
 	if(!L)
 		throw std::runtime_error("Failed to allocate memory");
 
-	if(luaL_dofile(L, _filename.c_str()))
+	luaL_openlibs(L);
+
+	if(luaL_dofile(L, "config.lua"))
 	{
-		std::cout << "[Error - ConfigManager::loadFile] With file = " << _filename << ", " << lua_tostring(L, -1) << std::endl;
+		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
 		return false;
 	}
@@ -52,7 +54,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	//parse config
 	if(!m_loaded) //info that must be loaded one time (unless we reset the modules involved)
 	{
-		m_confString[CONFIG_FILE] = _filename;
 		m_confString[IP] = getGlobalString(L, "ip", "127.0.0.1");
 		m_confString[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		m_confString[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
@@ -137,7 +138,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confBoolean[EXPERIENCE_FROM_PLAYERS] = booleanString(getGlobalString(L, "experienceByKillingPlayers", "no"));
 	m_confBoolean[SHUTDOWN_AT_SERVERSAVE] = booleanString(getGlobalString(L, "shutdownAtServerSave", "no"));
 	m_confBoolean[CLEAN_MAP_AT_SERVERSAVE] = booleanString(getGlobalString(L, "cleanMapAtServerSave", "yes"));
-	m_confBoolean[ADMIN_LOGS_ENABLED] = booleanString(getGlobalString(L, "adminLogsEnabled", "no"));
 	m_confBoolean[BROADCAST_BANISHMENTS] = booleanString(getGlobalString(L, "broadcastBanishments", "yes"));
 	m_confBoolean[GENERATE_ACCOUNT_NUMBER] = booleanString(getGlobalString(L, "generateAccountNumber", "yes"));
 	m_confBoolean[ACCOUNT_MANAGER] = booleanString(getGlobalString(L, "accountManager", "yes"));
@@ -158,7 +158,7 @@ bool ConfigManager::reload()
 	if(!m_loaded)
 		return false;
 
-	return loadFile(m_confString[CONFIG_FILE]);
+	return load();
 }
 
 const std::string& ConfigManager::getString(uint32_t _what) const

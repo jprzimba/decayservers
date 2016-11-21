@@ -53,10 +53,6 @@ AutoList<Player> Player::listPlayer;
 MuteCountMap Player::muteCountMap;
 int32_t Player::maxMessageBuffer;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Player::playerCount = 0;
-#endif
-
 Player::Player(const std::string& _name, ProtocolGame *p) :
 Creature()
 {
@@ -177,9 +173,6 @@ Creature()
 
 	requestedOutfit = false;
 	ghostMode = false;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	playerCount++;
-#endif
 }
 
 Player::~Player()
@@ -203,9 +196,6 @@ Player::~Player()
 
 	setWriteItem(NULL);
 	setEditHouse(NULL);
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	playerCount--;
-#endif
 }
 
 void Player::setVocation(uint32_t vocId)

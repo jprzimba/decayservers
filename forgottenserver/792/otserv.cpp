@@ -18,25 +18,19 @@
 // Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////
 #include "otpch.h"
-
 #include "definitions.h"
 #include <boost/asio.hpp>
 #include "server.h"
-
 #include <string>
 #include <iostream>
 #include <iomanip>
-
 #include "otsystem.h"
 #include "networkmessage.h"
 #include "protocolgame.h"
-
 #include <stdlib.h>
 #include <time.h>
 #include "game.h"
-
 #include "iologindata.h"
-
 #include "status.h"
 #include "monsters.h"
 #include "commands.h"
@@ -45,19 +39,15 @@
 #include "scriptmanager.h"
 #include "configmanager.h"
 #include "globalevent.h"
-
 #include "tools.h"
 #include "ban.h"
 #include "rsa.h"
-
 #include "spells.h"
 #include "movement.h"
 #include "talkaction.h"
 #include "raids.h"
 #include "quests.h"
 #include "resources.h"
-
-#include "admin.h"
 #include "databasemanager.h"
 
 #ifdef __OTSERV_ALLOCATOR__
@@ -87,7 +77,6 @@ Monsters g_monsters;
 Vocations g_vocations;
 
 extern Actions* g_actions;
-extern AdminProtocolConfig* g_adminConfig;
 extern CreatureEvents* g_creatureEvents;
 extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
@@ -150,32 +139,21 @@ int main(int argc, char *argv[])
 	SetConsoleTitle(STATUS_SERVER_NAME);
 	#endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")." << std::endl;
+	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
+
+#if defined(__amd64__) || defined(_M_X64)
+	std::cout << "x64" << std::endl;
+#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
+	std::cout << "x86" << std::endl;
+#elif defined(__arm__)
+	std::cout << "ARM" << std::endl;
+#else
+	std::cout << "unknown" << std::endl;
+#endif
 	std::cout << ">> A server developed by Talaturen, Kornholijo & Elf." << std::endl;
 	std::cout << ">> Server modfied and updated by Tryller." << std::endl;
 	std::cout << ">> Visit http://otland.net/." << std::endl;
-
-	#if defined __DEBUG__MOVESYS__ || defined __DEBUG_HOUSES__ || defined __DEBUG_MAILBOX__ || defined __DEBUG_LUASCRIPTS__ || defined __DEBUG_RAID__ || defined __DEBUG_NET__
-	std::cout << ">> Debugging:";
-	#ifdef __DEBUG__MOVESYS__
-	std::cout << " MOVESYS";
-	#endif
-	#ifdef __DEBUG_MAILBOX__
-	std::cout << " MAILBOX";
-	#endif
-	#ifdef __DEBUG_HOUSES__
-	std::cout << " HOUSES";
-	#endif
-	#ifdef __DEBUG_LUASCRIPTS__
-	std::cout << " LUA-SCRIPTS";
-	#endif
-	#ifdef __DEBUG_RAID__
-	std::cout << " RAIDS";
-	#endif
-	#ifdef __DEBUG_NET__
-	std::cout << " NET-ASIO";
-	#endif
-	std::cout << std::endl;
-	#endif
 
 	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
 	if(getuid() == 0 || geteuid() == 0)
@@ -186,27 +164,19 @@ int main(int argc, char *argv[])
 
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
-	#if !defined(WIN32) && !defined(__NO_HOMEDIR_CONF__)
-	std::string configpath;
-	configpath = getenv("HOME");
-	configpath += "/.otserv/config.lua";
-	if(!g_config.loadFile(configpath))
-	#else
-	if(!g_config.loadFile("config.lua"))
-	#endif
+	if (!g_config.load())
 	{
 		startupErrorMessage("Unable to load config.lua!");
+		return 0;
 	}
 
-	#ifdef WIN32
-	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
-	if(defaultPriority == "realtime")
-		SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-	else if(defaultPriority == "high")
-  	 	SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-  	else if(defaultPriority == "higher")
-  		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-  	#endif
+#ifdef WIN32
+	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
+	if(strcasecmp(defaultPriority.c_str(), "high") == 0)
+		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+	else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0)
+		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+#endif
 
 	//load RSA key
 	std::cout << ">> Loading RSA key" << std::endl;
@@ -290,11 +260,6 @@ int main(int argc, char *argv[])
 	if(!outfits->loadFromXml())
 		startupErrorMessage("Unable to load outfits!");
 
-	g_adminConfig = new AdminProtocolConfig();
-	std::cout << ">> Loading admin protocol config" << std::endl;
-	if(!g_adminConfig->loadXMLConfig())
-		startupErrorMessage("Unable to load admin protocol config!");
-
 	std::cout << ">> Loading experience stages" << std::endl;
 	if(!g_game.loadExperienceStages())
 		startupErrorMessage("Unable to load experience stages!");
@@ -346,20 +311,24 @@ int main(int argc, char *argv[])
 		std::cout << ">> Using plaintext passwords" << std::endl;
 	}
 
-	std::cout << ">> Checking world type... ";
+	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if(worldType == "pvp")
 		g_game.setWorldType(WORLD_TYPE_PVP);
-	else if(worldType == "no-pvp")
+	else if (worldType == "no-pvp")
 		g_game.setWorldType(WORLD_TYPE_NO_PVP);
-	else if(worldType == "pvp-enforced")
+	else if (worldType == "pvp-enforced")
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	else
 	{
-		std::cout << std::endl << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << std::endl;
-		startupErrorMessage("");
+		std::cout << std::endl;
+
+		std::ostringstream ss;
+		ss << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << ", valid world types are: pvp, no-pvp and pvp-enforced.";
+		startupErrorMessage(ss.str());
+		return 0;
 	}
-	std::cout << worldType << std::endl;
+	std::cout << asUpperCaseString(worldType) << std::endl;
 
 	Status* status = Status::getInstance();
 	status->setMaxPlayersOnline(g_config.getNumber(ConfigManager::MAX_PLAYERS));
@@ -368,12 +337,15 @@ int main(int argc, char *argv[])
 
 	std::cout << ">> Loading map" << std::endl;
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
-		startupErrorMessage("");
+	{
+		startupErrorMessage("Failed to load map");
+		return 0;
+	}
 
-	std::cout << ">> Setting gamestate to: GAME_STATE_INIT" << std::endl;
+	std::cout << ">> Initializing gamestate" << std::endl;
 	g_game.setGameState(GAME_STATE_INIT);
 
-	std::cout << ">> All modules has been loaded, server starting up..." << std::endl;
+	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
 	std::pair<uint32_t, uint32_t> IpNetMask;
 	IpNetMask.first  = inet_addr("127.0.0.1");

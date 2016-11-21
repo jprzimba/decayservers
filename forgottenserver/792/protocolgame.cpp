@@ -60,10 +60,6 @@ extern Ban g_bans;
 extern CreatureEvents* g_creatureEvents;
 Chat g_chat;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolGame::protocolGameCount = 0;
-#endif
-
 #ifdef __SERVER_PROTECTION__
 #error "You should not use __SERVER_PROTECTION__"
 #define ADD_TASK_INTERVAL 40
@@ -233,17 +229,11 @@ ProtocolGame::ProtocolGame(Connection* connection) :
 	m_debugAssertSent = false;
 	m_acceptPackets = false;
 	eventConnect = 0;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	protocolGameCount++;
-#endif
 }
 
 ProtocolGame::~ProtocolGame()
 {
 	player = NULL;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	protocolGameCount--;
-#endif
 }
 
 void ProtocolGame::setPlayer(Player* p)

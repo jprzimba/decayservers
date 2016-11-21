@@ -26,24 +26,23 @@
 #include "networkmessage.h"
 #include "protocol.h"
 
+enum RequestedInfo_t
+{
+	REQUEST_BASIC_SERVER_INFO = 0x01,
+	REQUEST_OWNER_SERVER_INFO = 0x02,
+	REQUEST_MISC_SERVER_INFO = 0x04,
+	REQUEST_PLAYERS_INFO = 0x08,
+	REQUEST_MAP_INFO = 0x10,
+	REQUEST_EXT_PLAYERS_INFO = 0x20,
+	REQUEST_PLAYER_STATUS_INFO = 0x40,
+};
+
 class ProtocolStatus : public Protocol
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		static uint32_t protocolStatusCount;
-#endif
-		ProtocolStatus(Connection* connection) : Protocol(connection)
-		{
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-			protocolStatusCount++;
-#endif
-		}
-		virtual ~ProtocolStatus()
-		{
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-			protocolStatusCount--;
-#endif
-		}
+		ProtocolStatus(Connection* connection) : Protocol(connection){}
+		virtual ~ProtocolStatus(){}
+
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
