@@ -96,7 +96,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/raid", &Commands::forceRaid},
 	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
-	{"/clean", &Commands::cleanMap},
 	{"/ghost", &Commands::ghost},
 	{"/save",&Commands::saveGame},
 
@@ -1384,16 +1383,6 @@ bool Commands::playerKills(Creature* creature, const std::string& cmd, const std
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
 	}
 	return false;
-}
-
-bool Commands::cleanMap(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	std::stringstream info;
-	int32_t count = g_game.getMap()->onRemoveTileItem();
-	info << "Clean completed. Collected " << count << (count==1? " item." : " items.") << std::endl;
-
-	g_game.broadcastMessage(info.str().c_str(), MSG_STATUS_WARNING);
-	return true;
 }
 
 bool Commands::ghost(Creature* creature, const std::string& cmd, const std::string& param)

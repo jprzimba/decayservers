@@ -1813,7 +1813,7 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "getPlayerIp", LuaScriptInterface::luaGetPlayerIp);
 
 	//getPlayerMasterPososition(cid)
-	lua_register(m_luaState, "getPlayerMasterPososition", LuaScriptInterface::luaGetPlayerMasterPos);	
+	lua_register(m_luaState, "getPlayerMasterPososition", LuaScriptInterface::luaGetPlayerMasterPos);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)

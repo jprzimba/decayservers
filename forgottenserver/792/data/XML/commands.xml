@@ -28,7 +28,6 @@
 	<command cmd="/raid" group="2" acctype="4"/>
 	<command cmd="/addskill" group="2" acctype="5"/>
 	<command cmd="/unban" group="1" acctype="4"/>
-	<command cmd="/clean" group="2" acctype="5"/>
 	<command cmd="/ghost" group="2" acctype="5"/>
 	<command cmd="/save" group="2" acctype="5"/>
 	
