@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talkactions>
+	<!-- Community Manager -->
+	<talkaction access="4" words="/i" filter="first word" script="createitembyid.lua"/>
+	<talkaction access="4" words="/n" filter="first word" script="createitembyname.lua"/>
+
+	<!-- Gamemasters -->
+	<talkaction access="3" words="/z" filter="first word" script="magiceffect.lua"/>
+	<talkaction access="3" words="/x" filter="first word" script="animationeffect.lua"/>
+	<talkaction access="3" words="/clean" filter="first word" script="clean.lua"/>
+
+	<!-- Players -->
+	<talkaction words="!buypremium" script="buyprem.lua"/>
+	<talkaction words="!leavehouse" script="leavehouse.lua"/>
+	<talkaction words="!changesex" script="changesex.lua"/>
+	<talkaction words="!uptime" script="uptime.lua"/>
+	<talkaction words="!deathlist" filter="first word" script="deathlist.lua"/>
+</talkactions>
