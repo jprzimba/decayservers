@@ -603,6 +603,8 @@ class LuaScriptInterface
 		static int32_t luaDoCleanMap(lua_State* L);
 
 		static int32_t luaDoAddMark(lua_State* L);
+		static int32_t luaGetGameState(lua_State* L);
+		static int32_t luaDoSetGameState(lua_State* L);
 
 		static int32_t luaGetPlayerParty(lua_State* L);
 		static int32_t luaDoPlayerJoinParty(lua_State* L);

@@ -1820,6 +1820,12 @@ void LuaScriptInterface::registerFunctions()
 
 	//isValidItemId(itemid)
 	lua_register(m_luaState, "isValidItemId", LuaScriptInterface::luaIsValidItemId);
+
+	//getGameState()
+	lua_register(m_luaState, "getGameState", LuaScriptInterface::luaGetGameState);
+
+	//doSetGameState(id)
+	lua_register(m_luaState, "doSetGameState", LuaScriptInterface::luaDoSetGameState);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -4879,10 +4885,12 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 	
 	Creature* creature = NULL;
 	
-	if(cid != 0){
+	if(cid != 0)
+	{
 		creature = env->getCreatureByUID(cid);
 
-		if(!creature){
+		if(!creature)
+		{
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			lua_pushboolean(L, false);
 			return 1;
@@ -4891,35 +4899,40 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 
 	const Combat* combat = env->getCombatObject(combatId);
 
-	if(!combat){
+	if(!combat)
+	{
 		reportErrorFunc(getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushboolean(L, false);
 		return 1;
 	}
 
-	if(var.type == VARIANT_NONE){
+	if(var.type == VARIANT_NONE)
+	{
 		reportErrorFunc(getErrorDesc(LUA_ERROR_VARIANT_NOT_FOUND));
 		lua_pushboolean(L, false);
 		return 1;
 	}
 
-	switch(var.type){
+	switch(var.type)
+	{
 		case VARIANT_NUMBER:
 		{
 			Creature* target = g_game.getCreatureByID(var.number);
 
-			if(!target){
+			if(!target)
+			{
 				lua_pushboolean(L, false);
 				return 1;
 			}
 
-			if(combat->hasArea()){
+			if(combat->hasArea())
+			{
 				combat->doCombat(creature, target->getPosition());
 				//std::cout << "Combat->hasArea()" << std::endl;
 			}
-			else{
+			else
 				combat->doCombat(creature, target);
-			}
+
 			break;
 		}
 
@@ -4931,10 +4944,10 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 
 		case VARIANT_TARGETPOSITION:
 		{
-			if(combat->hasArea()){
+			if(combat->hasArea())
 				combat->doCombat(creature, var.pos);
-			}
-			else{
+			else
+			{
 				combat->postCombatEffects(creature, var.pos);
 				g_game.addMagicEffect(var.pos, NM_ME_POFF);
 			}
@@ -4944,7 +4957,8 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 		case VARIANT_STRING:
 		{
 			Player* target = g_game.getPlayerByName(var.text);
-			if(!target){
+			if(!target)
+			{
 				lua_pushboolean(L, false);
 				return 1;
 			}
@@ -7201,10 +7215,7 @@ int32_t LuaScriptInterface::luaGetCreatureMaxHealth(lua_State* L)
 
 int32_t LuaScriptInterface::luaDoSaveServer(lua_State* L)
 {
-	Dispatcher::getDispatcher().addTask(
-		createTask(boost::bind(&Game::saveGameState, &g_game)));
-	lua_pushboolean(L, true);
-
+	Dispatcher::getDispatcher().addTask(createTask(boost::bind(&Game::saveGameState, &g_game)));
 	return 1;
 }
 
@@ -7641,9 +7652,31 @@ int32_t LuaScriptInterface::luaIsValidItemId(lua_State* L)
 	//isValidItemId(itemid)
 	uint32_t itemId = popNumber(L);
 	const ItemType& it = Item::items[itemId];
-	if (it.id == 0)
+	if(it.id == 0)
 		lua_pushboolean(L, false);
 	else
 		lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetGameState(lua_State* L)
+{
+	//getGameState()
+	lua_pushnumber(L, g_game.getGameState());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoSetGameState(lua_State* L)
+{
+	//doSetGameState(id)
+	uint32_t id = popNumber(L);
+	if(id >= GAME_STATE_FIRST && id <= GAME_STATE_LAST)
+	{
+		Dispatcher::getDispatcher().addTask(createTask(boost::bind(&Game::setGameState, &g_game, (GameState_t)id)));
+		lua_pushboolean(L, true);
+	}
+	else
+		lua_pushboolean(L, false);
+
 	return 1;
 }

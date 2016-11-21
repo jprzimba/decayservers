@@ -91,8 +91,8 @@ Event* Actions::getEvent(const std::string& nodeName)
 {
 	if(asLowerCaseString(nodeName) == "action")
 		return new Action(&m_scriptInterface);
-	else
-		return NULL;
+
+	return NULL;
 }
 
 bool Actions::registerEvent(Event* event, xmlNodePtr p)

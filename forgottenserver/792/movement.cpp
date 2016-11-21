@@ -712,9 +712,8 @@ uint32_t MoveEvent::EquipItem(Player* player, Item* item, slots_t slot, bool tra
 	else
 		player->setItemAbility(slot, true);
 
-	if (!it.abilities) {
+	if(!it.abilities)
 		return 1;
-	}
 	
 	if(it.abilities->invisible)
 	{

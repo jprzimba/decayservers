@@ -217,7 +217,7 @@ bool TalkAction::configureEvent(xmlNodePtr p)
 			filterType = TALKACTION_MATCH_FIRST_WORD;
 	}
 
-	if(readXMLString(p, "registerlog", strValue))
+	if(readXMLString(p, "registerlog", strValue) || readXMLString(p, "log", strValue))
 		registerlog = booleanString(strValue);
 		
 	if(readXMLString(p, "case-sensitive", strValue) || readXMLString(p, "sensitive", strValue))

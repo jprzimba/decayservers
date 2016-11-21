@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talkactions>
+	<!-- GOD -->
+	<talkaction access="5" log="yes" words="/closeserver" script="closeopen.lua"/>
+	<talkaction access="5" log="yes" words="/openserver" script="closeopen.lua"/>
+	<talkaction access="5" log="yes" words="/save" filter="first word" script="save.lua"/>
+
 	<!-- Community Manager -->
-	<talkaction access="4" words="/i" filter="first word" script="createitembyid.lua"/>
-	<talkaction access="4" words="/n" filter="first word" script="createitembyname.lua"/>
+	<talkaction access="4" log="yes" words="/i" filter="first word" script="createitembyid.lua"/>
+	<talkaction access="4" log="yes" words="/n" filter="first word" script="createitembyname.lua"/>
 
 	<!-- Gamemasters -->
 	<talkaction access="3" words="/z" filter="first word" script="magiceffect.lua"/>
 	<talkaction access="3" words="/x" filter="first word" script="animationeffect.lua"/>
-	<talkaction access="3" words="/clean" filter="first word" script="clean.lua"/>
+	<talkaction access="3" log="yes" words="/clean" filter="first word" script="clean.lua"/>
 
 	<!-- Players -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
-	if (!g_config.load())
+	if(!g_config.load())
 	{
 		startupErrorMessage("Unable to load config.lua!");
 		return 0;
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
 	if(strcasecmp(defaultPriority.c_str(), "high") == 0)
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0)
+	else if(strcasecmp(defaultPriority.c_str(), "above-normal") == 0)
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 #endif
 
@@ -306,9 +306,9 @@ int main(int argc, char *argv[])
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if(worldType == "pvp")
 		g_game.setWorldType(WORLD_TYPE_PVP);
-	else if (worldType == "no-pvp")
+	else if(worldType == "no-pvp")
 		g_game.setWorldType(WORLD_TYPE_NO_PVP);
-	else if (worldType == "pvp-enforced")
+	else if(worldType == "pvp-enforced")
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	else
 	{

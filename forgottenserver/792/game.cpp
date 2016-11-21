@@ -210,16 +210,19 @@ void Game::setGameState(GameState_t newState)
 
 void Game::saveGameState()
 {
-	std::cout << "Saving server..." << std::endl;
-	IOLoginData* ioLoginData = IOLoginData::getInstance();
+	std::cout << "> Saving server..." << std::endl;
+	uint64_t start = OTSYS_TIME();
+	IOLoginData* io = IOLoginData::getInstance();
 	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 	{
 		(*it).second->loginPosition = (*it).second->getPosition();
-		ioLoginData->savePlayer((*it).second, false);
+		io->savePlayer((*it).second, false);
 	}
 
 	map->saveMap();
 	ScriptEnvironment::saveGameState();
+
+	std::cout << "> SAVE: Complete in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 }
 
 void Game::loadGameState()
