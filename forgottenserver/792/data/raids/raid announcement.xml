@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raid>
+	<!-- Message broadcast -->
+	<!-- Broadcast types: warning, event, default, description, smallstatus, blueconsole, redconsole -->
+	<announce delay="10" type="blueconsole" message="Broadcast from a raid announcement!" />
+</raid>

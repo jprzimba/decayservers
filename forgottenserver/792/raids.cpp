@@ -31,12 +31,15 @@ extern Game g_game;
 extern ConfigManager g_config;
 
 Raids::Raids()
+	: m_scriptInterface("Raid Interface")
 {
 	loaded = false;
 	started = false;
 	running = NULL;
 	lastRaidEnd = 0;
 	checkRaidsEvent = 0;
+	
+	m_scriptInterface.initState();
 }
 
 Raids::~Raids()
@@ -163,6 +166,8 @@ void Raids::clear()
 	started = false;
 	running = NULL;
 	lastRaidEnd = 0;
+	
+	m_scriptInterface.reInitState();
 }
 
 bool Raids::reload()
@@ -225,9 +230,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		} else if (strcasecmp(eventNode.name(), "areaspawn") == 0) {
 			event = new AreaSpawnEvent();
 		} else if (strcasecmp(eventNode.name(), "script") == 0) {
-			//event = new ScriptEvent();
-			std::cout << "[Error - Raid::loadFromXml] In file (" << _filename << "), eventNode: " << eventNode.name() << std::endl;
-			delete event;
+			event = new ScriptEvent(&Raids::getInstance()->getScriptInterface());
 		} else {
 			continue;
 		}
@@ -624,17 +627,9 @@ bool AreaSpawnEvent::executeEvent()
 	return true;
 }
 
-LuaScriptInterface ScriptEvent::m_scriptInterface("Raid Interface");
-
-ScriptEvent::ScriptEvent() :
-Event(&m_scriptInterface)
+ScriptEvent::ScriptEvent(LuaScriptInterface* _interface) :
+	Event(_interface)
 {
-	m_scriptInterface.initState();
-}
-
-void ScriptEvent::reInitScriptInterface()
-{
-	m_scriptInterface.reInitState();
 }
 
 bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
@@ -664,26 +659,15 @@ std::string ScriptEvent::getScriptEventName()
 bool ScriptEvent::executeEvent()
 {
 	//onRaid()
-	if(m_scriptInterface.reserveScriptEnv())
-	{
-		ScriptEnvironment* env = m_scriptInterface.getScriptEnv();
-	
-		#ifdef __DEBUG_LUASCRIPTS__
-		env->setEventDesc("Raid event");
-		#endif
-	
-		env->setScriptId(m_scriptId, &m_scriptInterface);
-		
-		m_scriptInterface.pushFunction(m_scriptId);
-	
-		bool result = m_scriptInterface.callFunction(0) != 0;
-		m_scriptInterface.releaseScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
+		return false;
+	}
 
-		return result;
-	}
-	else
-	{
-		std::cout << "[Error] Call stack overflow. ScriptEvent::executeEvent" << std::endl;
-		return 0;
-	}
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	m_scriptInterface->pushFunction(m_scriptId);
+
+	return m_scriptInterface->callFunction(0);
 }

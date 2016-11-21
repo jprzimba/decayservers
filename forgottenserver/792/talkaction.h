@@ -90,7 +90,6 @@ class TalkAction : public Event
 		bool registerlog;
 		bool casesensitive;
 		TalkActionFilterType filterType;
-		std::string m_words;
 };
 
 #endif

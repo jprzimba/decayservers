@@ -85,6 +85,10 @@ class Raids
 
 		void checkRaids();
 
+		LuaScriptInterface& getScriptInterface() {
+			return m_scriptInterface;
+		}
+		
 	private:
 		Raids();
 		RaidList raidList;
@@ -92,6 +96,8 @@ class Raids
 		Raid* running;
 		uint64_t lastRaidEnd;
 		uint32_t checkRaidsEvent;
+		
+		LuaScriptInterface m_scriptInterface;
 };
 
 class Raid
@@ -202,11 +208,14 @@ class AreaSpawnEvent : public RaidEvent
 class ScriptEvent : public RaidEvent, public Event
 {
 	public:
-		ScriptEvent();
+		ScriptEvent(LuaScriptInterface* _interface);
+		ScriptEvent(const ScriptEvent* copy);
 		~ScriptEvent() {}
 
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-		virtual bool configureEvent(xmlNodePtr p) {return false;}
+		virtual bool configureEvent(const pugi::xml_node& node) {
+			return false;
+		}
 
 		bool executeEvent();
 
@@ -215,7 +224,6 @@ class ScriptEvent : public RaidEvent, public Event
 	protected:
 		virtual std::string getScriptEventName();
 
-		static LuaScriptInterface m_scriptInterface;
 };
 
 #endif
