@@ -712,6 +712,10 @@ uint32_t MoveEvent::EquipItem(Player* player, Item* item, slots_t slot, bool tra
 	else
 		player->setItemAbility(slot, true);
 
+	if (!it.abilities) {
+		return 1;
+	}
+	
 	if(it.abilities->invisible)
 	{
 		Condition* condition = Condition::createCondition((ConditionId_t)slot, CONDITION_INVISIBLE, -1, 0);

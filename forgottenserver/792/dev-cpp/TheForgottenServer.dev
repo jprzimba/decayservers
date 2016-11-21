@@ -1,7 +1,7 @@
 [Project]
 FileName=TheForgottenServer.dev
 Name=TheForgottenServer
-UnitCount=157
+UnitCount=153
 Type=1
 Ver=2
 ObjFiles=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=1
 SupportXPThemes=0
 CompilerSet=3
-CompilerSettings=00000001g0000000000001000
+CompilerSettings=000000d1g0000000000001000
 LogOutput=
 LogOutputEnabled=0
 
@@ -61,67 +61,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit5]
-FileName=..\admin.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit6]
-FileName=..\admin.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit7]
-FileName=..\allocator.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit8]
-FileName=..\allocator.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit9]
-FileName=..\ban.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit10]
-FileName=..\ban.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit11]
 FileName=..\baseevents.cpp
 CompileCpp=1
 Folder=
@@ -131,7 +71,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit12]
+[Unit8]
 FileName=..\baseevents.h
 CompileCpp=1
 Folder=
@@ -141,7 +81,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit13]
+[Unit9]
 FileName=..\beds.cpp
 CompileCpp=1
 Folder=
@@ -151,7 +91,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit14]
+[Unit10]
 FileName=..\beds.h
 CompileCpp=1
 Folder=
@@ -161,7 +101,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit15]
+[Unit11]
 FileName=..\chat.cpp
 CompileCpp=1
 Folder=
@@ -171,7 +111,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit16]
+[Unit12]
 FileName=..\chat.h
 CompileCpp=1
 Folder=
@@ -181,7 +121,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit17]
+[Unit13]
 FileName=..\combat.cpp
 CompileCpp=1
 Folder=
@@ -191,7 +131,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit18]
+[Unit14]
 FileName=..\combat.h
 CompileCpp=1
 Folder=
@@ -201,7 +141,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit19]
+[Unit15]
 FileName=..\commands.cpp
 CompileCpp=1
 Folder=
@@ -211,7 +151,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit20]
+[Unit16]
 FileName=..\commands.h
 CompileCpp=1
 Folder=
@@ -221,7 +161,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit21]
+[Unit17]
 FileName=..\condition.cpp
 CompileCpp=1
 Folder=
@@ -231,7 +171,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit22]
+[Unit18]
 FileName=..\condition.h
 CompileCpp=1
 Folder=
@@ -241,7 +181,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit23]
+[Unit19]
 FileName=..\config.lua
 CompileCpp=1
 Folder=
@@ -251,7 +191,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit24]
+[Unit20]
 FileName=..\configmanager.cpp
 CompileCpp=1
 Folder=
@@ -261,7 +201,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit25]
+[Unit21]
 FileName=..\configmanager.h
 CompileCpp=1
 Folder=
@@ -271,7 +211,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit26]
+[Unit22]
 FileName=..\connection.cpp
 CompileCpp=1
 Folder=
@@ -281,7 +221,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit27]
+[Unit23]
 FileName=..\connection.h
 CompileCpp=1
 Folder=
@@ -291,7 +231,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit28]
+[Unit24]
 FileName=..\const.h
 CompileCpp=1
 Folder=
@@ -301,7 +241,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit29]
+[Unit25]
 FileName=..\container.cpp
 CompileCpp=1
 Folder=
@@ -311,7 +251,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit30]
+[Unit26]
 FileName=..\container.h
 CompileCpp=1
 Folder=
@@ -321,7 +261,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit31]
+[Unit27]
 FileName=..\creature.cpp
 CompileCpp=1
 Folder=
@@ -331,7 +271,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit32]
+[Unit28]
 FileName=..\creature.h
 CompileCpp=1
 Folder=
@@ -341,7 +281,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit33]
+[Unit29]
 FileName=..\creatureevent.cpp
 CompileCpp=1
 Folder=
@@ -351,7 +291,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit34]
+[Unit30]
 FileName=..\creatureevent.h
 CompileCpp=1
 Folder=
@@ -361,7 +301,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit35]
+[Unit31]
 FileName=..\cylinder.cpp
 CompileCpp=1
 Folder=
@@ -371,7 +311,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit36]
+[Unit32]
 FileName=..\cylinder.h
 CompileCpp=1
 Folder=
@@ -381,7 +321,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit37]
+[Unit33]
 FileName=..\database.cpp
 CompileCpp=1
 Folder=
@@ -391,7 +331,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit38]
+[Unit34]
 FileName=..\database.h
 CompileCpp=1
 Folder=
@@ -401,7 +341,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit39]
+[Unit35]
 FileName=..\databasemanager.cpp
 CompileCpp=1
 Folder=
@@ -411,7 +351,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit40]
+[Unit36]
 FileName=..\databasemanager.h
 CompileCpp=1
 Folder=
@@ -421,7 +361,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit41]
+[Unit37]
 FileName=..\databasemysql.cpp
 CompileCpp=1
 Folder=
@@ -431,7 +371,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit42]
+[Unit38]
 FileName=..\databasemysql.h
 CompileCpp=1
 Folder=
@@ -441,7 +381,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit43]
+[Unit39]
 FileName=..\databasesqlite.cpp
 CompileCpp=1
 Folder=
@@ -451,7 +391,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit44]
+[Unit40]
 FileName=..\databasesqlite.h
 CompileCpp=1
 Folder=
@@ -461,7 +401,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit45]
+[Unit41]
 FileName=..\definitions.h
 CompileCpp=1
 Folder=
@@ -471,7 +411,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit46]
+[Unit42]
 FileName=..\depot.cpp
 CompileCpp=1
 Folder=
@@ -481,7 +421,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit47]
+[Unit43]
 FileName=..\depot.h
 CompileCpp=1
 Folder=
@@ -491,7 +431,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit48]
+[Unit44]
 FileName=..\enums.h
 CompileCpp=1
 Folder=
@@ -501,7 +441,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit49]
+[Unit45]
 FileName=..\exception.cpp
 CompileCpp=1
 Folder=
@@ -511,7 +451,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit51]
+[Unit46]
+FileName=..\exception.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
 FileName=..\fileloader.cpp
 CompileCpp=1
 Folder=
@@ -521,7 +471,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit52]
+[Unit48]
 FileName=..\fileloader.h
 CompileCpp=1
 Folder=
@@ -531,7 +481,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit53]
+[Unit49]
 FileName=..\game.cpp
 CompileCpp=1
 Folder=
@@ -541,7 +491,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit55]
+[Unit51]
 FileName=..\globalevent.cpp
 CompileCpp=1
 Folder=
@@ -551,7 +501,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
+[Unit52]
 FileName=..\globalevent.h
 CompileCpp=1
 Folder=
@@ -561,7 +511,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit57]
+[Unit53]
 FileName=..\house.cpp
 CompileCpp=1
 Folder=
@@ -571,17 +521,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit58]
-FileName=..\house.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit59]
+[Unit55]
 FileName=..\housetile.cpp
 CompileCpp=1
 Folder=
@@ -591,7 +531,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit60]
+[Unit56]
 FileName=..\housetile.h
 CompileCpp=1
 Folder=
@@ -601,7 +541,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit61]
+[Unit57]
 FileName=..\ioguild.cpp
 CompileCpp=1
 Folder=
@@ -611,7 +551,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit62]
+[Unit58]
 FileName=..\ioguild.h
 CompileCpp=1
 Folder=
@@ -621,7 +561,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit63]
+[Unit59]
 FileName=..\iologindata.cpp
 CompileCpp=1
 Folder=
@@ -631,7 +571,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit64]
+[Unit60]
 FileName=..\iologindata.h
 CompileCpp=1
 Folder=
@@ -641,7 +581,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit65]
+[Unit61]
 FileName=..\iomap.cpp
 CompileCpp=1
 Folder=
@@ -651,7 +591,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit66]
+[Unit62]
 FileName=..\iomap.h
 CompileCpp=1
 Folder=
@@ -661,7 +601,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit67]
+[Unit63]
 FileName=..\iomapserialize.cpp
 CompileCpp=1
 Folder=
@@ -671,7 +611,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit68]
+[Unit64]
 FileName=..\iomapserialize.h
 CompileCpp=1
 Folder=
@@ -681,7 +621,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit69]
+[Unit65]
 FileName=..\item.cpp
 CompileCpp=1
 Folder=
@@ -691,7 +631,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit70]
+[Unit66]
 FileName=..\item.h
 CompileCpp=1
 Folder=
@@ -701,7 +641,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit71]
+[Unit67]
 FileName=..\itemloader.h
 CompileCpp=1
 Folder=
@@ -711,7 +651,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit72]
+[Unit68]
 FileName=..\items.cpp
 CompileCpp=1
 Folder=
@@ -721,7 +661,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit73]
+[Unit69]
 FileName=..\items.h
 CompileCpp=1
 Folder=
@@ -731,7 +671,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit74]
+[Unit70]
 FileName=..\logger.cpp
 CompileCpp=1
 Folder=
@@ -741,7 +681,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit75]
+[Unit71]
 FileName=..\logger.h
 CompileCpp=1
 Folder=
@@ -751,7 +691,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit76]
+[Unit72]
 FileName=..\luascript.cpp
 CompileCpp=1
 Folder=
@@ -761,7 +701,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit77]
+[Unit73]
 FileName=..\luascript.h
 CompileCpp=1
 Folder=
@@ -771,7 +711,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit78]
+[Unit74]
 FileName=..\mailbox.cpp
 CompileCpp=1
 Folder=
@@ -781,7 +721,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit79]
+[Unit75]
 FileName=..\mailbox.h
 CompileCpp=1
 Folder=
@@ -791,7 +731,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit80]
+[Unit76]
 FileName=..\map.cpp
 CompileCpp=1
 Folder=
@@ -801,7 +741,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit81]
+[Unit77]
 FileName=..\map.h
 CompileCpp=1
 Folder=
@@ -811,7 +751,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit82]
+[Unit78]
 FileName=..\md5.cpp
 CompileCpp=1
 Folder=
@@ -821,7 +761,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit83]
+[Unit79]
 FileName=..\md5.h
 CompileCpp=1
 Folder=
@@ -831,7 +771,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit84]
+[Unit80]
 FileName=..\monster.cpp
 CompileCpp=1
 Folder=
@@ -841,7 +781,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit85]
+[Unit81]
 FileName=..\monster.h
 CompileCpp=1
 Folder=
@@ -851,7 +791,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit86]
+[Unit82]
 FileName=..\monsters.cpp
 CompileCpp=1
 Folder=
@@ -861,7 +801,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit87]
+[Unit83]
 FileName=..\monsters.h
 CompileCpp=1
 Folder=
@@ -871,7 +811,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit88]
+[Unit84]
 FileName=..\movement.cpp
 CompileCpp=1
 Folder=
@@ -881,7 +821,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit89]
+[Unit85]
 FileName=..\movement.h
 CompileCpp=1
 Folder=
@@ -891,7 +831,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit90]
+[Unit86]
 FileName=..\networkmessage.cpp
 CompileCpp=1
 Folder=
@@ -901,7 +841,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit91]
+[Unit87]
 FileName=..\networkmessage.h
 CompileCpp=1
 Folder=
@@ -911,7 +851,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit92]
+[Unit88]
 FileName=..\npc.cpp
 CompileCpp=1
 Folder=
@@ -921,7 +861,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit93]
+[Unit89]
 FileName=..\npc.h
 CompileCpp=1
 Folder=
@@ -931,7 +871,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit94]
+[Unit90]
 FileName=..\otpch.h
 CompileCpp=1
 Folder=
@@ -941,7 +881,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit95]
+[Unit91]
 FileName=..\otserv.cpp
 CompileCpp=1
 Folder=
@@ -951,7 +891,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit96]
+[Unit92]
 FileName=..\otsystem.h
 CompileCpp=1
 Folder=
@@ -961,7 +901,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit97]
+[Unit93]
 FileName=..\outfit.cpp
 CompileCpp=1
 Folder=
@@ -971,7 +911,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit99]
+[Unit94]
+FileName=..\outfit.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit95]
 FileName=..\outputmessage.cpp
 CompileCpp=1
 Folder=
@@ -981,7 +931,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit100]
+[Unit96]
 FileName=..\outputmessage.h
 CompileCpp=1
 Folder=
@@ -991,7 +941,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit101]
+[Unit97]
 FileName=..\party.cpp
 CompileCpp=1
 Folder=
@@ -1001,7 +951,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit103]
+[Unit99]
 FileName=..\player.cpp
 CompileCpp=1
 Folder=
@@ -1011,7 +961,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit104]
+[Unit100]
 FileName=..\player.h
 CompileCpp=1
 Folder=
@@ -1021,7 +971,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit105]
+[Unit101]
 FileName=..\position.cpp
 CompileCpp=1
 Folder=
@@ -1031,17 +981,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit106]
-FileName=..\position.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit107]
+[Unit103]
 FileName=..\protocol.cpp
 CompileCpp=1
 Folder=
@@ -1051,7 +991,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit108]
+[Unit104]
 FileName=..\protocol.h
 CompileCpp=1
 Folder=
@@ -1061,7 +1001,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit109]
+[Unit105]
 FileName=..\protocolgame.cpp
 CompileCpp=1
 Folder=
@@ -1071,7 +1011,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit110]
+[Unit106]
 FileName=..\protocolgame.h
 CompileCpp=1
 Folder=
@@ -1081,7 +1021,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit111]
+[Unit107]
 FileName=..\protocollogin.cpp
 CompileCpp=1
 Folder=
@@ -1091,7 +1031,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit112]
+[Unit108]
 FileName=..\protocollogin.h
 CompileCpp=1
 Folder=
@@ -1101,7 +1041,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit113]
+[Unit109]
 FileName=..\quests.cpp
 CompileCpp=1
 Folder=
@@ -1111,7 +1051,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit114]
+[Unit110]
 FileName=..\quests.h
 CompileCpp=1
 Folder=
@@ -1121,7 +1061,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit115]
+[Unit111]
 FileName=..\raids.cpp
 CompileCpp=1
 Folder=
@@ -1131,7 +1071,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit117]
+[Unit112]
+FileName=..\raids.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit113]
 FileName=..\resources.h
 CompileCpp=1
 Folder=
@@ -1141,7 +1091,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit118]
+[Unit114]
 FileName=..\rsa.cpp
 CompileCpp=1
 Folder=
@@ -1151,7 +1101,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit119]
+[Unit115]
 FileName=..\rsa.h
 CompileCpp=1
 Folder=
@@ -1161,17 +1111,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit120]
-FileName=..\scheduler.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit121]
+[Unit117]
 FileName=..\scheduler.h
 CompileCpp=1
 Folder=
@@ -1181,7 +1121,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit122]
+[Unit118]
 FileName=..\scriptmanager.cpp
 CompileCpp=1
 Folder=
@@ -1191,7 +1131,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit123]
+[Unit119]
 FileName=..\scriptmanager.h
 CompileCpp=1
 Folder=
@@ -1201,7 +1141,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit124]
+[Unit120]
 FileName=..\server.cpp
 CompileCpp=1
 Folder=
@@ -1211,7 +1151,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit125]
+[Unit121]
 FileName=..\server.h
 CompileCpp=1
 Folder=
@@ -1221,7 +1161,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit126]
+[Unit122]
 FileName=..\sha1.cpp
 CompileCpp=1
 Folder=
@@ -1231,7 +1171,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit127]
+[Unit123]
 FileName=..\sha1.h
 CompileCpp=1
 Folder=
@@ -1241,7 +1181,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit128]
+[Unit124]
 FileName=..\spawn.cpp
 CompileCpp=1
 Folder=
@@ -1251,7 +1191,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit129]
+[Unit125]
 FileName=..\spawn.h
 CompileCpp=1
 Folder=
@@ -1261,7 +1201,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit130]
+[Unit126]
 FileName=..\spells.cpp
 CompileCpp=1
 Folder=
@@ -1271,7 +1211,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit131]
+[Unit127]
 FileName=..\spells.h
 CompileCpp=1
 Folder=
@@ -1281,7 +1221,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit132]
+[Unit128]
 FileName=..\status.cpp
 CompileCpp=1
 Folder=
@@ -1291,7 +1231,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit133]
+[Unit129]
 FileName=..\status.h
 CompileCpp=1
 Folder=
@@ -1301,7 +1241,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit134]
+[Unit130]
 FileName=..\talkaction.cpp
 CompileCpp=1
 Folder=
@@ -1311,7 +1251,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit135]
+[Unit131]
 FileName=..\talkaction.h
 CompileCpp=1
 Folder=
@@ -1321,7 +1261,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit136]
+[Unit132]
 FileName=..\tasks.cpp
 CompileCpp=1
 Folder=
@@ -1331,7 +1271,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit137]
+[Unit133]
 FileName=..\tasks.h
 CompileCpp=1
 Folder=
@@ -1341,7 +1281,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit138]
+[Unit134]
 FileName=..\teleport.cpp
 CompileCpp=1
 Folder=
@@ -1351,7 +1291,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit139]
+[Unit135]
 FileName=..\teleport.h
 CompileCpp=1
 Folder=
@@ -1361,7 +1301,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit140]
+[Unit136]
 FileName=..\templates.h
 CompileCpp=1
 Folder=
@@ -1371,7 +1311,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit141]
+[Unit137]
 FileName=..\textlogger.cpp
 CompileCpp=1
 Folder=
@@ -1381,7 +1321,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit142]
+[Unit138]
 FileName=..\textlogger.h
 CompileCpp=1
 Folder=
@@ -1391,7 +1331,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit144]
+[Unit139]
+FileName=..\thing.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit140]
 FileName=..\thing.h
 CompileCpp=1
 Folder=
@@ -1401,7 +1351,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit145]
+[Unit141]
 FileName=..\tile.cpp
 CompileCpp=1
 Folder=
@@ -1411,7 +1361,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit146]
+[Unit142]
 FileName=..\tile.h
 CompileCpp=1
 Folder=
@@ -1421,17 +1371,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit147]
-FileName=..\tools.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit148]
+[Unit144]
 FileName=..\tools.h
 CompileCpp=1
 Folder=
@@ -1441,7 +1381,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit149]
+[Unit145]
 FileName=..\town.h
 CompileCpp=1
 Folder=
@@ -1451,7 +1391,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit150]
+[Unit146]
 FileName=..\trashholder.cpp
 CompileCpp=1
 Folder=
@@ -1461,7 +1401,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit151]
+[Unit147]
 FileName=..\trashholder.h
 CompileCpp=1
 Folder=
@@ -1471,7 +1411,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit152]
+[Unit148]
 FileName=..\vocation.cpp
 CompileCpp=1
 Folder=
@@ -1481,8 +1421,48 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit153]
+[Unit149]
 FileName=..\vocation.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit150]
+FileName=..\waitlist.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit151]
+FileName=..\waitlist.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit152]
+FileName=..\weapons.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit153]
+FileName=..\weapons.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -1551,16 +1531,6 @@ AutoIncBuildNr=0
 SyncProduct=0
 
 [Unit50]
-FileName=..\exception.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit54]
 FileName=..\game.h
 CompileCpp=1
 Folder=
@@ -1570,8 +1540,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit54]
+FileName=..\house.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit98]
-FileName=..\outfit.h
+FileName=..\party.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -1601,7 +1581,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit102]
-FileName=..\party.h
+FileName=..\position.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -1611,7 +1591,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit116]
-FileName=..\raids.h
+FileName=..\scheduler.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -1621,7 +1601,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit143]
-FileName=..\thing.cpp
+FileName=..\tools.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -1632,6 +1612,26 @@ BuildCmd=
 
 [Unit157]
 FileName=..\weapons.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=..\ban.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=..\ban.h
 CompileCpp=1
 Folder=
 Compile=1
