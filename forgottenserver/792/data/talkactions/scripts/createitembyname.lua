@@ -19,20 +19,20 @@ function onSay(cid, words, param)
 
 	local itemid = getItemIdByName(itemname)
 	if(not itemid)then
-		doPlayerSendTextMessage( cid, MESSAGE_STATUS_CONSOLE_BLUE, "There isn't any item named " .. itemname .. "." )
+		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "There isn't any item named " .. itemname .. ".")
 		doSendMagicEffect(playerPos, CONST_ME_POFF )
 		return false
 	end
 
 	local item = doCreateItemEx(itemid, itemcount)
 	if(item ~= false )then
-		if(doPlayerAddItemEx( cid, item, true ) ~= RETURNVALUE_NOERROR )then
-			doRemoveItem( item )
-			doPlayerSendTextMessage( cid, MESSAGE_STATUS_CONSOLE_BLUE, "Item could not be summoned." )
-			doSendMagicEffect( playerPos, CONST_ME_POFF )
+		if(doPlayerAddItemEx(cid, item, true) ~= RETURNVALUE_NOERROR ) then
+			doRemoveItem(item)
+			doPlayerSendTextMessage( cid, MESSAGE_STATUS_CONSOLE_BLUE, "Item could not be created." )
+			doSendMagicEffect(playerPos, CONST_ME_POFF )
 		else
-			doDecayItem( item )
-			doSendMagicEffect( playerPos, CONST_ME_MAGIC_GREEN )
+			doDecayItem(item)
+			doSendMagicEffect(playerPos, CONST_ME_MAGIC_GREEN)
 		end
 	end
 
