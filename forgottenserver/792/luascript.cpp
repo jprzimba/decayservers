@@ -1826,6 +1826,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//doSetGameState(id)
 	lua_register(m_luaState, "doSetGameState", LuaScriptInterface::luaDoSetGameState);
+
+	//getPlayersOnline()
+	lua_register(m_luaState, "getPlayersOnline", LuaScriptInterface::luaGetPlayersOnline);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7678,5 +7681,22 @@ int32_t LuaScriptInterface::luaDoSetGameState(lua_State* L)
 	else
 		lua_pushboolean(L, false);
 
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPlayersOnline(lua_State* L)
+{
+	//getPlayersOnline()
+	ScriptEnvironment* env = getScriptEnv();
+	AutoList<Player>::listiterator it = Player::listPlayer.list.begin();
+
+	lua_newtable(L);
+	for(int32_t i = 1; it != Player::listPlayer.list.end(); ++it, ++i)
+	{
+		lua_pushnumber(L, i);
+		lua_pushnumber(L, env->addThing(it->second));
+		lua_settable(L, -3);
+		//pushTable(L); TODO pushTable
+	}
 	return 1;
 }

@@ -20,4 +20,5 @@
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
 	<talkaction words="!deathlist" filter="first word" script="deathlist.lua"/>
+	<talkaction words="!online" script="online.lua"/>
 </talkactions>

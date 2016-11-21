@@ -601,6 +601,7 @@ class LuaScriptInterface
 		static int32_t luaGetOnlinePlayers(lua_State* L);
 		static int32_t luaDoSaveServer(lua_State* L);
 		static int32_t luaDoCleanMap(lua_State* L);
+		static int32_t luaGetPlayersOnline(lua_State* L);
 
 		static int32_t luaDoAddMark(lua_State* L);
 		static int32_t luaGetGameState(lua_State* L);

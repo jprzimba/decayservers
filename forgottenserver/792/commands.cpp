@@ -95,7 +95,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/ghost", &Commands::ghost},
 
 	//player commands - TODO: make them talkactions
-	{"!online", &Commands::whoIsOnline},
 	{"!buyhouse", &Commands::buyHouse},
  	{"!sellhouse", &Commands::sellHouse},
 	{"!serverinfo", &Commands::serverInfo},
@@ -888,27 +887,6 @@ bool Commands::buyHouse(Creature* creature, const std::string& cmd, const std::s
 			player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 	}
 	return false;
-}
-
-bool Commands::whoIsOnline(Creature* creature, const std::string &cmd, const std::string &param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		AutoList<Player>::listiterator it = Player::listPlayer.list.begin();
-		std::stringstream ss;
-		ss << "Players online:" << std::endl;
-		bool first = true;
-		while (it != Player::listPlayer.list.end())
-		{
-			ss << (first ? "" : ", ") << (*it).second->name << " [" << (*it).second->level << "]";
-			first = false;
-			++it;
-		}
-		ss << ".";
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	}
-	return true;
 }
 
 bool Commands::changeFloor(Creature* creature, const std::string &cmd, const std::string &param)
