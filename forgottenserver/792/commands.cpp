@@ -23,9 +23,6 @@
 #include <fstream>
 #include <utility>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "commands.h"
 #include "player.h"
 #include "npc.h"

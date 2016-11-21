@@ -54,8 +54,9 @@ bool Raids::loadFromXml()
 	}
 
 	pugi::xml_document doc;
-	if (!doc.load_file("data/raids/raids.xml")) {
-		std::cout << "[Error] Raids: Could not load data/raids/raids.xml" << std::endl;
+	pugi::xml_parse_result result = doc.load_file("data/raids/raids.xml");
+	if (!result) {
+		std::cout << "[Error - Raids::loadFromXml] Failed to load data/raids/raids.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -216,8 +217,9 @@ bool Raid::loadFromXml(const std::string& _filename)
 	}
 
 	pugi::xml_document doc;
-	if (!doc.load_file(_filename.c_str())) {
-		std::cout << "[Error] Raid: Could not load " << _filename << "!" << std::endl;
+	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
+	if (!result) {
+		std::cout << "[Error - Raid::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
@@ -406,7 +408,7 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute zAttribute = eventNode.attribute("z");
 	if (zAttribute) {
-		m_position.z = pugi::cast<uint8_t>(zAttribute.value());
+		m_position.z = pugi::cast<uint16_t>(zAttribute.value());
 	} else {
 		std::cout << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
 		return false;
@@ -462,7 +464,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 		pugi::xml_attribute zAttribute = eventNode.attribute("centerz");
 		if (zAttribute) {
-			centerPos.z = pugi::cast<uint8_t>(zAttribute.value());
+			centerPos.z = pugi::cast<uint16_t>(zAttribute.value());
 		} else {
 			std::cout << "[Error] Raid: centerz tag missing for areaspawn event." << std::endl;
 			return false;
@@ -494,7 +496,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 		pugi::xml_attribute fromzAttribute = eventNode.attribute("fromz");
 		if (fromzAttribute) {
-			m_fromPos.z = pugi::cast<uint8_t>(fromzAttribute.value());
+			m_fromPos.z = pugi::cast<uint16_t>(fromzAttribute.value());
 		} else {
 			std::cout << "[Error] Raid: fromz tag missing for areaspawn event." << std::endl;
 			return false;
@@ -518,7 +520,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 		pugi::xml_attribute tozAttribute = eventNode.attribute("toz");
 		if (tozAttribute) {
-			m_toPos.z = pugi::cast<uint8_t>(tozAttribute.value());
+			m_toPos.z = pugi::cast<uint16_t>(tozAttribute.value());
 		} else {
 			std::cout << "[Error] Raid: toz tag missing for areaspawn event." << std::endl;
 			return false;
