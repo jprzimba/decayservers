@@ -50,10 +50,6 @@
 #include "resources.h"
 #include "databasemanager.h"
 
-#ifdef __OTSERV_ALLOCATOR__
-#include "allocator.h"
-#endif
-
 #ifdef __DEBUG_CRITICALSECTION__
 OTSYS_THREAD_LOCK_CLASS::LogList OTSYS_THREAD_LOCK_CLASS::loglist;
 #endif
@@ -108,11 +104,6 @@ void startupErrorMessage(std::string errorStr)
 
 int main(int argc, char *argv[])
 {
-
-	#ifdef __OTSERV_ALLOCATOR_STATS__
-	OTSYS_CREATE_THREAD(allocatorStatsThread, NULL);
-	#endif
-
 	#ifdef __EXCEPTION_TRACER__
 	ExceptionHandler mainExceptionHandler;
 	mainExceptionHandler.InstallHandler();
