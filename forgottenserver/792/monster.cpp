@@ -40,10 +40,6 @@ AutoList<Monster>Monster::listMonster;
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Monster::monsterCount = 0;
-#endif
-
 Monster* Monster::createMonster(MonsterType* mType)
 {
 	return new Monster(mType);
@@ -95,18 +91,12 @@ Creature()
 		if(!registerCreatureEvent(*it))
 			std::cout << "Warning: [Monster::Monster]. Unknown event name - " << *it << std::endl;
 	}
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	monsterCount++;
-#endif
 }
 
 Monster::~Monster()
 {
 	clearTargetList();
 	clearFriendList();
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	monsterCount--;
-#endif
 }
 
 void Monster::onAttackedCreatureDisappear(bool isLogout)

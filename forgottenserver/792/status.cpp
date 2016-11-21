@@ -39,21 +39,6 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolStatus::protocolStatusCount = 0;
-#endif
-
-enum RequestedInfo_t
-{
-	REQUEST_BASIC_SERVER_INFO = 0x01,
-	REQUEST_OWNER_SERVER_INFO = 0x02,
-	REQUEST_MISC_SERVER_INFO = 0x04,
-	REQUEST_PLAYERS_INFO = 0x08,
-	REQUEST_MAP_INFO = 0x10,
-	REQUEST_EXT_PLAYERS_INFO = 0x20,
-	REQUEST_PLAYER_STATUS_INFO = 0x40,
-};
-
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)

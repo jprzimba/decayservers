@@ -45,13 +45,7 @@
 #include "weapons.h"
 #include "raids.h"
 #include "chat.h"
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-#include "outputmessage.h"
-#include "connection.h"
-#include "admin.h"
 #include "status.h"
-#include "protocollogin.h"
-#endif
 #include "globalevent.h"
 
 extern ConfigManager g_config;
@@ -103,9 +97,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
 	{"/clean", &Commands::cleanMap},
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	{"/serverdiag", &Commands::serverDiag},
-#endif
 	{"/ghost", &Commands::ghost},
 	{"/save",&Commands::saveGame},
 
@@ -1404,48 +1395,6 @@ bool Commands::cleanMap(Creature* creature, const std::string& cmd, const std::s
 	g_game.broadcastMessage(info.str().c_str(), MSG_STATUS_WARNING);
 	return true;
 }
-
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-bool Commands::serverDiag(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	std::stringstream text;
-	text << "Server diagonostic:\n";
-	text << "World:" << "\n";
-	text << "Player: " << g_game.getPlayersOnline() << " (" << Player::playerCount << ")\n";
-	text << "Npc: " << g_game.getNpcsOnline() << " (" << Npc::npcCount << ")\n";
-	text << "Monster: " << g_game.getMonstersOnline() << " (" << Monster::monsterCount << ")\n";
-
-	text << "\nProtocols:" << "\n";
-	text << "--------------------\n";
-	text << "ProtocolGame: " << ProtocolGame::protocolGameCount << "\n";
-	text << "ProtocolLogin: " << ProtocolLogin::protocolLoginCount << "\n";
-	text << "ProtocolAdmin: " << ProtocolAdmin::protocolAdminCount << "\n";
-	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << "\n\n";
-
-	text << "\nConnections:\n";
-	text << "--------------------\n";
-	text << "Active connections: " << Connection::connectionCount << "\n";
-	text << "Total message pool: " << OutputMessagePool::getInstance()->getTotalMessageCount() << "\n";
-	text << "Auto message pool: " << OutputMessagePool::getInstance()->getAutoMessageCount() << "\n";
-	text << "Free message pool: " << OutputMessagePool::getInstance()->getAvailableMessageCount() << "\n";
-
-	text << "\nLibraries:\n";
-	text << "--------------------\n";
-	text << "asio: " << BOOST_ASIO_VERSION << "\n";
-	text << "libxml: " << XML_DEFAULT_VERSION << "\n";
-	text << "lua: " << LUA_VERSION << "\n";
-
-	//TODO: more information that could be useful
-
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
-
-	return true;
-}
-#endif
 
 bool Commands::ghost(Creature* creature, const std::string& cmd, const std::string& param)
 {

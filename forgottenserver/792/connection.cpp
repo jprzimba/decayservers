@@ -24,16 +24,13 @@
 #include "outputmessage.h"
 #include "protocolgame.h"
 #include "protocollogin.h"
-#include "admin.h"
 #include "status.h"
 #include "tasks.h"
 #include "scheduler.h"
 
 #include <boost/bind.hpp>
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Connection::connectionCount = 0;
-#endif
+
 Connection* ConnectionManager::createConnection(boost::asio::io_service& io_service)
 {
 	#ifdef __DEBUG_NET_DETAIL__
@@ -184,9 +181,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 					break;
 				case 0x0A: // World server protocol
 					m_protocol = new ProtocolGame(this);
-					break;
-				case 0xFE: // Admin protocol
-					m_protocol = new ProtocolAdmin(this);
 					break;
 				case 0xFF: // Status protocol
 					m_protocol = new ProtocolStatus(this);

@@ -80,9 +80,6 @@ class Commands
 		bool joinGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool createGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool cleanMap(Creature* creature, const std::string& cmd, const std::string& param);
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		bool serverDiag(Creature* creature, const std::string& cmd, const std::string& param);
-#endif
 		bool ghost(Creature* creature, const std::string& cmd, const std::string& param);
 		bool saveGame(Creature* creature, const std::string& cmd, const std::string& param);
 

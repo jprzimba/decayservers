@@ -46,9 +46,6 @@ class Connection;
 class ProtocolGame : public Protocol
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		static uint32_t protocolGameCount;
-#endif
 		ProtocolGame(Connection* connection);
 		virtual ~ProtocolGame();
 		

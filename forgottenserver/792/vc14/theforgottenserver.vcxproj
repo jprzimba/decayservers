@@ -21,8 +21,6 @@
   <ItemGroup>
     <ClCompile Include="..\account.cpp" />
     <ClCompile Include="..\actions.cpp" />
-    <ClCompile Include="..\admin.cpp" />
-    <ClCompile Include="..\allocator.cpp" />
     <ClCompile Include="..\ban.cpp" />
     <ClCompile Include="..\baseevents.cpp" />
     <ClCompile Include="..\beds.cpp" />
@@ -44,7 +42,6 @@
     <ClCompile Include="..\exception.cpp" />
     <ClCompile Include="..\fileloader.cpp" />
     <ClCompile Include="..\game.cpp" />
-    <ClCompile Include="..\globalevent.cpp" />
     <ClCompile Include="..\house.cpp" />
     <ClCompile Include="..\housetile.cpp" />
     <ClCompile Include="..\ioguild.cpp" />
@@ -100,8 +97,6 @@
   <ItemGroup>
     <ClInclude Include="..\account.h" />
     <ClInclude Include="..\actions.h" />
-    <ClInclude Include="..\admin.h" />
-    <ClInclude Include="..\allocator.h" />
     <ClInclude Include="..\ban.h" />
     <ClInclude Include="..\baseevents.h" />
     <ClInclude Include="..\beds.h" />
@@ -126,7 +121,6 @@
     <ClInclude Include="..\exception.h" />
     <ClInclude Include="..\fileloader.h" />
     <ClInclude Include="..\game.h" />
-    <ClInclude Include="..\globalevent.h" />
     <ClInclude Include="..\house.h" />
     <ClInclude Include="..\housetile.h" />
     <ClInclude Include="..\ioguild.h" />
@@ -259,7 +253,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>__USE_MYSQL__;__USE_SQLITE__;NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__USE_MYSQL__;__USE_SQLITE___;NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -274,10 +268,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>__USE_MYSQL__;__USE_SQLITE__;NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
