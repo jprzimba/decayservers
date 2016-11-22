@@ -7,7 +7,6 @@
 	<command cmd="/a" group="2" acctype="5"/>
 	<command cmd="/c" group="2" acctype="4"/>
 	<command cmd="/kick" group="1" acctype="4"/>
-	<command cmd="/B" group="1" acctype="4"/>
 	<command cmd="/q" group="2" acctype="4"/>
 	<command cmd="/info" group="1" acctype="4"/>
 	<command cmd="/gethouse" group="2" acctype="4"/>

@@ -20,6 +20,7 @@
 	<talkaction access="3" log="yes" words="/down" script="teleportfloor.lua"/>
 	<talkaction access="3" log="yes" words="/t" filter="first word" script="teleportmaster.lua"/>
 	<talkaction access="3" log="yes" words="/town" filter="first word" script="teleporttown.lua"/>
+	<talkaction access="3" log="yes" words="/B" filter="first word" sensitive="yes" script="broadcast.lua"/>
 
 	<!-- Players -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

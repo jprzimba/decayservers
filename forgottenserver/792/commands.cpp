@@ -63,7 +63,6 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] =
 {
 	//admin commands
-	{"/B", &Commands::broadcastMessage},
 	{"/b", &Commands::banPlayer},
 	{"/c", &Commands::teleportHere},
 	{"/q", &Commands::subtractMoney},
@@ -233,15 +232,6 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-bool Commands::broadcastMessage(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	return g_game.playerBroadcastMessage(player, param, SPEAK_BROADCAST);
 }
 
 bool Commands::banPlayer(Creature* creature, const std::string& cmd, const std::string& param)
