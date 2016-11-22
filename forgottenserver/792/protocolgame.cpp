@@ -1505,23 +1505,13 @@ void ProtocolGame::parseLeaveParty(NetworkMessage& msg)
 
 void ProtocolGame::parseQuestLog(NetworkMessage& msg)
 {
-	NetworkMessage* _msg = getOutputBuffer();
-	TRACK_MESSAGE(_msg);
-	if(_msg)
-		Quests::getInstance()->getQuestsList(player, _msg);
+	addGameTask(&Game::playerShowQuestLog, player->getID());
 }
 
 void ProtocolGame::parseQuestLine(NetworkMessage& msg)
 {
-	uint16_t quid = msg.GetU16();
-	NetworkMessage* _msg = getOutputBuffer();
-	TRACK_MESSAGE(_msg);
-	if(_msg)
-	{
-		Quest* quest = Quests::getInstance()->getQuestByID(quid);
-		if(quest)
-			quest->getMissionList(player, _msg);
-	}
+	uint16_t questId = msg.GetU16();
+	addGameTask(&Game::playerShowQuestLine, player->getID(), questId);
 }
 
 void ProtocolGame::parseViolationWindow(NetworkMessage& msg)
@@ -2946,5 +2936,49 @@ void ProtocolGame::sendChannelMessage(std::string author, std::string text, Spea
 		msg->AddByte(type);
 		msg->AddU16(channel);
 		msg->AddString(text);
+	}
+}
+
+void ProtocolGame::sendQuestLog()
+{
+	NetworkMessage* msg = getOutputBuffer();
+	if(!msg)
+		return;
+
+	TRACK_MESSAGE(msg);
+	msg->AddByte(0xF0);
+	msg->AddU16(Quests::getInstance()->getQuestsCount(player));
+	for(QuestsList::const_iterator it = Quests::getInstance()->getFirstQuest(),
+		end = Quests::getInstance()->getLastQuest(); it != end; ++it)
+	{
+		Quest* quest = *it;
+		if(quest->isStarted(player))
+		{
+			msg->AddU16(quest->getID());
+			msg->AddString(quest->getName());
+			msg->AddByte(quest->isCompleted(player));
+		}
+	}
+}
+
+void ProtocolGame::sendQuestLine(const Quest* quest)
+{
+	NetworkMessage* msg = getOutputBuffer();
+	if(!msg)
+		return;
+
+	TRACK_MESSAGE(msg);
+	msg->AddByte(0xF1);
+	msg->AddU16(quest->getID());
+	msg->AddByte(quest->getMissionsCount(player));
+	for(MissionsList::const_iterator it = quest->getFirstMission(), end = quest->getLastMission();
+		it != end; ++it)
+	{
+		Mission* mission = *it;
+		if(mission->isStarted(player))
+		{
+			msg->AddString(mission->getName(player));
+			msg->AddString(mission->getDescription(player));
+		}
 	}
 }
