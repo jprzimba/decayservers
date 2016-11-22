@@ -17,7 +17,8 @@
 
 [ LIST
 	* Add latest TFS database (done)
-	* Updated data folder, removing non and outdated or not supported 7.9.
+	* Updated data folder, removing non and outdated or not supported 7.9. (done)
 	* Add alot usefull TFS 0.3/0.4 features
 	* Add stamina system
+	* Move all commands to talkactions
 ]
