@@ -55,11 +55,11 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 
 void Weapons::clear()
 {
-	WeaponMap::iterator it;
-	for(it = weapons.begin(); it != weapons.end(); ++it)
+	for(WeaponMap::iterator it = weapons.begin(); it != weapons.end(); ++it)
 		delete it->second;
 
 	weapons.clear();
+	m_scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
@@ -77,7 +77,6 @@ bool Weapons::loadDefaults()
 	for(uint32_t i = 0; i < Item::items.size(); ++i)
 	{
 		const ItemType* it = Item::items.getElement(i);
-
 		if(!it || weapons.find(it->id) != weapons.end())
 			continue;
 
@@ -89,9 +88,12 @@ bool Weapons::loadDefaults()
 				case WEAPON_SWORD:
 				case WEAPON_CLUB:
 				{
-					WeaponMelee* weapon = new WeaponMelee(&m_scriptInterface);
-					weapon->configureWeapon(*it);
-					weapons[it->id] = weapon;
+					if(WeaponMelee* weapon = new WeaponMelee(&m_scriptInterface))
+					{
+						weapon->configureWeapon(*it);
+						weapons[it->id] = weapon;
+					}
+
 					break;
 				}
 
@@ -101,9 +103,12 @@ bool Weapons::loadDefaults()
 					if(it->weaponType == WEAPON_DIST && it->ammoType != AMMO_NONE)
 						continue;
 
-					WeaponDistance* weapon = new WeaponDistance(&m_scriptInterface);
-					weapon->configureWeapon(*it);
-					weapons[it->id] = weapon;
+					if(WeaponDistance* weapon = new WeaponDistance(&m_scriptInterface))
+					{
+						weapon->configureWeapon(*it);
+						weapons[it->id] = weapon;
+					}
+
 					break;
 				}
 				default:
@@ -133,11 +138,18 @@ Event* Weapons::getEvent(const std::string& nodeName)
 bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	Weapon* weapon = dynamic_cast<Weapon*>(event);
-	if(weapon)
-		weapons[weapon->getID()] = weapon;
-	else
+	if(!weapon)
 		return false;
-	return true;
+
+	WeaponMap::iterator it = weapons.find(weapon->getID());
+	if(it == weapons.end())
+	{
+		weapons[weapon->getID()] = weapon;
+		return true;
+	}
+
+	std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
+	return false;
 }
 
 //monsters
@@ -155,7 +167,7 @@ int32_t Weapons::getMaxWeaponDamage(int32_t attackSkill, int32_t attackValue, fl
 Weapon::Weapon(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
-	m_scripted = true;
+	m_scripted = false;
 	id = 0;
 	level = 0;
 	magLevel = 0;
@@ -183,77 +195,69 @@ void Weapon::setCombatParam(const CombatParams& _params)
 bool Weapon::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("id"))) {
+	if (!(attr = node.attribute("id")))
+	{
 		std::cout << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
 		return false;
 	}
+
 	id = pugi::cast<uint16_t>(attr.value());
-
-	if ((attr = node.attribute("level"))) {
+	if ((attr = node.attribute("level")))
 		level = pugi::cast<int32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel"))) {
+	if ((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel")))
 		magLevel = pugi::cast<int32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("mana"))) {
+	if ((attr = node.attribute("mana")))
 		mana = pugi::cast<int32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("manapercent"))) {
+	if ((attr = node.attribute("manapercent")))
 		manaPercent = pugi::cast<int32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("soul"))) {
+	if ((attr = node.attribute("soul")))
 		soul = pugi::cast<int32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("exhaustion"))) {
+	if ((attr = node.attribute("exhaustion")))
 		exhaustion = pugi::cast<uint32_t>(attr.value());
-	}
 
-	if ((attr = node.attribute("prem"))) {
+	if ((attr = node.attribute("prem")))
 		premium = attr.as_bool();
-	}
 
-	if ((attr = node.attribute("enabled"))) {
+	if ((attr = node.attribute("enabled")))
 		enabled = attr.as_bool();
-	}
 
-	if ((attr = node.attribute("unproperly"))) {
+	if ((attr = node.attribute("unproperly")))
 		wieldUnproperly = attr.as_bool();
-	}
 
 	std::list<std::string> vocStringList;
-	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
-		if (!(attr = vocationNode.attribute("name"))) {
+	for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling())
+	{
+		if (!(attr = vocationNode.attribute("name")))
 			continue;
-		}
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
+		if (vocationId != -1)
+		{
 			vocWeaponMap[vocationId] = true;
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != 0) {
+			if (promotedVocation != 0)
 				vocWeaponMap[promotedVocation] = true;
-			}
 
-			if (vocationNode.attribute("showInDescription").as_bool(true)) {
+			if (vocationNode.attribute("showInDescription").as_bool(true))
 				vocStringList.push_back(asLowerCaseString(attr.as_string()));
-			}
 		}
 	}
-	range = Item::items[id].shootRange;
 
+	range = Item::items[id].shootRange;
 	std::string vocationString;
-	for (const std::string& str : vocStringList) {
-		if (!vocationString.empty()) {
-			if (str != vocStringList.back()) {
+	for (const std::string& str : vocStringList)
+	{
+		if (!vocationString.empty())
+		{
+			if (str != vocStringList.back())
 				vocationString += ", ";
-			} else {
+			else
 				vocationString += " and ";
-			}
 		}
 
 		vocationString += str;
@@ -261,23 +265,20 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	uint32_t wieldInfo = 0;
-	if (getReqLevel() > 0) {
+	if (getReqLevel() > 0)
 		wieldInfo |= WIELDINFO_LEVEL;
-	}
 
-	if (getReqMagLv() > 0) {
+	if (getReqMagLv() > 0)
 		wieldInfo |= WIELDINFO_MAGLV;
-	}
 
-	if (!vocationString.empty()) {
+	if (!vocationString.empty())
 		wieldInfo |= WIELDINFO_VOCREQ;
-	}
 
-	if (isPremium()) {
+	if (isPremium())
 		wieldInfo |= WIELDINFO_PREMIUM;
-	}
 
-	if (wieldInfo != 0) {
+	if (wieldInfo != 0)
+	{
 		ItemType& it = Item::items.getItemType(id);
 		it.wieldInfo = wieldInfo;
 		it.vocationString = vocationString;
@@ -996,7 +997,6 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 
 bool WeaponWand::configureWeapon(const ItemType& it)
 {
-	m_scripted = false;
 	range = it.shootRange;
 	params.distanceEffect = it.shootType;
 
