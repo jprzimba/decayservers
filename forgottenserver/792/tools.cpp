@@ -147,45 +147,6 @@ std::string asUpperCaseString(const std::string& source)
 	return s;
 }
 
-bool readXMLInteger(xmlNodePtr node, const char* tag, int& value)
-{
-	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-	if(nodeValue)
-	{
-		value = atoi(nodeValue);
-		xmlFreeOTSERV(nodeValue);
-		return true;
-	}
-
-	return false;
-}
-
-bool readXMLInteger64(xmlNodePtr node, const char* tag, uint64_t& value)
-{
-	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-	if(nodeValue)
-	{
-		value = ATOI64(nodeValue);
-		xmlFreeOTSERV(nodeValue);
-		return true;
-	}
-
-	return false;
-}
-
-bool readXMLFloat(xmlNodePtr node, const char* tag, float& value)
-{
-	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-	if(nodeValue)
-	{
-		value = atof(nodeValue);
-		xmlFreeOTSERV(nodeValue);
-		return true;
-	}
-
-	return false;
-}
-
 bool utf8ToLatin1(char* intext, std::string& outtext)
 {
 	outtext = "";

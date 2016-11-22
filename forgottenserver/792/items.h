@@ -28,9 +28,6 @@
 #include "position.h"
 #include <map>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #define SLOTP_WHEREEVER 0xFFFFFFFF
 #define SLOTP_HEAD 1
 #define	SLOTP_NECKLACE 2

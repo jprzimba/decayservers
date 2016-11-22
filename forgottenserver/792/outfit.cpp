@@ -21,8 +21,6 @@
 
 #include "definitions.h"
 #include "outfit.h"
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 #include "creature.h"
 #include "player.h"
 #include "tools.h"

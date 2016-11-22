@@ -27,12 +27,6 @@
 #include "pugicast.h"
 #include <pugixml.hpp>
 
-#ifdef __XML_GCC_FREE__
-	#define xmlFreeOTSERV(s)	free(s)
-#else
-	#define xmlFreeOTSERV(s)	xmlFree(s)
-#endif
-
 #ifdef __DEBUG_EXCEPTION_REPORT__
 	#define DEBUG_REPORT int *a = NULL; *a = 1;
 #else
@@ -101,21 +95,17 @@ enum passwordType_t
 #define _WIN32_WINNT 0x0601
 
 #ifdef __GNUC__
+
 	#include <assert.h>
 	#define ATOI64 atoll
 	
-	#if defined(__XML_GCC_FREE__)
-		#include <unordered_map>
-		#include <unordered_set>
-		#define OTSERV_HASH_MAP std::unordered_map
-		#define OTSERV_HASH_SET std::unordered_set
-	#else
-		#include <ext/hash_map>
-		#include <ext/hash_set>
-		#define OTSERV_HASH_MAP __gnu_cxx::hash_map
-		#define OTSERV_HASH_SET __gnu_cxx::hash_set
-	#endif
+	#include <unordered_map>
+	#include <unordered_set>
+	#define OTSERV_HASH_MAP std::unordered_map
+	#define OTSERV_HASH_SET std::unordered_set
+	
 #else
+
 	typedef unsigned long long uint64_t;
 	
 	#define _WIN32_WINNT 0x0601

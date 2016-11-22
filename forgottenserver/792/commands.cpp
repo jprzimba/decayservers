@@ -58,8 +58,6 @@ extern Chat g_chat;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 
-extern bool readXMLInteger(xmlNodePtr p, const char *tag, int32_t &value);
-
 #define ipText(a) (unsigned int)a[0] << "." << (unsigned int)a[1] << "." << (unsigned int)a[2] << "." << (unsigned int)a[3]
 
 s_defcommands Commands::defined_commands[] =

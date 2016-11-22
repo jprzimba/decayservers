@@ -226,48 +226,6 @@ bool Npc::loadFromXml(const std::string& filename)
 	return true;
 }
 
-uint32_t Npc::loadParams(xmlNodePtr node)
-{
-	uint32_t params = RESPOND_DEFAULT;
-	std::string strValue;
-
-	if(readXMLString(node, "param", strValue))
-	{
-		std::vector<std::string> paramList = explodeString(strValue, ";");
-		for(std::vector<std::string>::iterator it = paramList.begin(); it != paramList.end(); ++it)
-		{
-			std::string tmpParam = asLowerCaseString(*it);
-			if(tmpParam == "male")
-				params |= RESPOND_MALE;
-			else if(tmpParam == "female")
-				params |= RESPOND_FEMALE;
-			else if(tmpParam == "pzblock")
-				params |= RESPOND_PZBLOCK;
-			else if(tmpParam == "lowmoney")
-				params |= RESPOND_LOWMONEY;
-			else if(tmpParam == "noamount")
-				params |= RESPOND_NOAMOUNT;
-			else if(tmpParam == "lowamount")
-				params |= RESPOND_LOWAMOUNT;
-			else if(tmpParam == "premium")
-				params |= RESPOND_PREMIUM;
-			else if(tmpParam == "druid")
-				params |= RESPOND_DRUID;
-			else if(tmpParam == "knight")
-				params |= RESPOND_KNIGHT;
-			else if(tmpParam == "paladin")
-				params |= RESPOND_PALADIN;
-			else if(tmpParam == "sorcerer")
-				params |= RESPOND_SORCERER;
-			else if(tmpParam == "lowlevel")
-				params |= RESPOND_LOWLEVEL;
-			else
-				std::cout << "[Warning - Npc::loadParams] NPC Name: " << name << " - Unknown param " << (*it) << std::endl;
-		}
-	}
-	return params;
-}
-
 NpcState* Npc::getState(const Player* player, bool makeNew /*= true*/)
 {
 	for(StateList::iterator it = stateList.begin(); it != stateList.end(); ++it)
