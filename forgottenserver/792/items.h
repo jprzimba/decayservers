@@ -293,7 +293,7 @@ class Items
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
-		bool parseItemNode(xmlNodePtr itemNode, uint32_t id);
+		bool parseItemNode(const pugi::xml_node&, uint32_t id);
 
 		void addItemType(ItemType* iType);
 

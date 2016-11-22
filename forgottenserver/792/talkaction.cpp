@@ -213,11 +213,11 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		}
 	}
 	
-	if ((attr = node.attribute("registerlog"))) {
+	if ((attr = node.attribute("registerlog")) || (attr = node.attribute("log"))) {
 		registerlog = attr.as_string();
 	}
 
-	if ((attr = node.attribute("case-sensitive"))) {
+	if ((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive"))) {
 		casesensitive = attr.as_string();
 	}
 		
