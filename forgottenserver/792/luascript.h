@@ -420,6 +420,8 @@ class LuaScriptInterface
 		static int32_t luaGetTilePzInfo(lua_State* L);
 		static int32_t luaGetTileHouseInfo(lua_State* L);
 		static int32_t luaQueryTileAddThing(lua_State* L);
+		static int32_t luaGetTownName(lua_State* L);
+		static int32_t luaGetTownTemplePosition(lua_State* L);
 
 		//houses
 		static int32_t luaGetHouseOwner(lua_State* L);
@@ -476,6 +478,8 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerGUID(lua_State* L);
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
+		static int32_t luaGetPlayerByNameWildcard(lua_State* L);
+		static int32_t luaGetTownId(lua_State* L);
 
 		static int32_t luaGetPlayerGroupId(lua_State* L);
 		static int32_t luaSetPlayerGroupId(lua_State* L);

@@ -1832,6 +1832,19 @@ void LuaScriptInterface::registerFunctions()
 
 	//getClosestFreeTile(cid, targetpos[, extended = false[, ignoreHouse = true]])
 	lua_register(m_luaState, "getClosestFreeTile", LuaScriptInterface::luaGetClosestFreeTile);
+
+	//getTownName(townId)
+	lua_register(m_luaState, "getTownName", LuaScriptInterface::luaGetTownName);
+
+	//getTownTemplePosition(townId[, displayError])
+	lua_register(m_luaState, "getTownTemplePosition", LuaScriptInterface::luaGetTownTemplePosition);
+
+	//getPlayerByNameWildcard(name~[, ret = false])
+	lua_register(m_luaState, "getPlayerByNameWildcard", LuaScriptInterface::luaGetPlayerByNameWildcard);
+
+	//getTownId(townName)
+	lua_register(m_luaState, "getTownId", LuaScriptInterface::luaGetTownId);
+	
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7732,5 +7745,65 @@ int32_t LuaScriptInterface::luaGetClosestFreeTile(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetTownName(lua_State* L)
+{
+	//getTownName(townId)
+	uint32_t townId = popNumber(L);
+	if(Town* town = Towns::getInstance().getTown(townId))
+		lua_pushstring(L, town->getName().c_str());
+	else
+		lua_pushboolean(L, false);
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetTownTemplePosition(lua_State* L)
+{
+	//getTownTemplePosition(townId)
+	bool displayError = true;
+	if(lua_gettop(L) >= 2)
+		displayError = popNumber(L);
+
+	uint32_t townId = popNumber(L);
+	if(Town* town = Towns::getInstance().getTown(townId))
+		pushPosition(L, town->getTemplePosition(), 255);
+	else
+		lua_pushboolean(L, false);
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPlayerByNameWildcard(lua_State* L)
+{
+	//getPlayerByNameWildcard(name~[, ret = false])
+	Player* player = NULL;
+	bool pushRet = false;
+	if(lua_gettop(L) > 1)
+		pushRet = popNumber(L);
+
+	ScriptEnvironment* env = getScriptEnv();
+	ReturnValue ret = g_game.getPlayerByNameWildcard(popString(L), player);
+	if(ret == RET_NOERROR)
+		lua_pushnumber(L, env->addThing(player));
+	else if(pushRet)
+		lua_pushnumber(L, ret);
+	else
+		lua_pushnil(L);
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetTownId(lua_State* L)
+{
+	//getTownId(townName)
+	std::string townName = popString(L);
+	if(Town* town = Towns::getInstance().getTown(townName))
+		lua_pushnumber(L, town->getTownID());
+	else
+		lua_pushboolean(L, false);
+
 	return 1;
 }

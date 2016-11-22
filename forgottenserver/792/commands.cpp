@@ -73,7 +73,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/summon", &Commands::placeSummon},
 	{"/B", &Commands::broadcastMessage},
 	{"/b", &Commands::banPlayer},
-	{"/t", &Commands::teleportMasterPos},
 	{"/c", &Commands::teleportHere},
 	{"/q", &Commands::subtractMoney},
 	{"/reload", &Commands::reloadInfo},
@@ -83,7 +82,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
 	{"/gethouse", &Commands::getHouse},
-	{"/town", &Commands::teleportToTown},
 	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
@@ -381,41 +379,6 @@ bool Commands::banPlayer(Creature* creature, const std::string& cmd, const std::
 	return false;
 }
 
-bool Commands::teleportMasterPos(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		Player* targetPlayer = player;
-		if(!param.empty())
-		{
-			if(Player* paramPlayer = g_game.getPlayerByName(param))
-				targetPlayer = paramPlayer;
-			else
-			{
-				player->sendCancel("Player not found.");
-				return false;
-			}
-		}
-
-		Position oldPosition = player->getPosition();
-		Position destPos = player->masterPos;
-		Position newPosition = g_game.getClosestFreeTile(player, 0, destPos, true);
-		if(player->getPosition() != destPos)
-		{
-			if(newPosition.x == 0)
-				player->sendCancel("You can not teleport there.");
-			else if(g_game.internalTeleport(creature, newPosition, true) == RET_NOERROR)
-			{
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, targetPlayer->isInGhostMode());
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, targetPlayer->isInGhostMode());
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 bool Commands::teleportHere(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -548,35 +511,6 @@ bool Commands::reloadInfo(Creature* creature, const std::string& cmd, const std:
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
 	return true;
-}
-
-bool Commands::teleportToTown(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	std::string tmp = param;
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	Town* town = Towns::getInstance().getTown(tmp);
-	if(town)
-	{
-		Position oldPosition = player->getPosition();
-		Position newPosition = g_game.getClosestFreeTile(player, 0, town->getTemplePosition(), true);
-		if(player->getPosition() != town->getTemplePosition())
-		{
-			if(newPosition.x == 0)
-				player->sendCancel("You can not teleport there.");
-			else if(g_game.internalTeleport(player, newPosition, true) == RET_NOERROR)
-			{
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-				return true;
-			}
-		}
-	}
-	else
-		player->sendCancel("Could not find the town.");
-	return false;
 }
 
 bool Commands::teleportTo(Creature* creature, const std::string& cmd, const std::string& param)
