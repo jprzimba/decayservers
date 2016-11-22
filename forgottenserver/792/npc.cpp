@@ -33,9 +33,6 @@
 #include <sstream>
 #include <fstream>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "luascript.h"
 
 extern ConfigManager g_config;
@@ -140,132 +137,93 @@ void Npc::reload()
 
 bool Npc::loadFromXml(const std::string& filename)
 {
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-	if(doc)
-	{
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+	if (!result) {
+		std::cout << "[Error - Npc::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
+		return false;
+	}
 
-		if(xmlStrcmp(root->name,(const xmlChar*)"npc") != 0)
-		{
-			std::cerr << "Malformed XML" << std::endl;
+	pugi::xml_node npcNode = doc.child("npc");
+	if (!npcNode) {
+		std::cout << "[Error - Npc::loadFromXml] Missing npc tag in " << filename << std::endl;
+		return false;
+	}
+
+	name = npcNode.attribute("name").as_string();
+	attackable = npcNode.attribute("attackable").as_bool();
+	floorChange = npcNode.attribute("floorchange").as_bool();
+
+	pugi::xml_attribute attr;
+	if ((attr = npcNode.attribute("speed"))) {
+		baseSpeed = pugi::cast<uint32_t>(attr.value());
+	} else {
+		baseSpeed = 100;
+	}
+
+	if ((attr = npcNode.attribute("walkinterval"))) {
+		walkTicks = pugi::cast<uint32_t>(attr.value());
+	}
+
+	if ((attr = npcNode.attribute("walkradius"))) {
+		masterRadius = pugi::cast<int32_t>(attr.value());
+	}
+
+	pugi::xml_node healthNode = npcNode.child("health");
+	if (healthNode) {
+		if ((attr = healthNode.attribute("now"))) {
+			health = pugi::cast<int32_t>(attr.value());
+		} else {
+			health = 100;
+		}
+
+		if ((attr = healthNode.attribute("max"))) {
+			healthMax = pugi::cast<int32_t>(attr.value());
+		} else {
+			healthMax = 100;
+		}
+	}
+
+	pugi::xml_node lookNode = npcNode.child("look");
+	if (lookNode) {
+		pugi::xml_attribute lookTypeAttribute = lookNode.attribute("type");
+		if (lookTypeAttribute) {
+			defaultOutfit.lookType = pugi::cast<uint16_t>(lookTypeAttribute.value());
+			defaultOutfit.lookHead = pugi::cast<uint16_t>(lookNode.attribute("head").value());
+			defaultOutfit.lookBody = pugi::cast<uint16_t>(lookNode.attribute("body").value());
+			defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
+			defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
+			defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
+		} else if ((attr = lookNode.attribute("typeex"))) {
+			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
+		}
+
+		currentOutfit = defaultOutfit;
+	}
+
+	for (pugi::xml_node parameterNode = npcNode.child("parameters").first_child(); parameterNode; parameterNode = parameterNode.next_sibling()) {
+		m_parameters[parameterNode.attribute("key").as_string()] = parameterNode.attribute("value").as_string();
+	}
+
+	pugi::xml_node interactionNode = npcNode.child("interaction");
+	if (healthNode) {
+		if ((attr = interactionNode.attribute("talkradius"))) {
+			talkRadius = pugi::cast<int32_t>(attr.value());
+		}
+
+		if ((attr = interactionNode.attribute("idletime"))) {
+			idleTime = pugi::cast<int32_t>(attr.value());
+		}
+	}
+	
+	pugi::xml_attribute scriptFile = npcNode.attribute("script");
+	if (scriptFile) {
+		m_npcEventHandler = new NpcScript(scriptFile.as_string(), this);
+		if (!m_npcEventHandler->isLoaded()) {
 			return false;
 		}
-
-		int32_t intValue;
-		std::string strValue;
-
-		p = root->children;
-
-		std::string scriptfile = "";
-		if(readXMLString(root, "script", strValue))
-			scriptfile = strValue;
-
-		if(readXMLString(root, "name", strValue))
-			name = strValue;
-		else
-			name = "";
-
-		if(readXMLInteger(root, "speed", intValue))
-			baseSpeed = intValue;
-		else
-			baseSpeed = 110;
-
-		if(readXMLInteger(root, "attackable", intValue))
-			attackable = (intValue != 0);
-
-		if(readXMLInteger(root, "walkinterval", intValue))
-			walkTicks = intValue;
-
-		if(readXMLInteger(root, "autowalk", intValue))
-		{
-			std::cout << "[Notice - Npc::Npc] NPC Name: " << name << " - autowalk has been deprecated, use walkinterval." << std::endl;
-			walkTicks = 2000;
-		}
-
-		if(readXMLInteger(root, "floorchange", intValue))
-			floorChange = (intValue != 0);
-
-		while(p)
-		{
-			if(xmlStrcmp(p->name, (const xmlChar*)"health") == 0)
-			{
-				if(readXMLInteger(p, "now", intValue))
-					health = intValue;
-				else
-					health = 100;
-
-				if(readXMLInteger(p, "max", intValue))
-					healthMax = intValue;
-				else
-					healthMax = 100;
-			}
-			else if(xmlStrcmp(p->name, (const xmlChar*)"look") == 0)
-			{
-				if(readXMLInteger(p, "type", intValue))
-				{
-					defaultOutfit.lookType = intValue;
-
-					if(readXMLInteger(p, "head", intValue))
-						defaultOutfit.lookHead = intValue;
-
-					if(readXMLInteger(p, "body", intValue))
-						defaultOutfit.lookBody = intValue;
-
-					if(readXMLInteger(p, "legs", intValue))
-						defaultOutfit.lookLegs = intValue;
-
-					if(readXMLInteger(p, "feet", intValue))
-						defaultOutfit.lookFeet = intValue;
-
-					if(readXMLInteger(p, "addons", intValue))
-						defaultOutfit.lookAddons = intValue;
-				}
-				else if(readXMLInteger(p, "typeex", intValue))
-					defaultOutfit.lookTypeEx = intValue;
-
-				currentOutfit = defaultOutfit;
-			}
-			else if(xmlStrcmp(p->name, (const xmlChar*)"parameters") == 0)
-			{
-				for(xmlNodePtr q = p->children; q != NULL; q = q->next)
-				{
-					if(xmlStrcmp(q->name, (const xmlChar*)"parameter") == 0)
-					{
-						std::string paramKey;
-						std::string paramValue;
-						if(!readXMLString(q, "key", paramKey))
-							continue;
-						if(!readXMLString(q, "value", paramValue))
-							continue;
-						m_parameters[paramKey] = paramValue;
-					}
-				}
-
-			}
-			else if(xmlStrcmp(p->name, (const xmlChar*)"interaction") == 0)
-			{
-				if(readXMLInteger(p, "talkradius", intValue))
-					talkRadius = intValue;
-
-				if(readXMLInteger(p, "idletime", intValue))
-					idleTime = intValue;
-
-			}
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
-
-		if(!scriptfile.empty())
-		{
-			m_npcEventHandler = new NpcScript(scriptfile, this);
-			if(!m_npcEventHandler->isLoaded())
-				return false;
-		}
-		return true;
 	}
-	return false;
+	return true;
 }
 
 uint32_t Npc::loadParams(xmlNodePtr node)
