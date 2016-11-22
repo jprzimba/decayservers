@@ -6,7 +6,7 @@ function onSay(cid, words, param, channel)
 		pid = getPlayerByNameWildcard(t[2])
 		if(not pid) then
 			doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Player " .. t[2] .. " not found.")
-			return true
+			return false
 		end
 	end
 
@@ -19,5 +19,5 @@ function onSay(cid, words, param, channel)
 	end
 
 	doSendMagicEffect(position, effect)
-	return true
+	return false
 end

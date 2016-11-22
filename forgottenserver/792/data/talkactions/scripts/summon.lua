@@ -1,11 +1,11 @@
 function onSay(cid, words, param, channel)
 	local pid = cid
-	local t = string.explode(param, ",")
+	local t = string.explode(param, " ")
 	if(t[2]) then
 		pid = getPlayerByNameWildcard(t[2])
 		if(not pid or (isPlayerGhost(pid) and getPlayerGhostAccess(pid) > getPlayerGhostAccess(cid))) then
 			doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Player " .. t[2] .. " not found.")
-			return true
+			return false
 		end
 	end
 
@@ -17,5 +17,5 @@ function onSay(cid, words, param, channel)
 	end
 
 	doSendMagicEffect(getCreaturePosition(cid), effect)
-	return true
+	return false
 end
