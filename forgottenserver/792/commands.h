@@ -57,8 +57,6 @@ class Commands
 		bool subtractMoney(Creature* creature, const std::string& cmd, const std::string& param);
 		bool reloadInfo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getInfo(Creature* creature, const std::string& cmd, const std::string& param);
-		bool closeServer(Creature* creature, const std::string& cmd, const std::string& param);
-		bool openServer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportNTiles(Creature* creature, const std::string& cmd, const std::string& param);
 		bool kickPlayer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool setHouseOwner(Creature* creature, const std::string& cmd, const std::string& param);
@@ -66,7 +64,6 @@ class Commands
 		bool getHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool serverInfo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool changeFloor(Creature* creature, const std::string &cmd, const std::string &param);
-		bool whoIsOnline(Creature* creature, const std::string &cmd, const std::string &param);
 		bool showPosition(Creature* creature, const std::string &cmd, const std::string &param);
 		bool removeThing(Creature* creature, const std::string& cmd, const std::string& param);
 		bool buyHouse(Creature* creature, const std::string& cmd, const std::string& param);
@@ -78,7 +75,6 @@ class Commands
 		bool joinGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool createGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool ghost(Creature* creature, const std::string& cmd, const std::string& param);
-		bool saveGame(Creature* creature, const std::string& cmd, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];

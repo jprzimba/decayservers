@@ -3,8 +3,6 @@
 	<command cmd="/b" group="2" acctype="5"/>
 	<command cmd="/reload" group="1" acctype="5"/>
 	<command cmd="/s" group="2" acctype="5"/>
-	<command cmd="/openserver" group="1" acctype="5"/>
-	<command cmd="/closeserver" group="1" acctype="5"/>
 	<command cmd="/owner" group="2" acctype="5"/>
 	<command cmd="/goto" group="2" acctype="4"/>
 	<command cmd="/a" group="2" acctype="5"/>
@@ -27,9 +25,7 @@
 	<command cmd="/addskill" group="2" acctype="5"/>
 	<command cmd="/unban" group="1" acctype="4"/>
 	<command cmd="/ghost" group="2" acctype="5"/>
-	<command cmd="/save" group="2" acctype="5"/>
-	
-	<command cmd="!online" group="1" acctype="1"/>
+
 	<command cmd="!buyhouse" group="1" acctype="1"/>
 	<command cmd="!sellhouse" group="1" acctype="1"/>
 	<command cmd="!serverinfo" group="1" acctype="1"/>

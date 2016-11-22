@@ -114,12 +114,14 @@ Event* Spells::getEvent(const std::string& nodeName)
 	std::string tmpNodeName = asLowerCaseString(nodeName);
 	if(tmpNodeName == "rune")
 		return new RuneSpell(&m_scriptInterface);
-	else if(tmpNodeName == "instant")
+
+	if(tmpNodeName == "instant")
 		return new InstantSpell(&m_scriptInterface);
-	else if(tmpNodeName == "conjure")
+
+	if(tmpNodeName == "conjure")
 		return new ConjureSpell(&m_scriptInterface);
-	else
-		return NULL;
+
+	return NULL;
 }
 
 bool Spells::registerEvent(Event* event, const pugi::xml_node& node)

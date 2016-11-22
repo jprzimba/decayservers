@@ -76,8 +76,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/reload", &Commands::reloadInfo},
 	{"/goto", &Commands::teleportTo},
 	{"/info", &Commands::getInfo},
-	{"/closeserver", &Commands::closeServer},
-	{"/openserver", &Commands::openServer},
 	{"/a", &Commands::teleportNTiles},
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
@@ -92,10 +90,8 @@ s_defcommands Commands::defined_commands[] =
 	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
 	{"/ghost", &Commands::ghost},
-	{"/save",&Commands::saveGame},
 
 	//player commands - TODO: make them talkactions
-	{"!online", &Commands::whoIsOnline},
 	{"!buyhouse", &Commands::buyHouse},
  	{"!sellhouse", &Commands::sellHouse},
 	{"!serverinfo", &Commands::serverInfo},
@@ -633,24 +629,6 @@ bool Commands::getInfo(Creature* creature, const std::string& cmd, const std::st
 	return true;
 }
 
-bool Commands::closeServer(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	g_game.setGameState(GAME_STATE_CLOSED);
-	if(creature->getPlayer())
-		creature->getPlayer()->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Server is now closed.");
-
-	return true;
-}
-
-bool Commands::openServer(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	g_game.setGameState(GAME_STATE_NORMAL);
-	if(creature->getPlayer())
-		creature->getPlayer()->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Server is now open.");
-
-	return true;
-}
-
 bool Commands::teleportNTiles(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -891,27 +869,6 @@ bool Commands::buyHouse(Creature* creature, const std::string& cmd, const std::s
 			player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 	}
 	return false;
-}
-
-bool Commands::whoIsOnline(Creature* creature, const std::string &cmd, const std::string &param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		AutoList<Player>::listiterator it = Player::listPlayer.list.begin();
-		std::stringstream ss;
-		ss << "Players online:" << std::endl;
-		bool first = true;
-		while (it != Player::listPlayer.list.end())
-		{
-			ss << (first ? "" : ", ") << (*it).second->name << " [" << (*it).second->level << "]";
-			first = false;
-			++it;
-		}
-		ss << ".";
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	}
-	return true;
 }
 
 bool Commands::changeFloor(Creature* creature, const std::string &cmd, const std::string &param)
@@ -1330,17 +1287,5 @@ bool Commands::ghost(Creature* creature, const std::string& cmd, const std::stri
 		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
 		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 	}
-	return true;
-}
-
-bool Commands::saveGame(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-		
-	g_game.saveGameState();
-	if(player)
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Save server completed.");
 	return true;
 }
