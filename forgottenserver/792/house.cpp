@@ -160,12 +160,11 @@ bool House::kickPlayer(Player* player, const std::string& name)
 		{
 			if(getHouseAccessLevel(player) >= getHouseAccessLevel(kickingPlayer) && !kickingPlayer->hasFlag(PlayerFlag_CanEditHouses))
 			{
-				Position oldPosition = kickingPlayer->getPosition();
-				if(g_game.internalTeleport(kickingPlayer, g_game.getClosestFreeTile(
-					player, NULL, getEntryPosition(), true), true) == RET_NOERROR)
+				Position oldPosition = kickingPlayer->getPosition(), newPos = g_game.getClosestFreeTile(kickingPlayer, getEntryPosition(), false, false);
+				if(g_game.internalTeleport(kickingPlayer, newPos, true) == RET_NOERROR && !player->isInGhostMode())
 				{
 					g_game.addMagicEffect(oldPosition, NM_ME_POFF);
-					g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
+					g_game.addMagicEffect(newPos, NM_ME_TELEPORT);
 				}
 				return true;
 			}
