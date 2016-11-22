@@ -294,3 +294,21 @@ uint16_t Quests::getQuestsCount(Player* player)
 	return count;
 }
 
+bool Quests::isQuestStorage(const uint32_t key, const int32_t value)
+{
+	for(QuestsList::const_iterator it = quests.begin(), end = quests.end(); it != end; ++it)
+	{
+		if((*it)->getStartStorageId() == key && (*it)->getStartStorageValue() == value)
+			return true;
+
+		for(MissionsList::const_iterator m_it = (*it)->getFirstMission(), m_end = (*it)->getLastMission(); m_it != m_end; ++m_it)
+		{
+			if((*m_it)->mainState != NULL)
+				continue;
+
+			if((*m_it)->getStorageId() == key && value >= (*m_it)->getStartStorageValue() && value <= (*m_it)->getEndStorageValue())
+				return true;
+		}
+	}
+	return false;
+}

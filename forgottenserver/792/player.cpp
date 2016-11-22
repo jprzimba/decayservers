@@ -40,6 +40,7 @@
 #include "creatureevent.h"
 #include "status.h"
 #include "beds.h"
+#include "quests.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -792,7 +793,7 @@ void Player::dropLoot(Container* corpse)
 		__internalAddThing(SLOT_BACKPACK, Item::CreateItem(1987));
 }
 
-void Player::addStorageValue(const uint32_t key, const int32_t value)
+void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
 {
 	if(IS_IN_KEYRANGE(key, RESERVED_RANGE))
 	{
@@ -805,12 +806,24 @@ void Player::addStorageValue(const uint32_t key, const int32_t value)
 				std::cout << "Warning: No valid addons value key:" << key << " value: " << (int32_t)(value & 0xFF) << " player: " << getName() << std::endl;
 			else
 				m_playerOutfits.addOutfit(outfit);
+
+			return;
 		}
 		else
+		{
 			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
+			return;
+		}
 	}
+
+	if(value == -1)
+		storageMap.erase(key);
 	else
+	{
 		storageMap[key] = value;
+		if(!isLogin && Quests::getInstance()->isQuestStorage(key, value))
+			sendTextMessage(MSG_EVENT_ADVANCE, "Your questlog has been updated.");
+	}
 }
 
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const

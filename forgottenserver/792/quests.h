@@ -117,6 +117,7 @@ class Quests
 
 		bool loadFromXml();
 		Quest* getQuestByID(uint16_t id);
+		bool isQuestStorage(const uint32_t key, const int32_t value);
 		uint16_t getQuestsCount(Player* player);
 		bool reload();
 
