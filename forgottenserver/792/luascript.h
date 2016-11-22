@@ -90,8 +90,10 @@ class ScriptEnvironment
 		static bool saveGameState();
 		static bool loadGameState();
 
-		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface)
-			{m_scriptId = scriptId; m_interface = scriptInterface;}
+		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface) {
+			m_scriptId = scriptId;
+			m_interface = scriptInterface;
+		}
 		bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
 		void setEventDesc(const std::string& desc) {m_eventdesc = desc;}
 

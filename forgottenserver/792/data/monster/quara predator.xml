@@ -47,13 +47,11 @@
 	<item id="2148" chance="100000" countmax="100"/>
 	<item id="2387" chance="2000"/>
 	<item id="1987" chance="100000">
-	  <inside>
 		<item id="2473" chance="3333"/>
 		<item id="2145" chance="1429" countmax="1"/>
 		<item id="2483" chance="4000"/>
 		<item id="5741" chance="956"/>
 		<item id="7897" chance="800" />
-	  </inside>
 	</item>
   </loot>
 </monster>

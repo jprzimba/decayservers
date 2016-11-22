@@ -21,8 +21,6 @@
 
 #include "definitions.h"
 #include "outfit.h"
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 #include "creature.h"
 #include "player.h"
 #include "tools.h"
@@ -137,76 +135,50 @@ Outfits::~Outfits()
 
 bool Outfits::loadFromXml()
 {
-	std::string filename = "data/XML/outfits.xml";
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/outfits.xml");
+	if (!result) {
+		std::cout << "[Error - Outfits::loadFromXml] Failed to load data/XML/outfits.xml: " << result.description() << std::endl;
+		return false;
+	}
 
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-	if(doc){
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-		
-		if(xmlStrcmp(root->name,(const xmlChar*)"outfits") != 0){
-			xmlFreeDoc(doc);
-			std::cout << "Warning: outfits.xml not found, using defaults." << std::endl;
-			return true;
+	for (pugi::xml_node outfitNode = doc.child("outfits").first_child(); outfitNode; outfitNode = outfitNode.next_sibling()) {
+		pugi::xml_attribute typeAttribute = outfitNode.attribute("type");
+		if (!typeAttribute) {
+			std::cout << "[Warning - Outfits::loadFromXml] Missing outfit type." << std::endl;
+			continue;
 		}
-		
-		p = root->children;
-		
-		while(p){
-			std::string str;
-			int32_t intVal;
-			if(xmlStrcmp(p->name, (const xmlChar*)"outfit") == 0)
-			{
-				if(readXMLInteger(p, "type", intVal))
-				{
-					if(intVal > 9 || intVal < 0)
-						std::cout << "Warning: No valid outfit type " << intVal << std::endl;
-					else
-					{
-						OutfitList* list;
-						if(m_list[intVal] != NULL)
-							list = m_list[intVal];
-						else
-						{
-							list = new OutfitList;
-							m_list[intVal] = list;
-						}
-						
-						Outfit outfit;
-						std::string outfitName;
-						bool outfitEnabled = true;
 
-						readXMLString(p, "name", outfitName);
-						if(readXMLInteger(p, "looktype", intVal))
-							outfit.looktype = intVal;
-						else
-							std::cout << "[Warning] Missing looktype on outfit: " << outfitName << std::endl;
-
-						if(readXMLInteger(p, "addons", intVal))
-							outfit.addons = intVal;
-						else
-							outfit.addons = 0;
-
-						if(readXMLInteger(p, "premium", intVal))
-							outfit.premium = (intVal == 1);
-
-						if(readXMLInteger(p, "enabled", intVal))
-							outfitEnabled = (intVal == 1);
-
-						outfitNamesMap[outfit.looktype] = outfitName;
-						if(outfitEnabled)
-						{
-							//This way you can add names for outfits without adding them to default list
-							list->addOutfit(outfit);
-						}
-					}
-				}
-				else
-					std::cout << "Missing outfit type." << std::endl;
-			}
-			p = p->next;
+		uint32_t type = pugi::cast<uint32_t>(typeAttribute.value());
+		if (type > 9) {
+			std::cout << "[Warning - Outfits::loadFromXml] No valid outfit type " << type << std::endl;
+			continue;
 		}
-		xmlFreeDoc(doc);
+
+		if (!m_list[type]) {
+			m_list[type] = new OutfitList;
+		}
+		OutfitList* list = m_list[type];
+
+		Outfit outfit;
+		std::string outfitName = outfitNode.attribute("name").as_string();
+
+		pugi::xml_attribute lookTypeAttribute = outfitNode.attribute("looktype");
+		if (!lookTypeAttribute) {
+			std::cout << "[Warning - Outfits::loadFromXml] Missing looktype on outfit: " << outfitName << std::endl;
+			continue;
+		}
+
+		outfit.looktype = pugi::cast<uint32_t>(lookTypeAttribute.value());
+		outfit.addons = pugi::cast<uint32_t>(outfitNode.attribute("addons").value());
+		outfit.premium = outfitNode.attribute("premium").as_bool();
+
+		outfitNamesMap[outfit.looktype] = outfitName;
+
+		if (outfitNode.attribute("enabled").as_bool()) {
+			//This way you can add names for outfits without adding them to default list
+			list->addOutfit(outfit);
+		}
 	}
 	return true;
 }

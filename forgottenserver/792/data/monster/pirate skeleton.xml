@@ -38,10 +38,8 @@
     <item id="2231" chance="4000"/>
     <item id="6095" chance="5000"/>
     <item id="5927" chance="100000">
-      <inside>
         <item id="2376" chance="18402"/>
         <item id="2449" chance="8491"/>
-      </inside>
     </item>
   </loot>
 </monster>

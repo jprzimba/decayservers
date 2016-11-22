@@ -26,8 +26,6 @@
 #include "enums.h"
 
 #include <list>
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 class Creature;
 class Player;

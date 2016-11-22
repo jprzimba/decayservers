@@ -56,7 +56,7 @@ class Actions : public BaseEvents
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
 		void registerItemID(int32_t itemId, Event* event);
 		void registerActionID(int32_t actionId, Event* event);
@@ -82,7 +82,7 @@ class Action : public Event
 		Action(LuaScriptInterface* _interface);
 		virtual ~Action();
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 
 		//scripting

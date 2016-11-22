@@ -30,8 +30,6 @@
 #include <string>
 #include <algorithm>
 
-#include <libxml/parser.h>
-
 #include <boost/tokenizer.hpp>
 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
@@ -55,14 +53,6 @@ std::string asLowerCaseString(const std::string& source);
 std::string asUpperCaseString(const std::string& source);
 
 bool utf8ToLatin1(char* intext, std::string& outtext);
-bool readXMLInteger(xmlNodePtr node, const char* tag, int& value);
-#if(defined __WINDOWS__ || defined WIN32) && !defined __GNUC__
-bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value);
-#endif
-bool readXMLInteger64(xmlNodePtr node, const char* tag, uint64_t& value);
-bool readXMLFloat(xmlNodePtr node, const char* tag, float& value);
-bool readXMLString(xmlNodePtr node, const char* tag, std::string& value);
-bool readXMLContentString(xmlNodePtr node, std::string& value);
 
 std::vector<std::string> explodeString(const std::string& inString, const std::string& separator);
 std::vector<int32_t> vectorAtoi(std::vector<std::string> stringVector);

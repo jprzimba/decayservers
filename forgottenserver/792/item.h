@@ -29,9 +29,6 @@
 #include <list>
 #include <vector>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 class Creature;
 class Player;
 class Container;

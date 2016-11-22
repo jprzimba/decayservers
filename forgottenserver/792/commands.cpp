@@ -23,9 +23,6 @@
 #include <fstream>
 #include <utility>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "commands.h"
 #include "player.h"
 #include "npc.h"
@@ -60,8 +57,6 @@ extern Game g_game;
 extern Chat g_chat;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
-
-extern bool readXMLInteger(xmlNodePtr p, const char *tag, int32_t &value);
 
 #define ipText(a) (unsigned int)a[0] << "." << (unsigned int)a[1] << "." << (unsigned int)a[2] << "." << (unsigned int)a[3]
 
@@ -118,77 +113,62 @@ Commands::Commands()
 
 bool Commands::loadFromXml()
 {
-	std::string filename = "data/XML/commands.xml";
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-	if(doc)
-	{
-		loaded = true;
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-		
-		if(xmlStrcmp(root->name,(const xmlChar*)"commands") != 0)
-		{
-			xmlFreeDoc(doc);
-			return false;
-		}
-	
-		std::string strCmd;
-		p = root->children;
-		while(p)
-		{
-			if(xmlStrcmp(p->name, (const xmlChar*)"command") == 0)
-			{
-				if(readXMLString(p, "cmd", strCmd))
-				{
-					CommandMap::iterator it = commandMap.find(strCmd);
-					int32_t gId;
-					int32_t aTypeLevel;
-					if(it != commandMap.end())
-					{
-						if(readXMLInteger(p,"group",gId))
-						{
-							if(!it->second->loadedGroupId)
-							{
-								it->second->groupId = gId;
-								it->second->loadedGroupId = true;
-							}
-							else
-								std::cout << "Duplicated command " << strCmd << std::endl;
-						}
-						else
-							std::cout << "missing group tag for " << strCmd << std::endl;
-
-						if(readXMLInteger(p, "acctype", aTypeLevel))
-						{
-							if(!it->second->loadedAccountType)
-							{
-								it->second->accountType = (AccountType_t)aTypeLevel;
-								it->second->loadedAccountType = true;
-							}
-							else
-								std::cout << "Duplicated command " << strCmd << std::endl;
-						}
-						else
-							std::cout << "missing acctype tag for " << strCmd << std::endl;
-					}
-					else
-						std::cout << "Unknown command " << strCmd << std::endl;
-				}
-				else
-					std::cout << "missing cmd." << std::endl;
-			}
-			p = p->next;
-		}
-		xmlFreeDoc(doc);
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/commands.xml");
+	if (!result) {
+		std::cout << "[Error - Commands::loadFromXml] Failed to load data/XML/commands.xml: " << result.description() << std::endl;
+		return false;
 	}
-	
-	for(CommandMap::iterator it = commandMap.begin(); it != commandMap.end(); ++it)
-	{
-		if(!it->second->loadedGroupId)
-			std::cout << "Warning: Missing group id for command " << it->first << std::endl;
-		if(!it->second->loadedAccountType)
-			std::cout << "Warning: Missing acctype level for command " << it->first << std::endl;
-		g_game.addCommandTag(it->first.substr(0, 1));
+
+	loaded = true;
+
+	for (pugi::xml_node commandNode = doc.child("commands").first_child(); commandNode; commandNode = commandNode.next_sibling()) {
+		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
+		if (!cmdAttribute) {
+			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;
+			continue;
+		}
+
+		auto it = commandMap.find(cmdAttribute.as_string());
+		if (it == commandMap.end()) {
+			std::cout << "[Warning - Commands::loadFromXml] Unknown command " << cmdAttribute.as_string() << std::endl;
+			continue;
+		}
+
+		Command* command = it->second;
+
+		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
+		if (groupAttribute) {
+			if (!command->loadedGroupId) {
+				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
+				command->loadedGroupId = true;
+			} else {
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
+			}
+		}
+
+		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
+		if (acctypeAttribute) {
+			if (!command->loadedAccountType) {
+				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
+				command->loadedAccountType = true;
+			} else {
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
+			}
+		}
+	}
+
+	for (const auto& it : commandMap) {
+		Command* command = it.second;
+		if (!command->loadedGroupId) {
+			std::cout << "[Warning - Commands::loadFromXml] Missing group id for command " << it.first << std::endl;
+		}
+
+		if (!command->loadedAccountType) {
+			std::cout << "[Warning - Commands::loadFromXml] Missing acctype level for command " << it.first << std::endl;
+		}
+
+		g_game.addCommandTag(it.first[0]);
 	}
 	return loaded;
 }

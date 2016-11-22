@@ -27,9 +27,6 @@
 #include "position.h"
 #include "baseevents.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 enum RaidState_t
 {
 	RAIDSTATE_IDLE = 0,
@@ -85,6 +82,10 @@ class Raids
 
 		void checkRaids();
 
+		LuaScriptInterface& getScriptInterface() {
+			return m_scriptInterface;
+		}
+		
 	private:
 		Raids();
 		RaidList raidList;
@@ -92,6 +93,8 @@ class Raids
 		Raid* running;
 		uint64_t lastRaidEnd;
 		uint32_t checkRaidsEvent;
+		
+		LuaScriptInterface m_scriptInterface;
 };
 
 class Raid
@@ -136,7 +139,7 @@ class RaidEvent
 		RaidEvent() {}
 		virtual ~RaidEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent() {return false;}
 		uint32_t getDelay() const {return m_delay;}
@@ -157,7 +160,7 @@ class AnnounceEvent : public RaidEvent
 		AnnounceEvent() {}
 		virtual ~AnnounceEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent();
 
@@ -172,7 +175,7 @@ class SingleSpawnEvent : public RaidEvent
 		SingleSpawnEvent() {}
 		virtual ~SingleSpawnEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent();
 
@@ -187,7 +190,7 @@ class AreaSpawnEvent : public RaidEvent
 		AreaSpawnEvent() {}
 		virtual ~AreaSpawnEvent();
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
@@ -202,11 +205,14 @@ class AreaSpawnEvent : public RaidEvent
 class ScriptEvent : public RaidEvent, public Event
 {
 	public:
-		ScriptEvent();
+		ScriptEvent(LuaScriptInterface* _interface);
+		ScriptEvent(const ScriptEvent* copy);
 		~ScriptEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
-		virtual bool configureEvent(xmlNodePtr p) {return false;}
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		virtual bool configureEvent(const pugi::xml_node& node) {
+			return false;
+		}
 
 		bool executeEvent();
 
@@ -215,7 +221,6 @@ class ScriptEvent : public RaidEvent, public Event
 	protected:
 		virtual std::string getScriptEventName();
 
-		static LuaScriptInterface m_scriptInterface;
 };
 
 #endif

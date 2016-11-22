@@ -69,7 +69,7 @@ class MoveEvents : public BaseEvents
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
 		void registerItemID(int32_t itemId, MoveEvent_t eventType);
 		void registerActionID(int32_t actionId, MoveEvent_t eventType);
@@ -92,7 +92,7 @@ class MoveEvents : public BaseEvents
 
 typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos);
 typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
-typedef uint32_t (EquipFunction)(Player* player, Item* item, slots_t slot, bool isRemoval);
+typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isRemoval);
 
 class MoveEvent : public Event
 {
@@ -104,7 +104,7 @@ class MoveEvent : public Event
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);

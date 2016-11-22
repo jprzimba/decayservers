@@ -3272,12 +3272,12 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 		return internalCreatureSay(player, SPEAK_SAY, text);
 
 	//First, check if this was a command
-	for(uint32_t i = 0; i < commandTags.size(); i++)
-	{
-		if(commandTags[i] == text.substr(0,1))
-		{
-			if(commands.exeCommand(player, text))
+	char firstCharacter = text[0];
+	for (char commandTag : commandTags) {
+		if (commandTag == firstCharacter) {
+			if (commands.exeCommand(player, text)) {
 				return true;
+			}
 		}
 	}
 	return false;
@@ -4279,20 +4279,14 @@ bool Game::closeRuleViolation(Player* player)
 	return true;
 }
 
-void Game::addCommandTag(std::string tag)
+void Game::addCommandTag(char tag)
 {
-	bool found = false;
-	for(uint32_t i=0; i< commandTags.size() ;i++)
-	{
-		if(commandTags[i] == tag)
-		{
-			found = true;
-			break;
+	for (char commandTag : commandTags) {
+		if (commandTag == tag) {
+			return;
 		}
 	}
-
-	if(!found)
-		commandTags.push_back(tag);
+	commandTags.push_back(tag);
 }
 
 void Game::resetCommandTag()
@@ -4952,59 +4946,51 @@ uint64_t Game::getExperienceStage(uint32_t level)
 
 bool Game::loadExperienceStages()
 {
-	std::string filename = "data/XML/stages.xml";
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-	if(doc)
-	{
-		xmlNodePtr root, p;
-		int32_t intVal, low, high, mult;
-		root = xmlDocGetRootElement(doc);
-		if(xmlStrcmp(root->name,(const xmlChar*)"stages"))
-		{
-			xmlFreeDoc(doc);
-			return false;
-		}
-		p = root->children;
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
+	if (!result) {
+		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
+		return false;
+	}
 
-		while(p)
-		{
-			if(!xmlStrcmp(p->name, (const xmlChar*)"config"))
-			{
-				if(readXMLInteger(p, "enabled", intVal))
-					stagesEnabled = (intVal != 0);
+	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
+		if (strcasecmp(stageNode.name(), "config") == 0) {
+			stagesEnabled = stageNode.attribute("enabled").as_bool();
+		} 
+		else if (strcasecmp(stageNode.name(), "stage") == 0){
+			uint32_t minLevel, maxLevel, multiplier;
+
+			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
+			if (minLevelAttribute) {
+				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
+			} else {
+				minLevel = 1;
 			}
-			else if(!xmlStrcmp(p->name, (const xmlChar*)"stage"))
-			{
-				if(readXMLInteger(p, "minlevel", intVal))
-					low = intVal;
-				else
-					low = 1;
 
-				if(readXMLInteger(p, "maxlevel", intVal))
-					high = intVal;
-				else
-				{
-					high = 0;
-					lastStageLevel = low;
-					useLastStageLevel = true;
-				}
+			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
+			if (maxLevelAttribute) {
+				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
+			} else {
+				maxLevel = 0;
+				lastStageLevel = minLevel;
+				useLastStageLevel = true;
+			}
 
-				if(readXMLInteger(p, "multiplier", intVal))
-					mult = intVal;
-				else
-					mult = 1;
+			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
+			if (multiplierAttribute) {
+				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+			} else {
+				multiplier = 1;
+			}
 
-				if(useLastStageLevel)
-					stages[lastStageLevel] = mult;
-				else
-				{
-					for(int32_t iteratorValue = low; iteratorValue <= high; iteratorValue++)
-						stages[iteratorValue] = mult;
+			if (useLastStageLevel) {
+				stages[lastStageLevel] = multiplier;
+			} else {
+				for (uint32_t i = minLevel; i <= maxLevel; ++i) {
+					stages[i] = multiplier;
 				}
 			}
-			p = p->next;
 		}
-		xmlFreeDoc(doc);
 	}
 	return true;
 }

@@ -23,7 +23,6 @@
 #define __BASEEVENTS_H__
 
 #include "luascript.h"
-#include <libxml/parser.h>
 
 class Event;
 
@@ -41,7 +40,7 @@ class BaseEvents
 		virtual LuaScriptInterface& getScriptInterface() = 0;
 		virtual std::string getScriptBaseName() = 0;
 		virtual Event* getEvent(const std::string& nodeName) = 0;
-		virtual bool registerEvent(Event* event, xmlNodePtr p) = 0;
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;
 
 		bool m_loaded;
@@ -54,8 +53,9 @@ class Event
 		Event(const Event* copy);
 		virtual ~Event();
 
-		virtual bool configureEvent(xmlNodePtr p) = 0;
+		virtual bool configureEvent(const pugi::xml_node& node) = 0;
 
+		bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile);
 		bool loadScript(const std::string& scriptFile);
 		virtual bool loadFunction(const std::string& functionName);
 

@@ -512,7 +512,7 @@ class Game
 
 		int32_t getLightHour() const {return lightHour;}
 
-		void addCommandTag(std::string tag);
+		void addCommandTag(char tag);
 		void resetCommandTag();
 
 		bool npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize);
@@ -596,13 +596,13 @@ class Game
 		int32_t lastMotdNum;
 		uint32_t lastPlayersRecord;
 
-		typedef std::map<int32_t,int32_t> StageList;
+		typedef std::map<uint32_t,uint32_t> StageList;
 		StageList stages;
 		bool stagesEnabled;
 		uint32_t lastStageLevel;
 		bool useLastStageLevel;
 
-		std::vector<std::string> commandTags;
+		std::vector<char> commandTags;
 
 		friend class Commands;
 };

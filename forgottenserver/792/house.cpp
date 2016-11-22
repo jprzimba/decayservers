@@ -752,78 +752,47 @@ House* Houses::getHouseByPlayerId(uint32_t playerId)
 
 bool Houses::loadHousesXML(std::string filename)
 {
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-	if(doc)
-	{
-		xmlNodePtr root, houseNode;
-		root = xmlDocGetRootElement(doc);
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+	if (!result) {
+		std::cout << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
+		return false;
+	}
 
-		if(xmlStrcmp(root->name,(const xmlChar*)"houses") != 0)
-		{
-			xmlFreeDoc(doc);
+	for (pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
+		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
+		if (!houseIdAttribute) {
 			return false;
 		}
 
-		int32_t intValue;
-		std::string strValue;
+		int32_t _houseid = pugi::cast<int32_t>(houseIdAttribute.value());
 
-		houseNode = root->children;
-		while(houseNode)
-		{
-			if(xmlStrcmp(houseNode->name,(const xmlChar*)"house") == 0)
-			{
-				int32_t _houseid = 0;
-				Position entryPos(0, 0, 0);
-
-				if(!readXMLInteger(houseNode, "houseid", _houseid))
-				{
-					xmlFreeDoc(doc);
-					return false;
-				}
-
-				House* house = Houses::getInstance().getHouse(_houseid);
-				if(!house)
-				{
-					std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
-					xmlFreeDoc(doc);
-					return false;
-				}
-
-				if(readXMLString(houseNode, "name", strValue))
-					house->setName(strValue);
-
-				if(readXMLInteger(houseNode, "entryx", intValue))
-					entryPos.x = intValue;
-
-				if(readXMLInteger(houseNode, "entryy", intValue))
-					entryPos.y = intValue;
-
-				if(readXMLInteger(houseNode, "entryz", intValue))
-					entryPos.z = intValue;
-
-				if(entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0)
-				{
-					std::cout << "Warning: [Houses::loadHousesXML] House entry not set"
-						<< " - Name: " << house->getName()
-						<< " - House id: " << _houseid << std::endl;
-				}
-
-				house->setEntryPos(entryPos);
-
-				if(readXMLInteger(houseNode, "rent", intValue))
-					house->setRent(intValue);
-
-				if(readXMLInteger(houseNode, "townid", intValue))
-					house->setTownId(intValue);
-
-				house->setHouseOwner(0);
-			}
-			houseNode = houseNode->next;
+		House* house = Houses::getInstance().getHouse(_houseid);
+		if (!house) {
+			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
+			return false;
 		}
-		xmlFreeDoc(doc);
-		return true;
+
+		house->setName(houseNode.attribute("name").as_string());
+
+		Position entryPos(
+			pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
+			pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
+		);
+		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
+			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
+					    << " - Name: " << house->getName()
+					    << " - House id: " << _houseid << std::endl;
+		}
+		house->setEntryPos(entryPos);
+
+		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));
+		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
+
+		house->setHouseOwner(0, false);
 	}
-	return false;
+	return true;
 }
 
 bool Houses::payHouses()

@@ -343,8 +343,6 @@ class Npc : public Creature
 		typedef std::map<std::string, std::string> ParametersMap;
 		ParametersMap m_parameters;
 
-		uint32_t loadParams(xmlNodePtr node);
-
 		NpcState* getState(const Player* player, bool makeNew = true);
 
 		std::string name;

@@ -25,9 +25,6 @@
 #include <sstream>
 #include <fstream>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h> 
-
 #include "talkaction.h"
 #include "game.h"
 #include "configmanager.h"
@@ -77,7 +74,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool TalkActions::registerEvent(Event* event, xmlNodePtr p)
+bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	TalkAction* talkAction = dynamic_cast<TalkAction*>(event);
 	if(!talkAction)
@@ -197,36 +194,38 @@ TalkAction::~TalkAction()
 	//
 }
 
-bool TalkAction::configureEvent(xmlNodePtr p)
+bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
-	std::string strValue;
-	int32_t intValue;
-	if(readXMLString(p, "words", strValue))
-		commandString = strValue;
-	else
-	{
-		std::cout << "Error: [TalkAction::configureEvent] No words for TalkAction or Spell." << std::endl;
+	pugi::xml_attribute attr;
+	if (!(attr = node.attribute("words"))) {
+		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
 		return false;
 	}
+	
+	commandString = attr.as_string();
 
-	if(readXMLString(p, "filter", strValue))
-	{
-		if(strValue == "quotation")
+	if ((attr = node.attribute("filter"))) {
+		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		if (tmpStrValue == "quotation") {
 			filterType = TALKACTION_MATCH_QUOTATION;
-		else if(strValue == "first word")
+		} else if (tmpStrValue == "first word") {
 			filterType = TALKACTION_MATCH_FIRST_WORD;
+		}
+	}
+	
+	if ((attr = node.attribute("registerlog")) || (attr = node.attribute("log"))) {
+		registerlog = attr.as_string();
 	}
 
-	if(readXMLString(p, "registerlog", strValue) || readXMLString(p, "log", strValue))
-		registerlog = booleanString(strValue);
+	if ((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive"))) {
+		casesensitive = attr.as_string();
+	}
 		
-	if(readXMLString(p, "case-sensitive", strValue) || readXMLString(p, "sensitive", strValue))
-		casesensitive = booleanString(strValue);
-
-	if(readXMLInteger(p, "access", intValue))
-		access = intValue;
-
-	return true;
+	if ((attr = node.attribute("access"))) {
+		access = pugi::cast<int32_t>(attr.value());
+	}
+	
+	return true;	
 }
 
 std::string TalkAction::getScriptEventName()
