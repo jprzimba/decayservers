@@ -3165,6 +3165,30 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	return true;
 }
 
+bool Game::playerShowQuestLog(uint32_t playerId)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	player->sendQuestLog();
+	return true;
+}
+
+bool Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	Quest* quest = Quests::getInstance()->getQuestByID(questId);
+	if(!quest)
+		return false;
+
+	player->sendQuestLine(quest);
+	return true;
+}
+
 bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	const std::string& receiver, const std::string& text)
 {

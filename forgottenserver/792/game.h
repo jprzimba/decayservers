@@ -430,6 +430,8 @@ class Game
 		bool playerRequestAddVip(uint32_t playerId, const std::string& name);
 		bool playerRequestRemoveVip(uint32_t playerId, uint32_t guid);
 		bool playerTurn(uint32_t playerId, Direction dir);
+		bool playerShowQuestLog(uint32_t playerId);
+		bool playerShowQuestLine(uint32_t playerId, uint16_t questId);
 		bool playerRequestOutfit(uint32_t playerId);
 		bool playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 			const std::string& receiver, const std::string& text);
