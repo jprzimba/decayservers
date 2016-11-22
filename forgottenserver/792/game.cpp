@@ -2081,10 +2081,13 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 	if(!channel)
 		return false;
 
-	if(channel->getId() != CHANNEL_RVR)
-		player->sendChannel(channel->getId(), channel->getName());
-	else
+	if(channel->getId() == CHANNEL_RVR && g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
+	{
 		player->sendRuleViolationsChannel(channel->getId());
+		return true;
+	}
+
+	player->sendChannel(channel->getId(), channel->getName());
 	return true;
 }
 
@@ -2104,17 +2107,21 @@ bool Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 	if(!player || player->isRemoved())
 		return false;
 
-	uint32_t guid;
-	IOLoginData::getInstance()->getGuidByName(guid, receiver);
-	if(IOLoginData::getInstance()->playerExists(receiver))
-		player->sendOpenPrivateChannel(receiver);
-	else
+	if(!IOLoginData::getInstance()->playerExists(receiver))
+	{
 		player->sendCancel("A player with this name does not exist.");
+		return true;
+	}
+
+	player->sendOpenPrivateChannel(receiver);
 	return true;
 }
 
 bool Game::playerProcessRuleViolation(uint32_t playerId, const std::string& name)
 {
+	if(!g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
+		return false;
+
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
 		return false;
@@ -2151,6 +2158,9 @@ bool Game::playerProcessRuleViolation(uint32_t playerId, const std::string& name
 
 bool Game::playerCloseRuleViolation(uint32_t playerId, const std::string& name)
 {
+	if(!g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
+		return false;
+
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
 		return false;
@@ -5049,7 +5059,16 @@ void Game::sendGuildMotd(uint32_t playerId, uint32_t guildId)
 	if(!player || player->isRemoved())
 		return;
 
-	player->sendChannelMessage("Message of the Day", IOGuild::getInstance()->getMotd(guildId), SPEAK_CHANNEL_R1, 0x00);
+	player->sendChannelMessage("Message of the Day", IOGuild::getInstance()->getMotd(guildId), SPEAK_CHANNEL_R1, CHANNEL_GUILD);
+}
+
+void Game::sendRVRDisabled(uint32_t playerId)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return;
+
+	player->sendChannelMessage("Rule Violation Reports", "This feature is disabled.", SPEAK_CHANNEL_R1, CHANNEL_RVR);
 }
 
 void Game::kickPlayer(uint32_t playerId, bool displayEffect)
@@ -5065,6 +5084,9 @@ bool Game::playerReportBug(uint32_t playerId, std::string bug)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
+		return false;
+
+	if(player->getAccountType() == ACCOUNT_TYPE_NORMAL)
 		return false;
 
 	std::string fileName = "data/reports/" + player->getName() + " report.txt";

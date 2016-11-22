@@ -121,6 +121,7 @@
 	displayGamemastersWithOnlineCommand = "no"
 	maxMessageBuffer = 4
 	kickIdlePlayerAfterMinutes = 15
+	enableRuleViolationReports = "yes"
 
 	-- Status
 	ownerName = ""

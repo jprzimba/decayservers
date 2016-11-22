@@ -60,6 +60,7 @@ class ConfigManager
 			CLEAN_PZ,
 			SAVE_GLOBAL_STORAGE,
 			SERVERSAVE_ENABLED,
+			ENABLE_RULE_VIOLATION_REPORTS,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

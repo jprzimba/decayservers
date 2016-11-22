@@ -45,7 +45,13 @@ ScriptingManager* ScriptingManager::_instance = NULL;
 
 ScriptingManager::ScriptingManager()
 {
-	//
+	g_weapons = new Weapons();
+	g_spells = new Spells();
+	g_actions = new Actions();
+	g_talkActions = new TalkActions();
+	g_moveEvents = new MoveEvents();
+	g_creatureEvents = new CreatureEvents();
+	g_globalEvents = new GlobalEvents();
 }
 
 ScriptingManager::~ScriptingManager()
@@ -62,7 +68,6 @@ ScriptingManager* ScriptingManager::getInstance()
 
 bool ScriptingManager::loadScriptSystems()
 {
-	g_weapons = new Weapons();
 	if(!g_weapons->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load Weapons!" << std::endl;
@@ -70,42 +75,36 @@ bool ScriptingManager::loadScriptSystems()
 	}
 	g_weapons->loadDefaults();
 
-	g_spells = new Spells();
 	if(!g_spells->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load Spells!" << std::endl;
 		return false;
 	}
 
-	g_actions = new Actions();
 	if(!g_actions->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load Actions!" << std::endl;
 		return false;
 	}
-	
-	g_talkActions = new TalkActions();
+
 	if(!g_talkActions->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load TalkActions!" << std::endl;
 		return false;
 	}
-	
-	g_moveEvents = new MoveEvents();
+
 	if(!g_moveEvents->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load MoveEvents!" << std::endl;
 		return false;
 	}
 
-	g_creatureEvents = new CreatureEvents();
 	if(!g_creatureEvents->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load CreatureEvents!" << std::endl;
 		return false;
 	}
 
-	g_globalEvents = new GlobalEvents();
 	if(!g_globalEvents->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load GlobalEvents!" << std::endl;
