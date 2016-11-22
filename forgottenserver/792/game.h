@@ -369,6 +369,9 @@ class Game
 
 		Position getClosestFreeTile(Player* player, Creature* teleportedCreature, Position toPos, bool toCreature);
 
+		Position getClosestFreeTile(Creature* creature, Position pos, bool extended = false, bool ignoreHouse = true);
+			std::string getSearchString(const Position fromPos, const Position toPos, bool fromIsCreature = false, bool toIsCreature = false);
+
 		int32_t getMotdNum();
 		void loadMotd();
 		void loadPlayersRecord();

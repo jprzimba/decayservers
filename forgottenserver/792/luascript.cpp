@@ -1301,7 +1301,7 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerSendDefaultCancel(cid, ReturnValue)
 	lua_register(m_luaState, "doPlayerSendDefaultCancel", LuaScriptInterface::luaDoSendDefaultCancel);
 
-	//doTeleportThing(cid, newpos, <optional> pushmove)
+	//doTeleportThing(cid, newpos[, pushmove])
 	lua_register(m_luaState, "doTeleportThing", LuaScriptInterface::luaDoTeleportThing);
 
 	//doTransformItem(uid, toitemid, <optional> count/subtype)	
@@ -1829,6 +1829,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getPlayersOnline()
 	lua_register(m_luaState, "getPlayersOnline", LuaScriptInterface::luaGetPlayersOnline);
+
+	//getClosestFreeTile(cid, targetpos[, extended = false[, ignoreHouse = true]])
+	lua_register(m_luaState, "getClosestFreeTile", LuaScriptInterface::luaGetClosestFreeTile);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7697,6 +7700,37 @@ int32_t LuaScriptInterface::luaGetPlayersOnline(lua_State* L)
 		lua_pushnumber(L, env->addThing(it->second));
 		lua_settable(L, -3);
 		//pushTable(L); TODO pushTable
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetClosestFreeTile(lua_State* L)
+{
+	//getClosestFreeTile(cid, targetPos[, extended = false[, ignoreHouse = true]])
+	uint32_t params = lua_gettop(L);
+	bool ignoreHouse = true, extended = false;
+	if(params > 3)
+		ignoreHouse = popNumber(L);
+
+	if(params > 2)
+		extended = popNumber(L);
+
+	PositionEx pos;
+	popPosition(L, pos);
+
+	ScriptEnvironment* env = getScriptEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		Position newPos = g_game.getClosestFreeTile(creature, pos, extended, ignoreHouse);
+		if(newPos.x != 0)
+			pushPosition(L, newPos, 0);
+		else
+			lua_pushboolean(L, false);
+	}
+	else
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
 	}
 	return 1;
 }

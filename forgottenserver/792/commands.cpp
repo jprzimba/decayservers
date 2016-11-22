@@ -84,8 +84,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/owner", &Commands::setHouseOwner},
 	{"/gethouse", &Commands::getHouse},
 	{"/town", &Commands::teleportToTown},
-	{"/up", &Commands::changeFloor},
-	{"/down", &Commands::changeFloor},
 	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
@@ -886,32 +884,6 @@ bool Commands::buyHouse(Creature* creature, const std::string& cmd, const std::s
 		else
 			player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 	}
-	return false;
-}
-
-bool Commands::changeFloor(Creature* creature, const std::string &cmd, const std::string &param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return true;
-
-	Position newPos = player->getPosition();
-	if(cmd[1] == 'u')
-		newPos.z--;
-	else
-		newPos.z++;
-	Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
-	if(newPosition.x != 0)
-	{
-		Position oldPosition = player->getPosition();
-		if(g_game.internalTeleport(creature, newPosition, true) == RET_NOERROR)
-		{
-			g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-			g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-			return true;
-		}
-	}
-	player->sendCancel("You can not teleport there.");
 	return false;
 }
 

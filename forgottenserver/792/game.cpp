@@ -4585,6 +4585,59 @@ Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, 
 	return Position(0, 0, 0);
 }
 
+
+Position Game::getClosestFreeTile(Creature* creature, Position pos, bool extended/* = false*/, bool ignoreHouse/* = true*/)
+{
+	PairVector relList;
+	relList.push_back(PositionPair(0, 0));
+	relList.push_back(PositionPair(-1, -1));
+	relList.push_back(PositionPair(-1, 0));
+	relList.push_back(PositionPair(-1, 1));
+	relList.push_back(PositionPair(0, -1));
+	relList.push_back(PositionPair(0, 1));
+	relList.push_back(PositionPair(1, -1));
+	relList.push_back(PositionPair(1, 0));
+	relList.push_back(PositionPair(1, 1));
+
+	if(extended)
+	{
+		relList.push_back(PositionPair(-2, 0));
+		relList.push_back(PositionPair(0, -2));
+		relList.push_back(PositionPair(0, 2));
+		relList.push_back(PositionPair(2, 0));
+	}
+
+	std::random_shuffle(relList.begin() + 1, relList.end());
+	if(Player* player = creature->getPlayer())
+	{
+		for(PairVector::iterator it = relList.begin(); it != relList.end(); ++it)
+		{
+			Tile* tile = map->getTile(Position((pos.x + it->first), (pos.y + it->second), pos.z));
+			if(!tile || !tile->ground)
+				continue;
+
+			ReturnValue ret = tile->__queryAdd(0, player, 1, FLAG_IGNOREBLOCKITEM);
+			if(ret == RET_NOTENOUGHROOM || (ret == RET_NOTPOSSIBLE && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
+				|| (ret == RET_PLAYERISNOTINVITED && !ignoreHouse && !player->hasFlag(PlayerFlag_CanEditHouses)))
+				continue;
+
+			return tile->getPosition();
+		}
+	}
+	else
+	{
+		for(PairVector::iterator it = relList.begin(); it != relList.end(); ++it)
+		{
+			Tile* tile = NULL;
+			if((tile = map->getTile(Position((pos.x + it->first), (pos.y + it->second), pos.z)))
+				&& tile->__queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM) == RET_NOERROR)
+				return tile->getPosition();
+		}
+	}
+
+	return Position(0, 0, 0);
+}
+
 int32_t Game::getMotdNum()
 {
 	if(lastMotdText != g_config.getString(ConfigManager::MOTD))

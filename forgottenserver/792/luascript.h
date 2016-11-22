@@ -340,6 +340,7 @@ class LuaScriptInterface
 		static int32_t luaDoFeedPlayer(lua_State* L);
 		static int32_t luaDoPlayerSendCancel(lua_State* L);
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
+		static int32_t luaGetClosestFreeTile(lua_State* L);
 		static int32_t luaDoTeleportThing(lua_State* L);
 		static int32_t luaDoTransformItem(lua_State* L);
 		static int32_t luaDoSendMagicEffect(lua_State* L);

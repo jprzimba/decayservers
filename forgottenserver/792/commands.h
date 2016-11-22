@@ -63,7 +63,6 @@ class Commands
 		bool sellHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool serverInfo(Creature* creature, const std::string& cmd, const std::string& param);
-		bool changeFloor(Creature* creature, const std::string &cmd, const std::string &param);
 		bool showPosition(Creature* creature, const std::string &cmd, const std::string &param);
 		bool removeThing(Creature* creature, const std::string& cmd, const std::string& param);
 		bool buyHouse(Creature* creature, const std::string& cmd, const std::string& param);

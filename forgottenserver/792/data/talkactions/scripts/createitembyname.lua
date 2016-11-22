@@ -1,5 +1,5 @@
 function onSay(cid, words, param)
-	if(param == "") then
+	if (param == "") then
 		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "You need to type the parameter.")
 		doSendMagicEffect(playerPos, CONST_ME_POFF)
 		return false
@@ -18,18 +18,18 @@ function onSay(cid, words, param)
 	itemcount = itemcount and math.min(tonumber(itemcount), 100) or 1
 
 	local itemid = getItemIdByName(itemname)
-	if(not itemid)then
+	if (not itemid)then
 		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "There isn't any item named " .. itemname .. ".")
 		doSendMagicEffect(playerPos, CONST_ME_POFF )
 		return false
 	end
 
 	local item = doCreateItemEx(itemid, itemcount)
-	if(item ~= false )then
-		if(doPlayerAddItemEx(cid, item, true) ~= RETURNVALUE_NOERROR ) then
+	if (item ~= false )then
+		if (doPlayerAddItemEx(cid, item, true) ~= RETURNVALUE_NOERROR) then
 			doRemoveItem(item)
-			doPlayerSendTextMessage( cid, MESSAGE_STATUS_CONSOLE_BLUE, "Item could not be created." )
-			doSendMagicEffect(playerPos, CONST_ME_POFF )
+			doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Item could not be created.")
+			doSendMagicEffect(playerPos, CONST_ME_POFF)
 		else
 			doDecayItem(item)
 			doSendMagicEffect(playerPos, CONST_ME_MAGIC_GREEN)

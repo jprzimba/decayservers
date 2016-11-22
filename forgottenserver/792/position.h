@@ -37,6 +37,9 @@ enum Direction
 	NORTHEAST = 7
 };
 
+typedef std::pair<int32_t, int32_t> PositionPair;
+typedef std::vector<PositionPair> PairVector;
+
 class Position
 {
 	public:
