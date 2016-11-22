@@ -8,6 +8,9 @@
 	<!-- Community Manager -->
 	<talkaction access="4" log="yes" words="/i" filter="first word" script="createitembyid.lua"/>
 	<talkaction access="4" log="yes" words="/n" filter="first word" script="createitembyname.lua"/>
+	<talkaction access="4" log="yes" words="/summon" filter="first word" script="summon.lua"/>
+	<talkaction access="4" log="yes" words="/s" filter="first word" script="placenpc.lua"/>
+	<talkaction access="4" log="yes" words="/m" filter="first word" script="placemonster.lua"/>
 
 	<!-- Gamemasters -->
 	<talkaction access="3" words="/z" filter="first word" script="magiceffect.lua"/>

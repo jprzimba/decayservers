@@ -618,6 +618,10 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerJoinParty(lua_State* L);
 		static int32_t luaGetPartyMembers(lua_State* L);
 
+		static int32_t luaDoCreateMonster(lua_State* L);
+		static int32_t luaDoCreateNpc(lua_State* L);
+		static int32_t luaDoSummonMonster(lua_State* L);
+
 		//
 
 		static int32_t internalGetPlayerInfo(lua_State* L, PlayerInfo_t info);

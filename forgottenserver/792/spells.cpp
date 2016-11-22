@@ -1533,7 +1533,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 		}
 	}
 	
-	ReturnValue ret = Commands::placeSummon(creature, param);
+	ReturnValue ret = g_game.placeSummon(creature, param);
 	if(ret == RET_NOERROR)
 	{
 		spell->postCastSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());

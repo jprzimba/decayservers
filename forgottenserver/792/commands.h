@@ -39,15 +39,10 @@ class Commands
 
 		bool exeCommand(Creature* creature, const std::string& cmd);
 
-		static ReturnValue placeSummon(Creature* creature, const std::string& name);
-	
 	protected:
 		bool loaded;
 
 		//commands
-		bool placeNpc(Creature* creature, const std::string& cmd, const std::string& param);
-		bool placeMonster(Creature* creature, const std::string& cmd, const std::string& param);
-		bool placeSummon(Creature* creature, const std::string& cmd, const std::string& param);
 		bool broadcastMessage(Creature* creature, const std::string& cmd, const std::string& param);
 		bool banPlayer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportHere(Creature* creature, const std::string& cmd, const std::string& param);

@@ -63,9 +63,6 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] =
 {
 	//admin commands
-	{"/s", &Commands::placeNpc},
-	{"/m", &Commands::placeMonster},
-	{"/summon", &Commands::placeSummon},
 	{"/B", &Commands::broadcastMessage},
 	{"/b", &Commands::banPlayer},
 	{"/c", &Commands::teleportHere},
@@ -236,95 +233,6 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-bool Commands::placeNpc(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Npc* npc = Npc::createNpc(param);
-	if(!npc)
-		return false;
-
-	// Place the npc
-	if(g_game.placeCreature(npc, creature->getPosition()))
-	{
-		g_game.addMagicEffect(creature->getPosition(), NM_ME_MAGIC_BLOOD);
-		return true;
-	}
-	else
-	{
-		delete npc;
-		Player* player = creature->getPlayer();
-		if(player)
-		{
-			player->sendCancelMessage(RET_NOTENOUGHROOM);
-			g_game.addMagicEffect(creature->getPosition(), NM_ME_POFF);
-		}
-		return true;
-	}
-	return false;
-}
-
-bool Commands::placeMonster(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-
-	Monster* monster = Monster::createMonster(param);
-	if(!monster)
-	{
-		if(player)
-		{
-			player->sendCancelMessage(RET_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-		}
-		return false;
-	}
-
-	// Place the monster
-	if(g_game.placeCreature(monster, creature->getPosition()))
-	{
-		g_game.addMagicEffect(creature->getPosition(), NM_ME_MAGIC_BLOOD);
-		return true;
-	}
-	else
-	{
-		delete monster;
-		if(player)
-		{
-			player->sendCancelMessage(RET_NOTENOUGHROOM);
-			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-		}
-	}
-	return false;
-}
-
-ReturnValue Commands::placeSummon(Creature* creature, const std::string& name)
-{
-	Monster* monster = Monster::createMonster(name);
-	if(!monster)
-		return RET_NOTPOSSIBLE;
-	
-	// Place the monster
-	creature->addSummon(monster);
-	if(!g_game.placeCreature(monster, creature->getPosition()))
-	{
-		creature->removeSummon(monster);
-		return RET_NOTENOUGHROOM;
-	}
-	return RET_NOERROR;
-}
-
-bool Commands::placeSummon(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	ReturnValue ret = placeSummon(creature, param);
-	if(ret != RET_NOERROR)
-	{
-		if(Player* player = creature->getPlayer())
-		{
-			player->sendCancelMessage(ret);
-			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-		}
-	}
-	return (ret == RET_NOERROR);
 }
 
 bool Commands::broadcastMessage(Creature* creature, const std::string& cmd, const std::string& param)

@@ -1844,6 +1844,15 @@ void LuaScriptInterface::registerFunctions()
 
 	//getTownId(townName)
 	lua_register(m_luaState, "getTownId", LuaScriptInterface::luaGetTownId);
+
+	//doCreateMonster(name, pos[, displayError = true])
+	lua_register(m_luaState, "doCreateMonster", LuaScriptInterface::luaDoCreateMonster);
+
+	//doCreateNpc(name, pos[, displayError = true])
+	lua_register(m_luaState, "doCreateNpc", LuaScriptInterface::luaDoCreateNpc);
+
+	//doSummonMonster(cid, name)
+	lua_register(m_luaState, "doSummonMonster", LuaScriptInterface::luaDoSummonMonster);
 	
 }
 
@@ -7805,5 +7814,95 @@ int32_t LuaScriptInterface::luaGetTownId(lua_State* L)
 	else
 		lua_pushboolean(L, false);
 
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoSummonMonster(lua_State* L)
+{
+	//doSummonMonster(cid, name)
+	std::string name = popString(L);
+
+	ScriptEnvironment* env = getScriptEnv();
+	Creature* creature = env->getCreatureByUID(popNumber(L));
+	if(!creature)
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	lua_pushnumber(L, g_game.placeSummon(creature, name));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreateMonster(lua_State* L)
+{
+	//doCreateMonster(name, pos[, displayError = true])
+	bool displayError = true;
+	if(lua_gettop(L) > 2)
+		displayError = popNumber(L);
+
+	PositionEx pos;
+	popPosition(L, pos);
+
+	std::string name = popString(L);
+	Monster* monster = Monster::createMonster(name.c_str());
+	if(!monster)
+	{
+		if(displayError)
+			reportErrorFunc("Monster with name '" + name + "' not found");
+
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if(!g_game.placeCreature(monster, pos))
+	{
+		delete monster;
+		if(displayError)
+			reportErrorFunc("Cannot create monster: " + name);
+
+		lua_pushboolean(L, true);
+		return 1;
+	}
+
+	ScriptEnvironment* env = getScriptEnv();
+	lua_pushnumber(L, env->addThing((Thing*)monster));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
+{
+	//doCreateNpc(name, pos[, displayError = true])
+	bool displayError = true;
+	if(lua_gettop(L) > 2)
+		displayError = popNumber(L);
+
+	PositionEx pos;
+	popPosition(L, pos);
+
+	std::string name = popString(L);
+	Npc* npc = Npc::createNpc(name.c_str());
+	if(!npc)
+	{
+		if(displayError)
+			reportErrorFunc("Npc with name '" + name + "' not found");
+
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if(!g_game.placeCreature(npc, pos))
+	{
+		delete npc;
+		if(displayError)
+			reportErrorFunc("Cannot create npc: " + name);
+
+		lua_pushboolean(L, true); //for scripting compatibility
+		return 1;
+	}
+
+	ScriptEnvironment* env = getScriptEnv();
+	lua_pushnumber(L, env->addThing((Thing*)npc));
 	return 1;
 }

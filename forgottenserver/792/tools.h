@@ -52,8 +52,6 @@ void toUpperCaseString(std::string& source);
 std::string asLowerCaseString(const std::string& source);
 std::string asUpperCaseString(const std::string& source);
 
-bool utf8ToLatin1(char* intext, std::string& outtext);
-
 std::vector<std::string> explodeString(const std::string& inString, const std::string& separator);
 std::vector<int32_t> vectorAtoi(std::vector<std::string> stringVector);
 bool hasBitSet(uint32_t flag, uint32_t flags);

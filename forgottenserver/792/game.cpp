@@ -765,6 +765,21 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 	return true;
 }
 
+ReturnValue Game::placeSummon(Creature* creature, const std::string& name)
+{
+	Monster* monster = Monster::createMonster(name);
+	if(!monster)
+		return RET_NOTPOSSIBLE;
+
+	// Place the monster
+	creature->addSummon(monster);
+	if(placeCreature(monster, creature->getPosition(), true))
+		return RET_NOERROR;
+
+	creature->removeSummon(monster);
+	return RET_NOTENOUGHROOM;
+}
+
 bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 {
 	if(creature->isRemoved())
