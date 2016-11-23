@@ -37,14 +37,6 @@ extern IPList serverIPs;
 extern Ban g_bans;
 extern Game g_game;
 
-#ifdef __DEBUG_NET_DETAIL__
-void ProtocolLogin::deleteProtocolTask()
-{
-	std::cout << "Deleting ProtocolLogin" << std::endl;
-	Protocol::deleteProtocolTask();
-}
-#endif
-
 void ProtocolLogin::disconnectClient(const char* message)
 {
 	OutputMessage* output = OutputMessagePool::getInstance()->getOutputMessage(this, false);

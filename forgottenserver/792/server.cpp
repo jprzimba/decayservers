@@ -43,9 +43,6 @@ void Server::accept()
 {
 	if(!m_acceptor)
 	{
-		#ifdef __DEBUG_NET__
-		std::cout << "Error: [Server::accept] nullptr m_acceptor." << std::endl;
-		#endif
 		return;
 	}
 
@@ -86,9 +83,6 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 	if(!error)
 	{
 		connection->acceptConnection();
-		#ifdef __DEBUG_NET_DETAIL__
-		std::cout << "accept - OK" << std::endl;
-		#endif
 		accept();
 	}
 	else
@@ -111,9 +105,7 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 		}
 		else
 		{
-			#ifdef __DEBUG_NET__
-			std::cout << "Error: [Server::onAccept] Operation aborted." << std::endl;
-			#endif
+
 		}
 	}
 }

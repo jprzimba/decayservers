@@ -252,10 +252,6 @@ void ProtocolGame::deleteProtocolTask()
 
 	if(player)
 	{
-		#ifdef __DEBUG_NET_DETAIL__
-		std::cout << "Deleting ProtocolGame - Protocol:" << this << ", Player: " << player << std::endl;
-		#endif
-
 		player->client = nullptr;
 
 		g_game.FreeThing(player);

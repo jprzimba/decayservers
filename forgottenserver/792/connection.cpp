@@ -33,9 +33,6 @@
 
 Connection* ConnectionManager::createConnection(boost::asio::io_service& io_service)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Create new Connection" << std::endl;
-	#endif
 	OTSYS_THREAD_LOCK_CLASS(m_connectionManagerLock, "");
 	Connection* connection = new Connection(io_service);
 	m_connections.push_back(connection);
@@ -44,9 +41,6 @@ Connection* ConnectionManager::createConnection(boost::asio::io_service& io_serv
 
 void ConnectionManager::releaseConnection(Connection* connection)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Releasing connection" << std::endl;
-	#endif
 	OTSYS_THREAD_LOCK_CLASS lockClass(m_connectionManagerLock);
 	std::list<Connection*>::iterator it =
 		std::find(m_connections.begin(), m_connections.end(), connection);
@@ -59,9 +53,6 @@ void ConnectionManager::releaseConnection(Connection* connection)
 
 void ConnectionManager::closeAll()
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Closing all connections" << std::endl;
-	#endif
 	OTSYS_THREAD_LOCK_CLASS lockClass(m_connectionManagerLock);
 	std::list<Connection*>::iterator it = m_connections.begin();
 	while(it != m_connections.end())
@@ -79,9 +70,6 @@ void ConnectionManager::closeAll()
 void Connection::closeConnection()
 {
 	//any thread
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closeConnection" << std::endl;
-	#endif
 	OTSYS_THREAD_LOCK_CLASS lockClass(m_connectionLock);
 	if(m_closeState != CLOSE_STATE_NONE)
 		return;
@@ -95,10 +83,6 @@ void Connection::closeConnection()
 void Connection::closeConnectionTask()
 {
 	//dispatcher thread
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closeConnectionTask" << std::endl;
-	#endif
-
 	OTSYS_THREAD_LOCK(m_connectionLock, "");
 	if(m_closeState != CLOSE_STATE_REQUESTED)
 	{
@@ -214,9 +198,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 void Connection::handleReadError(const boost::system::error_code& error)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	PRINT_ASIO_ERROR("Reading - detail");
-	#endif
 	if(error == boost::asio::error::operation_aborted)
 	{
 		//Operation aborted because connection will be closed
@@ -243,10 +224,6 @@ void Connection::handleReadError(const boost::system::error_code& error)
 
 bool Connection::send(OutputMessage* msg)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::send init" << std::endl;
-	#endif
-
 	OTSYS_THREAD_LOCK(m_connectionLock, "");
 	if(m_closeState == CLOSE_STATE_CLOSING || m_writeError)
 	{
@@ -258,16 +235,10 @@ bool Connection::send(OutputMessage* msg)
 
 	if(m_pendingWrite == 0)
 	{
-		#ifdef __DEBUG_NET_DETAIL__
-		std::cout << "Connection::send " << msg->getMessageLength() << std::endl;
-		#endif
 		internalSend(msg);
 	}
 	else
 	{
-		#ifdef __DEBUG_NET__
-		std::cout << "Connection::send Adding to queue " << msg->getMessageLength() << std::endl;
-		#endif
 		m_outputQueue.push_back(msg);
 		m_pendingWrite++;
 	}
@@ -299,10 +270,6 @@ uint32_t Connection::getIP() const
 
 void Connection::onWriteOperation(OutputMessage* msg, const boost::system::error_code& error)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "onWriteOperation" << std::endl;
-	#endif
-
 	OutputMessagePool::getInstance()->releaseMessage(msg, true);
 
 	OTSYS_THREAD_LOCK(m_connectionLock, "");
@@ -317,17 +284,12 @@ void Connection::onWriteOperation(OutputMessage* msg, const boost::system::error
 				m_outputQueue.pop_front();
 				m_pendingWrite--;
 				internalSend(msg);
-				#ifdef __DEBUG_NET_DETAIL__
-				std::cout << "Connection::onWriteOperation send " << msg->getMessageLength() << std::endl;
-				#endif
 			}
 			m_pendingWrite--;
 		}
 		else
 		{
 			std::cout << "Error: [Connection::onWriteOperation] Getting unexpected notification!" << std::endl;
-			// Error. Pending operations counter is 0, but we are getting a
-			// notification!!
 		}
 	}
 	else
@@ -348,9 +310,6 @@ void Connection::onWriteOperation(OutputMessage* msg, const boost::system::error
 
 void Connection::handleWriteError(const boost::system::error_code& error)
 {
-	#ifdef __DEBUG_NET_DETAIL__
-	PRINT_ASIO_ERROR("Writing - detail");
-	#endif
 	if(error == boost::asio::error::operation_aborted)
 	{
 		//Operation aborted because connection will be closed
@@ -378,17 +337,10 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 bool Connection::closingConnection()
 {
 	//any thread
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closingConnection" << std::endl;
-	#endif
-
 	if(m_pendingWrite == 0 || m_writeError == true)
 	{
 		if(!m_socketClosed)
 		{
-			#ifdef __DEBUG_NET_DETAIL__
-			std::cout << "Closing socket" << std::endl;
-			#endif
 			boost::system::error_code error;
 			m_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
 			if(error)
@@ -410,10 +362,6 @@ bool Connection::closingConnection()
 
 		if(m_pendingRead == 0)
 		{
-			#ifdef __DEBUG_NET_DETAIL__
-			std::cout << "Deleting Connection" << std::endl;
-			#endif
-
 			OTSYS_THREAD_UNLOCK(m_connectionLock, "");
 
 			Dispatcher::getDispatcher().addTask(

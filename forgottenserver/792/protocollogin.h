@@ -36,10 +36,6 @@ class ProtocolLogin : public Protocol
 
 	protected:
 		void disconnectClient(const char* message);
-
-		#ifdef __DEBUG_NET_DETAIL__
-		virtual void deleteProtocolTask();
-		#endif
 };
 
 #endif

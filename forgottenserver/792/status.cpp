@@ -86,14 +86,6 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 	getConnection()->closeConnection();
 }
 
-#ifdef __DEBUG_NET_DETAIL__
-void ProtocolStatus::deleteProtocolTask()
-{
-	std::cout << "Deleting ProtocolStatus" << std::endl;
-	Protocol::deleteProtocolTask();
-}
-#endif
-
 Status::Status()
 {
 	m_playersOnline = 0;

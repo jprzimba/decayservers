@@ -38,9 +38,6 @@ OutputMessagePool::OutputMessagePool()
 	{
 		OutputMessage* msg = new OutputMessage();
 		m_outputMessages.push_back(msg);
-#ifdef __TRACK_NETWORK__
-		m_allOutputMessages.push_back(msg);
-#endif
 	}
 
 	m_frameTime = OTSYS_TIME();
@@ -69,10 +66,6 @@ void OutputMessagePool::send(OutputMessage* msg)
 	
 	if(state == OutputMessage::STATE_ALLOCATED_NO_AUTOSEND)
 	{
-		#ifdef __DEBUG_NET_DETAIL__
-		std::cout << "Sending message - SINGLE" << std::endl;
-		#endif
-
 		if(msg->getConnection())
 		{
 			if(msg->getConnection()->send(msg))
@@ -88,16 +81,12 @@ void OutputMessagePool::send(OutputMessage* msg)
 		}
 		else
 		{
-			#ifdef __DEBUG_NET__
-			std::cout << "Error: [OutputMessagePool::send] nullptr connection." << std::endl;
-			#endif
+
 		}
 	}
 	else
 	{
-		#ifdef __DEBUG_NET__
-		std::cout << "Warning: [OutputMessagePool::send] State != STATE_ALLOCATED_NO_AUTOSEND" << std::endl;
-		#endif
+
 	}
 }
 
@@ -116,10 +105,6 @@ void OutputMessagePool::sendAll()
 		#endif
 		if(v)
 		{
-			#ifdef __DEBUG_NET_DETAIL__
-			std::cout << "Sending message - ALL" << std::endl;
-			#endif
-
 			if((*it)->getConnection())
 			{
 				if((*it)->getConnection()->send(*it))
@@ -133,9 +118,7 @@ void OutputMessagePool::sendAll()
 			}
 			else
 			{
-				#ifdef __DEBUG_NET__
-				std::cout << "Error: [OutputMessagePool::send] nullptr connection." << std::endl;
-				#endif
+
 			}
 			m_autoSendOutputMessages.erase(it++);
 		}
@@ -191,43 +174,18 @@ void OutputMessagePool::releaseMessage(OutputMessage* msg, bool sent /*= false*/
 
 OutputMessage* OutputMessagePool::getOutputMessage(Protocol* protocol, bool autosend /*= true*/)
 {
-	#ifdef __DEBUG_NET__
-	if(protocol->getConnection() == nullptr)
-		std::cout << "Warning: [OutputMessagePool::getOutputMessage] nullptr connection." << std::endl;
-	#endif
-	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "request output message - auto = " << autosend << std::endl;
-	#endif
-	
 	OTSYS_THREAD_LOCK_CLASS lockClass(m_outputPoolLock);
 	OutputMessage* outputmessage;
 	if(m_outputMessages.empty())
 	{
-#ifdef __TRACK_NETWORK__
-		if(m_allOutputMessages.size() >= 5000)
-		{
-			std::cout << "High usage of outputmessages: " << std::endl;
-			m_allOutputMessages.back()->PrintTrace();
-		}
-#endif
 		outputmessage = new OutputMessage;
-#ifdef __TRACK_NETWORK__
-		m_allOutputMessages.push_back(outputmessage);
-#endif
 	}
 	else
 	{
 		outputmessage = m_outputMessages.back();
-#ifdef __TRACK_NETWORK__
-		// Print message trace
-		if(outputmessage->getState() != OutputMessage::STATE_FREE)
-		{
-			std::cout << "Using allocated message, message trace:" << std::endl;
-			outputmessage->PrintTrace();
-		}
-#else
+
 		assert(outputmessage->getState() == OutputMessage::STATE_FREE);
-#endif
+
 		m_outputMessages.pop_back();
 	}
 

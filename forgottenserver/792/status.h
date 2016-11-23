@@ -47,10 +47,6 @@ class ProtocolStatus : public Protocol
 
 	protected:
 		static std::map<uint32_t, int64_t> ipConnectMap;
-
-		#ifdef __DEBUG_NET_DETAIL__
-		virtual void deleteProtocolTask();
-		#endif
 };
 
 class Status

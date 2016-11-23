@@ -25,11 +25,6 @@
 #include "otsystem.h"
 #include <list>
 
-#ifdef __TRACK_NETWORK__
-#include <iostream>
-#include <sstream>
-#endif
-
 #include <boost/utility.hpp>
 
 class Protocol;
@@ -73,29 +68,7 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 		Protocol* getProtocol() { return m_protocol;}
 		Connection* getConnection() { return m_connection;}
 
-#ifdef __TRACK_NETWORK__
-		void Track(std::string file, int64_t line, std::string func)
-		{
-			if(last_uses.size() >= 25)
-				last_uses.pop_front();
-
-			std::ostringstream os;
-			os << /*file << ":"*/ "line " << line << " " << func;
-			last_uses.push_back(os.str());
-		}
-		void PrintTrace()
-		{
-			uint32_t n = 1;
-			for(std::list<std::string>::const_reverse_iterator iter = last_uses.rbegin(); iter != last_uses.rend(); ++iter, ++n)
-				std::cout << "\t" << n << ".\t" << *iter << std::endl;
-		}
-#endif
-
 	protected:
-#ifdef __TRACK_NETWORK__
-		std::list<std::string> last_uses;
-#endif
-
 		void freeMessage()
 		{
 			setConnection(nullptr);
@@ -171,10 +144,6 @@ class OutputMessagePool
 		uint64_t m_frameTime;
 };
 
-#ifdef __TRACK_NETWORK__
-	#define TRACK_MESSAGE(omsg) if(dynamic_cast<OutputMessage*>(omsg)) dynamic_cast<OutputMessage*>(omsg)->Track(__FILE__, __LINE__, __FUNCTION__)
-#else
-	#define TRACK_MESSAGE(omsg) 
-#endif
+#define TRACK_MESSAGE(omsg) 
 
 #endif
