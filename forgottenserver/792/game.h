@@ -447,7 +447,7 @@ class Game
 		bool playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId);
 		bool playerLeaveParty(uint32_t playerId);
 
-		void removePremium(Account account);
+		void updatePremium(Account account);
 
 		void cleanup();
 		void shutdown();

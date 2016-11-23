@@ -45,22 +45,22 @@ void ProtocolLogin::deleteProtocolTask()
 }
 #endif
 
-void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
+void ProtocolLogin::disconnectClient(const char* message)
 {
 	OutputMessage* output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	TRACK_MESSAGE(output);
-	output->AddByte(error);
+	output->AddByte(0x0A);
 	output->AddString(message);
 	OutputMessagePool::getInstance()->send(output);
 	getConnection()->closeConnection();
 }
 
-bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
+void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if(g_game.getGameState() == GAME_STATE_SHUTDOWN)
 	{
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint32_t clientip = getConnection()->getIP();
@@ -70,12 +70,12 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	msg.skip(12);
 
 	if(version <= 760)
-		disconnectClient(0x0A, "Only clients with protocol 7.9x allowed!");
+		disconnectClient("Only clients with protocol 7.9x allowed!");
 
 	if(!RSA_decrypt(g_otservRSA, msg))
 	{
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint32_t key[4];
@@ -98,33 +98,33 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		}
 		else
 		{
-			disconnectClient(0x0A, "You must enter your account number.");
-			return false;
+			disconnectClient("You must enter your account number.");
+			return;
 		}
 	}
 
 	if(version < 790 && version > 792)
 	{
-		disconnectClient(0x0A, "Only clients with protocol 7.9x allowed!");
-		return false;
+		disconnectClient("Only clients with protocol 7.9x allowed!");
+		return;
 	}
 
 	if(g_game.getGameState() == GAME_STATE_STARTUP)
 	{
-		disconnectClient(0x0A, "Gameworld is starting up. Please wait.");
-		return false;
+		disconnectClient("Gameworld is starting up. Please wait.");
+		return;
 	}
 
 	if(g_bans.isIpDisabled(clientip))
 	{
-		disconnectClient(0x0A, "Too many connections attempts from this IP. Try again later.");
-		return false;
+		disconnectClient("Too many connections attempts from this IP. Try again later.");
+		return;
 	}
 
 	if(IOBan::getInstance()->isIpBanished(clientip))
 	{
-		disconnectClient(0x0A, "Your IP is banished!");
-		return false;
+		disconnectClient("Your IP is banished!");
+		return;
 	}
 
 	uint32_t serverip = serverIPs[0].first;
@@ -142,8 +142,8 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 			passwordTest(password, account.password)))
 	{
 		g_bans.addLoginAttempt(clientip, false);
-		disconnectClient(0x0A, "Account number or password is not correct.");
-		return false;
+		disconnectClient("Account number or password is not correct.");
+		return;
 	}
 
 	g_bans.addLoginAttempt(clientip, true);
@@ -151,8 +151,8 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	OutputMessage* output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	TRACK_MESSAGE(output);
 
-	//Remove premium days
-	g_game.removePremium(account);
+	//Update premium days
+	g_game.updatePremium(account);
 
 	//Add MOTD
 	output->AddByte(0x14);
@@ -196,10 +196,4 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	
 	OutputMessagePool::getInstance()->send(output);
 	getConnection()->closeConnection();
-	return true;
-}
-
-void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
-{
-	parseFirstPacket(msg);
 }

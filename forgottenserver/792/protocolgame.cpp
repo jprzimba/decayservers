@@ -280,7 +280,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 #ifdef __DEBUG__
 			std::cout << "ProtocolGame::login - loadPlayer failed - " << name << std::endl;
 #endif
-			disconnectClient(0x14, "Your character could not be loaded.");
+			disconnectClient("Your character could not be loaded.");
 			return false;
 		}
 
@@ -313,7 +313,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 
 		if(gamemasterLogin == 1 && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && player->getName() != "Account Manager")
 		{
-			disconnectClient(0x14, "You are not a gamemaster!");
+			disconnectClient("You are not a gamemaster!");
 			return false;
 		}
 
@@ -336,7 +336,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 
 					std::ostringstream ss;
 					ss << "Your account has been " << (deletion ? "deleted" : "banished") << " by:\n" << bannedByName << ", for the following reason:\n" << getReason(reason) << ".\nThe action taken was:\n" << getAction(action, false) << ".\nThe comment given was:\n" << comment << "\nYour " << (deletion ? "account was deleted on" : "banishment will be lifted at") << ":\n" << formatDateShort(banTime) << ".";
-					disconnectClient(0x14, ss.str().c_str());
+					disconnectClient(ss.str().c_str());
 					return false;
 				}
 			}
@@ -344,25 +344,25 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 
 		if(!letNamelockedLogin || player->getName() == "Account Manager" && !g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
-			disconnectClient(0x14, "Your character has been namelocked.");
+			disconnectClient("Your character has been namelocked.");
 			return false;
 		}
 
 		if(g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin))
 		{
-			disconnectClient(0x14, "The game is just going down.\nPlease try again later.");
+			disconnectClient("The game is just going down.\nPlease try again later.");
 			return false;
 		}
 
 		if(g_game.getGameState() == GAME_STATE_CLOSED && !player->hasFlag(PlayerFlag_CanAlwaysLogin))
 		{
-			disconnectClient(0x14, "Server is currently closed. Please try again later.");
+			disconnectClient("Server is currently closed. Please try again later.");
 			return false;
 		}
 
 		if(g_config.getBool(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && player->getName() != "Account Manager" && g_game.getPlayerByAccount(player->getAccount()))
 		{
-			disconnectClient(0x14, "You may only login with one character\nof your account at the same time.");
+			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return false;
 		}
 
@@ -387,7 +387,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 
 		if(!IOLoginData::getInstance()->loadPlayer(player, name))
 		{
-			disconnectClient(0x14, "Your character could not be loaded.");
+			disconnectClient("Your character could not be loaded.");
 			return false;
 		}
 
@@ -395,7 +395,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		{
 			if(!g_game.placeCreature(player, player->getTemplePosition(), true))
 			{
-				disconnectClient(0x14, "Temple position is wrong. Contact the administrator.");
+				disconnectClient("Temple position is wrong. Contact the administrator.");
 				return false;
 			}
 		}
@@ -410,7 +410,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		if(eventConnect != 0)
 		{
 			//Already trying to connect
-			disconnectClient(0x14, "Your already logged in.");
+			disconnectClient("Your already logged in.");
 			return false;
 		}
 
@@ -434,7 +434,7 @@ bool ProtocolGame::connect(uint32_t playerId)
 	Player* _player = g_game.getPlayerByID(playerId);
 	if(!_player || _player->isRemoved() || _player->isOnline())
 	{
-		disconnectClient(0x14, "Your already logged in.");
+		disconnectClient("Your already logged in.");
 		return false;
 	}
 
@@ -490,12 +490,12 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 	return g_game.removeCreature(player);
 }
 
-bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
+void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if(g_game.getGameState() == GAME_STATE_SHUTDOWN)
 	{
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint16_t clientos = msg.GetU16();
@@ -504,7 +504,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	if(!RSA_decrypt(g_otservRSA, msg))
 	{
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint32_t key[4];
@@ -522,8 +522,8 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	if(version < 790 && version > 792)
 	{
-		disconnectClient(0x0A, "Only clients with protocol 7.9x allowed!");
-		return false;
+		disconnectClient("Only clients with protocol 7.9x allowed!");
+		return;
 	}
 
 	if(!accnumber)
@@ -535,27 +535,27 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		}
 		else
 		{
-			disconnectClient(0x14, "You must enter your account number.");
-			return false;
+			disconnectClient("You must enter your account number.");
+			return;
 		}
 	}
 
 	if(g_game.getGameState() == GAME_STATE_STARTUP || g_game.getServerSaveMessage(0))
 	{
-		disconnectClient(0x14, "Gameworld is starting up. Please wait.");
-		return false;
+		disconnectClient("Gameworld is starting up. Please wait.");
+		return;
 	}
 
 	if(g_bans.isIpDisabled(getIP()))
 	{
-		disconnectClient(0x14, "Too many connections attempts from this IP. Try again later.");
-		return false;
+		disconnectClient("Too many connections attempts from this IP. Try again later.");
+		return;
 	}
 
 	if(IOBan::getInstance()->isIpBanished(getIP()))
 	{
-		disconnectClient(0x14, "Your IP is banished!");
-		return false;
+		disconnectClient("Your IP is banished!");
+		return;
 	}
 
 	std::string acc_pass;
@@ -563,27 +563,20 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	{
 		g_bans.addLoginAttempt(getIP(), false);
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	g_bans.addLoginAttempt(getIP(), true);
 
 	Dispatcher::getDispatcher().addTask(
 		createTask(boost::bind(&ProtocolGame::login, this, name, accnumber, password, clientos, isSetGM)));
-
-	return true;
 }
 
-void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
-{
-	parseFirstPacket(msg);
-}
-
-void ProtocolGame::disconnectClient(uint8_t error, const char* message)
+void ProtocolGame::disconnectClient(const char* message)
 {
 	OutputMessage* output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	TRACK_MESSAGE(output);
-	output->AddByte(error);
+	output->AddByte(0x14);
 	output->AddString(message);
 	OutputMessagePool::getInstance()->send(output);
 	disconnect();

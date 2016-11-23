@@ -60,7 +60,7 @@ class ProtocolGame : public Protocol
 
 		bool connect(uint32_t playerId);
 		void disconnect();
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const char* message);
 		
 		virtual void deleteProtocolTask();
 	
@@ -73,7 +73,6 @@ class ProtocolGame : public Protocol
 		// we have all the parse methods
 		virtual void parsePacket(NetworkMessage& msg);
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
-		bool parseFirstPacket(NetworkMessage& msg);
 		
 		//Parse methods
 		void parseLogout(NetworkMessage& msg);

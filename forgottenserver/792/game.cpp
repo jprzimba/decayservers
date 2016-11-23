@@ -4461,26 +4461,46 @@ void Game::updateCreatureSkull(Player* player)
 	}
 }
 
-void Game::removePremium(Account account)
+void Game::updatePremium(Account account)
 {
-	uint32_t timeNow = time(nullptr);
-	if(account.premiumDays > 0 && account.premiumDays < 65535)
-	{
-		uint32_t days = (uint32_t)std::ceil((timeNow - account.lastDay) / 86400);
-		if(days > 0)
-		{
-			if(account.premiumDays < days)
-				account.premiumDays = 0;
-			else
-				account.premiumDays -= days;
+	bool save = false;
+	time_t timeNow = time(nullptr);
 
+	if(account.premiumDays != 0 && account.premiumDays != std::numeric_limits<uint16_t>::max())
+	{
+		if(account.lastDay == 0)
+		{
 			account.lastDay = timeNow;
+			save = true;
+		}
+		else
+		{
+			uint32_t days = (timeNow - account.lastDay) / 86400;
+			if (days > 0)
+			{
+				if (days >= account.premiumDays)
+				{
+					account.premiumDays = 0;
+					account.lastDay = 0;
+				}
+				else
+				{
+					account.premiumDays -= days;
+					time_t remainder = (timeNow - account.lastDay) % 86400;
+					account.lastDay = timeNow - remainder;
+				}
+
+				save = true;
+			}
 		}
 	}
-	else
-		account.lastDay = timeNow;
+	else if(account.lastDay != 0)
+	{
+		account.lastDay = 0;
+		save = true;
+	}
 
-	if(!IOLoginData::getInstance()->saveAccount(account))
+	if(save && !IOLoginData::getInstance()->saveAccount(account))
 		std::cout << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
 }
 
