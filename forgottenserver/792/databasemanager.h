@@ -32,8 +32,7 @@ class DatabaseManager
 		}
 
 		bool tableExists(std::string table);
-		bool triggerExists(std::string trigger);
-
+		
 		int32_t getDatabaseVersion();
 		bool isDatabaseSetup();
 
@@ -47,6 +46,5 @@ class DatabaseManager
 		void registerDatabaseConfig(std::string config, std::string value);
 
 		void checkEncryption();
-		void checkTriggers();
 };
 #endif

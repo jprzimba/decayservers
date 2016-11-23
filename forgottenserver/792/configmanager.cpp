@@ -62,7 +62,6 @@ bool ConfigManager::load()
 		m_confString[MYSQL_USER] = getGlobalString(L, "mysqlUser", "root");
 		m_confString[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
-		m_confString[SQLITE_DB] = getGlobalString(L, "sqliteDatabase");
 		m_confString[PASSWORDTYPE] = getGlobalString(L, "passwordType", "plain");
 		m_confInteger[PASSWORD_TYPE] = PASSWORD_TYPE_PLAIN;
 	

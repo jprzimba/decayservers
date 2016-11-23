@@ -175,13 +175,6 @@ class _Database
 		DATABASE_VIRTUAL std::string getUpdateLimiter() {return " LIMIT 1;";}
 
 		/**
-		* Get database engine
-		*
-		* @return the database engine type
-		*/
-		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_NONE;}
-
-		/**
 		* Get database engine name
 		*
 		* @return the database engine name

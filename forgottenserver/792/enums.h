@@ -21,13 +21,6 @@
 #ifndef __OTSERV_ENUMS_H__
 #define __OTSERV_ENUMS_H__
 
-enum DatabaseEngine_t
-{
-	DATABASE_ENGINE_NONE = 0,
-	DATABASE_ENGINE_MYSQL,
-	DATABASE_ENGINE_SQLITE
-};
-
 enum StorageValues_t
 {
 	STORAGEVALUE_PROMOTION = 30018

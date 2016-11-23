@@ -8,7 +8,6 @@
 	mysqlPass = ""
 	mysqlPort = 3306
 	mysqlDatabase = "otserv"
-	sqliteDatabase = "forgottenserver.s3db"
 	startupDatabaseOptimization = "yes"
 
 	-- Account Manager

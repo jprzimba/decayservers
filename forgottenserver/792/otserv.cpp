@@ -181,20 +181,8 @@ int main(int argc, char *argv[])
 	Database* db = Database::getInstance();
 	if(db == NULL || !db->isConnected())
 	{
-		switch(db->getDatabaseEngine())
-		{
-			case DATABASE_ENGINE_MYSQL:
-				startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information or try SQLite which doesn't require any connection.");
-				return 0;
-
-			case DATABASE_ENGINE_SQLITE:
-				startupErrorMessage("Failed to connect to sqlite database file, make sure it exists and is readable.");
-				return 0;
-
-			default:
-				startupErrorMessage("Unkwown sqlType in config.lua, valid sqlTypes are: \"mysql\" and \"sqlite\".");
-				return 0;
-		}
+		startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information.");
+		return 0;
 	}
 	std::cout << " " << db->getClientName() << " " << db->getClientVersion() << std::endl;
 
@@ -210,7 +198,6 @@ int main(int argc, char *argv[])
 	for(uint32_t version = dbManager->updateDatabase(); version != 0; version = dbManager->updateDatabase())
 		std::cout << "> Database has been updated to version " << version << "." << std::endl;
 
-	dbManager->checkTriggers();
 	dbManager->checkEncryption();
 
 	if(g_config.getBool(ConfigManager::OPTIMIZE_DATABASE) && !dbManager->optimizeTables())

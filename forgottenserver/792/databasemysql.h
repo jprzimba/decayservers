@@ -64,8 +64,6 @@ class DatabaseMySQL : public _Database
 
 		DATABASE_VIRTUAL uint64_t getLastInsertId() {return (uint64_t)mysql_insert_id(&m_handle);}
 
-		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_MYSQL;}
-
 		DATABASE_VIRTUAL std::string getClientName() {return "MySQL";}
 		DATABASE_VIRTUAL const char* getClientVersion() {return mysql_get_client_info();}
 		DATABASE_VIRTUAL uint64_t getClientVersionNumeric() {return mysql_get_client_version();}
