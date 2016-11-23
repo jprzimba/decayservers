@@ -26,9 +26,6 @@
 #include "tools.h"
 #include "configmanager.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h> 
-
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;

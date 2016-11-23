@@ -26,15 +26,6 @@
 #ifdef __USE_MYSQL__
 #include "databasemysql.h"
 #endif
-#ifdef __USE_SQLITE__
-#include "databasesqlite.h"
-#endif
-
-#if defined MULTI_SQL_DRIVERS
-#include "tools.h"
-#include "configmanager.h"
-extern ConfigManager g_config;
-#endif
 
 boost::recursive_mutex DBQuery::database_lock;
 
@@ -44,17 +35,7 @@ Database* _Database::getInstance()
 {
 	if(!_instance)
 	{
-#if defined MULTI_SQL_DRIVERS
-		std::string sqlType = asLowerCaseString(g_config.getString(ConfigManager::SQL_TYPE));
-		if(sqlType == "mysql")
-			_instance = new DatabaseMySQL;
-		else if(sqlType == "sqlite")
-			_instance = new DatabaseSQLite;
-		else
-			_instance = new Database;
-#else
 		_instance = new Database;
-#endif
 	}
 	return _instance;
 }

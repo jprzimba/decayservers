@@ -85,9 +85,6 @@ class ConfigManager
 			MYSQL_DB,
 			DEFAULT_PRIORITY,
 			SQLITE_DB,
-			#ifdef MULTI_SQL_DRIVERS
-			SQL_TYPE,
-			#endif
 			PASSWORDTYPE,
 			MAP_AUTHOR,
 			MAP_STORAGE_TYPE,

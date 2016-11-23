@@ -63,9 +63,6 @@ bool ConfigManager::load()
 		m_confString[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
 		m_confString[SQLITE_DB] = getGlobalString(L, "sqliteDatabase");
-		#ifdef MULTI_SQL_DRIVERS
-		m_confString[SQL_TYPE] = getGlobalString(L, "sqlType", "sqlite");
-		#endif
 		m_confString[PASSWORDTYPE] = getGlobalString(L, "passwordType", "plain");
 		m_confInteger[PASSWORD_TYPE] = PASSWORD_TYPE_PLAIN;
 	

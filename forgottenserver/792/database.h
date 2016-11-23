@@ -26,27 +26,12 @@
 #include <sstream>
 #include "enums.h"
 
-#ifdef MULTI_SQL_DRIVERS
-#define DATABASE_VIRTUAL virtual
-#define DATABASE_CLASS _Database
-#define DBRES_CLASS _DBResult
-class _Database;
-class _DBResult;
-#else
 #define DATABASE_VIRTUAL
 #if defined(__USE_MYSQL__)
 #define DATABASE_CLASS DatabaseMySQL
 #define DBRES_CLASS MySQLResult
 class DatabaseMySQL;
 class MySQLResult;
-#elif defined(__USE_SQLITE__)
-#define DATABASE_CLASS DatabaseSQLite
-#define DBRES_CLASS SQLiteResult
-class DatabaseSQLite;
-class SQLiteResult;
-#else
-#error "You must define at least one database driver, __USE_MYSQL__ or __USE_SQLITE__."
-#endif
 #endif
 
 typedef DATABASE_CLASS Database;
@@ -343,12 +328,8 @@ class DBInsert
 		std::string m_buf;
 };
 
-#ifndef MULTI_SQL_DRIVERS
 #if defined(__USE_MYSQL__)
 #include "databasemysql.h"
-#elif defined(__USE_SQLITE__)
-#include "databasesqlite.h"
-#endif
 #endif
 
 class DBTransaction

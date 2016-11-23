@@ -43,13 +43,6 @@
 #endif
 #endif
 
-#undef MULTI_SQL_DRIVERS
-#define SQL_DRIVERS __USE_SQLITE__+__USE_MYSQL__
-
-#if SQL_DRIVERS > 1
-#define MULTI_SQL_DRIVERS
-#endif
-
 enum passwordType_t
 {
 	PASSWORD_TYPE_PLAIN = 0,
