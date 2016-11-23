@@ -43,7 +43,6 @@ class Commands
 		bool loaded;
 
 		//commands
-		bool banPlayer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportHere(Creature* creature, const std::string& cmd, const std::string& param);
 		bool teleportTo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool subtractMoney(Creature* creature, const std::string& cmd, const std::string& param);

@@ -826,6 +826,7 @@ class Player : public Creature, public Cylinder
 		friend class Actions;
 		friend class IOLoginData;
 		friend class ProtocolGame;
+		friend class TalkAction;
 };
 
 #endif

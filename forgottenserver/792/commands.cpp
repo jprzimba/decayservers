@@ -63,7 +63,6 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] =
 {
 	//admin commands
-	{"/b", &Commands::banPlayer},
 	{"/c", &Commands::teleportHere},
 	{"/q", &Commands::subtractMoney},
 	{"/reload", &Commands::reloadInfo},
@@ -232,29 +231,6 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-bool Commands::banPlayer(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* playerBan = g_game.getPlayerByName(param);
-	if(playerBan)
-	{
-		if(playerBan->hasFlag(PlayerFlag_CannotBeBanned))
-		{
-			if(Player* player = creature->getPlayer())
-				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot ban this player.");
-			return true;
-		}
-
-		playerBan->sendTextMessage(MSG_STATUS_CONSOLE_RED, "You have been banned.");
-		uint32_t ip = playerBan->lastIP;
-		if(ip > 0)
-			IOBan::getInstance()->addIpBan(ip, (time(NULL) + 86400), 0);
-
-		playerBan->kickPlayer(true);
-		return true;
-	}
-	return false;
 }
 
 bool Commands::teleportHere(Creature* creature, const std::string& cmd, const std::string& param)

@@ -19,13 +19,14 @@
 //////////////////////////////////////////////////////////////////////
 #include "otpch.h"
 
-#include "creature.h"
-#include "player.h"
-#include "tools.h"
 #include <sstream>
 #include <fstream>
 
+#include "ban.h"
+#include "creature.h"
+#include "player.h"
 #include "talkaction.h"
+#include "tools.h"
 #include "game.h"
 #include "configmanager.h"
 
@@ -143,18 +144,33 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 
 		if(cmdstring == it->first || !it->second->isCaseSensitive() && strcasecmp(it->first.c_str(), cmdstring.c_str()) == 0)
 		{
+			bool ret = true;
 			TalkAction* talkActionRef = it->second;
-			if(talkActionRef->getAccess() > player->getAccessLevel())
+			if(player->getAccessLevel() < it->second->getAccessLevel())
 			{
                 if(player->getAccessLevel() > 0)
 				{
                     player->sendCancel("You are not able to execute this action.");
                     g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-                    return TALKACTION_FAILED;
+					ret = false;
                 }
-                else
-                    return TALKACTION_CONTINUE;
             }
+			else
+			{
+				TalkAction* talkAction = it->second;
+
+				if(talkAction->isScripted())
+					ret = talkAction->executeSay(player, cmdstring, paramstring);
+				else
+				{
+					TalkActionFunction* func = talkAction->getFunction();
+					if(func)
+					{
+						func(player, cmdstring, paramstring);
+						ret = false;
+					}
+				}
+			}
 
             if(talkActionRef->getLog() && player)
 			{
@@ -168,8 +184,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
                 talkaction.close();
             }
 
-			uint32_t ret =  talkActionRef->executeSay(player, cmdstring, paramstring);
-			if(ret == 1)
+			if(ret)
 				return TALKACTION_CONTINUE;
 			else
 				return TALKACTION_BREAK;
@@ -184,7 +199,8 @@ TalkAction::TalkAction(LuaScriptInterface* _interface) :
 	filterType(TALKACTION_MATCH_QUOTATION),
 	registerlog(false),
 	casesensitive(false),
-	access(0)
+	accessLevel(0),
+	function(NULL)
 {
 	//
 }
@@ -221,9 +237,20 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		casesensitive = attr.as_string();
 		
 	if ((attr = node.attribute("access")))
-		access = pugi::cast<int32_t>(attr.value());
+		accessLevel = pugi::cast<int32_t>(attr.value());
 	
 	return true;	
+}
+
+bool TalkAction::loadFunction(const std::string& functionName)
+{
+	if(asLowerCaseString(functionName) == "banplayer")
+		function = banPlayer;
+	else
+		return false;
+
+	m_scripted = false;
+	return true;
 }
 
 std::string TalkAction::getScriptEventName()
@@ -265,4 +292,26 @@ uint32_t TalkAction::executeSay(Creature* creature, const std::string& words, co
 		std::cout << "[Error] Call stack overflow. TalkAction::executeSay" << std::endl;
 		return 0;
 	}
+}
+
+bool TalkAction::banPlayer(Player* player, const std::string& words, const std::string& param)
+{
+	Player* playerBan = g_game.getPlayerByName(param);
+	if(playerBan)
+	{
+		if(playerBan->hasFlag(PlayerFlag_CannotBeBanned))
+		{
+			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot ban this player.");
+			return true;
+		}
+
+		playerBan->sendTextMessage(MSG_STATUS_CONSOLE_RED, "You have been banned.");
+		uint32_t ip = playerBan->lastIP;
+		if(ip > 0)
+			IOBan::getInstance()->addIpBan(ip, (time(NULL) + 86400), 0);
+
+		playerBan->kickPlayer(true);
+		return true;
+	}
+	return false;
 }
