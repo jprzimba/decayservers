@@ -92,6 +92,9 @@ class TalkAction : public Event
 		virtual std::string getScriptEventName();
 
 		static TalkActionFunction banPlayer;
+		static TalkActionFunction addSkill;
+		static TalkActionFunction joinGuild;
+		static TalkActionFunction createGuild;
 	
 		std::string commandString;
 		int16_t accessLevel;

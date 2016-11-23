@@ -59,10 +59,10 @@ bool hasBitSet(uint32_t flag, uint32_t flags);
 std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLength);
 
 bool isNumber(char character);
-bool isLowercaseLetter(char character);
 bool isPasswordCharacter(char character);
-
-bool isValidName(std::string text);
+bool isValidName(std::string text, bool forceUppercaseOnFirstLetter = true);
+bool isUppercaseLetter(char character);
+bool isLowercaseLetter(char character);
 bool isValidPassword(std::string text);
 bool isNumbers(std::string text);
 

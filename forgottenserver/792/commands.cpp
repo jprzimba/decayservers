@@ -76,7 +76,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
 	{"/raid", &Commands::forceRaid},
-	{"/addskill", &Commands::addSkill},
 	{"/unban", &Commands::unban},
 	{"/ghost", &Commands::ghost},
 
@@ -84,9 +83,7 @@ s_defcommands Commands::defined_commands[] =
 	{"!buyhouse", &Commands::buyHouse},
  	{"!sellhouse", &Commands::sellHouse},
 	{"!serverinfo", &Commands::serverInfo},
-	{"!kills", &Commands::playerKills},
- 	{"!createguild", &Commands::createGuild},
- 	{"!joinguild", &Commands::joinGuild}
+	{"!kills", &Commands::playerKills}
 };
 
 Commands::Commands()
@@ -110,22 +107,26 @@ bool Commands::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/commands.xml");
-	if (!result) {
+	if(!result)
+	{
 		std::cout << "[Error - Commands::loadFromXml] Failed to load data/XML/commands.xml: " << result.description() << std::endl;
 		return false;
 	}
 
 	loaded = true;
 
-	for (pugi::xml_node commandNode = doc.child("commands").first_child(); commandNode; commandNode = commandNode.next_sibling()) {
+	for(pugi::xml_node commandNode = doc.child("commands").first_child(); commandNode; commandNode = commandNode.next_sibling())
+	{
 		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
-		if (!cmdAttribute) {
+		if(!cmdAttribute)
+		{
 			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;
 			continue;
 		}
 
 		auto it = commandMap.find(cmdAttribute.as_string());
-		if (it == commandMap.end()) {
+		if(it == commandMap.end())
+		{
 			std::cout << "[Warning - Commands::loadFromXml] Unknown command " << cmdAttribute.as_string() << std::endl;
 			continue;
 		}
@@ -133,35 +134,38 @@ bool Commands::loadFromXml()
 		Command* command = it->second;
 
 		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
-		if (groupAttribute) {
-			if (!command->loadedGroupId) {
+		if(groupAttribute)
+		{
+			if(!command->loadedGroupId)
+			{
 				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
 				command->loadedGroupId = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 			}
+			else
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
-		if (acctypeAttribute) {
-			if (!command->loadedAccountType) {
+		if(acctypeAttribute)
+		{
+			if(!command->loadedAccountType)
+			{
 				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
 				command->loadedAccountType = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 			}
+			else
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 		}
 	}
 
-	for (const auto& it : commandMap) {
+	for(const auto& it : commandMap)
+	{
 		Command* command = it.second;
-		if (!command->loadedGroupId) {
+		if(!command->loadedGroupId)
 			std::cout << "[Warning - Commands::loadFromXml] Missing group id for command " << it.first << std::endl;
-		}
 
-		if (!command->loadedAccountType) {
+		if(!command->loadedAccountType)
 			std::cout << "[Warning - Commands::loadFromXml] Missing acctype level for command " << it.first << std::endl;
-		}
 
 		g_game.addCommandTag(it.first[0]);
 	}
@@ -792,118 +796,6 @@ bool Commands::forceRaid(Creature* creature, const std::string& cmd, const std::
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
 	return true;
-}
-
-bool Commands::addSkill(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	boost::char_separator<char> sep(",");
-	tokenizer cmdtokens(param, sep);
-	tokenizer::iterator cmdit = cmdtokens.begin();
-	std::string param1, param2;
-	param1 = parseParams(cmdit, cmdtokens.end());
-	param2 = parseParams(cmdit, cmdtokens.end());
-	trimString(param1);
-	trimString(param2);
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		Player* paramPlayer = g_game.getPlayerByName(param1);
-		if(paramPlayer)
-		{
-			if(param2[0] == 'l' || param2[0] == 'e')
-				paramPlayer->addExperience(paramPlayer, Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience);
-			else if(param2[0] == 'm')
-				paramPlayer->addManaSpent(player->vocation->getReqMana(paramPlayer->getMagicLevel() + 1) - paramPlayer->manaSpent);
-			else
-				paramPlayer->addSkillAdvance(getSkillId(param2), paramPlayer->vocation->getReqSkillTries(getSkillId(param2), paramPlayer->getSkill(getSkillId(param2), SKILL_LEVEL) + 1));
-			return true;
-		}
-		else
-			player->sendTextMessage(MSG_STATUS_SMALL, "Couldn't find target.");
-	}
-	return false;
-}
-
-bool Commands::joinGuild(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		if(player->guildId == 0)
-		{
-			trimString((std::string&)param);
-			uint32_t guildId;
-			if(IOGuild::getInstance()->getGuildIdByName(guildId, param))
-			{
-				if(player->isInvitedToGuild(guildId))
-				{
-					player->sendTextMessage(MSG_INFO_DESCR, "You have joined the guild.");
-					IOGuild::getInstance()->joinGuild(player, guildId);
-					ChatChannel* guildChannel = g_chat.getChannel(player, CHANNEL_GUILD);
-					char buffer[55];
-					sprintf(buffer, "%s has joined the guild.", player->name.c_str());
-					if(guildChannel)
-						guildChannel->talk(player, SPEAK_CHANNEL_R2, buffer);
-					return true;
-				}
-				else
-					player->sendCancel("You are not invited to that guild.");
-			}
-			else
-				player->sendCancel("There's no guild with that name.");
-		}
-		else
-			player->sendCancel("You are already in a guild.");
-	}
-	return false;
-}
-
-bool Commands::createGuild(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		if(player->guildId == 0)
-		{
-			trimString((std::string&)param);
-			if(param.length() > 3)
-			{
-				if(param.length() < 21)
-				{
-					uint32_t guildId;
-					if(!IOGuild::getInstance()->getGuildIdByName(guildId, param))
-					{
-						if(player->level > 7)
-						{
-							if(player->isPremium())
-							{
-								char buffer[55];
-								sprintf(buffer, "You have formed the guild: %s!", param.c_str());
-								player->sendTextMessage(MSG_INFO_DESCR, buffer);
-								player->setGuildName(param);
-
-								IOGuild::getInstance()->createGuild(player);
-								return true;
-							}
-							else
-								player->sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
-						}
-						else
-							player->sendCancel("You have to be atleast Level 8 to form a guild.");
-					}
-					else
-						player->sendCancel("There is already a guild with that name.");
-				}
-				else
-					player->sendCancel("That guild name is too long, please select a shorter name.");
-			}
-			else
-				player->sendCancel("That guild name is too short, please select a longer name.");
-		}
-		else
-			player->sendCancel("You are already in a guild.");
-	}
-	return false;
 }
 
 bool Commands::unban(Creature* creature, const std::string& cmd, const std::string& param)

@@ -132,6 +132,9 @@ class ConfigManager
 			BAN_DAYS,
 			FINAL_BAN_DAYS,
 			AUTO_SAVE_EACH_MINUTES,
+			LEVEL_TO_CREATE_GUILD,
+			MIN_GUILD_NAME,
+			MAX_GUILD_NAME,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

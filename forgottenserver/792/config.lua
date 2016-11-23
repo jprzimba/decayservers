@@ -1,7 +1,6 @@
 	-- The Forgotten Server Config
 
 	-- SQL Conneciton
-	sqlType = "mysql"
 	passwordType = "plain"
 	mysqlHost = "127.0.0.1"
 	mysqlUser = "otserv"
@@ -84,6 +83,9 @@
 
 	-- Guilds
 	ingameGuildSystem = "yes"
+	levelToCreateGuild = 8
+	minGuildNameLength = 4
+	maxGuildNameLength = 20
 
 	-- Rates
 	rateExp = 5

@@ -59,11 +59,8 @@ class Commands
 		bool buyHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool newType(Creature* creature, const std::string& cmd, const std::string& param);
 		bool forceRaid(Creature* creature, const std::string& cmd, const std::string& param);
-		bool addSkill(Creature* creature, const std::string& cmd, const std::string& param);
 		bool playerKills(Creature* creature, const std::string& cmd, const std::string& param);
 		bool unban(Creature* creature, const std::string& cmd, const std::string& param);
-		bool joinGuild(Creature* creature, const std::string& cmd, const std::string& param);
-		bool createGuild(Creature* creature, const std::string& cmd, const std::string& param);
 		bool ghost(Creature* creature, const std::string& cmd, const std::string& param);
 
 		//table of commands

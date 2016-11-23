@@ -272,6 +272,11 @@ bool isLowercaseLetter(char character)
 	return (character >= 97 && character <= 122);
 }
 
+bool isUppercaseLetter(char character)
+{
+	return (character >= 65 && character <= 90);
+}
+
 bool isPasswordCharacter(char character)
 {
 	return (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126);
@@ -300,13 +305,74 @@ bool isNumbers(std::string text)
 	return true;
 }
 
-bool isValidName(std::string text)
+bool isValidName(std::string text, bool forceUppercaseOnFirstLetter/* = true*/)
 {
-	std::transform(text.begin(), text.end(), text.begin(), (int32_t(*)(int32_t))tolower);
-	for(uint32_t size = 0; size <= text.length() - 1; size++)
+	uint32_t lenBeforeSpace = 1;
+	uint32_t lenBeforeSingleQuote = 1;
+	uint32_t lenBeforeDash = 1;
+	uint32_t repeatedCharacter = 0;
+	char lastChar = 32;
+
+	if(forceUppercaseOnFirstLetter)
 	{
-		if(isLowercaseLetter(text[size]) || text[size] == 32 || text[size] == 39 || text[size] == 45)
+		if(!isUppercaseLetter(text[0]))
+			return false;
+	}
+	else if(!isLowercaseLetter(text[0]) && !isUppercaseLetter(text[0]))
+		return false;
+
+	for(uint32_t i = 1, size = text.length(); i < size; ++i)
+	{
+		if(text[i] != 32)
+		{
+			lenBeforeSpace++;
+
+			if(text[i] != 39)
+				lenBeforeSingleQuote++;
+			else
+			{
+				if(lenBeforeSingleQuote <= 1 || i == size - 1 || text[i + 1] == 32)
+					return false;
+
+				lenBeforeSingleQuote = 0;
+			}
+
+			if(text[i] != 45)
+				lenBeforeDash++;
+			else
+			{
+				if(lenBeforeDash <= 1 || i == size - 1 || text[i + 1] == 32)
+					return false;
+
+				lenBeforeDash = 0;
+			}
+
+			if(text[i] == lastChar)
+			{
+				repeatedCharacter++;
+				if(repeatedCharacter > 2)
+					return false;
+			}
+			else
+				repeatedCharacter = 0;
+
+			lastChar = text[i];
+		}
+		else
+		{
+			if(lenBeforeSpace <= 1 || i == size - 1 || text[i + 1] == 32)
+				return false;
+
+			lenBeforeSpace = 0;
+			lenBeforeSingleQuote = 0;
+			lenBeforeDash = 0;
+		}
+
+		if(isLowercaseLetter(text[i]) || text[i] == 32 || text[i] == 39 || text[i] == 45
+			|| (isUppercaseLetter(text[i]) && text[i - 1] == 32))
+		{
 			continue;
+		}
 		else
 			return false;
 	}

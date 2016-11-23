@@ -4,6 +4,7 @@
 	<talkaction access="5" log="yes" words="/closeserver" script="closeopen.lua"/>
 	<talkaction access="5" log="yes" words="/openserver" script="closeopen.lua"/>
 	<talkaction access="5" log="yes" words="/save" filter="first word" script="save.lua"/>
+	<talkaction access="5" log="yes" words="/addskill" filter="first word" function="addskill"/>
 
 	<!-- Community Manager -->
 	<talkaction access="4" log="yes" words="/i" filter="first word" script="createitembyid.lua"/>
@@ -30,4 +31,6 @@
 	<talkaction words="!uptime" script="uptime.lua"/>
 	<talkaction words="!deathlist" filter="first word" script="deathlist.lua"/>
 	<talkaction words="!online" script="online.lua"/>
+	<talkaction words="!createguild" filter="first word" function="createguild"/>
+	<talkaction words="!joinguild" filter="first word" function="joinguild"/>
 </talkactions>

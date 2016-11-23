@@ -123,6 +123,9 @@ bool ConfigManager::load()
 	m_confInteger[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5 * 60 * 1000);
 	m_confInteger[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	m_confInteger[AUTO_SAVE_EACH_MINUTES] = getGlobalNumber(L, "autoSaveEachMinutes", 0);
+	m_confInteger[LEVEL_TO_CREATE_GUILD] = getGlobalNumber(L, "levelToCreateGuild", 8);
+	m_confInteger[MIN_GUILD_NAME] = getGlobalNumber(L, "minGuildNameLength", 4);
+	m_confInteger[MAX_GUILD_NAME] = getGlobalNumber(L, "maxGuildNameLength", 20);
 
 
 	m_confBoolean[CANNOT_ATTACK_SAME_LOOKFEET] = booleanString(getGlobalString(L, "noDamageToSameLookfeet", "no"));
