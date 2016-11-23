@@ -76,7 +76,7 @@ class Tile : public Cylinder
 
 			thingCount = 0;
 			m_flags = 0;
-			ground = NULL;
+			ground = nullptr;
 		}
 
 		~Tile()

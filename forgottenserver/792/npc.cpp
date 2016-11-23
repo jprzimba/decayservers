@@ -41,12 +41,12 @@ extern Spells* g_spells;
 
 AutoList<Npc> Npc::listNpc;
 
-NpcScriptInterface* Npc::m_scriptInterface = NULL;
+NpcScriptInterface* Npc::m_scriptInterface = nullptr;
 
 void Npcs::reload()
 {
 	delete Npc::m_scriptInterface;
-	Npc::m_scriptInterface = NULL;
+	Npc::m_scriptInterface = nullptr;
 
 	for(AutoList<Npc>::listiterator it = Npc::listNpc.list.begin(); it != Npc::listNpc.list.end(); ++it)
 		it->second->reload();
@@ -56,12 +56,12 @@ Npc* Npc::createNpc(const std::string& name)
 {
 	Npc* npc = new Npc(name);
 	if(!npc)
-		return NULL;
+		return nullptr;
 
 	if(!npc->load())
 	{
 		delete npc;
-		return NULL;
+		return nullptr;
 	}
 	return npc;
 }
@@ -72,7 +72,7 @@ Npc::Npc(const std::string& _name) :
 	m_filename = "data/npc/" + _name + ".xml";
 	loaded = false;
 
-	m_npcEventHandler = NULL;
+	m_npcEventHandler = nullptr;
 	reset();
 }
 
@@ -111,7 +111,7 @@ void Npc::reset()
 	idleTime = 30;
 
 	delete m_npcEventHandler;
-	m_npcEventHandler = NULL;
+	m_npcEventHandler = nullptr;
 
 	for(StateList::iterator it = stateList.begin(); it != stateList.end(); ++it)
 		delete *it;
@@ -235,7 +235,7 @@ NpcState* Npc::getState(const Player* player, bool makeNew /*= true*/)
 	}
 
 	if(!makeNew)
-		return NULL;
+		return nullptr;
 
 	NpcState* state = new NpcState;
 	state->prevInteraction = 0;

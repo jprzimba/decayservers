@@ -25,8 +25,8 @@
 
 FileLoader::FileLoader()
 {
-	m_file = NULL;
-	m_root = NULL;
+	m_file = nullptr;
+	m_root = nullptr;
 	m_buffer = new unsigned char[1024];
 	m_buffer_size = 1024;
 	m_lastError = ERROR_NONE;
@@ -44,7 +44,7 @@ FileLoader::~FileLoader()
 	if(m_file)
 	{
 		fclose(m_file);
-		m_file = NULL;
+		m_file = nullptr;
 	}
 
 	NodeStruct::clearNet(m_root);
@@ -83,7 +83,7 @@ bool FileLoader::openFile(const char* filename, bool write, bool caching /*= fal
 			if(version > 0)
 			{
 				fclose(m_file);
-				m_file = NULL;
+				m_file = nullptr;
 				m_lastError = ERROR_INVALID_FILE_VERSION;
 				return false;
 			}
@@ -264,10 +264,10 @@ const unsigned char* FileLoader::getProps(const NODE node, uint32_t &size)
 			return m_buffer;
 		}
 		else
-			return NULL;
+			return nullptr;
 	}
 	else
-		return NULL;
+		return nullptr;
 }
 
 bool FileLoader::getProps(const NODE node, PropStream &props)
@@ -276,7 +276,7 @@ bool FileLoader::getProps(const NODE node, PropStream &props)
 	const unsigned char* a = getProps(node, size);
 	if(!a)
 	{
-		props.init(NULL, 0);
+		props.init(nullptr, 0);
 		return false;
 	}
 	else
@@ -547,7 +547,7 @@ int32_t FileLoader::loadCacheBlock(uint32_t pos)
 			loading_cache = 0;
 	}
 			
-	if(m_cached_data[loading_cache].data == NULL)
+	if(m_cached_data[loading_cache].data == nullptr)
 		m_cached_data[loading_cache].data = new unsigned char[m_cache_size];
 
 	m_cached_data[loading_cache].base = base_pos;

@@ -44,13 +44,13 @@ Weapons::~Weapons()
 const Weapon* Weapons::getWeapon(const Item* item) const
 {
 	if(!item)
-		return NULL;
+		return nullptr;
 
 	WeaponMap::const_iterator it = weapons.find(item->getID());
 	if(it != weapons.end())
 		return it->second;
 
-	return NULL;
+	return nullptr;
 }
 
 void Weapons::clear()
@@ -132,7 +132,7 @@ Event* Weapons::getEvent(const std::string& nodeName)
 	if(tmpNodeName == "wand" || tmpNodeName == "rod")
 		return new WeaponWand(&m_scriptInterface);
 
-	return NULL;
+	return nullptr;
 }
 
 bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
@@ -478,7 +478,7 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 			g_game.transformItem(item, item->getID(), newCharge);
 		}
 		else if(ammoAction == AMMOACTION_MOVE)
-			g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, NULL, FLAG_NOLIMIT);
+			g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, nullptr, FLAG_NOLIMIT);
 		else if(ammoAction == AMMOACTION_MOVEBACK){ /* do nothing */ }
 		else if(item->hasCharges())
 		{
@@ -856,7 +856,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 		Position destPos = target->getPosition();
 		Tile* destTile = target->getTile();
-		Tile* tmpTile = NULL;
+		Tile* tmpTile = nullptr;
 
 		for(std::vector<dPair>::iterator it = destList.begin(); it != destList.end(); ++it)
 		{

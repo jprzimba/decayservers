@@ -112,7 +112,7 @@ ItemType::ItemType()
 	breakChance = 0;
 	shootRange = 1;
 
-	condition = NULL;
+	condition = nullptr;
 	combatType = COMBAT_NONE;
 
 	replaceable = true;
@@ -724,7 +724,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.type = ITEM_TYPE_MAGICFIELD;
 
 			CombatType_t combatType = COMBAT_NONE;
-			ConditionDamage* conditionDamage = NULL;
+			ConditionDamage* conditionDamage = nullptr;
 
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 			if(tmpStrValue == "fire") {
@@ -894,7 +894,7 @@ int32_t Items::getItemIdByName(const std::string& name)
 	if(!name.empty())
 	{
 		uint32_t i = 100;
-		ItemType* iType = NULL;
+		ItemType* iType = nullptr;
 		do
 		{
 			if((iType = items->getElement(i)) && !strcasecmp(name.c_str(), iType->name.c_str()))

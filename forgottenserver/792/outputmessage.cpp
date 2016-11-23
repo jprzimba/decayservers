@@ -89,7 +89,7 @@ void OutputMessagePool::send(OutputMessage* msg)
 		else
 		{
 			#ifdef __DEBUG_NET__
-			std::cout << "Error: [OutputMessagePool::send] NULL connection." << std::endl;
+			std::cout << "Error: [OutputMessagePool::send] nullptr connection." << std::endl;
 			#endif
 		}
 	}
@@ -134,7 +134,7 @@ void OutputMessagePool::sendAll()
 			else
 			{
 				#ifdef __DEBUG_NET__
-				std::cout << "Error: [OutputMessagePool::send] NULL connection." << std::endl;
+				std::cout << "Error: [OutputMessagePool::send] nullptr connection." << std::endl;
 				#endif
 			}
 			m_autoSendOutputMessages.erase(it++);
@@ -192,8 +192,8 @@ void OutputMessagePool::releaseMessage(OutputMessage* msg, bool sent /*= false*/
 OutputMessage* OutputMessagePool::getOutputMessage(Protocol* protocol, bool autosend /*= true*/)
 {
 	#ifdef __DEBUG_NET__
-	if(protocol->getConnection() == NULL)
-		std::cout << "Warning: [OutputMessagePool::getOutputMessage] NULL connection." << std::endl;
+	if(protocol->getConnection() == nullptr)
+		std::cout << "Warning: [OutputMessagePool::getOutputMessage] nullptr connection." << std::endl;
 	#endif
 	#ifdef __DEBUG_NET_DETAIL__
 	std::cout << "request output message - auto = " << autosend << std::endl;

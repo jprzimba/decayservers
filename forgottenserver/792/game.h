@@ -83,7 +83,7 @@ struct RuleViolation
 		reporter(_reporter),
 		text(_text),
 		time(_time),
-		gamemaster(NULL),
+		gamemaster(nullptr),
 		isOpen(true)
 	{
 	}
@@ -297,7 +297,7 @@ class Game
 		  * \param subType is the extra type an item can have such as charges/fluidtype, default is -1
 			* meaning it's not used
 		  * \param depthSearch if true it will check child containers aswell
-		  * \returns A pointer to the item to an item and NULL if not found
+		  * \returns A pointer to the item to an item and nullptr if not found
 		  */
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			bool depthSearch = true, int32_t subType = -1);

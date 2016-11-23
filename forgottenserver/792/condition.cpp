@@ -186,7 +186,7 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 			return new ConditionGeneric(_id, _type, _ticks);
 
 		default:
-			return NULL;
+			return nullptr;
 	}
 }
 
@@ -196,25 +196,25 @@ Condition* Condition::createCondition(PropStream& propStream)
 	uint8_t attr;
 	
 	if(!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_TYPE)
-		return NULL;
+		return nullptr;
 
 	uint32_t _type = 0;
 	if(!propStream.GET_ULONG(_type))
-		return NULL;
+		return nullptr;
 
 	if(!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_ID)
-		return NULL;
+		return nullptr;
 
 	uint32_t _id = 0;
 	if(!propStream.GET_ULONG(_id))
-		return NULL;
+		return nullptr;
 
 	if(!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_TICKS)
-		return NULL;
+		return nullptr;
 
 	uint32_t _ticks = 0;
 	if(!propStream.GET_ULONG(_ticks))
-		return NULL;
+		return nullptr;
 
 	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0);
 }

@@ -128,7 +128,7 @@ bool Mailbox::sendItem(Item* item)
 		if(depot)
 		{
 			if(g_game.internalMoveItem(item->getParent(), depot, INDEX_WHEREEVER,
-				item, item->getItemCount(), NULL, FLAG_NOLIMIT) == RET_NOERROR)
+				item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR)
 			{
 				g_game.transformItem(item, item->getID() + 1);
 				return true;
@@ -137,7 +137,7 @@ bool Mailbox::sendItem(Item* item)
 	}
 	else if(IOLoginData::getInstance()->playerExists(receiver))
 	{
-		Player* player = new Player(receiver, NULL);
+		Player* player = new Player(receiver, nullptr);
 		if(!IOLoginData::getInstance()->loadPlayer(player, receiver))
 		{
 			#ifdef __DEBUG_MAILBOX__
@@ -161,7 +161,7 @@ bool Mailbox::sendItem(Item* item)
 		if(depot)
 		{
 			if(g_game.internalMoveItem(item->getParent(), depot, INDEX_WHEREEVER,
-				item, item->getItemCount(), NULL, FLAG_NOLIMIT) == RET_NOERROR)
+				item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR)
 			{
 				g_game.transformItem(item, item->getID() + 1);
 				IOLoginData::getInstance()->savePlayer(player, true);

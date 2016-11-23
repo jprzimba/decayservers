@@ -224,7 +224,7 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 		if(player->getAccessLevel() > 0)
 		{
 			player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd.c_str());
-			time_t ticks = time(NULL);
+			time_t ticks = time(nullptr);
 			const tm* now = localtime(&ticks);
 			char buf[32], buffer[85];
 			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);
@@ -699,7 +699,7 @@ bool Commands::removeThing(Creature* creature, const std::string& cmd, const std
 		Position pos = player->getPosition();
 		pos = getNextPosition(player->direction, pos);
 		Tile *removeTile = g_game.getMap()->getTile(pos);
-		if(removeTile != NULL)
+		if(removeTile != nullptr)
 		{
 			Thing *thing = removeTile->getTopThing();
 			if(thing)

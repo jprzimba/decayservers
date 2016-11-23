@@ -79,8 +79,8 @@ extern Spells* g_spells;
 extern TalkActions* g_talkActions;
 extern GlobalEvents* g_globalEvents;
 
-RSA* g_otservRSA = NULL;
-Server* g_server = NULL;
+RSA* g_otservRSA = nullptr;
+Server* g_server = nullptr;
 
 OTSYS_THREAD_SIGNALVAR g_loaderSignal;
 
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	sigh.sa_handler = SIG_IGN;
 	sigh.sa_flags = 0;
 	sigemptyset(&sigh.sa_mask);
-	sigaction(SIGPIPE, &sigh, NULL);
+	sigaction(SIGPIPE, &sigh, nullptr);
 	#endif
 
 	OTSYS_THREAD_SIGNALVARINIT(g_loaderSignal);
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 
 	std::cout << ">> Loading database driver..." << std::flush;
 	Database* db = Database::getInstance();
-	if(db == NULL || !db->isConnected())
+	if(db == nullptr || !db->isConnected())
 	{
 		startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information.");
 		return 0;
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
 		if(serverSaveHour >= 0 && serverSaveHour <= 24)
 		{
-			time_t timeNow = time(NULL);
+			time_t timeNow = time(nullptr);
 			tm* timeinfo = localtime(&timeNow);
 
 			if(serverSaveHour == 0)
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 		if(he)
 		{
 			unsigned char** addr = (unsigned char**)he->h_addr_list;
-			while(addr[0] != NULL)
+			while(addr[0] != nullptr)
 			{
 				IpNetMask.first  = *(uint32_t*)(*addr);
 				IpNetMask.second = 0x0000FFFF;

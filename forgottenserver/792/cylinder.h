@@ -170,7 +170,7 @@ class Cylinder : virtual public Thing
 
 		/**
 		  * Gets the object based on index
-		  * \returns the object, returns NULL if not found
+		  * \returns the object, returns nullptr if not found
 		  */
 		virtual Thing* __getThing(uint32_t index) const;
 
@@ -210,7 +210,7 @@ class VirtualCylinder : public Cylinder
 			uint32_t& maxQueryCount, uint32_t flags) const {return RET_NOTPOSSIBLE;}
 		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count) const {return RET_NOTPOSSIBLE;}
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-			uint32_t& flags) {return NULL;}
+			uint32_t& flags) {return nullptr;}
 
 		virtual void __addThing(Thing* thing) {}
 		virtual void __addThing(int32_t index, Thing* thing) {}

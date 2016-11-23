@@ -35,7 +35,7 @@ Dispatcher::Dispatcher()
 {
 	OTSYS_THREAD_LOCKVARINIT(m_taskLock);
 	OTSYS_THREAD_SIGNALVARINIT(m_taskSignal);
-	OTSYS_CREATE_THREAD(Dispatcher::dispatcherThread, NULL);
+	OTSYS_CREATE_THREAD(Dispatcher::dispatcherThread, nullptr);
 }
 
 OTSYS_THREAD_RETURN Dispatcher::dispatcherThread(void *p)
@@ -47,7 +47,7 @@ OTSYS_THREAD_RETURN Dispatcher::dispatcherThread(void *p)
 	srand((unsigned int)OTSYS_TIME());
 	while(!Dispatcher::m_shutdown)
 	{
-		Task* task = NULL;
+		Task* task = nullptr;
 
 		// check if there are tasks waiting
 		OTSYS_THREAD_LOCK(getDispatcher().m_taskLock, "")
@@ -79,7 +79,7 @@ OTSYS_THREAD_RETURN Dispatcher::dispatcherThread(void *p)
 	dispatcherExceptionHandler.RemoveHandler();
 	#endif
 	#ifndef WIN32
-	return NULL;
+	return nullptr;
 	#endif
 }
 
@@ -107,7 +107,7 @@ void Dispatcher::addTask(Task* task)
 
 void Dispatcher::flush()
 {
-	Task* task = NULL;
+	Task* task = nullptr;
 	while(!m_taskList.empty())
 	{
 		task = getDispatcher().m_taskList.front();

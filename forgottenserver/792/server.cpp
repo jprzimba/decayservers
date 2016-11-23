@@ -27,7 +27,7 @@
 Server::Server(uint32_t serverip, uint16_t port)
 : m_io_service()
 {
-	m_acceptor = NULL;
+	m_acceptor = nullptr;
 	m_listenErrors = 0;
 	m_serverIp = serverip;
 	m_serverPort = port;
@@ -44,7 +44,7 @@ void Server::accept()
 	if(!m_acceptor)
 	{
 		#ifdef __DEBUG_NET__
-		std::cout << "Error: [Server::accept] NULL m_acceptor." << std::endl;
+		std::cout << "Error: [Server::accept] nullptr m_acceptor." << std::endl;
 		#endif
 		return;
 	}
@@ -69,7 +69,7 @@ void Server::closeListenSocket()
 			}
 		}
 		delete m_acceptor;
-		m_acceptor = NULL;
+		m_acceptor = nullptr;
 	}
 }
 

@@ -88,7 +88,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 	if(asLowerCaseString(nodeName) == "action")
 		return new Action(&m_scriptInterface);
 
-	return NULL;
+	return nullptr;
 }
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -313,7 +313,7 @@ Action* Actions::getAction(const Item* item)
 	if(runeSpell)
 		return runeSpell;
 	
-	return NULL;
+	return nullptr;
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
@@ -365,7 +365,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 		}
 		else
 		{
-			player->setWriteItem(NULL);
+			player->setWriteItem(nullptr);
 			player->sendTextWindow(item, 0, false);
 		}
 		return RET_NOERROR;
@@ -486,7 +486,7 @@ void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 
 bool Actions::openContainer(Player* player, Container* container, const uint8_t index)
 {
-	Container* openContainer = NULL;
+	Container* openContainer = nullptr;
 
 	//depot container
 	if(Depot* depot = container->getDepot())
@@ -668,7 +668,7 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 		}
 		else
 		{
-			LuaScriptInterface::pushThing(L, NULL, 0);
+			LuaScriptInterface::pushThing(L, nullptr, 0);
 			Position posEx;
 			LuaScriptInterface::pushPosition(L, posEx, 0);
 		}

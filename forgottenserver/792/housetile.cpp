@@ -64,7 +64,7 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 				if(!destTile)
 				{
 					#ifdef __DEBUG__
-					assert(destTile != NULL);
+					assert(destTile != nullptr);
 					#endif
 					std::cout << "Error: [HouseTile::__queryDestination] House entry not correct"
 						<< " - Name: " << house->getName()
@@ -78,7 +78,7 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 				}
 
 				index = -1;
-				*destItem = NULL;
+				*destItem = nullptr;
 				return destTile;
 			}
 		}

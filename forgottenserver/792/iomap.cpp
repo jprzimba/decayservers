@@ -75,7 +75,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	uint32_t type;
 	PropStream propStream;
 
-	NODE root = f.getChildNode((NODE)NULL, type);
+	NODE root = f.getChildNode((NODE)nullptr, type);
 
 	if(!f.getProps(root, propStream))
 	{
@@ -163,7 +163,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		}
 	}
 	
-	Tile* tile = NULL;
+	Tile* tile = nullptr;
 
 	NODE nodeMapData = f.getChildNode(nodeMap, type);
 	while(nodeMapData != NO_NODE)
@@ -224,7 +224,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					pz = base_z;
 					
 					bool isHouseTile = false;
-					House* house = NULL;
+					House* house = nullptr;
 
 					if(type == OTBM_TILE)
 						tile = new Tile(px, py, pz);
@@ -300,7 +300,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								{
 									std::cout << "Warning: [OTBM loader] Moveable item in house id = " << house->getHouseId() << " Item type = " << item->getID() << std::endl;
 									delete item;
-									item = NULL;
+									item = nullptr;
 								}
 								else
 								{

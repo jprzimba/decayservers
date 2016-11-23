@@ -140,7 +140,7 @@ class ItemType
 		bool isLevelDoor() const {return id == 1227 || id == 1229 || id == 1245 || id == 1247 || id == 1259 || id == 1261 || id == 3540 || id == 3549 || id == 5103 || id == 5112 || id == 5121 || id == 5130 || id == 5292 || id == 5294 || id == 6206 || id == 6208 || id == 6263 || id == 6265 || id == 6896 || id == 6905 || id == 7038 || id == 7047 || id == 8459 || id == 8461;}
 		bool hasSubType() const {return (isFluidContainer() || isSplash() || stackable || charges != 0);}
 
-		Abilities* getAbilities() { if(abilities == NULL) { abilities = new Abilities(); } return abilities; }
+		Abilities* getAbilities() { if(abilities == nullptr) { abilities = new Abilities(); } return abilities; }
 
 		std::string getPluralName() const
 		{
@@ -355,7 +355,7 @@ void Array<A>::reset()
 	for(uint32_t i = 0; i < m_size; i++)
 	{
 		delete m_data[i];
-		m_data[i] = NULL;
+		m_data[i] = nullptr;
 	}
 	memset(this->m_data, 0, sizeof(A) * this->m_size);
 }

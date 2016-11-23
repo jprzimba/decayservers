@@ -331,7 +331,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 
 	if(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
 	{
-		int32_t redSkullSeconds = result->getDataInt("redskulltime") - time(NULL);
+		int32_t redSkullSeconds = result->getDataInt("redskulltime") - time(nullptr);
 		if(redSkullSeconds > 0)
 		{
 			//ensure that we round up the number of ticks
@@ -692,7 +692,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 	{
 		int32_t redSkullTime = 0;
 		if(player->redSkullTicks > 0)
-			redSkullTime = time(NULL) + player->redSkullTicks/1000;
+			redSkullTime = time(nullptr) + player->redSkullTicks/1000;
 
 		query << "`redskulltime` = " << redSkullTime << ", ";
 		int32_t redSkull = 0;
@@ -986,7 +986,7 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 
 		query << "SELECT `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` WHERE `id` = " << groupid;
 		if(!(result = db->storeQuery(query.str())))
-			return NULL;
+			return nullptr;
 
 		PlayerGroup* group = new PlayerGroup;
 		group->m_name = result->getDataString("name");
@@ -999,7 +999,7 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 		db->freeResult(result);
 		return group;
 	}
-	return NULL;
+	return nullptr;
 }
 
 const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
@@ -1015,7 +1015,7 @@ const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
 		db->freeResult(result);
 		return getPlayerGroup(groupId);
 	}
-	return NULL;
+	return nullptr;
 }
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
@@ -1159,7 +1159,7 @@ bool IOLoginData::createCharacter(uint32_t accountNumber, std::string characterN
 
 	Database* db = Database::getInstance();
 	DBQuery query;
-	query << "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `redskull`, `redskulltime`, `save`, `rank_id`, `guildnick`, `lastlogout`, `blessings`, `online`) VALUES (NULL, " << db->escapeString(characterName) << ", 1, " << accountNumber << ", " << level << ", " << vocationId << ", " << healthMax << ", " << healthMax << ", " << exp << ", 68, 76, 78, 39, " << lookType << ", 0, " << g_config.getNumber(ConfigManager::START_MAGICLEVEL) << ", " << manaMax << ", " << manaMax << ", 0, 100, " << g_config.getNumber(ConfigManager::SPAWNTOWN_ID) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_X) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Y) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Z) << ", 0, " << capMax << ", " << sex << ", 0, 0, 0, 0, 1, 0, '', 0, 0, 0);";
+	query << "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `redskull`, `redskulltime`, `save`, `rank_id`, `guildnick`, `lastlogout`, `blessings`, `online`) VALUES (nullptr, " << db->escapeString(characterName) << ", 1, " << accountNumber << ", " << level << ", " << vocationId << ", " << healthMax << ", " << healthMax << ", " << exp << ", 68, 76, 78, 39, " << lookType << ", 0, " << g_config.getNumber(ConfigManager::START_MAGICLEVEL) << ", " << manaMax << ", " << manaMax << ", 0, 100, " << g_config.getNumber(ConfigManager::SPAWNTOWN_ID) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_X) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Y) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Z) << ", 0, " << capMax << ", " << sex << ", 0, 0, 0, 0, 1, 0, '', 0, 0, 0);";
 	return db->executeQuery(query.str());
 }
 

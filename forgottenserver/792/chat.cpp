@@ -229,13 +229,13 @@ Chat::~Chat()
 ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 {
 	if(getChannel(player, channelId))
-		return NULL;
+		return nullptr;
 
 	switch(channelId)
 	{
 		case CHANNEL_GUILD:
 		{
-			ChatChannel* newChannel = NULL;
+			ChatChannel* newChannel = nullptr;
 			if((newChannel = new ChatChannel(channelId, player->getGuildName())))
 				m_guildChannels[player->getGuildId()] = newChannel;
 
@@ -245,14 +245,14 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 		{
 			//only 1 private channel for each premium player
 			if(!player->isPremium() || getPrivateChannel(player))
-				return NULL;
+				return nullptr;
 
 			//find a free private channel slot
 			for(uint16_t i = 100; i < 10000; ++i)
 			{
 				if(m_privateChannels.find(i) == m_privateChannels.end())
 				{
-					PrivateChatChannel* newChannel = NULL;
+					PrivateChatChannel* newChannel = nullptr;
 					if((newChannel = new PrivateChatChannel(i, player->getName() + "'s Channel")))
 					{
 						newChannel->setOwner(player->getGUID());
@@ -268,7 +268,7 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 			break;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool Chat::deleteChannel(Player* player, uint16_t channelId)
@@ -307,7 +307,7 @@ bool Chat::addUserToChannel(Player* player, uint16_t channelId)
 	if(channel && channel->addUser(player))
 		return channel;
 
-	return NULL;
+	return nullptr;
 }
 
 bool Chat::removeUserFromChannel(Player* player, uint16_t channelId)
@@ -1059,7 +1059,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 		if(git != m_guildChannels.end())
 			return git->second;
 
-		return NULL;
+		return nullptr;
 	}
 
 	NormalChannelMap::iterator nit = m_normalChannels.find(channelId);
@@ -1070,7 +1070,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 			case CHANNEL_GAMEMASTER:
 			{
 				if(player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
-					return NULL;
+					return nullptr;
 
 				break;
 			}
@@ -1078,7 +1078,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 			case CHANNEL_TUTOR:
 			{
 				if(player->getAccountType() < ACCOUNT_TYPE_TUTOR)
-					return NULL;
+					return nullptr;
 
 				break;
 			}
@@ -1086,7 +1086,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 			case CHANEL_TRADE:
 			{
 				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
-					return NULL;
+					return nullptr;
 
 				break;
 			}
@@ -1094,7 +1094,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 			case CHANNEL_TRADEROOK:
 			{
 				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() != VOCATION_NONE)
-					return NULL;
+					return nullptr;
 
 				break;
 			}
@@ -1109,7 +1109,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 	if(pit != m_privateChannels.end() && pit->second->isInvited(player))
 		return pit->second;
 
-	return NULL;
+	return nullptr;
 }
 
 ChatChannel* Chat::getChannelById(uint16_t channelId)
@@ -1118,16 +1118,16 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 	if(it != m_normalChannels.end())
 		return it->second;
 
-	return NULL;
+	return nullptr;
 }
 
 PrivateChatChannel* Chat::getPrivateChannel(Player* player)
 {
-	PrivateChatChannel* channel = NULL;
+	PrivateChatChannel* channel = nullptr;
 	for(PrivateChannelMap::iterator it = m_privateChannels.begin(); it != m_privateChannels.end(); ++it)
 	{
 		if((channel = it->second) && channel->getOwner() == player->getGUID())
 			return channel;
 	}
-	return NULL;
+	return nullptr;
 }

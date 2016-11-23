@@ -39,7 +39,7 @@ Logger::~Logger()
 void Logger::logMessage(const char* channel, eLogType type, int32_t level, std::string message, const char* func)
 {
 	char buffer[32];
-	uint64_t tmp = time(NULL);
+	uint64_t tmp = time(nullptr);
 	formatDate(tmp, buffer);
 	fprintf(m_file, "%s", buffer);
 

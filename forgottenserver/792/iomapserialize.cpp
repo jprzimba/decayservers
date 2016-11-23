@@ -87,8 +87,8 @@ bool IOMapSerialize::saveTile(Database* db, uint32_t tileId, const Tile* tile)
 
 	bool storedTile = false;
 	int32_t runningID = 0;
-	Item* item = NULL;
-	Container* container = NULL;
+	Item* item = nullptr;
+	Container* container = nullptr;
 
 	int32_t parentid = 0;
 	std::stringstream streamitems;
@@ -201,14 +201,14 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 	query << "SELECT * FROM `tile_items` WHERE `tile_id` = " << tileId << " ORDER BY `sid` DESC;";
 	if((result = db.storeQuery(query.str())))
 	{
-		Item* item = NULL;
+		Item* item = nullptr;
 		do
 		{
 			int32_t sid = result->getDataInt("sid");
 			int32_t pid = result->getDataInt("pid");
 			int32_t type = result->getDataInt("itemtype");
 			int32_t count = result->getDataInt("count");
-			item = NULL;
+			item = nullptr;
 
 			unsigned long attrSize = 0;
 			const char* attr = result->getDataStream("attributes", attrSize);
@@ -263,7 +263,7 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 				itemMap[sid] = myPair;
 			}
 			else
-				std::cout << "WARNING: IOMapSerialize::loadTile() - NULL item at " << tile->getPosition() << " (type = " << type << ", sid = " << sid << ", pid = " << pid << ")." << std::endl;
+				std::cout << "WARNING: IOMapSerialize::loadTile() - nullptr item at " << tile->getPosition() << " (type = " << type << ", sid = " << sid << ", pid = " << pid << ")." << std::endl;
 		}
 		while(result->next());
 		db.freeResult(result);

@@ -28,7 +28,7 @@
 #include <pugixml.hpp>
 
 #ifdef __DEBUG_EXCEPTION_REPORT__
-	#define DEBUG_REPORT int *a = NULL; *a = 1;
+	#define DEBUG_REPORT int *a = nullptr; *a = 1;
 #else
 	#ifdef __EXCEPTION_TRACER__
 		#define DEBUG_REPORT ExceptionHandler::dumpStack();

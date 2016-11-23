@@ -79,7 +79,7 @@ class Towns
 				if(strcasecmp(it->second->getName().c_str(), townname.c_str()) == 0)
 					return it->second;
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		Town* getTown(uint32_t _townid)
@@ -88,7 +88,7 @@ class Towns
 			if(it != townMap.end())
 				return it->second;
 
-			return NULL;
+			return nullptr;
 		}
 
 		TownMap::const_iterator getFirstTown() const{return townMap.begin();}

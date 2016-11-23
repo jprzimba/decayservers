@@ -220,7 +220,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4, f5, f6, f7, f8), T1 
 ProtocolGame::ProtocolGame(Connection* connection) :
 	Protocol(connection)
 {
-	player = NULL;
+	player = nullptr;
 	m_nextTask = 0;
 	m_nextPing = 0;
 	m_lastTaskCheck = 0;
@@ -233,7 +233,7 @@ ProtocolGame::ProtocolGame(Connection* connection) :
 
 ProtocolGame::~ProtocolGame()
 {
-	player = NULL;
+	player = nullptr;
 }
 
 void ProtocolGame::setPlayer(Player* p)
@@ -256,10 +256,10 @@ void ProtocolGame::deleteProtocolTask()
 		std::cout << "Deleting ProtocolGame - Protocol:" << this << ", Player: " << player << std::endl;
 		#endif
 
-		player->client = NULL;
+		player->client = nullptr;
 
 		g_game.FreeThing(player);
-		player = NULL;
+		player = nullptr;
 	}
 	Protocol::deleteProtocolTask();
 }
@@ -290,7 +290,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 			if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 			{
 				std::string realPassword = player->password;
-				player = NULL;
+				player = nullptr;
 				player = new Player("Account Manager", this);
 				player->useThing2();
 				player->setID();
@@ -325,7 +325,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 			bool deletion = false;
 			if(IOBan::getInstance()->getBanInformation(accnumber, bannedBy, banTime, reason, action, comment, deletion))
 			{
-				uint64_t timeNow = time(NULL);
+				uint64_t timeNow = time(nullptr);
 				if((deletion && banTime != 0) || banTime > timeNow)
 				{
 					std::string bannedByName;
@@ -401,7 +401,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		}
 
 		player->lastIP = player->getIP();
-		player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
+		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		m_acceptPackets = true;
 		return true;
 	}
@@ -445,7 +445,7 @@ bool ProtocolGame::connect(uint32_t playerId)
 	player->client->sendAddCreature(player, false);
 	player->sendIcons();
 	player->lastIP = player->getIP();
-	player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
+	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	m_acceptPackets = true;
 	return true;
 }
@@ -1459,7 +1459,7 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 	if(file)
 	{
 		char bufferDate[32], bufferIp[32];
-		uint64_t tmp = time(NULL);
+		uint64_t tmp = time(nullptr);
 		formatIP(getIP(), bufferIp);
 		formatDate(tmp, bufferDate);
 		fprintf(file, "----- %s - %s (%s) -----\n", bufferDate, player->getName().c_str(), bufferIp);
@@ -1831,7 +1831,7 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 		{
 			std::list<const Container*> listContainer;
 			ItemList::const_iterator it;
-			Container* tmpContainer = NULL;
+			Container* tmpContainer = nullptr;
 
 			listContainer.push_back(tradeContainer);
 
@@ -2866,7 +2866,7 @@ void ProtocolGame::MoveDownCreature(NetworkMessage* msg, const Creature* creatur
 //inventory
 void ProtocolGame::AddInventoryItem(NetworkMessage* msg, slots_t slot, const Item* item)
 {
-	if(item == NULL)
+	if(item == nullptr)
 	{
 		msg->AddByte(0x79);
 		msg->AddByte(slot);
@@ -2881,7 +2881,7 @@ void ProtocolGame::AddInventoryItem(NetworkMessage* msg, slots_t slot, const Ite
 
 void ProtocolGame::UpdateInventoryItem(NetworkMessage* msg, slots_t slot, const Item* item)
 {
-	if(item == NULL)
+	if(item == nullptr)
 	{
 		msg->AddByte(0x79);
 		msg->AddByte(slot);

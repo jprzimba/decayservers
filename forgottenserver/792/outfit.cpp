@@ -121,7 +121,7 @@ Outfits::Outfits()
 		m_male_list.addOutfit(outfit);
 	}
 
-	m_list.resize(10, NULL);
+	m_list.resize(10, nullptr);
 }
 
 Outfits::~Outfits()

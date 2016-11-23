@@ -50,7 +50,7 @@ void Protocol::onSendMessage(OutputMessage* msg)
 	}
 
 	if(msg == m_outputBuffer)
-		m_outputBuffer = NULL;
+		m_outputBuffer = nullptr;
 }
 
 void Protocol::onRecvMessage(NetworkMessage& msg)
@@ -80,7 +80,7 @@ OutputMessage* Protocol::getOutputBuffer()
 		return m_outputBuffer;
 	}
 	else
-		return NULL;
+		return nullptr;
 }
 
 void Protocol::deleteProtocolTask()

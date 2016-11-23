@@ -128,12 +128,12 @@ class Creature : public AutoID, virtual public Thing
 
 		virtual Creature* getCreature() {return this;}
 		virtual const Creature* getCreature()const {return this;}
-		virtual Player* getPlayer() {return NULL;}
-		virtual const Player* getPlayer() const {return NULL;}
-		virtual Npc* getNpc() {return NULL;}
-		virtual const Npc* getNpc() const {return NULL;}
-		virtual Monster* getMonster() {return NULL;}
-		virtual const Monster* getMonster() const {return NULL;}
+		virtual Player* getPlayer() {return nullptr;}
+		virtual const Player* getPlayer() const {return nullptr;}
+		virtual Npc* getNpc() {return nullptr;}
+		virtual const Npc* getNpc() const {return nullptr;}
+		virtual Monster* getMonster() {return nullptr;}
+		virtual const Monster* getMonster() const {return nullptr;}
 
 		void getPathToFollowCreature();
 
@@ -243,7 +243,7 @@ class Creature : public AutoID, virtual public Thing
 
 		void setMaster(Creature* creature) {master = creature;}
 		Creature* getMaster() {return master;}
-		bool isSummon() const {return master != NULL;}
+		bool isSummon() const {return master != nullptr;}
 		const Creature* getMaster() const {return master;}
 
 		virtual void addSummon(Creature* creature);

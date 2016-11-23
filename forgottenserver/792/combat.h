@@ -78,13 +78,13 @@ struct CombatParams
 		itemId = 0;
 		impactEffect = NM_ME_NONE;
 		distanceEffect = NM_ME_NONE;
-		condition = NULL;
+		condition = nullptr;
 		dispelType = CONDITION_NONE;
 		useCharges = false;
 
-		valueCallback = NULL;
-		tileCallback = NULL;
-		targetCallback = NULL;
+		valueCallback = nullptr;
+		tileCallback = nullptr;
+		targetCallback = nullptr;
 	}
 
 	const Condition* condition;
@@ -243,7 +243,7 @@ class AreaCombat
 			if(it != areas.end())
 				return it->second;
 
-			return NULL;
+			return nullptr;
 		}
 
 		AreaCombatMap areas;
@@ -305,7 +305,7 @@ class Combat
 
 			area = _area;
 		}
-		bool hasArea() const {return area != NULL;}
+		bool hasArea() const {return area != nullptr;}
 		void setCondition(const Condition* _condition) {params.condition = _condition;}
 		void setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb);
 		void postCombatEffects(Creature* caster, const Position& pos) const {Combat::postCombatEffects(caster, pos, params);}

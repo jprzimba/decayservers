@@ -117,7 +117,7 @@ class ItemAttributes
 		ItemAttributes()
 		{
 			m_attributes = 0;
-			m_firstAttr = NULL;
+			m_firstAttr = nullptr;
 		}
 		
 		virtual ~ItemAttributes()
@@ -207,8 +207,8 @@ class ItemAttributes
 				Attribute(itemAttrTypes _type)
 				{
 					type = _type;
-					value = NULL;
-					next = NULL;
+					value = nullptr;
+					next = nullptr;
 				}
 
 				Attribute(const Attribute &i)
@@ -219,9 +219,9 @@ class ItemAttributes
 					else if(ItemAttributes::validateStrAttrType(type))
 						value = (void*)new std::string( *((std::string*)i.value) );
 					else
-						value = NULL;
+						value = nullptr;
 
-					next = NULL;
+					next = nullptr;
 					if(i.next)
 						next = new Attribute(*i.next);
 				}
@@ -265,23 +265,23 @@ class Item : virtual public Thing, public ItemAttributes
 
 		virtual Item* getItem() {return this;}
 		virtual const Item* getItem() const {return this;}
-		virtual Container* getContainer() {return NULL;}
-		virtual const Container* getContainer() const {return NULL;}
-		virtual Teleport* getTeleport() {return NULL;}
-		virtual const Teleport* getTeleport() const {return NULL;}
-		virtual TrashHolder* getTrashHolder() {return NULL;}
-		virtual const TrashHolder* getTrashHolder() const {return NULL;}
-		virtual Mailbox* getMailbox() {return NULL;}
-		virtual const Mailbox* getMailbox() const {return NULL;}
-		virtual Door* getDoor() {return NULL;}
-		virtual const Door* getDoor() const {return NULL;}
-		virtual MagicField* getMagicField() {return NULL;}
-		virtual const MagicField* getMagicField() const {return NULL;}
-		virtual BedItem* getBed() {return NULL;}
-		virtual const BedItem* getBed() const {return NULL;}
+		virtual Container* getContainer() {return nullptr;}
+		virtual const Container* getContainer() const {return nullptr;}
+		virtual Teleport* getTeleport() {return nullptr;}
+		virtual const Teleport* getTeleport() const {return nullptr;}
+		virtual TrashHolder* getTrashHolder() {return nullptr;}
+		virtual const TrashHolder* getTrashHolder() const {return nullptr;}
+		virtual Mailbox* getMailbox() {return nullptr;}
+		virtual const Mailbox* getMailbox() const {return nullptr;}
+		virtual Door* getDoor() {return nullptr;}
+		virtual const Door* getDoor() const {return nullptr;}
+		virtual MagicField* getMagicField() {return nullptr;}
+		virtual const MagicField* getMagicField() const {return nullptr;}
+		virtual BedItem* getBed() {return nullptr;}
+		virtual const BedItem* getBed() const {return nullptr;}
 
-		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
-		static std::string getNameDescription(const ItemType& it, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
+		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
+		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
 
 		virtual std::string getDescription(int32_t lookDistance) const;

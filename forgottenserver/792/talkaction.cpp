@@ -74,7 +74,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	if(nodeName == "talkaction")
 		return new TalkAction(&m_scriptInterface);
 
-	return NULL;
+	return nullptr;
 }
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -178,7 +178,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 			{
                 std::string filename = "data/logs/" + player->getName() + ".txt";
                 std::ofstream talkaction(filename.c_str(), std::ios_base::app);
-                time_t timeNow = time(NULL);
+                time_t timeNow = time(nullptr);
                 const tm* now = localtime(&timeNow);
                 char buffer[32];
                 strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
@@ -202,7 +202,7 @@ TalkAction::TalkAction(LuaScriptInterface* _interface) :
 	registerlog(false),
 	casesensitive(false),
 	accessLevel(0),
-	function(NULL)
+	function(nullptr)
 {
 	//
 }
@@ -319,7 +319,7 @@ bool TalkAction::banPlayer(Player* player, const std::string& words, const std::
 		playerBan->sendTextMessage(MSG_STATUS_CONSOLE_RED, "You have been banned.");
 		uint32_t ip = playerBan->lastIP;
 		if(ip > 0)
-			IOBan::getInstance()->addIpBan(ip, (time(NULL) + 86400), 0);
+			IOBan::getInstance()->addIpBan(ip, (time(nullptr) + 86400), 0);
 
 		playerBan->kickPlayer(true);
 		return true;

@@ -522,7 +522,7 @@ uint64_t getBanEndFromString(std::string string)
 			ret = ret + atoi(number.c_str())*multiplier;
 		number = "";
 	}
-	return time(NULL) + ret;
+	return time(nullptr) + ret;
 }
 */
 
@@ -934,7 +934,7 @@ std::string getAction(int32_t actionId, bool IPBanishment)
 std::string formatDate(time_t _time/* = 0*/)
 {
 	if(!_time)
-		_time = time(NULL);
+		_time = time(nullptr);
 
 	const tm* tms = localtime(&_time);
 	std::stringstream s;
@@ -949,7 +949,7 @@ std::string formatDate(time_t _time/* = 0*/)
 bool fileExists(const char* filename)
 {
 	FILE* f = fopen(filename, "rb");
-	bool exists = (f != NULL);
+	bool exists = (f != nullptr);
 	if(exists)
 		fclose(f);
 

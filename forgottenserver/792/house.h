@@ -162,7 +162,7 @@ class House
 		void setName(const std::string& _houseName) {houseName = _houseName;}
 		const std::string& getName() const {return houseName;}
 
-		void setHouseOwner(uint32_t guid, bool updateDatabase = true, Player* player = NULL);
+		void setHouseOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
 		uint32_t getHouseOwner() const {return houseOwner;}
 
 		void setPaidUntil(uint32_t paid){paidUntil = paid;}
@@ -259,7 +259,7 @@ class Houses
 				return house;
 			}
 			else
-				return NULL;
+				return nullptr;
 		}
 
 		House* getHouseByPlayerId(uint32_t playerId);

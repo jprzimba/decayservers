@@ -139,7 +139,7 @@ char* getFunctionName(unsigned long addr, unsigned long& start)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 #ifdef WIN32
@@ -309,7 +309,7 @@ EXCEPTION_DISPOSITION
 	*outdriver << "*****************************************************" << std::endl;
 	if(file)
 		((std::ofstream*)outdriver)->close();
-	MessageBox(NULL,"Please send the file report.txt to support service ;). Thanks","Error",MB_OK |MB_ICONERROR);
+	MessageBox(nullptr,"Please send the file report.txt to support service ;). Thanks","Error",MB_OK |MB_ICONERROR);
 	std::cout << "Error report generated. Killing server." <<std::endl;
 	exit(1); //force exit
 	return ExceptionContinueSearch;
