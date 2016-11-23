@@ -53,6 +53,7 @@ class Spawns
 		void startup();
 		void clear();
 
+		bool isLoaded() {return loaded;}
 		bool isStarted() {return started;}
 
 	private:

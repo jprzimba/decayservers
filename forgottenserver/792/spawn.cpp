@@ -26,6 +26,9 @@
 #include "tools.h"
 #include "configmanager.h"
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h> 
+
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
@@ -47,9 +50,8 @@ Spawns::~Spawns()
 
 bool Spawns::loadFromXml(const std::string& _filename)
 {
-	if (loaded) {
+	if(isLoaded())
 		return true;
-	}
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
@@ -59,13 +61,12 @@ bool Spawns::loadFromXml(const std::string& _filename)
 	}
 
 	filename = _filename;
-	loaded = true;
-
+	
 	for (pugi::xml_node spawnNode = doc.child("spawns").first_child(); spawnNode; spawnNode = spawnNode.next_sibling()) {
 		Position centerPos(
-			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centerz").value())
+			pugi::cast<int32_t>(spawnNode.attribute("centerx").value()),
+			pugi::cast<int32_t>(spawnNode.attribute("centery").value()),
+			pugi::cast<int32_t>(spawnNode.attribute("centerz").value())
 		);
 
 		int32_t radius;
@@ -73,7 +74,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 		if (radiusAttribute) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
 		} else {
-			radius = -1;
+			return false;
 		}
 
 		Spawn* spawn = new Spawn(centerPos, radius);
@@ -96,8 +97,8 @@ bool Spawns::loadFromXml(const std::string& _filename)
 				}
 
 				Position pos(
-					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
+					centerPos.x + pugi::cast<int32_t>(childNode.attribute("x").value()),
+					centerPos.y + pugi::cast<int32_t>(childNode.attribute("y").value()),
 					centerPos.z
 				);
 				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
@@ -131,31 +132,29 @@ bool Spawns::loadFromXml(const std::string& _filename)
 			}
 		}
 	}
+	loaded = true;
 	return true;
 }
 
 void Spawns::startup()
 {
-	if (!loaded || isStarted()) {
+	if(!isLoaded() || isStarted())
 		return;
-	}
 
 	for(NpcList::iterator it = npcList.begin(); it != npcList.end(); ++it)
 		g_game.placeCreature((*it), (*it)->getMasterPos(), true);
 	npcList.clear();
 
-	for (Spawn* spawn : spawnList) {
-		spawn->startup();
-	}
+	for(SpawnList::iterator it = spawnList.begin(); it != spawnList.end(); ++it)
+		(*it)->startup();
 
 	started = true;
 }
 
 void Spawns::clear()
 {
-	for (Spawn* spawn : spawnList) {
-		delete spawn;
-	}
+	for(SpawnList::iterator it= spawnList.begin(); it != spawnList.end(); ++it)
+		delete (*it);
 
 	spawnList.clear();
 

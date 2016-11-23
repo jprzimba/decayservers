@@ -41,6 +41,7 @@
 #include "status.h"
 #include "beds.h"
 #include "quests.h"
+#include "outputmessage.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -174,6 +175,8 @@ Creature()
 
 	requestedOutfit = false;
 	ghostMode = false;
+	
+	lastQuestlogUpdate = 0;
 }
 
 Player::~Player()
@@ -821,8 +824,13 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 	else
 	{
 		storageMap[key] = value;
-		if(!isLogin && Quests::getInstance()->isQuestStorage(key, value))
-			sendTextMessage(MSG_EVENT_ADVANCE, "Your questlog has been updated.");
+		if (!isLogin) {
+			int64_t currentFrameTime = OutputMessagePool::getInstance()->getFrameTime();
+			if (lastQuestlogUpdate != currentFrameTime && Quests::getInstance()->isQuestStorage(key, value)) {
+				lastQuestlogUpdate = currentFrameTime;
+				sendTextMessage(MSG_EVENT_ADVANCE, "Your questlog has been updated.");
+			}
+		}
 	}
 }
 

@@ -679,6 +679,7 @@ class Player : public Creature, public Cylinder
 		uint32_t actionTaskEvent;
 		uint32_t nextStepEvent;
 		uint32_t walkTaskEvent;
+		int64_t lastQuestlogUpdate;
 		SchedulerTask* walkTask;
 		bool ghostMode;
 		

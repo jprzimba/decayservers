@@ -145,6 +145,10 @@ class OutputMessagePool
 		OutputMessage* getOutputMessage(Protocol* protocol, bool autosend = true);
 		void startExecutionFrame();
 
+		int64_t getFrameTime() const {
+			return m_frameTime;
+		}
+
 		void releaseMessage(OutputMessage* msg, bool sent = false);
 
 		size_t getTotalMessageCount() const {return m_allOutputMessages.size();}
