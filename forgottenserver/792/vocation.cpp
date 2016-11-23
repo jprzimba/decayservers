@@ -42,14 +42,14 @@ bool Vocations::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Vocations::loadFromXml] Failed to load data/XML/vocations.xml: " << result.description() << std::endl;
 		return false;
 	}
 
 	for (pugi::xml_node vocationNode = doc.child("vocations").first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 		pugi::xml_attribute attr;
-		if (!(attr = vocationNode.attribute("id"))) {
+		if(!(attr = vocationNode.attribute("id"))) {
 			std::cout << "[Warning - Vocations::loadFromXml] Missing vocation id" << std::endl;
 			continue;
 		}
@@ -58,68 +58,68 @@ bool Vocations::loadFromXml()
 		Vocation* voc = new Vocation();
 		vocationsMap[id] = voc;
 
-		if ((attr = vocationNode.attribute("name"))) {
+		if((attr = vocationNode.attribute("name"))) {
 			voc->name = attr.as_string();
 		}
 
-		if ((attr = vocationNode.attribute("description"))) {
+		if((attr = vocationNode.attribute("description"))) {
 			voc->description = attr.as_string();
 		}
 
-		if ((attr = vocationNode.attribute("gaincap"))) {
+		if((attr = vocationNode.attribute("gaincap"))) {
 			voc->gainCap = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainhp"))) {
+		if((attr = vocationNode.attribute("gainhp"))) {
 			voc->gainHP = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmana"))) {
+		if((attr = vocationNode.attribute("gainmana"))) {
 			voc->gainMana = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainhpticks"))) {
+		if((attr = vocationNode.attribute("gainhpticks"))) {
 			voc->gainHealthTicks = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainhpamount"))) {
+		if((attr = vocationNode.attribute("gainhpamount"))) {
 			voc->gainHealthAmount = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmanaticks"))) {
+		if((attr = vocationNode.attribute("gainmanaticks"))) {
 			voc->gainManaTicks = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmanaamount"))) {
+		if((attr = vocationNode.attribute("gainmanaamount"))) {
 			voc->gainManaAmount = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("manamultiplier"))) {
+		if((attr = vocationNode.attribute("manamultiplier"))) {
 			voc->manaMultiplier = pugi::cast<float>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("attackspeed"))) {
+		if((attr = vocationNode.attribute("attackspeed"))) {
 			voc->attackSpeed = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("soulmax"))) {
+		if((attr = vocationNode.attribute("soulmax"))) {
 			voc->soulMax = pugi::cast<uint16_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainsoulticks"))) {
+		if((attr = vocationNode.attribute("gainsoulticks"))) {
 			voc->gainSoulTicks = pugi::cast<uint16_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("fromvoc"))) {
+		if((attr = vocationNode.attribute("fromvoc"))) {
 			voc->fromVocation = pugi::cast<uint32_t>(attr.value());
 		}
 
 		for (pugi::xml_node childNode = vocationNode.first_child(); childNode; childNode = childNode.next_sibling()) {
-			if (strcasecmp(childNode.name(), "skill") == 0) {
+			if(strcasecmp(childNode.name(), "skill") == 0) {
 				pugi::xml_attribute skillIdAttribute = childNode.attribute("id");
-				if (skillIdAttribute) {
+				if(skillIdAttribute) {
 					uint16_t skill_id = pugi::cast<uint16_t>(skillIdAttribute.value());
-					if (skill_id <= SKILL_LAST) {
+					if(skill_id <= SKILL_LAST) {
 						voc->skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
 					} else {
 						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << id << std::endl;
@@ -127,24 +127,24 @@ bool Vocations::loadFromXml()
 				} else {
 					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << id << std::endl;
 				}
-			} else if (strcasecmp(childNode.name(), "formula") == 0) {
+			} else if(strcasecmp(childNode.name(), "formula") == 0) {
 				pugi::xml_attribute meleeDamageAttribute = childNode.attribute("meleeDamage");
-				if (meleeDamageAttribute) {
+				if(meleeDamageAttribute) {
 					voc->meleeDamageMultipler = pugi::cast<float>(meleeDamageAttribute.value());
 				}
 
 				pugi::xml_attribute distDamageAttribute = childNode.attribute("distDamage");
-				if (distDamageAttribute) {
+				if(distDamageAttribute) {
 					voc->distDamageMultipler = pugi::cast<float>(distDamageAttribute.value());
 				}
 
 				pugi::xml_attribute defenseAttribute = childNode.attribute("defense");
-				if (defenseAttribute) {
+				if(defenseAttribute) {
 					voc->defenseMultipler = pugi::cast<float>(defenseAttribute.value());
 				}
 
 				pugi::xml_attribute armorAttribute = childNode.attribute("armor");
-				if (armorAttribute) {
+				if(armorAttribute) {
 					voc->armorMultipler = pugi::cast<float>(armorAttribute.value());
 				}
 			}

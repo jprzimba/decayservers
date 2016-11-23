@@ -52,7 +52,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Spawns::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
@@ -68,7 +68,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 
 		int32_t radius;
 		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
-		if (radiusAttribute) {
+		if(radiusAttribute) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
 		} else {
 			return false;
@@ -78,16 +78,16 @@ bool Spawns::loadFromXml(const std::string& _filename)
 		spawnList.push_back(spawn);
 
 		for (pugi::xml_node childNode = spawnNode.first_child(); childNode; childNode = childNode.next_sibling()) {
-			if (strcasecmp(childNode.name(), "monster") == 0) {
+			if(strcasecmp(childNode.name(), "monster") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
-				if (!nameAttribute) {
+				if(!nameAttribute) {
 					continue;
 				}
 
 				Direction dir;
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
-				if (directionAttribute) {
+				if(directionAttribute) {
 					dir = static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value()));
 				} else {
 					dir = NORTH;
@@ -99,24 +99,24 @@ bool Spawns::loadFromXml(const std::string& _filename)
 					centerPos.z
 				);
 				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
-				if (interval > MINSPAWN_INTERVAL) {
+				if(interval > MINSPAWN_INTERVAL) {
 					spawn->addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
 					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 				}
-			} else if (strcasecmp(childNode.name(), "npc") == 0) {
+			} else if(strcasecmp(childNode.name(), "npc") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
-				if (!nameAttribute) {
+				if(!nameAttribute) {
 					continue;
 				}
 
 				Npc* npc = Npc::createNpc(nameAttribute.as_string());
-				if (!npc) {
+				if(!npc) {
 					continue;
 				}
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
-				if (directionAttribute) {
+				if(directionAttribute) {
 					npc->setDirection(static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value())));
 				}
 

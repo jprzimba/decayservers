@@ -18,8 +18,6 @@
 // Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////
 
-#ifdef __USE_MYSQL__
-
 #ifndef __OTSERV_DATABASEMYSQL_H__
 #define __OTSERV_DATABASEMYSQL_H__
 
@@ -91,7 +89,5 @@ class MySQLResult : public _DBResult
 		MYSQL_RES* m_handle;
 		MYSQL_ROW m_row;
 };
-
-#endif
 
 #endif

@@ -195,55 +195,55 @@ void Weapon::setCombatParam(const CombatParams& _params)
 bool Weapon::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("id")))
+	if(!(attr = node.attribute("id")))
 	{
 		std::cout << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
 		return false;
 	}
 
 	id = pugi::cast<uint16_t>(attr.value());
-	if ((attr = node.attribute("level")))
+	if((attr = node.attribute("level")))
 		level = pugi::cast<int32_t>(attr.value());
 
-	if ((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel")))
+	if((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel")))
 		magLevel = pugi::cast<int32_t>(attr.value());
 
-	if ((attr = node.attribute("mana")))
+	if((attr = node.attribute("mana")))
 		mana = pugi::cast<int32_t>(attr.value());
 
-	if ((attr = node.attribute("manapercent")))
+	if((attr = node.attribute("manapercent")))
 		manaPercent = pugi::cast<int32_t>(attr.value());
 
-	if ((attr = node.attribute("soul")))
+	if((attr = node.attribute("soul")))
 		soul = pugi::cast<int32_t>(attr.value());
 
-	if ((attr = node.attribute("exhaustion")))
+	if((attr = node.attribute("exhaustion")))
 		exhaustion = pugi::cast<uint32_t>(attr.value());
 
-	if ((attr = node.attribute("prem")))
+	if((attr = node.attribute("prem")))
 		premium = attr.as_bool();
 
-	if ((attr = node.attribute("enabled")))
+	if((attr = node.attribute("enabled")))
 		enabled = attr.as_bool();
 
-	if ((attr = node.attribute("unproperly")))
+	if((attr = node.attribute("unproperly")))
 		wieldUnproperly = attr.as_bool();
 
 	std::list<std::string> vocStringList;
 	for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling())
 	{
-		if (!(attr = vocationNode.attribute("name")))
+		if(!(attr = vocationNode.attribute("name")))
 			continue;
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1)
+		if(vocationId != -1)
 		{
 			vocWeaponMap[vocationId] = true;
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != 0)
+			if(promotedVocation != 0)
 				vocWeaponMap[promotedVocation] = true;
 
-			if (vocationNode.attribute("showInDescription").as_bool(true))
+			if(vocationNode.attribute("showInDescription").as_bool(true))
 				vocStringList.push_back(asLowerCaseString(attr.as_string()));
 		}
 	}
@@ -252,9 +252,9 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	std::string vocationString;
 	for (const std::string& str : vocStringList)
 	{
-		if (!vocationString.empty())
+		if(!vocationString.empty())
 		{
-			if (str != vocStringList.back())
+			if(str != vocStringList.back())
 				vocationString += ", ";
 			else
 				vocationString += " and ";
@@ -265,19 +265,19 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	uint32_t wieldInfo = 0;
-	if (getReqLevel() > 0)
+	if(getReqLevel() > 0)
 		wieldInfo |= WIELDINFO_LEVEL;
 
-	if (getReqMagLv() > 0)
+	if(getReqMagLv() > 0)
 		wieldInfo |= WIELDINFO_MAGLV;
 
-	if (!vocationString.empty())
+	if(!vocationString.empty())
 		wieldInfo |= WIELDINFO_VOCREQ;
 
-	if (isPremium())
+	if(isPremium())
 		wieldInfo |= WIELDINFO_PREMIUM;
 
-	if (wieldInfo != 0)
+	if(wieldInfo != 0)
 	{
 		ItemType& it = Item::items.getItemType(id);
 		it.wieldInfo = wieldInfo;
@@ -966,26 +966,26 @@ WeaponWand::WeaponWand(LuaScriptInterface* _interface) :
 
 bool WeaponWand::configureEvent(const pugi::xml_node& node)
 {
-	if (!Weapon::configureEvent(node)) {
+	if(!Weapon::configureEvent(node)) {
 		return false;
 	}
 
 	pugi::xml_attribute attr;
-	if ((attr = node.attribute("min"))) {
+	if((attr = node.attribute("min"))) {
 		minChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("max"))) {
+	if((attr = node.attribute("max"))) {
 		maxChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("type"))) {
+	if((attr = node.attribute("type"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "earth" || tmpStrValue == "poison") {
+		if(tmpStrValue == "earth" || tmpStrValue == "poison") {
 			params.combatType = COMBAT_POISONDAMAGE;
-		} else if (tmpStrValue == "energy") {
+		} else if(tmpStrValue == "energy") {
 			params.combatType = COMBAT_ENERGYDAMAGE;
-		} else if (tmpStrValue == "fire") {
+		} else if(tmpStrValue == "fire") {
 			params.combatType = COMBAT_FIREDAMAGE;
 		} else {
 			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;

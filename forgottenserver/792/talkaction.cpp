@@ -215,7 +215,7 @@ TalkAction::~TalkAction()
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("words")))
+	if(!(attr = node.attribute("words")))
 	{
 		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
 		return false;
@@ -223,22 +223,22 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	
 	commandString = attr.as_string();
 
-	if ((attr = node.attribute("filter")))
+	if((attr = node.attribute("filter")))
 	{
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "quotation")
+		if(tmpStrValue == "quotation")
 			filterType = TALKACTION_MATCH_QUOTATION;
-		else if (tmpStrValue == "first word")
+		else if(tmpStrValue == "first word")
 			filterType = TALKACTION_MATCH_FIRST_WORD;
 	}
 	
-	if ((attr = node.attribute("registerlog")) || (attr = node.attribute("log")))
+	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")))
 		registerlog = attr.as_string();
 
-	if ((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive")))
+	if((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive")))
 		casesensitive = attr.as_string();
 		
-	if ((attr = node.attribute("access")))
+	if((attr = node.attribute("access")))
 		accessLevel = pugi::cast<int32_t>(attr.value());
 	
 	return true;	

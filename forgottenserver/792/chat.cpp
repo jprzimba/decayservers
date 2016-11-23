@@ -127,7 +127,7 @@ bool ChatChannel::addUser(Player* player)
 	}
 
 
-	if (CHANNEL_RVR && !g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
+	if(CHANNEL_RVR && !g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
 	{
 		uint32_t playerId = player->getID();
 		Scheduler::getScheduler().addEvent(createSchedulerTask(150, boost::bind(

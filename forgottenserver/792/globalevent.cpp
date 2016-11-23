@@ -212,7 +212,7 @@ GlobalEvent::GlobalEvent(LuaScriptInterface* _interface):
 bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute nameAttribute = node.attribute("name");
-	if (!nameAttribute) {
+	if(!nameAttribute) {
 		std::cout << "[Error - GlobalEvent::configureEvent] Missing name for a globalevent" << std::endl;
 		return false;
 	}
@@ -221,9 +221,9 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	m_eventType = GLOBALEVENT_NONE;
 
 	pugi::xml_attribute attr;
-	if ((attr = node.attribute("time"))) {
+	if((attr = node.attribute("time"))) {
 		std::vector<int32_t> params = vectorAtoi(explodeString(attr.as_string(), ":"));
-		if (params[0] < 0 || params[0] > 23) {
+		if(params[0] < 0 || params[0] > 23) {
 			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 			return false;
 		}
@@ -233,16 +233,16 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		int32_t min = 0;
 		int32_t sec = 0;
 
-		if (params.size() > 1) {
-			if (params[1] < 0 || params[1] > 59) {
+		if(params.size() > 1) {
+			if(params[1] < 0 || params[1] > 59) {
 				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 				return false;
 			}
 
 			min = params[1];
 
-			if (params.size() > 2) {
-				if (params[2] < 0 || params[2] > 59) {
+			if(params.size() > 2) {
+				if(params[2] < 0 || params[2] > 59) {
 					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 					return false;
 				}
@@ -258,25 +258,25 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		timeinfo->tm_sec = sec;
 		time_t difference = (time_t)difftime(mktime(timeinfo), current_time);
 
-		if (difference < 0) {
+		if(difference < 0) {
 			difference += 86400;
 		}
 
 		m_nextExecution = current_time + difference;
 		m_eventType = GLOBALEVENT_TIMER;
-	} else if ((attr = node.attribute("type"))) {
+	} else if((attr = node.attribute("type"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
+		if(tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
 			m_eventType = GLOBALEVENT_STARTUP;
-		} else if (tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
+		} else if(tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
 			m_eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (tmpStrValue == "record" || tmpStrValue == "playersrecord") {
+		} else if(tmpStrValue == "record" || tmpStrValue == "playersrecord") {
 			m_eventType = GLOBALEVENT_RECORD;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << m_name << std::endl;
 			return false;
 		}
-	} else if ((attr = node.attribute("interval"))) {
+	} else if((attr = node.attribute("interval"))) {
 		m_interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
 		m_nextExecution = OTSYS_TIME() + m_interval;
 	} else {

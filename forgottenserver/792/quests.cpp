@@ -186,7 +186,7 @@ bool Quests::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/quests.xml");
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Quests::loadFromXml] Failed to load data/XML/quests.xml: " << result.description() << std::endl;
 		return false;
 	}
@@ -212,7 +212,7 @@ bool Quests::loadFromXml()
 			
 			Mission* mission = new Mission(missionName, storageID, startValue, endValue);
 
-			if (missionState.empty()) {
+			if(missionState.empty()) {
 				for (pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
 					int32_t missionID = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
 					mission->state[missionID] = new MissionState(missionStateNode.attribute("description").as_string(), missionID);

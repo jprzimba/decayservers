@@ -35,14 +35,14 @@ BaseEvents::~BaseEvents()
 	
 bool BaseEvents::loadFromXml()
 {
-	if (m_loaded) {
+	if(m_loaded) {
 		std::cout << "[Error - BaseEvents::loadFromXml] It's already loaded." << std::endl;
 		return false;
 	}
 
 	std::string scriptsName = getScriptBaseName();
 	std::string basePath = "data/" + scriptsName + "/";
-	if (getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
+	if(getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
 		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
 	}
 
@@ -50,7 +50,7 @@ bool BaseEvents::loadFromXml()
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - BaseEvents::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
@@ -59,11 +59,11 @@ bool BaseEvents::loadFromXml()
 
 	for (pugi::xml_node node = doc.child(scriptsName.c_str()).first_child(); node; node = node.next_sibling()) {
 		Event* event = getEvent(node.name());
-		if (!event) {
+		if(!event) {
 			continue;
 		}
 
-		if (!event->configureEvent(node)) {
+		if(!event->configureEvent(node)) {
 			std::cout << "[Warning - BaseEvents::loadFromXml] Failed to configure event" << std::endl;
 			delete event;
 			continue;
@@ -72,19 +72,19 @@ bool BaseEvents::loadFromXml()
 		bool success;
 
 		pugi::xml_attribute scriptAttribute = node.attribute("script");
-		if (scriptAttribute) {
+		if(scriptAttribute) {
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
 		} else {
 			pugi::xml_attribute functionAttribute = node.attribute("function");
-			if (functionAttribute) {
+			if(functionAttribute) {
 				success = event->loadFunction(functionAttribute.as_string());
 			} else {
 				success = false;
 			}
 		}
 
-		if (!success || !registerEvent(event, node)) {
+		if(!success || !registerEvent(event, node)) {
 			delete event;
 		}
 	}
@@ -122,23 +122,23 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 	LuaScriptInterface testInterface("Test Interface");
 	testInterface.initState();
 
-	if (testInterface.loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
+	if(testInterface.loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
 		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
 	}
 
-	if (m_scriptId != 0) {
+	if(m_scriptId != 0){
 		std::cout << "[Failure - Event::checkScript] scriptid = " << m_scriptId << std::endl;
 		return false;
 	}
 
-	if (testInterface.loadFile(basePath + scriptFile) == -1) {
+	if(testInterface.loadFile(basePath + scriptFile) == -1){
 		std::cout << "[Warning - Event::checkScript] Can not load script: " << scriptFile << std::endl;
 		std::cout << testInterface.getLastLuaError() << std::endl;
 		return false;
 	}
 
 	int32_t id = testInterface.getEvent(getScriptEventName());
-	if (id == -1) {
+	if(id == -1) {
 		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}

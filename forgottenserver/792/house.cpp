@@ -754,21 +754,21 @@ bool Houses::loadHousesXML(std::string filename)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
 	for (pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
 		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
-		if (!houseIdAttribute) {
+		if(!houseIdAttribute) {
 			return false;
 		}
 
 		int32_t _houseid = pugi::cast<int32_t>(houseIdAttribute.value());
 
 		House* house = Houses::getInstance().getHouse(_houseid);
-		if (!house) {
+		if(!house) {
 			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
 			return false;
 		}
@@ -780,7 +780,7 @@ bool Houses::loadHousesXML(std::string filename)
 			pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
 			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
 		);
-		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
+		if(entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
 					    << " - Name: " << house->getName()
 					    << " - House id: " << _houseid << std::endl;

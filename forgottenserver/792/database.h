@@ -27,12 +27,10 @@
 #include "enums.h"
 
 #define DATABASE_VIRTUAL
-#if defined(__USE_MYSQL__)
 #define DATABASE_CLASS DatabaseMySQL
 #define DBRES_CLASS MySQLResult
 class DatabaseMySQL;
 class MySQLResult;
-#endif
 
 typedef DATABASE_CLASS Database;
 typedef DBRES_CLASS DBResult;
@@ -321,10 +319,8 @@ class DBInsert
 		std::string m_buf;
 };
 
-#if defined(__USE_MYSQL__)
-#include "databasemysql.h"
-#endif
 
+#include "databasemysql.h"
 class DBTransaction
 {
 	public:

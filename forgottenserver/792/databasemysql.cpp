@@ -20,8 +20,6 @@
 
 #include "otpch.h"
 
-#ifdef __USE_MYSQL__
-
 #include "database.h"
 #include "databasemysql.h"
 #if defined(WIN32) && !defined(_MSC_VER)
@@ -340,5 +338,3 @@ MySQLResult::~MySQLResult()
 {
 	mysql_free_result(m_handle);
 }
-
-#endif

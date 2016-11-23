@@ -23,9 +23,7 @@
 #include "database.h"
 #include <string>
 
-#ifdef __USE_MYSQL__
 #include "databasemysql.h"
-#endif
 
 boost::recursive_mutex DBQuery::database_lock;
 

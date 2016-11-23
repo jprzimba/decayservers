@@ -3289,8 +3289,8 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 	//First, check if this was a command
 	char firstCharacter = text[0];
 	for (char commandTag : commandTags) {
-		if (commandTag == firstCharacter) {
-			if (commands.exeCommand(player, text)) {
+		if(commandTag == firstCharacter) {
+			if(commands.exeCommand(player, text)) {
 				return true;
 			}
 		}
@@ -4297,7 +4297,7 @@ bool Game::closeRuleViolation(Player* player)
 void Game::addCommandTag(char tag)
 {
 	for (char commandTag : commandTags) {
-		if (commandTag == tag) {
+		if(commandTag == tag) {
 			return;
 		}
 	}
@@ -4963,27 +4963,27 @@ bool Game::loadExperienceStages()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
 	}
 
 	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
-		if (strcasecmp(stageNode.name(), "config") == 0) {
+		if(strcasecmp(stageNode.name(), "config") == 0) {
 			stagesEnabled = stageNode.attribute("enabled").as_bool();
 		} 
-		else if (strcasecmp(stageNode.name(), "stage") == 0){
+		else if(strcasecmp(stageNode.name(), "stage") == 0){
 			uint32_t minLevel, maxLevel, multiplier;
 
 			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
-			if (minLevelAttribute) {
+			if(minLevelAttribute) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
 			} else {
 				minLevel = 1;
 			}
 
 			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
-			if (maxLevelAttribute) {
+			if(maxLevelAttribute) {
 				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
 			} else {
 				maxLevel = 0;
@@ -4992,13 +4992,13 @@ bool Game::loadExperienceStages()
 			}
 
 			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
-			if (multiplierAttribute) {
+			if(multiplierAttribute) {
 				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
 			} else {
 				multiplier = 1;
 			}
 
-			if (useLastStageLevel) {
+			if(useLastStageLevel) {
 				stages[lastStageLevel] = multiplier;
 			} else {
 				for (uint32_t i = minLevel; i <= maxLevel; ++i) {

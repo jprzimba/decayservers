@@ -127,8 +127,8 @@ Event* Spells::getEvent(const std::string& nodeName)
 bool Spells::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
-	if (instant) {
-		if (instants.find(instant->getWords()) != instants.end()) {
+	if(instant) {
+		if(instants.find(instant->getWords()) != instants.end()) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 			return false;
 		}
@@ -137,8 +137,8 @@ bool Spells::registerEvent(Event* event, const pugi::xml_node& node)
 		return true;
 	} else {
 		RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
-		if (rune) {
-			if (runes.find(rune->getRuneItemId()) != runes.end()) {
+		if(rune) {
+			if(runes.find(rune->getRuneItemId()) != runes.end()) {
 				std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 				return false;
 			}
@@ -399,7 +399,7 @@ Spell::Spell()
 bool Spell::configureSpell(const pugi::xml_node& node)
 {
 	pugi::xml_attribute nameAttribute = node.attribute("name");
-	if (!nameAttribute) {
+	if(!nameAttribute) {
 		std::cout << "[Error - Spell::configureSpell] Spell without name" << std::endl;
 		return false;
 	}
@@ -432,7 +432,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	//static size_t size = sizeof(reservedList) / sizeof(const char*);
 	//for (size_t i = 0; i < size; ++i) {
 	for (const char* reserved : reservedList) {
-		if (strcasecmp(reserved, name.c_str()) == 0) {
+		if(strcasecmp(reserved, name.c_str()) == 0) {
 			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
 			return false;
 		}
@@ -440,91 +440,91 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 
-	if ((attr = node.attribute("lvl"))) {
+	if((attr = node.attribute("lvl"))) {
 		level = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("maglv"))) {
+	if((attr = node.attribute("maglv"))) {
 		magLevel = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("mana"))) {
+	if((attr = node.attribute("mana"))) {
 		mana = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("manapercent"))) {
+	if((attr = node.attribute("manapercent"))) {
 		manaPercent = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("soul"))) {
+	if((attr = node.attribute("soul"))) {
 		soul = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("range"))) {
+	if((attr = node.attribute("range"))) {
 		range = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("exhaustion"))) {
+	if((attr = node.attribute("exhaustion"))) {
 		exhaustion = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("prem"))) {
+	if((attr = node.attribute("prem"))) {
 		premium = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("enabled"))) {
+	if((attr = node.attribute("enabled"))) {
 		enabled = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("needtarget"))) {
+	if((attr = node.attribute("needtarget"))) {
 		needTarget = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("needweapon"))) {
+	if((attr = node.attribute("needweapon"))) {
 		needWeapon = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("selftarget"))) {
+	if((attr = node.attribute("selftarget"))) {
 		selfTarget = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("needlearn"))) {
+	if((attr = node.attribute("needlearn"))) {
 		learnable = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("blocking"))) {
+	if((attr = node.attribute("blocking"))) {
 		blockingSolid = attr.as_bool();
 		blockingCreature = blockingSolid;
 	}
 
-	if ((attr = node.attribute("blocktype"))) {
+	if((attr = node.attribute("blocktype"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "all") {
+		if(tmpStrValue == "all") {
 			blockingSolid = true;
 			blockingCreature = true;
-		} else if (tmpStrValue == "solid") {
+		} else if(tmpStrValue == "solid") {
 			blockingSolid = true;
-		} else if (tmpStrValue == "creature") {
+		} else if(tmpStrValue == "creature") {
 			blockingCreature = true;
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" << attr.as_string() << "\" does not exist." << std::endl;
 		}
 	}
 
-	if ((attr = node.attribute("aggressive"))) {
+	if((attr = node.attribute("aggressive"))) {
 		isAggressive = booleanString(attr.as_string());
 	}
 
 	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
-		if (!(attr = vocationNode.attribute("name"))) {
+		if(!(attr = vocationNode.attribute("name"))) {
 			continue;
 		}
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
+		if(vocationId != -1) {
 			vocSpellMap[vocationId] = true;
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != 0) {
+			if(promotedVocation != 0) {
 				vocSpellMap[promotedVocation] = true;
 			}
 		} else {
@@ -920,26 +920,26 @@ std::string InstantSpell::getScriptEventName()
 
 bool InstantSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!Spell::configureSpell(node)) {
+	if(!Spell::configureSpell(node)) {
 		return false;
 	}
 
-	if (!TalkAction::configureEvent(node)) {
+	if(!TalkAction::configureEvent(node)) {
 		return false;
 	}
 
 	pugi::xml_attribute attr;
-	if ((attr = node.attribute("params"))) {
+	if((attr = node.attribute("params"))) {
 		hasParam = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("direction"))) {
+	if((attr = node.attribute("direction"))) {
 		needDirection = attr.as_bool();
-	} else if ((attr = node.attribute("casterTargetOrDirection"))) {
+	} else if((attr = node.attribute("casterTargetOrDirection"))) {
 		casterTargetOrDirection = attr.as_bool();
 	}
 
-	if ((attr = node.attribute("blockwalls"))) {
+	if((attr = node.attribute("blockwalls"))) {
 		checkLineOfSight = attr.as_bool();
 	}
 	return true;
@@ -1659,26 +1659,26 @@ std::string ConjureSpell::getScriptEventName()
 
 bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!InstantSpell::configureEvent(node)) {
+	if(!InstantSpell::configureEvent(node)) {
 		return false;
 	}
 
 	pugi::xml_attribute attr;
-	if ((attr = node.attribute("conjureId"))) {
+	if((attr = node.attribute("conjureId"))) {
 		conjureId = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("conjureCount"))) {
+	if((attr = node.attribute("conjureCount"))) {
 		conjureCount = pugi::cast<uint32_t>(attr.value());
-	} else if (conjureId != 0) {
+	} else if(conjureId != 0) {
 		// load default charges from items.xml
 		const ItemType& it = Item::items[conjureId];
-		if (it.charges != 0) {
+		if(it.charges != 0) {
 			conjureCount = it.charges;
 		}
 	}
 
-	if ((attr = node.attribute("reagentId"))) {
+	if((attr = node.attribute("reagentId"))) {
 		conjureReagentId = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -1882,30 +1882,30 @@ std::string RuneSpell::getScriptEventName()
 
 bool RuneSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!Spell::configureSpell(node)) {
+	if(!Spell::configureSpell(node)) {
 		return false;
 	}
 
-	if (!Action::configureEvent(node)) {
+	if(!Action::configureEvent(node)) {
 		return false;
 	}
 
 	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("id"))) {
+	if(!(attr = node.attribute("id"))) {
 		std::cout << "[Error - RuneSpell::configureSpell] Rune spell without id." << std::endl;
 		return false;
 	}
 	runeId = pugi::cast<uint32_t>(attr.value());
 
 	uint32_t charges;
-	if ((attr = node.attribute("charges"))) {
+	if((attr = node.attribute("charges"))) {
 		charges = pugi::cast<uint32_t>(attr.value());
 	} else {
 		charges = 0;
 	}
 
 	hasCharges = (charges > 0);
-	if (magLevel != 0 || level != 0) {
+	if(magLevel != 0 || level != 0) {
 		//Change information in the ItemType to get accurate description
 		ItemType& iType = Item::items.getItemType(runeId);
 		iType.runeMagLevel = magLevel;

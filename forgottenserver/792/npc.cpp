@@ -139,13 +139,13 @@ bool Npc::loadFromXml(const std::string& filename)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
-	if (!result) {
+	if(!result) {
 		std::cout << "[Error - Npc::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
 	pugi::xml_node npcNode = doc.child("npc");
-	if (!npcNode) {
+	if(!npcNode) {
 		std::cout << "[Error - Npc::loadFromXml] Missing npc tag in " << filename << std::endl;
 		return false;
 	}
@@ -155,29 +155,29 @@ bool Npc::loadFromXml(const std::string& filename)
 	floorChange = npcNode.attribute("floorchange").as_bool();
 
 	pugi::xml_attribute attr;
-	if ((attr = npcNode.attribute("speed"))) {
+	if((attr = npcNode.attribute("speed"))) {
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
 	}
 
-	if ((attr = npcNode.attribute("walkinterval"))) {
+	if((attr = npcNode.attribute("walkinterval"))) {
 		walkTicks = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = npcNode.attribute("walkradius"))) {
+	if((attr = npcNode.attribute("walkradius"))) {
 		masterRadius = pugi::cast<int32_t>(attr.value());
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
-	if (healthNode) {
-		if ((attr = healthNode.attribute("now"))) {
+	if(healthNode) {
+		if((attr = healthNode.attribute("now"))) {
 			health = pugi::cast<int32_t>(attr.value());
 		} else {
 			health = 100;
 		}
 
-		if ((attr = healthNode.attribute("max"))) {
+		if((attr = healthNode.attribute("max"))) {
 			healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
 			healthMax = 100;
@@ -185,16 +185,16 @@ bool Npc::loadFromXml(const std::string& filename)
 	}
 
 	pugi::xml_node lookNode = npcNode.child("look");
-	if (lookNode) {
+	if(lookNode) {
 		pugi::xml_attribute lookTypeAttribute = lookNode.attribute("type");
-		if (lookTypeAttribute) {
+		if(lookTypeAttribute) {
 			defaultOutfit.lookType = pugi::cast<uint16_t>(lookTypeAttribute.value());
 			defaultOutfit.lookHead = pugi::cast<uint16_t>(lookNode.attribute("head").value());
 			defaultOutfit.lookBody = pugi::cast<uint16_t>(lookNode.attribute("body").value());
 			defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
 			defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
 			defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
-		} else if ((attr = lookNode.attribute("typeex"))) {
+		} else if((attr = lookNode.attribute("typeex"))) {
 			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
 
@@ -206,20 +206,20 @@ bool Npc::loadFromXml(const std::string& filename)
 	}
 
 	pugi::xml_node interactionNode = npcNode.child("interaction");
-	if (healthNode) {
-		if ((attr = interactionNode.attribute("talkradius"))) {
+	if(healthNode) {
+		if((attr = interactionNode.attribute("talkradius"))) {
 			talkRadius = pugi::cast<int32_t>(attr.value());
 		}
 
-		if ((attr = interactionNode.attribute("idletime"))) {
+		if((attr = interactionNode.attribute("idletime"))) {
 			idleTime = pugi::cast<int32_t>(attr.value());
 		}
 	}
 	
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
-	if (scriptFile) {
+	if(scriptFile) {
 		m_npcEventHandler = new NpcScript(scriptFile.as_string(), this);
-		if (!m_npcEventHandler->isLoaded()) {
+		if(!m_npcEventHandler->isLoaded()) {
 			return false;
 		}
 	}

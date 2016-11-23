@@ -824,9 +824,9 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 	else
 	{
 		storageMap[key] = value;
-		if (!isLogin) {
+		if(!isLogin) {
 			int64_t currentFrameTime = OutputMessagePool::getInstance()->getFrameTime();
-			if (lastQuestlogUpdate != currentFrameTime && Quests::getInstance()->isQuestStorage(key, value)) {
+			if(lastQuestlogUpdate != currentFrameTime && Quests::getInstance()->isQuestStorage(key, value)) {
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MSG_EVENT_ADVANCE, "Your questlog has been updated.");
 			}
