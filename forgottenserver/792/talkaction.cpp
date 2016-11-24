@@ -174,7 +174,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 				}
 			}
 
-            if(talkActionRef->getLog() && player)
+            if(talkActionRef->isLogged() && player)
 			{
                 std::string filename = "data/logs/" + player->getName() + ".txt";
                 std::ofstream talkaction(filename.c_str(), std::ios_base::app);
@@ -197,14 +197,13 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 
 
 TalkAction::TalkAction(LuaScriptInterface* _interface) :
-	Event(_interface),
-	filterType(TALKACTION_MATCH_QUOTATION),
-	registerlog(false),
-	casesensitive(false),
-	accessLevel(0),
-	function(nullptr)
+Event(_interface)
 {
-	//
+	m_filterType = TALKACTION_MATCH_QUOTATION;
+	m_logged = false;
+	m_sensitive = true;
+	m_access = 0;
+	m_function = nullptr;
 }
 
 TalkAction::~TalkAction()
@@ -223,39 +222,47 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	
 	commandString = attr.as_string();
 
+	if((attr = node.attribute("access")))
+		m_access = pugi::cast<int32_t>(attr.value());
+
 	if((attr = node.attribute("filter")))
 	{
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if(tmpStrValue == "quotation")
-			filterType = TALKACTION_MATCH_QUOTATION;
+			m_filterType = TALKACTION_MATCH_QUOTATION;
 		else if(tmpStrValue == "first word")
-			filterType = TALKACTION_MATCH_FIRST_WORD;
+			m_filterType = TALKACTION_MATCH_FIRST_WORD;
 	}
 	
-	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")))
-		registerlog = attr.as_string();
+	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")) || (attr = node.attribute("logged")))
+		m_logged = booleanString(attr.as_string());
 
 	if((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive")))
-		casesensitive = attr.as_string();
-		
-	if((attr = node.attribute("access")))
-		accessLevel = pugi::cast<int32_t>(attr.value());
+		m_sensitive = booleanString(attr.as_string());
 	
 	return true;	
 }
 
 bool TalkAction::loadFunction(const std::string& functionName)
 {
-	if(asLowerCaseString(functionName) == "banplayer")
-		function = banPlayer;
-	else if(asLowerCaseString(functionName) == "addskill")
-		function = addSkill;
-	else if(asLowerCaseString(functionName) == "createguild")
-		function = createGuild;
-	else if(asLowerCaseString(functionName) == "joinguild")
-		function = joinGuild;
+	std::string tmpFunctionName = asLowerCaseString(functionName);
+	if(tmpFunctionName == "banplayer")
+		m_function = banPlayer;
+	else if(tmpFunctionName == "addskill")
+		m_function = addSkill;
+	else if(tmpFunctionName == "createguild")
+		m_function = createGuild;
+	else if(tmpFunctionName == "joinguild")
+		m_function = joinGuild;
+	else if(tmpFunctionName == "unban")
+		m_function = unBan;
+	else if(tmpFunctionName == "ghost")
+		m_function = ghost;
 	else
+	{
+		std::cout << "[Warning - TalkAction::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
+	}
 
 	m_scripted = false;
 	return true;
@@ -302,8 +309,9 @@ uint32_t TalkAction::executeSay(Creature* creature, const std::string& words, co
 	}
 }
 
-bool TalkAction::banPlayer(Player* player, const std::string& words, const std::string& param)
+bool TalkAction::banPlayer(Creature* creature, const std::string& cmd, const std::string& param)
 {
+	Player* player = creature->getPlayer();
 	if(!player)
 		return false;
 
@@ -327,8 +335,12 @@ bool TalkAction::banPlayer(Player* player, const std::string& words, const std::
 	return false;
 }
 
-bool TalkAction::addSkill(Player* player, const std::string& words, const std::string& param)
+bool TalkAction::addSkill(Creature* creature, const std::string& cmd, const std::string& param)
 {
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
 	boost::char_separator<char> sep(",");
 	tokenizer cmdtokens(param, sep);
 	tokenizer::iterator cmdit = cmdtokens.begin();
@@ -358,8 +370,9 @@ bool TalkAction::addSkill(Player* player, const std::string& words, const std::s
 	return false;
 }
 
-bool TalkAction::createGuild(Player* player, const std::string& words, const std::string& param)
+bool TalkAction::createGuild(Creature* creature, const std::string& cmd, const std::string& param)
 {
+	Player* player = creature->getPlayer();
 	if(!player)
 		return false;
 
@@ -421,8 +434,9 @@ bool TalkAction::createGuild(Player* player, const std::string& words, const std
 	return false;
 }
 
-bool TalkAction::joinGuild(Player* player, const std::string& words, const std::string& param)
+bool TalkAction::joinGuild(Creature* creature, const std::string& cmd, const std::string& param)
 {
+	Player* player = creature->getPlayer();
 	if(!player)
 		return false;
 
@@ -455,6 +469,147 @@ bool TalkAction::joinGuild(Player* player, const std::string& words, const std::
 		std::ostringstream ss;
 		ss << player->getName() << " has joined the guild.";
 		guildChannel->sendToAll(ss.str(), SPEAK_CHANNEL_R1);
+	}
+
+	return false;
+}
+
+bool TalkAction::unBan(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	uint32_t accountNumber = atoi(param.c_str());
+	bool removedIPBan = false;
+	std::string name = param;
+	bool playerExists = false;
+	if(IOLoginData::getInstance()->playerExists(name))
+	{
+		playerExists = true;
+		accountNumber = IOLoginData::getInstance()->getAccountNumberByName(name);
+
+		uint32_t lastIP = IOLoginData::getInstance()->getLastIPByName(name);
+		if(lastIP != 0 && IOBan::getInstance()->isIpBanished(lastIP))
+			removedIPBan = IOBan::getInstance()->removeIPBan(lastIP);
+	}
+
+	bool banned = false;
+	bool deleted = false;
+	uint32_t bannedBy = 0, banTime = 0;
+	int32_t reason = 0, action = 0;
+	std::string comment = "";
+	if(IOBan::getInstance()->getBanInformation(accountNumber, bannedBy, banTime, reason, action, comment, deleted))
+	{
+		if(!deleted)
+			banned = true;
+	}
+
+	if(banned)
+	{
+		if(IOBan::getInstance()->removeAccountBan(accountNumber))
+		{
+			std::ostringstream ss;
+			ss << name << " has been unbanned.";
+			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		}
+	}
+	else if(deleted)
+	{
+		if(IOBan::getInstance()->removeAccountDeletion(accountNumber))
+		{
+			std::ostringstream ss;
+			ss << name << " has been undeleted.";
+			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		}
+	}
+	else if(removedIPBan)
+	{
+		std::ostringstream ss;
+		ss << "The IP banishment on " << name << " has been lifted.";
+		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	}
+	else
+	{
+		bool removedNamelock = false;
+		if(playerExists)
+		{
+			uint32_t guid = 0;
+			if(IOLoginData::getInstance()->getGuidByName(guid, name) &&
+				IOBan::getInstance()->isPlayerNamelocked(name) &&
+				IOBan::getInstance()->removePlayerNamelock(guid))
+			{
+				std::ostringstream ss;
+				ss << "Namelock on " << name << " has been lifted.";
+				player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+				removedNamelock = true;
+			}
+		}
+
+		if(!removedNamelock)
+			player->sendCancel("That player or account is not banished or deleted.");
+	}
+
+	return false;
+}
+
+bool TalkAction::ghost(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	player->switchGhostMode();
+	Player* tmpPlayer;
+
+	SpectatorVec list;
+	g_game.getSpectators(list, player->getPosition(), true);
+	SpectatorVec::const_iterator it;
+
+	Cylinder* cylinder = player->getTopParent();
+	int32_t index = cylinder->__getIndexOfThing(creature);
+
+	for(it = list.begin(); it != list.end(); ++it)
+	{
+		if((tmpPlayer = (*it)->getPlayer()))
+		{
+			tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
+			if(tmpPlayer != player && !tmpPlayer->canSeeGhost(player))
+			{
+				if(player->isInGhostMode())
+					tmpPlayer->sendCreatureDisappear(player, index, true);
+				else
+					tmpPlayer->sendCreatureAppear(player, true);
+
+				tmpPlayer->sendUpdateTile(player->getTile(), player->getPosition());
+			}
+		}
+	}
+
+	for(it = list.begin(); it != list.end(); ++it)
+		(*it)->onUpdateTile(player->getTile(), player->getPosition());
+
+	if(player->isInGhostMode())
+	{
+		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
+		{
+			if(!it->second->canSeeGhost(player))
+				it->second->notifyLogOut(player);
+		}
+
+		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), false);
+		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
+	}
+	else
+	{
+		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
+		{
+			if(!it->second->canSeeGhost(player))
+				it->second->notifyLogIn(player);
+		}
+
+		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
+		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 	}
 
 	return false;

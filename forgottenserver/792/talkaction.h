@@ -65,7 +65,7 @@ class TalkActions : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-typedef bool (TalkActionFunction)(Player*, const std::string&, const std::string&);
+typedef bool (TalkActionFunction)(Creature* creature, const std::string& words, const std::string& param);
 
 class TalkAction : public Event
 {
@@ -77,11 +77,11 @@ class TalkAction : public Event
 		virtual bool loadFunction(const std::string& functionName);
 	
 		std::string getWords() const {return commandString;}
-		int16_t getAccessLevel() const {return accessLevel;}
-		bool getLog() const {return registerlog;}
-		bool isCaseSensitive() const {return casesensitive;}
-		TalkActionFilterType getFilterType() const {return filterType;}
-		TalkActionFunction* getFunction() const {return function;}
+		int16_t getAccessLevel() const {return m_access;}
+		bool isLogged() const {return m_logged;}
+		bool isCaseSensitive() const {return m_sensitive;}
+		TalkActionFilterType getFilterType() const {return m_filterType;}
+		TalkActionFunction* getFunction() const {return m_function;}
 		bool isScripted() const {return m_scripted;}
 
 		//scripting
@@ -95,13 +95,15 @@ class TalkAction : public Event
 		static TalkActionFunction addSkill;
 		static TalkActionFunction joinGuild;
 		static TalkActionFunction createGuild;
+		static TalkActionFunction unBan;
+		static TalkActionFunction ghost;
 	
 		std::string commandString;
-		int16_t accessLevel;
-		bool registerlog;
-		bool casesensitive;
-		TalkActionFilterType filterType;
-		TalkActionFunction* function;
+		int16_t m_access;
+		bool m_logged;
+		bool m_sensitive;
+		TalkActionFilterType m_filterType;
+		TalkActionFunction* m_function;
 };
 
 #endif

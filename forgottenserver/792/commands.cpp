@@ -76,8 +76,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
 	{"/raid", &Commands::forceRaid},
-	{"/unban", &Commands::unban},
-	{"/ghost", &Commands::ghost},
 
 	//player commands - TODO: make them talkactions
 	{"!buyhouse", &Commands::buyHouse},
@@ -798,84 +796,6 @@ bool Commands::forceRaid(Creature* creature, const std::string& cmd, const std::
 	return true;
 }
 
-bool Commands::unban(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	uint32_t accountNumber = atoi(param.c_str());
-	bool removedIPBan = false;
-	std::string name = param;
-	bool playerExists = false;
-	if(IOLoginData::getInstance()->playerExists(name))
-	{
-		playerExists = true;
-		accountNumber = IOLoginData::getInstance()->getAccountNumberByName(name);
-
-		uint32_t lastIP = IOLoginData::getInstance()->getLastIPByName(name);
-		if(lastIP != 0 && IOBan::getInstance()->isIpBanished(lastIP))
-			removedIPBan = IOBan::getInstance()->removeIPBan(lastIP);
-	}
-
-	bool banned = false;
-	bool deleted = false;
-	uint32_t bannedBy = 0, banTime = 0;
-	int32_t reason = 0, action = 0;
-	std::string comment = "";
-	if(IOBan::getInstance()->getBanInformation(accountNumber, bannedBy, banTime, reason, action, comment, deleted))
-	{
-		if(!deleted)
-			banned = true;
-	}
-
-	if(banned)
-	{
-		if(IOBan::getInstance()->removeAccountBan(accountNumber))
-		{
-			std::ostringstream ss;
-			ss << name << " has been unbanned.";
-			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-		}
-	}
-	else if(deleted)
-	{
-		if(IOBan::getInstance()->removeAccountDeletion(accountNumber))
-		{
-			std::ostringstream ss;
-			ss << name << " has been undeleted.";
-			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-		}
-	}
-	else if(removedIPBan)
-	{
-		std::ostringstream ss;
-		ss << "The IP banishment on " << name << " has been lifted.";
-		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-	}
-	else
-	{
-		bool removedNamelock = false;
-		if(playerExists)
-		{
-			uint32_t guid = 0;
-			if(IOLoginData::getInstance()->getGuidByName(guid, name) &&
-				IOBan::getInstance()->isPlayerNamelocked(name) &&
-				IOBan::getInstance()->removePlayerNamelock(guid))
-			{
-				std::ostringstream ss;
-				ss << "Namelock on " << name << " has been lifted.";
-				player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-				removedNamelock = true;
-			}
-		}
-
-		if(!removedNamelock)
-			player->sendCancel("That player or account is not banished or deleted.");
-	}
-	return false;
-}
-
 bool Commands::playerKills(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -897,65 +817,4 @@ bool Commands::playerKills(Creature* creature, const std::string& cmd, const std
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
 	}
 	return false;
-}
-
-bool Commands::ghost(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	player->switchGhostMode();
-	Player* tmpPlayer;
-
-	SpectatorVec list;
-	g_game.getSpectators(list, player->getPosition(), true);
-	SpectatorVec::const_iterator it;
-
-	Cylinder* cylinder = player->getTopParent();
-	int32_t index = cylinder->__getIndexOfThing(creature);
-
-	for(it = list.begin(); it != list.end(); ++it)
-	{
-		if((tmpPlayer = (*it)->getPlayer()))
-		{
-			tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
-			if(tmpPlayer != player && !tmpPlayer->canSeeGhost(player))
-			{
-				if(player->isInGhostMode())
-					tmpPlayer->sendCreatureDisappear(player, index, true);
-				else
-					tmpPlayer->sendCreatureAppear(player, true);
-
-				tmpPlayer->sendUpdateTile(player->getTile(), player->getPosition());
-			}
-		}
-	}
-
-	for(it = list.begin(); it != list.end(); ++it)
-		(*it)->onUpdateTile(player->getTile(), player->getPosition());
-
-	if(player->isInGhostMode())
-	{
-		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
-		{
-			if(!it->second->canSeeGhost(player))
-				it->second->notifyLogOut(player);
-		}
-
-		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), false);
-		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
-	}
-	else
-	{
-		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
-		{
-			if(!it->second->canSeeGhost(player))
-				it->second->notifyLogIn(player);
-		}
-
-		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
-		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
-	}
-	return true;
 }

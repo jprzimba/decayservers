@@ -23,6 +23,8 @@
 	<talkaction access="3" log="yes" words="/town" filter="first word" script="teleporttown.lua"/>
 	<talkaction access="3" log="yes" words="/B" filter="first word" sensitive="yes" script="broadcast.lua"/>
 	<talkaction access="3" log="yes" words="/b" filter="first word" sensitive="yes" function="banplayer"/>
+	<talkaction access="3" log="yes" words="/unban" filter="first word" function="unban"/>
+	<talkaction access="3" log="yes" words="/ghost" function="ghost"/>
 
 	<!-- Players -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
