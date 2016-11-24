@@ -61,6 +61,7 @@ class ConfigManager
 			SAVE_GLOBAL_STORAGE,
 			SERVERSAVE_ENABLED,
 			ENABLE_RULE_VIOLATION_REPORTS,
+			SURPRISE_BAGS,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -135,6 +136,7 @@ class ConfigManager
 			LEVEL_TO_CREATE_GUILD,
 			MIN_GUILD_NAME,
 			MAX_GUILD_NAME,
+			SUPRISEBAG_PERCENT,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

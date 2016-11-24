@@ -1283,8 +1283,12 @@ void Monster::updateLookDirection()
 
 void Monster::dropLoot(Container* corpse)
 {
-	if(corpse && lootDrop)
-		mType->createLoot(corpse);
+	if(corpse && lootDrop){
+		if(!getMaster()){
+			mType->createLoot(corpse);
+			mType->createSurpriseBag(corpse, getName());
+		}
+	}
 }
 
 void Monster::setNormalCreatureLight()

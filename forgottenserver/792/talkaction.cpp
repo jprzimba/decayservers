@@ -123,29 +123,29 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 			TalkAction* talkAction = it->second;
 			if(talkAction->getAccess() > player->getAccessLevel())
 			{
-                if(player->getAccessLevel() > 0)
+				if(player->getAccessLevel() > 0)
 				{
-                    player->sendCancel("You are not able to execute this action.");
-                    g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-                    return TALKACTION_FAILED;
-                }
-                else
-                    return TALKACTION_CONTINUE;
-            }
-
-            if(talkAction->isLogged() && player)
+					player->sendCancel("You are not able to execute this action.");
+					g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
+					return TALKACTION_FAILED;
+				}
+				else
+					return TALKACTION_CONTINUE;
+			}
+			
+			if(talkAction->isLogged() && player)
 			{
-                std::string filename = "data/logs/" + player->getName() + ".txt";
-                std::ofstream talkaction(filename.c_str(), std::ios_base::app);
-                time_t timeNow = time(NULL);
-                const tm* now = localtime(&timeNow);
-                char buffer[32];
-                strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
-                talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
-                talkaction.close();
-            }
+				std::string filename = "data/logs/" + player->getName() + ".txt";
+				std::ofstream talkaction(filename.c_str(), std::ios_base::app);
+				time_t timeNow = time(NULL);
+				const tm* now = localtime(&timeNow);
+				char buffer[32];
+				strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
+				talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
+				talkaction.close();
+			}
 
-			uint32_t ret = false;
+			bool ret = false;
 			if(talkAction->isScripted())
 				ret = talkAction->executeSay(player, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
 			else
@@ -163,6 +163,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 				return TALKACTION_BREAK;
 		}
 	}
+
 	return TALKACTION_CONTINUE;
 }
 

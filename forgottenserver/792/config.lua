@@ -92,7 +92,13 @@
 	rateSkill = 3
 	rateLoot = 2
 	rateMagic = 3
+
+	-- Monsters
 	rateSpawn = 1
+	deSpawnRange = 2
+	deSpawnRadius = 50
+	monstersDropSurpriseBags = "yes"
+	surpriseBagPercent = 0
 
 	-- Real Server Save
 	-- note: serverSaveHour means like 24:00, not that it will save every 24 hours,
@@ -109,10 +115,6 @@
 	-- Clean System
 	cleanProtectedZones = "yes"
 	cleanMapAtServerSave = "yes"
-
-	-- Spawns
-	deSpawnRange = 2
-	deSpawnRadius = 50
 
 	-- Startup
 	displayOnOrOffAtCharlist = "no"

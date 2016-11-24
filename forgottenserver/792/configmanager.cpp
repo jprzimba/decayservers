@@ -126,6 +126,7 @@ bool ConfigManager::load()
 	m_confInteger[LEVEL_TO_CREATE_GUILD] = getGlobalNumber(L, "levelToCreateGuild", 8);
 	m_confInteger[MIN_GUILD_NAME] = getGlobalNumber(L, "minGuildNameLength", 4);
 	m_confInteger[MAX_GUILD_NAME] = getGlobalNumber(L, "maxGuildNameLength", 20);
+	m_confInteger[SUPRISEBAG_PERCENT] = getGlobalNumber(L, "surpriseBagPercent", 0);
 
 
 	m_confBoolean[CANNOT_ATTACK_SAME_LOOKFEET] = booleanString(getGlobalString(L, "noDamageToSameLookfeet", "no"));
@@ -147,6 +148,7 @@ bool ConfigManager::load()
 	m_confBoolean[ALLOW_CHANGEOUTFIT] = booleanString(getGlobalString(L, "allowChangeOutfit", "yes"));
 	m_confBoolean[CLEAN_PZ] = booleanString(getGlobalString(L, "cleanProtectedZones", "yes"));
 	m_confBoolean[ENABLE_RULE_VIOLATION_REPORTS] = booleanString(getGlobalString(L, "enableRuleViolationReports", "no"));
+	m_confBoolean[SURPRISE_BAGS] = booleanString(getGlobalString(L, "monstersDropSurpriseBags", "no"));
 
 	m_loaded = true;
 	lua_close(L);

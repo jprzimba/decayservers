@@ -60,7 +60,8 @@ std::string CreatureEvents::getScriptBaseName()
 
 Event* CreatureEvents::getEvent(const std::string& nodeName)
 {
-	if(asLowerCaseString(nodeName) == "event")
+	std::string tmpNodeName = asLowerCaseString(nodeName);
+	if(tmpNodeName == "event" || tmpNodeName == "creaturevent" || tmpNodeName == "creatureevent" || tmpNodeName == "creaturescript")
 		return new CreatureEvent(&m_scriptInterface);
 
 	return nullptr;
