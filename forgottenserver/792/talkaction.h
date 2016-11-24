@@ -51,7 +51,7 @@ class TalkActions : public BaseEvents
 		TalkActions();
 		virtual ~TalkActions();
 	
-		TalkActionResult_t onPlayerSpeak(Creature* creature, SpeakClasses type, const std::string& words);
+		TalkActionResult_t onPlayerSpeak(Player* player, SpeakClasses type, const std::string& words);
 	
 	protected:
 		virtual LuaScriptInterface& getScriptInterface();

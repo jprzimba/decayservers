@@ -87,7 +87,7 @@ bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 	return true;
 }
 
-TalkActionResult_t TalkActions::onPlayerSpeak(Creature* creature, SpeakClasses type, const std::string& words)
+TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type, const std::string& words)
 {
 	if(type != SPEAK_SAY)
 		return TALKACTION_CONTINUE;
@@ -115,59 +115,54 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Creature* creature, SpeakClasses t
 		}
 	}
 
-	TalkAction* talkAction = nullptr;
 	TalkActionList::iterator it;
 	for(it = wordsMap.begin(); it != wordsMap.end(); ++it)
 	{
-		if(it->first == cmdstring[it->second->getFilter()] || (!it->second->isSensitive() &&
-			!strcasecmp(it->first.c_str(), cmdstring[it->second->getFilter()].c_str())))
+		if(it->first == cmdstring[it->second->getFilter()] || !it->second->isSensitive() && !strcasecmp(it->first.c_str(), cmdstring[it->second->getFilter()].c_str()))
 		{
-			talkAction = it->second;
-			break;
+			TalkAction* talkAction = it->second;
+			if(talkAction->getAccess() > player->getAccessLevel())
+			{
+                if(player->getAccessLevel() > 0)
+				{
+                    player->sendCancel("You are not able to execute this action.");
+                    g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
+                    return TALKACTION_FAILED;
+                }
+                else
+                    return TALKACTION_CONTINUE;
+            }
+
+            if(talkAction->isLogged() && player)
+			{
+                std::string filename = "data/logs/" + player->getName() + ".txt";
+                std::ofstream talkaction(filename.c_str(), std::ios_base::app);
+                time_t timeNow = time(NULL);
+                const tm* now = localtime(&timeNow);
+                char buffer[32];
+                strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
+                talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
+                talkaction.close();
+            }
+
+			uint32_t ret = false;
+			if(talkAction->isScripted())
+				ret = talkAction->executeSay(player, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
+			else
+			{
+				if(TalkActionFunction* function = talkAction->getFunction())
+				{
+					function(player, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
+					ret = false;
+				}
+			}
+
+			if(ret)
+				return TALKACTION_CONTINUE;
+			else
+				return TALKACTION_BREAK;
 		}
 	}
-
-
-	bool ret = true;
-	Player* player = creature->getPlayer();
-	if(player->getAccessLevel() < talkAction->getAccess())
-	{
-		if(player->getAccessLevel() > 0)
-		{
-			player->sendCancel("You are not able to execute this action.");
-            g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-			ret = false;
-        }
-    }
-
-	if(talkAction->isLogged())
-	{
-		std::string filename = "data/logs/" + player->getName() + ".txt";
-		std::ofstream talkaction(filename.c_str(), std::ios_base::app);
-		time_t timeNow = time(nullptr);
-		const tm* now = localtime(&timeNow);
-		char buffer[32];
-		strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
-		talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
-		talkaction.close();
-	}
-
-	if(talkAction->isScripted())
-		ret = talkAction->executeSay(creature, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
-	else
-	{
-		if(TalkActionFunction* function = talkAction->getFunction())
-		{
-			function(creature, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
-			ret = false;
-		}
-	}
-
-	if(ret)
-		return TALKACTION_CONTINUE;
-	else
-		return TALKACTION_BREAK;
-
 	return TALKACTION_CONTINUE;
 }
 

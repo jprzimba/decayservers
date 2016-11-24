@@ -1,1 +1,3 @@
 *.o
+*.res
+forgottenserver/792/dev-cpp/Makefile.win
