@@ -3,27 +3,27 @@
 	<!-- GOD -->
 	<talkaction access="5" log="yes" words="/closeserver" script="closeopen.lua"/>
 	<talkaction access="5" log="yes" words="/openserver" script="closeopen.lua"/>
-	<talkaction access="5" log="yes" words="/save" filter="first word" script="save.lua"/>
-	<talkaction access="5" log="yes" words="/addskill" filter="first word" function="addskill"/>
+	<talkaction access="5" log="yes" words="/save" script="save.lua"/>
+	<talkaction access="5" log="yes" words="/addskill" function="addskill"/>
 
 	<!-- Community Manager -->
-	<talkaction access="4" log="yes" words="/i" filter="first word" script="createitembyid.lua"/>
-	<talkaction access="4" log="yes" words="/n" filter="first word" script="createitembyname.lua"/>
-	<talkaction access="4" log="yes" words="/summon" filter="first word" script="summon.lua"/>
-	<talkaction access="4" log="yes" words="/s" filter="first word" script="placenpc.lua"/>
-	<talkaction access="4" log="yes" words="/m" filter="first word" script="placemonster.lua"/>
+	<talkaction access="4" log="yes" words="/i" script="createitembyid.lua"/>
+	<talkaction access="4" log="yes" words="/n" script="createitembyname.lua"/>
+	<talkaction access="4" log="yes" words="/summon" script="summon.lua"/>
+	<talkaction access="4" log="yes" words="/s" script="placenpc.lua"/>
+	<talkaction access="4" log="yes" words="/m" script="placemonster.lua"/>
 
 	<!-- Gamemasters -->
-	<talkaction access="3" words="/z" filter="first word" script="magiceffect.lua"/>
-	<talkaction access="3" words="/x" filter="first word" script="animationeffect.lua"/>
-	<talkaction access="3" log="yes" words="/clean" filter="first word" script="clean.lua"/>
+	<talkaction access="3" log="yes" words="/z" script="magiceffect.lua"/>
+	<talkaction access="3" log="yes" words="/x" script="animationeffect.lua"/>
+	<talkaction access="3" log="yes" words="/clean" script="clean.lua"/>
 	<talkaction access="3" log="yes" words="/up" script="teleportfloor.lua"/>
 	<talkaction access="3" log="yes" words="/down" script="teleportfloor.lua"/>
-	<talkaction access="3" log="yes" words="/t" filter="first word" script="teleportmaster.lua"/>
-	<talkaction access="3" log="yes" words="/town" filter="first word" script="teleporttown.lua"/>
-	<talkaction access="3" log="yes" words="/B" filter="first word" sensitive="yes" script="broadcast.lua"/>
-	<talkaction access="3" log="yes" words="/b" filter="first word" sensitive="yes" function="banplayer"/>
-	<talkaction access="3" log="yes" words="/unban" filter="first word" function="unban"/>
+	<talkaction access="3" log="yes" words="/t" script="teleportmaster.lua"/>
+	<talkaction access="3" log="yes" words="/town" script="teleporttown.lua"/>
+	<talkaction access="3" log="yes" words="/B" sensitive="yes" script="broadcast.lua"/>
+	<talkaction access="3" log="yes" words="/b" sensitive="yes" function="banplayer"/>
+	<talkaction access="3" log="yes" words="/unban" function="unban"/>
 	<talkaction access="3" log="yes" words="/ghost" function="ghost"/>
 
 	<!-- Players -->
@@ -31,8 +31,8 @@
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
-	<talkaction words="!deathlist" filter="first word" script="deathlist.lua"/>
+	<talkaction words="!deathlist" script="deathlist.lua"/>
 	<talkaction words="!online" script="online.lua"/>
-	<talkaction words="!createguild" filter="first word" function="createguild"/>
-	<talkaction words="!joinguild" filter="first word" function="joinguild"/>
+	<talkaction words="!createguild" function="createguild"/>
+	<talkaction words="!joinguild" function="joinguild"/>
 </talkactions>

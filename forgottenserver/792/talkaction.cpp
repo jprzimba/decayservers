@@ -87,111 +87,87 @@ bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 	return true;
 }
 
-TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type, const std::string& words)
+TalkActionResult_t TalkActions::onPlayerSpeak(Creature* creature, SpeakClasses type, const std::string& words)
 {
 	if(type != SPEAK_SAY)
 		return TALKACTION_CONTINUE;
 
-	std::string str_words_quote;
-	std::string str_param_quote;
-	std::string str_words_first_word;
-	std::string str_param_first_word;
-	
-	// With quotation filtering
-	size_t loc = words.find( '"', 0 );
+	std::string cmdstring[TALKFILTER_LAST] = words, paramstring[TALKFILTER_LAST] = "";
+	size_t loc = words.find('"', 0);
 	if(loc != std::string::npos && loc >= 0)
 	{
-		str_words_quote = std::string(words, 0, loc);
-		str_param_quote = std::string(words, (loc+1), words.size()-loc-1);
-	}
-	else
-	{
-		str_words_quote = words;
-		str_param_quote = std::string(""); 
-	}
-	
-	trim_left(str_words_quote, " ");
-	trim_right(str_param_quote, " ");
-	
-	// With whitespace filtering
-	loc = words.find( ' ', 0 );
-	if(loc != std::string::npos && loc >= 0)
-	{
-		str_words_first_word = std::string(words, 0, loc);
-		str_param_first_word = std::string(words, (loc+1), words.size()-loc-1);
-	}
-	else
-	{
-		str_words_first_word = words;
-		str_param_first_word = std::string(""); 
+		cmdstring[TALKFILTER_QUOTATION] = std::string(words, 0, loc);
+		paramstring[TALKFILTER_QUOTATION] = std::string(words, (loc + 1), (words.size() - (loc - 1)));
+		trimString(cmdstring[TALKFILTER_QUOTATION]);
 	}
 
+	loc = words.find(" ", 0);
+	if(loc != std::string::npos && loc >= 0)
+	{
+		cmdstring[TALKFILTER_WORD] = std::string(words, 0, loc);
+		paramstring[TALKFILTER_WORD] = std::string(words, (loc + 1), (words.size() - (loc - 1)));
+
+		size_t sloc = words.find(" ", ++loc);
+		if(sloc != std::string::npos && sloc >= 0)
+		{
+			cmdstring[TALKFILTER_WORD_SPACED] = std::string(words, 0, sloc);
+			paramstring[TALKFILTER_WORD_SPACED] = std::string(words, (sloc + 1), (words.size() - (sloc - 1)));
+		}
+	}
+
+	TalkAction* talkAction = nullptr;
 	TalkActionList::iterator it;
 	for(it = wordsMap.begin(); it != wordsMap.end(); ++it)
 	{
-		std::string cmdstring;
-		std::string paramstring;
-		if(it->second->getFilterType() == TALKACTION_MATCH_QUOTATION)
+		if(it->first == cmdstring[it->second->getFilter()] || (!it->second->isSensitive() &&
+			!strcasecmp(it->first.c_str(), cmdstring[it->second->getFilter()].c_str())))
 		{
-			cmdstring = str_words_quote;
-			paramstring = str_param_quote;
-		}
-		else if(it->second->getFilterType() == TALKACTION_MATCH_FIRST_WORD)
-		{
-			cmdstring = str_words_first_word;
-			paramstring = str_param_first_word;
-		}
-		else
-			continue;
-
-		if(cmdstring == it->first || !it->second->isCaseSensitive() && strcasecmp(it->first.c_str(), cmdstring.c_str()) == 0)
-		{
-			bool ret = true;
-			TalkAction* talkActionRef = it->second;
-			if(player->getAccessLevel() < it->second->getAccessLevel())
-			{
-                if(player->getAccessLevel() > 0)
-				{
-                    player->sendCancel("You are not able to execute this action.");
-                    g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-					ret = false;
-                }
-            }
-			else
-			{
-				TalkAction* talkAction = it->second;
-
-				if(talkAction->isScripted())
-					ret = talkAction->executeSay(player, cmdstring, paramstring);
-				else
-				{
-					TalkActionFunction* func = talkAction->getFunction();
-					if(func)
-					{
-						func(player, cmdstring, paramstring);
-						ret = false;
-					}
-				}
-			}
-
-            if(talkActionRef->isLogged() && player)
-			{
-                std::string filename = "data/logs/" + player->getName() + ".txt";
-                std::ofstream talkaction(filename.c_str(), std::ios_base::app);
-                time_t timeNow = time(nullptr);
-                const tm* now = localtime(&timeNow);
-                char buffer[32];
-                strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
-                talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
-                talkaction.close();
-            }
-
-			if(ret)
-				return TALKACTION_CONTINUE;
-			else
-				return TALKACTION_BREAK;
+			talkAction = it->second;
+			break;
 		}
 	}
+
+
+	bool ret = true;
+	Player* player = creature->getPlayer();
+	if(player->getAccessLevel() < talkAction->getAccess())
+	{
+		if(player->getAccessLevel() > 0)
+		{
+			player->sendCancel("You are not able to execute this action.");
+            g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
+			ret = false;
+        }
+    }
+
+	if(talkAction->isLogged())
+	{
+		std::string filename = "data/logs/" + player->getName() + ".txt";
+		std::ofstream talkaction(filename.c_str(), std::ios_base::app);
+		time_t timeNow = time(nullptr);
+		const tm* now = localtime(&timeNow);
+		char buffer[32];
+		strftime(buffer, sizeof(buffer), "%d/%m/%Y  %H:%M", now);
+		talkaction << "["<<buffer<<"] TalkAction: " << words << std::endl;
+		talkaction.close();
+	}
+
+	if(talkAction->isScripted())
+		ret = talkAction->executeSay(creature, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
+	else
+	{
+		if(TalkActionFunction* function = talkAction->getFunction())
+		{
+			function(creature, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
+			ret = false;
+		}
+	}
+
+	if(ret)
+		return TALKACTION_CONTINUE;
+	else
+		return TALKACTION_BREAK;
+
 	return TALKACTION_CONTINUE;
 }
 
@@ -199,9 +175,9 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 TalkAction::TalkAction(LuaScriptInterface* _interface) :
 Event(_interface)
 {
-	m_filterType = TALKACTION_MATCH_QUOTATION;
+	m_filter = TALKFILTER_WORD;
 	m_logged = false;
-	m_sensitive = true;
+	m_sensitive = false;
 	m_access = 0;
 	m_function = nullptr;
 }
@@ -214,13 +190,13 @@ TalkAction::~TalkAction()
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;
-	if(!(attr = node.attribute("words")))
+	if(attr = node.attribute("words"))
+		m_words = attr.as_string();
+	else
 	{
-		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
+		std::cout << "[Error - TalkAction::configureEvent] No words for TalkAction." << std::endl;
 		return false;
 	}
-	
-	commandString = attr.as_string();
 
 	if((attr = node.attribute("access")))
 		m_access = pugi::cast<int32_t>(attr.value());
@@ -229,9 +205,13 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	{
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if(tmpStrValue == "quotation")
-			m_filterType = TALKACTION_MATCH_QUOTATION;
-		else if(tmpStrValue == "first word")
-			m_filterType = TALKACTION_MATCH_FIRST_WORD;
+			m_filter = TALKFILTER_QUOTATION;
+		else if(tmpStrValue == "word")
+			m_filter = TALKFILTER_WORD;
+		else if(tmpStrValue == "word-spaced")
+			m_filter = TALKFILTER_WORD_SPACED;
+		else
+			std::cout << "[Warning - TalkAction::configureEvent] Unknown filter for TalkAction: " << tmpStrValue << ", using default." << std::endl;
 	}
 	
 	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")) || (attr = node.attribute("logged")))

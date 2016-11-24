@@ -30,16 +30,17 @@
 
 enum TalkActionResult_t
 {
-	//TALKACTION_NOTFOUND,
 	TALKACTION_CONTINUE,
 	TALKACTION_BREAK,
 	TALKACTION_FAILED,
 };
 
-enum TalkActionFilterType
+enum TalkActionFilter
 {
-	TALKACTION_MATCH_QUOTATION,
-	TALKACTION_MATCH_FIRST_WORD,
+	TALKFILTER_QUOTATION,
+	TALKFILTER_WORD,
+	TALKFILTER_WORD_SPACED,
+	TALKFILTER_LAST
 };
 
 class TalkAction;
@@ -50,7 +51,7 @@ class TalkActions : public BaseEvents
 		TalkActions();
 		virtual ~TalkActions();
 	
-		TalkActionResult_t onPlayerSpeak(Player* player, SpeakClasses type, const std::string& words);
+		TalkActionResult_t onPlayerSpeak(Creature* creature, SpeakClasses type, const std::string& words);
 	
 	protected:
 		virtual LuaScriptInterface& getScriptInterface();
@@ -76,11 +77,15 @@ class TalkAction : public Event
 		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 	
-		std::string getWords() const {return commandString;}
-		int16_t getAccessLevel() const {return m_access;}
+		std::string getWords() const {return m_words;}
+		void setWords(const std::string& words) {m_words = words;}
+		
+		int16_t getAccess() const {return m_access;}
+		TalkActionFilter getFilter() const {return m_filter;}
+
 		bool isLogged() const {return m_logged;}
-		bool isCaseSensitive() const {return m_sensitive;}
-		TalkActionFilterType getFilterType() const {return m_filterType;}
+		bool isSensitive() const {return m_sensitive;}
+
 		TalkActionFunction* getFunction() const {return m_function;}
 		bool isScripted() const {return m_scripted;}
 
@@ -98,11 +103,11 @@ class TalkAction : public Event
 		static TalkActionFunction unBan;
 		static TalkActionFunction ghost;
 	
-		std::string commandString;
+		std::string m_words;
 		int16_t m_access;
 		bool m_logged;
 		bool m_sensitive;
-		TalkActionFilterType m_filterType;
+		TalkActionFilter m_filter;
 		TalkActionFunction* m_function;
 };
 
