@@ -134,7 +134,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 					return TALKACTION_CONTINUE;
 			}
 			
-			if(talkAction->isLogged() && player)
+			if(player && talkAction->isLogged())
 			{
 				std::string filename = "data/logs/" + player->getName() + ".txt";
 				std::ofstream talkaction(filename.c_str(), std::ios_base::app);
@@ -146,6 +146,7 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 				talkaction.close();
 			}
 
+			player->sendTextMessage(MSG_STATUS_CONSOLE_RED, words.c_str());
 			bool ret = false;
 			if(talkAction->isScripted())
 				ret = talkAction->executeSay(player, cmdstring[talkAction->getFilter()], paramstring[talkAction->getFilter()]);
