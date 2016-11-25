@@ -94,7 +94,7 @@ bool ConfigManager::load()
 	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 0);
 	m_confInteger[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
 	m_confInteger[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
-	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 1);
+	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExperience", 1);
 	m_confInteger[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 1);
 	m_confInteger[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 1);
 	m_confInteger[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 1);
@@ -151,6 +151,7 @@ bool ConfigManager::load()
 	m_confBoolean[SURPRISE_BAGS] = booleanString(getGlobalString(L, "monstersDropSurpriseBags", "no"));
 	m_confBoolean[SPELL_NAME_INSTEAD_WORDS] = booleanString(getGlobalString(L, "spellNameInsteadOfWords", "no"));
 	m_confBoolean[EMOTE_SPELLS] = booleanString(getGlobalString(L, "emoteSpells", "no"));
+	m_confBoolean[EXPERIENCE_STAGES] = booleanString(getGlobalString(L, "experienceStages", "no"));
 
 	m_loaded = true;
 	lua_close(L);

@@ -102,6 +102,10 @@ class TalkAction : public Event
 		static TalkActionFunction createGuild;
 		static TalkActionFunction unBan;
 		static TalkActionFunction ghost;
+		static TalkActionFunction frags;
+		static TalkActionFunction serverInfo;
+		static TalkActionFunction sellHouse;
+		static TalkActionFunction buyHouse;
 	
 		std::string m_words;
 		int16_t m_access;

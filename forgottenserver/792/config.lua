@@ -88,7 +88,9 @@
 	maxGuildNameLength = 20
 
 	-- Rates
-	rateExp = 5
+	-- NOTE: experienceStages configuration is located in data/XML/stages.xml.
+	experienceStages = "no"
+	rateExperience = 5
 	rateSkill = 3
 	rateLoot = 2
 	rateMagic = 3

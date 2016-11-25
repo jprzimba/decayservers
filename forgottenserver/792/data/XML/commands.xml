@@ -13,9 +13,4 @@
 	<command cmd="/pos" group="1" acctype="2"/>
 	<command cmd="/r" group="2" acctype="5"/>
 	<command cmd="/raid" group="2" acctype="4"/>
-
-	<command cmd="!buyhouse" group="1" acctype="1"/>
-	<command cmd="!sellhouse" group="1" acctype="1"/>
-	<command cmd="!serverinfo" group="1" acctype="1"/>
-	<command cmd="!kills" group="1" acctype="1"/>
 </commands>

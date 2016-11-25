@@ -673,9 +673,9 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 			LuaScriptInterface::pushPosition(L, posEx, 0);
 		}
 	
-		int32_t result = m_scriptInterface->callFunction(5) != 0;
+		bool result = m_scriptInterface->callFunction(5);
 		m_scriptInterface->releaseScriptEnv();
-		return result != 0;
+		return result;
 	}
 	else
 	{

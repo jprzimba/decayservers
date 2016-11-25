@@ -76,12 +76,6 @@ s_defcommands Commands::defined_commands[] =
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
 	{"/raid", &Commands::forceRaid},
-
-	//player commands - TODO: make them talkactions
-	{"!buyhouse", &Commands::buyHouse},
- 	{"!sellhouse", &Commands::sellHouse},
-	{"!serverinfo", &Commands::serverInfo},
-	{"!kills", &Commands::playerKills}
 };
 
 Commands::Commands()
@@ -513,65 +507,6 @@ bool Commands::setHouseOwner(Creature* creature, const std::string& cmd, const s
 	return false;
 }
 
-bool Commands::sellHouse(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		House* house = Houses::getInstance().getHouseByPlayerId(player->guid);
-		if(!house)
-		{
-			player->sendCancel("You do not own any house.");
-			return false;
-		}
-
-		Player* tradePartner = g_game.getPlayerByName(param);
-		if(!(tradePartner && tradePartner != player))
-		{
-			player->sendCancel("Trade player not found.");
-			return false;
-		}
-
-		if(tradePartner->level < 1)
-		{
-			player->sendCancel("Trade player level is too low.");
-			return false;
-		}
-
-		if(Houses::getInstance().getHouseByPlayerId(tradePartner->guid))
-		{
-			player->sendCancel("Trade player already owns a house.");
-			return false;
-		}
-
-		if(!Position::areInRange<2,2,0>(tradePartner->getPosition(), player->getPosition()))
-		{
-			player->sendCancel("Trade player is too far away.");
-			return false;
-		}
-
-		if(!tradePartner->isPremium())
-		{
-			player->sendCancel("Trade player does not have a premium account.");
-			return false;
-		}
-
-		Item* transferItem = house->getTransferItem();
-		if(!transferItem)
-		{
-			player->sendCancel("You can not trade this house.");
-			return false;
-		}
-
-		transferItem->getParent()->setParent(player);
-		if(g_game.internalStartTrade(player, tradePartner, transferItem))
-			return true;
-		else
-			house->resetTransferItem();
-	}
-	return false;
-}
-
 bool Commands::getHouse(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -591,88 +526,6 @@ bool Commands::getHouse(Creature* creature, const std::string& cmd, const std::s
 			str << " does not own any house.";
 
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str().c_str());
-	}
-	return false;
-}
-
-bool Commands::serverInfo(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-	
-	std::stringstream text;
-	text << "Server Info:";
-	text << "\nExp Rate: " << g_game.getExperienceStage(player->level);
-	text << "\nSkill Rate: " << g_config.getNumber(ConfigManager::RATE_SKILL);
-	text << "\nMagic Rate: " << g_config.getNumber(ConfigManager::RATE_MAGIC);
-	text << "\nLoot Rate: " << g_config.getNumber(ConfigManager::RATE_LOOT);
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
-	return true;
-}
-
-bool Commands::buyHouse(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		Position pos = player->getPosition();
-		pos = getNextPosition(player->direction, pos);
-		for(HouseMap::iterator it = Houses::getInstance().getHouseBegin(); it != Houses::getInstance().getHouseEnd(); it++)
-		{
-			if(it->second->getHouseOwner() == player->guid)
-			{
-				player->sendCancel("You are already the owner of a house.");
-				return false;
-			}
-		}
-		if(Tile* tile = g_game.getTile(pos.x, pos.y, pos.z))
-		{
-			if(HouseTile* houseTile = dynamic_cast<HouseTile*>(tile))
-			{
-				if(House* house = houseTile->getHouse())
-				{
-					if(house->getDoorByPosition(pos))
-					{
-						if(!house->getHouseOwner())
-						{
-							if(player->isPremium())
-							{
-								uint32_t price = 0;
-								for(HouseTileList::iterator it = house->getHouseTileBegin(); it != house->getHouseTileEnd(); it++)
-									price += g_config.getNumber(ConfigManager::HOUSE_PRICE);
-								if(price)
-								{
-									uint32_t money = g_game.getMoney(player);
-									if(money >= price && g_game.removeMoney(player, price))
-									{
-										house->setHouseOwner(player->guid);
-										player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in your depot of this city.");
-										return true;
-									}
-									else
-										player->sendCancel("You do not have enough money.");
-								}
-								else
-									player->sendCancel("That house doesn't contain any house tile.");
-							}
-							else
-								player->sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
-						}
-						else
-							player->sendCancel("This house alreadly has an owner.");
-					}
-					else
-						player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-				}
-				else
-					player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-			}
-			else
-				player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-		}
-		else
-			player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 	}
 	return false;
 }
@@ -796,25 +649,3 @@ bool Commands::forceRaid(Creature* creature, const std::string& cmd, const std::
 	return true;
 }
 
-bool Commands::playerKills(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		int32_t fragTime = g_config.getNumber(ConfigManager::FRAG_TIME);
-		if(player->redSkullTicks && fragTime > 0)
-		{
-			int32_t frags = (player->redSkullTicks / fragTime) + 1;
-			int32_t remainingTime = player->redSkullTicks - (fragTime * (frags - 1));
-			int32_t hours = ((remainingTime / 1000) / 60) / 60;
-			int32_t minutes = ((remainingTime / 1000) / 60) - (hours * 60);
-
-			char buffer[140];
-			sprintf(buffer, "You have %d unjustified frag%s. The amount of unjustified frags will decrease after: %s.", frags, (frags > 1 ? "s" : ""), formatTime(hours, minutes).c_str());
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, buffer);
-		}
-		else
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
-	}
-	return false;
-}

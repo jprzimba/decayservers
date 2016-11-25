@@ -1,4 +1,4 @@
-function onSay(cid, words, param, channel)
+function onSay(cid, words, param)
 	local func = doCreateNpc
 	local pid = cid
 	local t = string.explode(param, " ")

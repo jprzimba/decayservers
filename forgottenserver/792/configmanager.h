@@ -64,6 +64,7 @@ class ConfigManager
 			SURPRISE_BAGS,
 			SPELL_NAME_INSTEAD_WORDS,
 			EMOTE_SPELLS,
+			EXPERIENCE_STAGES,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

@@ -252,9 +252,8 @@ uint32_t CreatureEvent::executeOnLogin(Player* player)
 		m_scriptInterface->pushFunction(m_scriptId);
 		lua_pushnumber(L, cid);
 
-		bool result = m_scriptInterface->callFunction(1) != 0;
+		bool result = m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	}
 	else
@@ -287,9 +286,8 @@ uint32_t CreatureEvent::executeOnLogout(Player* player)
 		m_scriptInterface->pushFunction(m_scriptId);
 		lua_pushnumber(L, cid);
 
-		bool result = m_scriptInterface->callFunction(1) != 0;
+		bool result = m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	}
 	else
@@ -323,9 +321,8 @@ uint32_t CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 		lua_pushnumber(L, cid);
 		lua_pushnumber(L, interval);
 
-		bool result = m_scriptInterface->callFunction(2) != 0;
+		bool result = m_scriptInterface->callFunction(2);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	}
 	else
@@ -360,9 +357,8 @@ uint32_t CreatureEvent::executeOnPrepareDeath(Player* player, Creature* killer)
 		lua_pushnumber(L, cid);
 		lua_pushnumber(L, killercid);
 
-		bool result = m_scriptInterface->callFunction(2) != 0;
+		bool result = m_scriptInterface->callFunction(2);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	}
 	else
@@ -399,9 +395,8 @@ uint32_t CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creatur
 		lua_pushnumber(L, corpseid);
 		lua_pushnumber(L, killercid);
 
-		bool result = m_scriptInterface->callFunction(3) != 0;
+		bool result = m_scriptInterface->callFunction(3);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	}
 	else

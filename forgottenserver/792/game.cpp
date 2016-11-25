@@ -4959,7 +4959,7 @@ bool Game::violationWindow(uint32_t playerId, std::string targetPlayerName, int3
 
 uint64_t Game::getExperienceStage(uint32_t level)
 {
-	if(!stagesEnabled)
+	if(!g_config.getBool(ConfigManager::EXPERIENCE_STAGES))
 		return g_config.getNumber(ConfigManager::RATE_EXPERIENCE);
 
 	if(useLastStageLevel && level >= lastStageLevel)
@@ -4970,6 +4970,9 @@ uint64_t Game::getExperienceStage(uint32_t level)
 
 bool Game::loadExperienceStages()
 {
+	if(!g_config.getBool(ConfigManager::EXPERIENCE_STAGES))
+		return true;
+
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
 	if(!result) {
@@ -4978,10 +4981,7 @@ bool Game::loadExperienceStages()
 	}
 
 	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
-		if(strcasecmp(stageNode.name(), "config") == 0) {
-			stagesEnabled = stageNode.attribute("enabled").as_bool();
-		} 
-		else if(strcasecmp(stageNode.name(), "stage") == 0){
+		if(strcasecmp(stageNode.name(), "stage") == 0){
 			uint32_t minLevel, maxLevel, multiplier;
 
 			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");

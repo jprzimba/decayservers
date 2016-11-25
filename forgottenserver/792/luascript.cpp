@@ -588,7 +588,8 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 		return -1;
 
 	m_loadingFile = file;
-	this->reserveScriptEnv();
+	reserveScriptEnv();
+
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
@@ -623,7 +624,8 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = nu
 		return -1;
 
 	m_loadingFile = "loadBuffer";
-	this->reserveScriptEnv();
+	reserveScriptEnv();
+
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
@@ -1853,7 +1855,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//doSummonMonster(cid, name)
 	lua_register(m_luaState, "doSummonMonster", LuaScriptInterface::luaDoSummonMonster);
-	
+
+	//getExperienceStage(level)
+	lua_register(m_luaState, "getExperienceStage", LuaScriptInterface::luaGetExperienceStage);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7906,3 +7910,11 @@ int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
 	lua_pushnumber(L, env->addThing((Thing*)npc));
 	return 1;
 }
+
+int32_t LuaScriptInterface::luaGetExperienceStage(lua_State* L)
+{
+	//getExperienceStage(level)
+	lua_pushnumber(L, g_game.getExperienceStage(popNumber(L)));
+	return 1;
+}
+

@@ -598,7 +598,6 @@ class Game
 
 		typedef std::map<uint32_t,uint32_t> StageList;
 		StageList stages;
-		bool stagesEnabled;
 		uint32_t lastStageLevel;
 		bool useLastStageLevel;
 

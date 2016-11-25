@@ -27,11 +27,18 @@
 
 	<!-- Players -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
-	<talkaction words="!leavehouse" script="leavehouse.lua"/>
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
 	<talkaction words="!deathlist" script="deathlist.lua"/>
 	<talkaction words="!online" script="online.lua"/>
 	<talkaction words="!createguild" function="createguild"/>
 	<talkaction words="!joinguild" function="joinguild"/>
+	<talkaction words="!frags" function="frags"/>
+	<talkaction words="!serverinfo" function="serverinfo"/>
+
+	<!-- Houses -->
+	<talkaction words="!buyhouse" function="buyhouse"/>
+	<talkaction words="!leavehouse" script="leavehouse.lua"/>
+	<talkaction words="!sellhouse" function="sellhouse"/>
+
 </talkactions>

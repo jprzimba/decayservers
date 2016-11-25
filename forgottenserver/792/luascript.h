@@ -273,13 +273,13 @@ class LuaScriptInterface
 		static bool reserveScriptEnv()
 		{
 			++m_scriptEnvIndex;
-			if(m_scriptEnvIndex < 15)
-				return true;
-			else
+			if(m_scriptEnvIndex > 20)
 			{
 				--m_scriptEnvIndex;
 				return false;
 			}
+
+			return true;
 		}
 
 		static void releaseScriptEnv()
@@ -512,6 +512,7 @@ class LuaScriptInterface
 		static int32_t luaBroadcastMessage(lua_State* L);
 		static int32_t luaDoPlayerBroadcastMessage(lua_State* L);
 		static int32_t luaGetGuildId(lua_State* L);
+		static int32_t luaGetExperienceStage(lua_State* L);
 
 		//type validation
 		static int32_t luaIsPlayer(lua_State* L);

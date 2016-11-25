@@ -93,6 +93,12 @@ class Vocations
 		Vocations();
 		~Vocations();
 
+		static Vocations* getInstance()
+		{
+			static Vocations instance;
+			return &instance;
+		}
+
 		bool loadFromXml();
 		Vocation* getVocation(uint32_t vocId);
 		int32_t getVocationId(const std::string& name);

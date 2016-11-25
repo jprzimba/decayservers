@@ -51,15 +51,11 @@ class Commands
 		bool teleportNTiles(Creature* creature, const std::string& cmd, const std::string& param);
 		bool kickPlayer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool setHouseOwner(Creature* creature, const std::string& cmd, const std::string& param);
-		bool sellHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getHouse(Creature* creature, const std::string& cmd, const std::string& param);
-		bool serverInfo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool showPosition(Creature* creature, const std::string &cmd, const std::string &param);
 		bool removeThing(Creature* creature, const std::string& cmd, const std::string& param);
-		bool buyHouse(Creature* creature, const std::string& cmd, const std::string& param);
 		bool newType(Creature* creature, const std::string& cmd, const std::string& param);
 		bool forceRaid(Creature* creature, const std::string& cmd, const std::string& param);
-		bool playerKills(Creature* creature, const std::string& cmd, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];
