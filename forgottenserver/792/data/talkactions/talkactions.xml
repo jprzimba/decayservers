@@ -7,8 +7,7 @@
 	<talkaction access="5" log="yes" words="/addskill" function="addskill"/>
 
 	<!-- Community Manager -->
-	<talkaction access="4" log="yes" words="/i" script="createitembyid.lua"/>
-	<talkaction access="4" log="yes" words="/n" script="createitembyname.lua"/>
+	<talkaction access="4" log="yes" words="/i" script="createitem.lua"/>
 	<talkaction access="4" log="yes" words="/summon" script="summon.lua"/>
 	<talkaction access="4" log="yes" words="/s" script="placenpc.lua"/>
 	<talkaction access="4" log="yes" words="/m" script="placemonster.lua"/>
