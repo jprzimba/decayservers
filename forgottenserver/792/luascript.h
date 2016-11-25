@@ -681,6 +681,7 @@ class LuaScriptInterface
 			int32_t scriptId;
 			int32_t function;
 			std::list<int> parameters;
+			uint32_t eventId;
 		};
 		uint32_t m_lastEventTimerId;
 
