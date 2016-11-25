@@ -9,6 +9,20 @@
 	mysqlDatabase = "otserv"
 	startupDatabaseOptimization = "yes"
 
+	-- Connection Config
+	ip = "127.0.0.1"
+	port = 7171
+	loginTries = 0
+	retryTimeout = 30 * 1000
+	loginTimeout = 60 * 1000
+	maxPlayers = "1000"
+	motd = "Welcome to the Forgotten Server!"
+	onePlayerOnlinePerAccount = "yes"
+	allowClones = "no"
+	serverName = "Forgotten"
+	loginMessage = "Welcome to the Forgotten Server!"
+	statusTimeout = 5 * 60 * 1000
+
 	-- Account Manager
 	accountManager = "yes"
 	newPlayerChooseVoc = "yes"
@@ -38,20 +52,6 @@
 	criticalHitChance = 7
 	removeAmmoWhenUsingDistanceWeapon = "yes"
 	removeChargesFromRunes = "yes"
-
-	-- Connection Config
-	ip = "127.0.0.1"
-	port = 7171
-	loginTries = 0
-	retryTimeout = 30 * 1000
-	loginTimeout = 60 * 1000
-	maxPlayers = "1000"
-	motd = "Welcome to the Forgotten Server!"
-	onePlayerOnlinePerAccount = "yes"
-	allowClones = "no"
-	serverName = "Forgotten"
-	loginMessage = "Welcome to the Forgotten Server!"
-	statusTimeout = 5 * 60 * 1000
 
 	-- Highscores and Deathlist
 	highscoreDisplayPlayers = 15
@@ -99,6 +99,10 @@
 	deSpawnRadius = 50
 	monstersDropSurpriseBags = "yes"
 	surpriseBagPercent = 0
+
+	-- Spells
+	spellNameInsteadOfWords = "no"
+	emoteSpells = "no"
 
 	-- Real Server Save
 	-- note: serverSaveHour means like 24:00, not that it will save every 24 hours,

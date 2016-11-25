@@ -149,6 +149,8 @@ bool ConfigManager::load()
 	m_confBoolean[CLEAN_PZ] = booleanString(getGlobalString(L, "cleanProtectedZones", "yes"));
 	m_confBoolean[ENABLE_RULE_VIOLATION_REPORTS] = booleanString(getGlobalString(L, "enableRuleViolationReports", "no"));
 	m_confBoolean[SURPRISE_BAGS] = booleanString(getGlobalString(L, "monstersDropSurpriseBags", "no"));
+	m_confBoolean[SPELL_NAME_INSTEAD_WORDS] = booleanString(getGlobalString(L, "spellNameInsteadOfWords", "no"));
+	m_confBoolean[EMOTE_SPELLS] = booleanString(getGlobalString(L, "emoteSpells", "no"));
 
 	m_loaded = true;
 	lua_close(L);

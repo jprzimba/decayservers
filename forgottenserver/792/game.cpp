@@ -3230,18 +3230,22 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return false;
 	}
 
+	if(player->getName() == "Account Manager")
+	{
+		player->removeMessageBuffer();
+		return internalCreatureSay(player, SPEAK_SAY, text);
+	}
+
+	if(playerSayCommand(player, type, text))
+		return true;
+
 	TalkActionResult_t result;
 	result = g_talkActions->onPlayerSpeak(player, type, text);
 	if(result == TALKACTION_BREAK)
 		return true;
 
-	if(playerSayCommand(player, type, text))
+	if(g_spells->playerSaySpell(player, text))
 		return true;
-
-	if(playerSaySpell(player, type, text))
-		return true;
-
-	player->removeMessageBuffer();
 
 	switch(type)
 	{
@@ -3295,21 +3299,6 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 			}
 		}
 	}
-	return false;
-}
-
-bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& text)
-{
-	if(player->getName() == "Account Manager")
-		return internalCreatureSay(player, SPEAK_SAY, text);
-
-	TalkActionResult_t result;
-	result = g_spells->playerSaySpell(player, type, text);
-	if(result == TALKACTION_BREAK)
-		return internalCreatureSay(player, SPEAK_SAY, text);
-	else if(result == TALKACTION_FAILED)
-		return true;
-
 	return false;
 }
 

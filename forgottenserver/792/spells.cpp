@@ -47,43 +47,61 @@ Spells::~Spells()
 	clear();
 }
 
-TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, const std::string& words)
+ReturnValue Spells::playerSaySpell(Player* player, const std::string& words)
 {
-	std::string str_words = words;
+	std::string reWords = words;
+	trimString(reWords);
 
-	//strip trailing spaces
-	trimString(str_words);
-
-	InstantSpell* instantSpell = getInstantSpell(str_words);
+	InstantSpell* instantSpell = getInstantSpell(reWords);
 	if(!instantSpell)
-		return TALKACTION_CONTINUE;
+		return RET_NOTPOSSIBLE;
 
-	std::string param = "";
-	if(instantSpell->getHasParam())
+	size_t size = instantSpell->getWords().length();
+	std::string param = reWords.substr(size, reWords.length() - size), reParam = "";
+	if(instantSpell->getHasParam() && !param.empty() && param[0] == ' ')
 	{
-		size_t spellLen = instantSpell->getWords().length();
-		size_t paramLen = str_words.length() - spellLen;
-		std::string paramText = str_words.substr(spellLen, paramLen);
-
-		if(!paramText.empty() && paramText[0] == ' ')
+		size_t quote = param.find('"', 1);
+		if(quote != std::string::npos)
 		{
-			size_t loc1 = paramText.find('"', 0);
-			size_t loc2 = std::string::npos;
-			if(loc1 != std::string::npos)
-				loc2 = paramText.find('"', loc1 + 1);
+			size_t tmp = param.find('"', quote + 1);
+			if(tmp == std::string::npos)
+				tmp = param.length();
 
-			if(loc2 == std::string::npos)
-				loc2 = paramText.length();
-			
-			param = paramText.substr(loc1 + 1, loc2 - loc1 - 1);
-			trimString(param);
+			reParam = param.substr(quote + 1, tmp - quote - 1);
 		}
+		else if(param.find(' ', 1) == std::string::npos)
+			reParam = param.substr(1, param.length());
+
+		trimString(reParam);
 	}
 
-	if(instantSpell->playerCastInstant(player, param))
-		return TALKACTION_BREAK;
-	else
-		return TALKACTION_FAILED;
+	if(!instantSpell->playerCastInstant(player, reParam))
+		return RET_NEEDEXCHANGE;
+
+	SpeakClasses type = SPEAK_SAY;
+	if(g_config.getBool(ConfigManager::EMOTE_SPELLS))
+		type = SPEAK_MONSTER_SAY;
+
+	if(!g_config.getBool(ConfigManager::SPELL_NAME_INSTEAD_WORDS))
+		return g_game.internalCreatureSay(player, type, reWords) ?
+			RET_NOERROR : RET_NOTPOSSIBLE;
+
+	std::string ret = instantSpell->getName();
+	if(param.length())
+	{
+		trimString(param);
+		size_t tmp = 0, rtmp = param.length();
+		if(param[0] == '"')
+			tmp = 1;
+
+		if(param[rtmp] == '"')
+			rtmp -= 1;
+
+		ret += ": " + param.substr(tmp, rtmp);
+	}
+
+	return g_game.internalCreatureSay(player, type, ret) ?
+		RET_NOERROR : RET_NOTPOSSIBLE;
 }
 
 void Spells::clear()

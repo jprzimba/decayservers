@@ -62,6 +62,8 @@ class ConfigManager
 			SERVERSAVE_ENABLED,
 			ENABLE_RULE_VIOLATION_REPORTS,
 			SURPRISE_BAGS,
+			SPELL_NAME_INSTEAD_WORDS,
+			EMOTE_SPELLS,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
