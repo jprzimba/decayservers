@@ -228,7 +228,7 @@ void ScriptEnvironment::removeUniqueThing(Thing* thing)
 
 uint32_t ScriptEnvironment::addThing(Thing* thing)
 {
-	if(thing)
+	if(thing && !thing->isRemoved())
 	{
 		ThingMap::iterator it;
 		for(it = m_localMap.begin(); it != m_localMap.end(); ++it)
