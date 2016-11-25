@@ -544,6 +544,9 @@ LuaScriptInterface::LuaScriptInterface(std::string interfaceName)
 
 LuaScriptInterface::~LuaScriptInterface()
 {
+	for(LuaTimerEvents::iterator it = m_timerEvents.begin(); it != m_timerEvents.end(); ++it)
+		Scheduler::getScheduler().stopEvent(it->second.eventId);
+
 	closeState();
 }
 	
@@ -595,10 +598,10 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 	env->setNpc(npc);
 
 	//execute it
-	ret = lua_pcall(m_luaState, 0, 0, 0);
+	ret = protectedCall(m_luaState, 0, 0);
 	if(ret != 0)
 	{
-		reportError(nullptr, std::string(popString(m_luaState)));
+		reportError(nullptr, popString(m_luaState));
 		this->releaseScriptEnv();
 		return -1;
 	}
@@ -631,7 +634,7 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = nu
 	env->setNpc(npc);
 
 	//execute it
-	ret = lua_pcall(m_luaState, 0, 0, 0);
+	ret = protectedCall(m_luaState, 0, 0);
 	if(ret != 0)
 	{
 		reportError(nullptr, std::string(popString(m_luaState)));
@@ -7037,7 +7040,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	int32_t parameters = lua_gettop(L);
 	if(lua_isfunction(L, -parameters) == 0) //-parameters means the first parameter from left to right
 	{
-		reportError(__FUNCTION__, "callback parameter should be a function.");
+		reportErrorFunc("callback parameter should be a function.");
 		lua_pushboolean(L, false);
 		return 1;
 	}
@@ -7055,9 +7058,10 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = env->getScriptId();
 
 	script_interface->m_lastEventTimerId++;
-	script_interface->m_timerEvents[script_interface->m_lastEventTimerId] = eventDesc;
 
-	Scheduler::getScheduler().addEvent(createSchedulerTask(delay, boost::bind(&LuaScriptInterface::executeTimerEvent, script_interface, script_interface->m_lastEventTimerId)));
+	eventDesc.eventId = Scheduler::getScheduler().addEvent(createSchedulerTask(delay, boost::bind(&LuaScriptInterface::executeTimerEvent,
+		script_interface, script_interface->m_lastEventTimerId)));
+	script_interface->m_timerEvents[script_interface->m_lastEventTimerId] = eventDesc;
 	lua_pushnumber(L, script_interface->m_lastEventTimerId);
 	return 1;
 }
@@ -7067,7 +7071,7 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	//stopEvent(eventid)
 	uint32_t eventId = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	
+
 	LuaScriptInterface* script_interface = env->getScriptInterface();
 	if(!script_interface)
 	{
@@ -7092,7 +7096,7 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	}
 	else
 		lua_pushboolean(L, false);
-	
+
 	return 1;
 }
 

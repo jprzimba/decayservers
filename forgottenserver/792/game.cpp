@@ -3221,6 +3221,8 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	if(!player || player->isRemoved())
 		return false;
 
+	player->resetIdleTime();
+
 	uint32_t muteTime = player->isMuted();
 	if(muteTime > 0)
 	{
@@ -3228,12 +3230,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		sprintf(buffer, "You are still muted for %d seconds.", muteTime);
 		player->sendTextMessage(MSG_STATUS_SMALL, buffer);
 		return false;
-	}
-
-	if(player->getName() == "Account Manager")
-	{
-		player->removeMessageBuffer();
-		return internalCreatureSay(player, SPEAK_SAY, text);
 	}
 
 	if(playerSayCommand(player, type, text))
@@ -3244,8 +3240,10 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	if(result == TALKACTION_BREAK)
 		return true;
 
-	if(g_spells->playerSaySpell(player, text))
+	if(playerSaySpell(player, text))
 		return true;
+
+	player->removeMessageBuffer();
 
 	switch(type)
 	{
@@ -3299,6 +3297,21 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 			}
 		}
 	}
+	return false;
+}
+
+bool Game::playerSaySpell(Player* player, const std::string& text)
+{
+	if(player->getName() == "Account Manager")
+		return internalCreatureSay(player, SPEAK_SAY, text);
+
+	std::string words = text;
+	ReturnValue result = g_spells->playerSaySpell(player, words);
+	if(result == RET_NOTPOSSIBLE)
+		return internalCreatureSay(player, SPEAK_SAY, words);
+	else if(result == RET_NOERROR)
+		return true;
+
 	return false;
 }
 

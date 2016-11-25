@@ -167,6 +167,14 @@ int main(int argc, char *argv[])
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 	else if(strcasecmp(defaultPriority.c_str(), "above-normal") == 0)
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+
+	std::stringstream mutexName;
+	mutexName << "forgottenserver_" << g_config.getNumber(ConfigManager::PORT);
+
+	CreateMutex(NULL, FALSE, mutexName.str().c_str());
+	if(GetLastError() == ERROR_ALREADY_EXISTS)
+		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
+	
 #endif
 
 	//load RSA key
@@ -242,36 +250,6 @@ int main(int argc, char *argv[])
 	if(!g_game.loadExperienceStages())
 		startupErrorMessage("Unable to load experience stages!");
 
-	g_game.timedHighscoreUpdate();
-
-	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
-	if(autoSaveEachMinutes > 0)
-		Scheduler::getScheduler().addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, boost::bind(&Game::autoSave, &g_game)));
-
-	if(g_config.getBool(ConfigManager::SERVERSAVE_ENABLED))
-	{
-		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
-		if(serverSaveHour >= 0 && serverSaveHour <= 24)
-		{
-			time_t timeNow = time(nullptr);
-			tm* timeinfo = localtime(&timeNow);
-
-			if(serverSaveHour == 0)
-				serverSaveHour = 23;
-			else
-				serverSaveHour--;
-
-			timeinfo->tm_hour = serverSaveHour;
-			timeinfo->tm_min = 55;
-			timeinfo->tm_sec = 0;
-			time_t difference = (time_t)difftime(mktime(timeinfo), timeNow);
-			if(difference < 0)
-				difference += 86400;
-
-			Scheduler::getScheduler().addEvent(createSchedulerTask(difference * 1000, boost::bind(&Game::prepareServerSave, &g_game)));
-		}
-	}
-
 	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORDTYPE));
 	if(passwordType == "md5")
 	{
@@ -322,6 +300,37 @@ int main(int argc, char *argv[])
 
 	std::cout << ">> Initializing gamestate" << std::endl;
 	g_game.setGameState(GAME_STATE_INIT);
+
+
+	g_game.timedHighscoreUpdate();
+
+	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
+	if(autoSaveEachMinutes > 0)
+		Scheduler::getScheduler().addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, boost::bind(&Game::autoSave, &g_game)));
+
+	if(g_config.getBool(ConfigManager::SERVERSAVE_ENABLED))
+	{
+		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
+		if(serverSaveHour >= 0 && serverSaveHour <= 24)
+		{
+			time_t timeNow = time(nullptr);
+			tm* timeinfo = localtime(&timeNow);
+
+			if(serverSaveHour == 0)
+				serverSaveHour = 23;
+			else
+				serverSaveHour--;
+
+			timeinfo->tm_hour = serverSaveHour;
+			timeinfo->tm_min = 55;
+			timeinfo->tm_sec = 0;
+			time_t difference = (time_t)difftime(mktime(timeinfo), timeNow);
+			if(difference < 0)
+				difference += 86400;
+
+			Scheduler::getScheduler().addEvent(createSchedulerTask(difference * 1000, boost::bind(&Game::prepareServerSave, &g_game)));
+		}
+	}
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
