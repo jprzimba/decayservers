@@ -22,19 +22,38 @@
 #include <sstream>
 #include <fstream>
 
+#include "actions.h"
 #include "ban.h"
 #include "chat.h"
 #include "creature.h"
+#include "creatureevent.h"
 #include "player.h"
 #include "talkaction.h"
 #include "tools.h"
 #include "game.h"
+#include "globalevent.h"
 #include "configmanager.h"
 #include "house.h"
+#include "monster.h"
+#include "npc.h"
+#include "movement.h"
+#include "spells.h"
+#include "weapons.h"
+#include "raids.h"
+#include "status.h"
 
-extern ConfigManager g_config;
+extern Actions* g_actions;
 extern Chat g_chat;
+extern ConfigManager g_config;
+extern CreatureEvents* g_creatureEvents;
 extern Game g_game;
+extern GlobalEvents* g_globalEvents;
+extern Monsters g_monsters;
+extern Npcs g_npcs;
+extern TalkActions* g_talkActions;
+extern MoveEvents* g_moveEvents;
+extern Spells* g_spells;
+extern Weapons* g_weapons;
 
 TalkActions::TalkActions() :
 m_scriptInterface("TalkAction Interface")
@@ -244,6 +263,20 @@ bool TalkAction::loadFunction(const std::string& functionName)
 		m_function = sellHouse;
 	else if(tmpFunctionName == "buyhouse")
 		m_function = buyHouse;
+	else if(tmpFunctionName == "reloadinfo")
+		m_function = reloadInfo;
+	else if(tmpFunctionName == "getinfo")
+		m_function = getInfo;
+	else if(tmpFunctionName == "forceraid")
+		m_function = forceRaid;
+	else if(tmpFunctionName == "gethouse")
+		m_function = getHouse;
+	else if(tmpFunctionName == "sethouseowner")
+		m_function = setHouseOwner;
+	else if(tmpFunctionName == "removething")
+		m_function = removeThing;
+	else if(tmpFunctionName == "newtype")
+		m_function = newType;
 	else
 	{
 		std::cout << "[Warning - TalkAction::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -767,3 +800,264 @@ bool TalkAction::buyHouse(Creature* creature, const std::string& cmd, const std:
 
 	return false;
 }
+
+bool TalkAction::reloadInfo(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	std::string tmpParam = asLowerCaseString(param);
+	if(tmpParam == "action" || tmpParam == "actions")
+	{
+		g_actions->reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded actions.");
+	}
+	else if(tmpParam == "config" || tmpParam == "configuration")
+	{
+		g_config.reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded config.");
+	}
+	else if(tmpParam == "creaturescript" || tmpParam == "creaturescripts")
+	{
+		g_creatureEvents->reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded creaturescripts.");
+	}
+	else if(tmpParam == "globalevent" || tmpParam == "globalevents")
+	{
+		g_globalEvents->reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded global events.");
+	}
+	else if(tmpParam == "highscore" || tmpParam == "highscores")
+	{
+		g_game.reloadHighscores();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded highscores.");
+	}
+	else if(tmpParam == "monster" || tmpParam == "monsters")
+	{
+		g_monsters.reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
+	}
+	else if(tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
+		|| tmpParam == "moveevents" || tmpParam == "moveevent")
+	{
+		g_moveEvents->reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
+	}
+	else if(tmpParam == "npc" || tmpParam == "npcs")
+	{
+		g_npcs.reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
+	}
+	else if(tmpParam == "raid" || tmpParam == "raids")
+	{
+		Raids::getInstance()->reload();
+		Raids::getInstance()->startup();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded raids.");
+	}
+	else if(tmpParam == "spell" || tmpParam == "spells")
+	{
+		g_spells->reload();
+		g_monsters.reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded spells.");
+	}
+	else if(tmpParam == "talk" || tmpParam == "talkaction" || tmpParam == "talkactions")
+	{
+		g_talkActions->reload();
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded talkactions.");
+	}
+	else
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
+
+	return false;
+}
+
+bool TalkAction::getInfo(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	Player* paramPlayer = g_game.getPlayerByName(param);
+	if(paramPlayer)
+	{
+		if(player != paramPlayer && paramPlayer->getAccessLevel() >= player->getAccessLevel())
+		{
+			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You can not get info about this player.");
+			return false;
+		}
+		uint8_t ip[4];
+		*(uint32_t*)&ip = paramPlayer->lastIP;
+		std::stringstream info;
+		info << "name:    " << paramPlayer->name << std::endl <<
+			"access:  " << paramPlayer->accessLevel << std::endl <<
+			"level:   " << paramPlayer->level << std::endl <<
+			"maglvl:  " << paramPlayer->magLevel << std::endl <<
+			"speed:   " << paramPlayer->getSpeed() <<std::endl <<
+			"position " << paramPlayer->getPosition() << std::endl;
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, info.str().c_str());
+	}
+	else
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
+
+	return false;
+}
+
+bool TalkAction::forceRaid(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	Raid* raid = Raids::getInstance()->getRaidByName(param);
+	if(!raid || !raid->isLoaded())
+	{
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "No such raid exists.");
+		return false;
+	}
+
+	if(Raids::getInstance()->getRunning())
+	{
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
+		return false;
+	}
+
+	Raids::getInstance()->setRunning(raid);
+	RaidEvent* event = raid->getNextRaidEvent();
+
+	if(!event)
+	{
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
+		return false;
+	}
+
+	raid->setState(RAIDSTATE_EXECUTING);
+
+	uint32_t ticks = event->getDelay();
+	if(ticks > 0)
+		Scheduler::getScheduler().addEvent(createSchedulerTask(ticks,
+			boost::bind(&Raid::executeRaidEvent, raid, event)));
+	else
+		Dispatcher::getDispatcher().addTask(createTask(
+			boost::bind(&Raid::executeRaidEvent, raid, event)));
+
+	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
+	return false;
+}
+
+bool TalkAction::getHouse(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	std::string real_name = param;
+	uint32_t guid;
+	if(IOLoginData::getInstance()->getGuidByName(guid, real_name))
+	{
+		House* house = Houses::getInstance().getHouseByPlayerId(guid);
+		std::stringstream str;
+		str << real_name;
+		if(house)
+			str << " owns house: " << house->getName() << ".";
+		else
+			str << " does not own any house.";
+
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str().c_str());
+	}
+	return false;
+}
+
+bool TalkAction::setHouseOwner(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	if(player->getTile()->hasFlag(TILESTATE_HOUSE))
+	{
+		HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
+		if(houseTile)
+		{
+			std::string real_name = param;
+			uint32_t guid;
+			if(param == "none")
+				houseTile->getHouse()->setHouseOwner(0);
+			else if(IOLoginData::getInstance()->getGuidByName(guid, real_name))
+				houseTile->getHouse()->setHouseOwner(guid);
+			else
+				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
+
+			return true;
+		}
+	}
+	return false;
+}
+
+bool TalkAction::removeThing(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	Position pos = player->getPosition();
+	pos = getNextPosition(player->direction, pos);
+	Tile *removeTile = g_game.getMap()->getTile(pos);
+	if(removeTile != nullptr)
+	{
+		Thing *thing = removeTile->getTopThing();
+		if(thing)
+		{
+			if(Creature *creature = thing->getCreature())
+				g_game.removeCreature(creature, true);
+			else
+			{
+				Item *item = thing->getItem();
+				if(item && !item->isGroundTile())
+				{
+					g_game.internalRemoveItem(item, 1);
+					g_game.addMagicEffect(pos, NM_ME_MAGIC_BLOOD);
+				}
+				else if(item && item->isGroundTile())
+				{
+					player->sendTextMessage(MSG_STATUS_SMALL, "You may not remove a ground tile.");
+					g_game.addMagicEffect(pos, NM_ME_POFF);
+					return false;
+				}
+			}
+		}
+		else
+		{
+			player->sendTextMessage(MSG_STATUS_SMALL, "No object found.");
+			g_game.addMagicEffect(pos, NM_ME_POFF);
+			return false;
+		}
+	}
+	else
+	{
+		player->sendTextMessage(MSG_STATUS_SMALL, "No tile found.");
+		g_game.addMagicEffect(pos, NM_ME_POFF);
+		return false;
+	}
+	return false;
+}
+
+bool TalkAction::newType(Creature* creature, const std::string& cmd, const std::string& param)
+{
+	Player* player = creature->getPlayer();
+	if(!player)
+		return false;
+
+	int32_t lookType = atoi(param.c_str());
+	if(lookType < 0 || lookType == 1 || lookType == 135 || lookType > 160 && lookType < 192 || lookType > 247)
+		player->sendTextMessage(MSG_STATUS_SMALL, "This looktype does not exist.");
+	else
+	{
+		g_game.internalCreatureChangeOutfit(creature, (const Outfit_t&)lookType);
+		return true;
+	}
+
+	return false;
+}
+
+

@@ -33,7 +33,6 @@
 #include "iologindata.h"
 #include "status.h"
 #include "monsters.h"
-#include "commands.h"
 #include "outfit.h"
 #include "vocation.h"
 #include "scriptmanager.h"
@@ -66,7 +65,6 @@ IPList serverIPs;
 
 Ban g_bans;
 Game g_game;
-Commands commands;
 Npcs g_npcs;
 ConfigManager g_config;
 Monsters g_monsters;
@@ -219,11 +217,6 @@ int main(int argc, char *argv[])
 	std::cout << ">> Loading vocations" << std::endl;
 	if(!g_vocations.loadFromXml())
 		startupErrorMessage("Unable to load vocations!");
-
-	//load commands
-	std::cout << ">> Loading commands" << std::endl;
-	if(!commands.loadFromXml())
-		startupErrorMessage("Unable to load commands!");
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;

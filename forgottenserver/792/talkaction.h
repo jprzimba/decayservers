@@ -106,6 +106,13 @@ class TalkAction : public Event
 		static TalkActionFunction serverInfo;
 		static TalkActionFunction sellHouse;
 		static TalkActionFunction buyHouse;
+		static TalkActionFunction reloadInfo;
+		static TalkActionFunction getInfo;
+		static TalkActionFunction forceRaid;
+		static TalkActionFunction setHouseOwner;
+		static TalkActionFunction getHouse;
+		static TalkActionFunction removeThing;
+		static TalkActionFunction newType;
 	
 		std::string m_words;
 		int16_t m_access;

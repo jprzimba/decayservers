@@ -40,7 +40,6 @@ class Creature;
 class Monster;
 class Npc;
 class CombatInfo;
-class Commands;
 
 enum stackPosType_t
 {
@@ -511,11 +510,6 @@ class Game
 
 		int32_t getLightHour() const {return lightHour;}
 
-		void addCommandTag(char tag);
-		void resetCommandTag();
-
-		bool npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize);
-
 		const RuleViolationsMap& getRuleViolations() const {return ruleViolations;}
 		bool cancelRuleViolation(Player* player);
 		bool closeRuleViolation(Player* player);
@@ -527,7 +521,6 @@ class Game
 		bool getServerSaveMessage(int16_t key) const {return serverSaveMessage[key];}
 
 	protected:
-		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text);
 		bool playerSaySpell(Player* player, const std::string& text);
 		bool playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
@@ -599,9 +592,5 @@ class Game
 		StageList stages;
 		uint32_t lastStageLevel;
 		bool useLastStageLevel;
-
-		std::vector<char> commandTags;
-
-		friend class Commands;
 };
 #endif

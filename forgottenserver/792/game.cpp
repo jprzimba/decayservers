@@ -35,7 +35,6 @@
 #include "otsystem.h"
 #include "tasks.h"
 #include "items.h"
-#include "commands.h"
 #include "creature.h"
 #include "player.h"
 #include "monster.h"
@@ -66,7 +65,6 @@ extern OTSYS_THREAD_LOCKVAR maploadlock;
 extern ConfigManager g_config;
 extern Server* g_server;
 extern Actions* g_actions;
-extern Commands commands;
 extern Chat g_chat;
 extern TalkActions* g_talkActions;
 extern Spells* g_spells;
@@ -3232,9 +3230,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return false;
 	}
 
-	if(playerSayCommand(player, type, text))
-		return true;
-
 	TalkActionResult_t result;
 	result = g_talkActions->onPlayerSpeak(player, type, text);
 	if(result == TALKACTION_BREAK)
@@ -3279,23 +3274,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 
 		default:
 			break;
-	}
-	return false;
-}
-
-bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text)
-{
-	if(player->getName() == "Account Manager")
-		return internalCreatureSay(player, SPEAK_SAY, text);
-
-	//First, check if this was a command
-	char firstCharacter = text[0];
-	for(char commandTag : commandTags) {
-		if(commandTag == firstCharacter) {
-			if(commands.exeCommand(player, text)) {
-				return true;
-			}
-		}
 	}
 	return false;
 }
@@ -3429,33 +3407,6 @@ bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::str
 	}
 
 	g_chat.talkToChannel(player, type, text, channelId);
-	return true;
-}
-
-bool Game::npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize)
-{
-	if(publicize)
-	{
-		SpectatorVec list;
-		SpectatorVec::iterator it;
-		getSpectators(list, npc->getPosition());
-
-		//send to client
-		Player* tmpPlayer = nullptr;
-		for(it = list.begin(); it != list.end(); ++it)
-		{
-			tmpPlayer = (*it)->getPlayer();
-			if((tmpPlayer != nullptr) && (tmpPlayer != player))
-				tmpPlayer->sendCreatureSay(npc, SPEAK_SAY, text);
-		}
-
-		//event method
-		for(it = list.begin(); it != list.end(); ++it)
-		{
-			if((*it) != player)
-				(*it)->onCreatureSay(npc, SPEAK_SAY, text);
-		}
-	}
 	return true;
 }
 
@@ -4294,21 +4245,6 @@ bool Game::closeRuleViolation(Player* player)
 		}
 	}
 	return true;
-}
-
-void Game::addCommandTag(char tag)
-{
-	for(char commandTag : commandTags) {
-		if(commandTag == tag) {
-			return;
-		}
-	}
-	commandTags.push_back(tag);
-}
-
-void Game::resetCommandTag()
-{
-	commandTags.clear();
 }
 
 void Game::shutdown()
