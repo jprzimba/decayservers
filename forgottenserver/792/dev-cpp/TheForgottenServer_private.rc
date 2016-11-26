@@ -4,7 +4,7 @@
 #include <windows.h> // include for version info constants
 
 
-A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "TheForgottenServer.ico"
+A ICON "TheForgottenServer.ico"
 
 //
 // TO CHANGE VERSION INFORMATION, EDIT PROJECT OPTIONS...
@@ -15,23 +15,22 @@ PRODUCTVERSION 0,2,12,0
 FILETYPE VFT_APP
 {
   BLOCK "StringFileInfo"
-	 {
-		 BLOCK "040904E4"
-		 {
-			 VALUE "CompanyName", ""
-			 VALUE "FileVersion", "0.2.12"
-			 VALUE "FileDescription", "The Forgotten Server"
-			 VALUE "InternalName", ""
-			 VALUE "LegalCopyright", ""
-			 VALUE "LegalTrademarks", ""
-			 VALUE "OriginalFilename", "TheForgottenServer.exe"
-			 VALUE "ProductName", "The Forgotten Server"
-			 VALUE "ProductVersion", ""
-		 }
-	 }
+  {
+    BLOCK "040904E4"
+    {
+      VALUE "CompanyName", ""
+      VALUE "FileVersion", "0.2.12.0"
+      VALUE "FileDescription", "The Forgotten Server"
+      VALUE "InternalName", ""
+      VALUE "LegalCopyright", ""
+      VALUE "LegalTrademarks", ""
+      VALUE "OriginalFilename", "TheForgottenServer.exe"
+      VALUE "ProductName", "The Forgotten Server"
+      VALUE "ProductVersion", ""
+    }
+  }
   BLOCK "VarFileInfo"
-	 {
-		 VALUE "Translation", 0x0409, 1252
-	 }
+  {
+    VALUE "Translation", 0x0409, 1252
+  }
 }
-

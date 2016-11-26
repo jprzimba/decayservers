@@ -11,7 +11,7 @@
 #define VER_RELEASE	12
 #define VER_BUILD	0
 #define COMPANY_NAME	""
-#define FILE_VERSION	"0.2.12"
+#define FILE_VERSION	"0.2.12.0"
 #define FILE_DESCRIPTION	"The Forgotten Server"
 #define INTERNAL_NAME	""
 #define LEGAL_COPYRIGHT	""
