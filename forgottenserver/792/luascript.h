@@ -273,13 +273,13 @@ class LuaScriptInterface
 		static bool reserveScriptEnv()
 		{
 			++m_scriptEnvIndex;
-			if(m_scriptEnvIndex > 20)
+			if(m_scriptEnvIndex < 15)
+				return true;
+			else
 			{
 				--m_scriptEnvIndex;
 				return false;
 			}
-
-			return true;
 		}
 
 		static void releaseScriptEnv()
