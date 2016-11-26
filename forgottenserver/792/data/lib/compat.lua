@@ -18,3 +18,4 @@ doPlayerSetBankBalance = doPlayerSetBalance
 getPlayerMasterPos = getPlayerMasterPososition
 getThingfromPosition = getThingfromPos
 getPosByDir = getPositionByDirection
+getPlayerByName = getCreatureByName

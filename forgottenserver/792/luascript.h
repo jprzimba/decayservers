@@ -394,7 +394,7 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerSetGuildId(lua_State* L);
 
 		//queries
-		static int32_t luaGetPlayerByName(lua_State* L);
+		static int32_t luaGetCreatureByName(lua_State* L);
 		static int32_t luaGetPlayerGUIDByName(lua_State* L);
 		static int32_t luaGetAccountNumberByPlayerName(lua_State* L);
 		static int32_t luaGetPlayersByAccountNumber(lua_State* L);

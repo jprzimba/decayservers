@@ -4571,52 +4571,6 @@ void Game::serverSave()
 	}
 }
 
-Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, Position toPos, bool teleport)
-{
-	int i;
-	Tile* tile[9] =
-	{
-		getTile(toPos.x, toPos.y, toPos.z),
-		getTile(toPos.x - 1, toPos.y - 1, toPos.z), getTile(toPos.x, toPos.y - 1, toPos.z),
-		getTile(toPos.x + 1, toPos.y - 1, toPos.z), getTile(toPos.x - 1, toPos.y, toPos.z),
-		getTile(toPos.x + 1, toPos.y, toPos.z), getTile(toPos.x - 1, toPos.y + 1, toPos.z),
-		getTile(toPos.x, toPos.y + 1, toPos.z), getTile(toPos.x + 1, toPos.y + 1, toPos.z),
-	};
-	if(teleport)
-	{
-		if(player)
-		{
-			for(i = 0; i < 9; i++)
-			{
-				if(tile[i] && tile[i]->creatures.empty() && (!tile[i]->hasProperty(IMMOVABLEBLOCKSOLID) || player->getAccountType() == ACCOUNT_TYPE_GOD))
-					return tile[i]->getPosition();
-			}
-		}
-	}
-	else if(teleportedCreature)
-	{
-		Player* teleportedPlayer = teleportedCreature->getPlayer();
-		if(teleportedPlayer)
-		{
-			for(i = 0; i < 9; i++)
-			{
-				if(tile[i] && tile[i]->creatures.empty() && (!tile[i]->hasProperty(IMMOVABLEBLOCKSOLID) || teleportedPlayer->getAccountType() == ACCOUNT_TYPE_GOD))
-					return tile[i]->getPosition();
-			}
-		}
-		else
-		{
-			for(i = 0; i < 9; i++)
-			{
-				if(tile[i] && tile[i]->creatures.empty() && !tile[i]->hasProperty(IMMOVABLEBLOCKSOLID))
-					return tile[i]->getPosition();
-			}
-		}
-	}
-	return Position(0, 0, 0);
-}
-
-
 Position Game::getClosestFreeTile(Creature* creature, Position pos, bool extended/* = false*/, bool ignoreHouse/* = true*/)
 {
 	PairVector relList;

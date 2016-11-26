@@ -1492,8 +1492,8 @@ void LuaScriptInterface::registerFunctions()
 	//isMoveable(uid)
 	lua_register(m_luaState, "isMoveable", LuaScriptInterface::luaIsMoveable);
 
-	//getPlayerByName(name)
-	lua_register(m_luaState, "getPlayerByName", LuaScriptInterface::luaGetPlayerByName);
+	//getCreatureByName(name)
+	lua_register(m_luaState, "getCreatureByName", LuaScriptInterface::luaGetCreatureByName);
 
 	//getPlayerGUIDByName(name)
 	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
@@ -6083,24 +6083,6 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetPlayerByName(lua_State* L)
-{
-	//getPlayerByName(name)
-	std::string name = popString(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	if(Player* player = g_game.getPlayerByName(name))
-	{
-		uint32_t cid = env->addThing(player);
-		lua_pushnumber(L, cid);
-	}
-	else
-		lua_pushboolean(L, false);
-
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetPlayersByAccountNumber(lua_State* L)
 {
 	//getPlayersByAccountNumber(accountNumber)
@@ -7926,6 +7908,18 @@ int32_t LuaScriptInterface::luaGetExperienceStage(lua_State* L)
 {
 	//getExperienceStage(level)
 	lua_pushnumber(L, g_game.getExperienceStage(popNumber(L)));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetCreatureByName(lua_State* L)
+{
+	//getCreatureByName(name)
+	ScriptEnvironment* env = getScriptEnv();
+	if(Creature* creature = g_game.getCreatureByName(popString(L)))
+		lua_pushnumber(L, env->addThing(creature));
+	else
+		lua_pushnil(L);
+
 	return 1;
 }
 

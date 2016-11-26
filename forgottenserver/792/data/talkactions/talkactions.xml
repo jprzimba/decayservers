@@ -11,6 +11,8 @@
 	<talkaction access="4" log="yes" words="/summon" script="summon.lua"/>
 	<talkaction access="4" log="yes" words="/s" script="placenpc.lua"/>
 	<talkaction access="4" log="yes" words="/m" script="placemonster.lua"/>
+	<talkaction access="4" log="yes" words="/c" script="teleporthere.lua"/>
+	<talkaction access="4" log="yes" words="/goto" script="teleportto.lua"/>
 
 	<!-- Gamemasters -->
 	<talkaction access="3" log="yes" words="/z" script="magiceffect.lua"/>
@@ -21,6 +23,7 @@
 	<talkaction access="3" log="yes" words="/t" script="teleportmaster.lua"/>
 	<talkaction access="3" log="yes" words="/town" script="teleporttown.lua"/>
 	<talkaction access="3" log="yes" words="/B" sensitive="yes" script="broadcast.lua"/>
+	<talkaction access="3" log="yes" words="/a" script="teleporttiles.lua"/>
 	<talkaction access="3" log="yes" words="/b" sensitive="yes" function="banplayer"/>
 	<talkaction access="3" log="yes" words="/unban" function="unban"/>
 	<talkaction access="3" log="yes" words="/ghost" function="ghost"/>
@@ -31,6 +34,7 @@
 	<talkaction words="!uptime" script="uptime.lua"/>
 	<talkaction words="!deathlist" script="deathlist.lua"/>
 	<talkaction words="!online" script="online.lua"/>
+	<talkaction words="!q" script="money.lua"/>
 	<talkaction words="!createguild" function="createguild"/>
 	<talkaction words="!joinguild" function="joinguild"/>
 	<talkaction words="!frags" function="frags"/>

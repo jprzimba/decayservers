@@ -43,12 +43,8 @@ class Commands
 		bool loaded;
 
 		//commands
-		bool teleportHere(Creature* creature, const std::string& cmd, const std::string& param);
-		bool teleportTo(Creature* creature, const std::string& cmd, const std::string& param);
-		bool subtractMoney(Creature* creature, const std::string& cmd, const std::string& param);
 		bool reloadInfo(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getInfo(Creature* creature, const std::string& cmd, const std::string& param);
-		bool teleportNTiles(Creature* creature, const std::string& cmd, const std::string& param);
 		bool kickPlayer(Creature* creature, const std::string& cmd, const std::string& param);
 		bool setHouseOwner(Creature* creature, const std::string& cmd, const std::string& param);
 		bool getHouse(Creature* creature, const std::string& cmd, const std::string& param);

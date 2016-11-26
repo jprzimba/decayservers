@@ -1,7 +1,7 @@
 function onSay(cid, words, param)
 	if (param == '') then
 		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Command param required.")
-		return true
+		return false
 	end
 
 	local t = string.explode(param, ",")
@@ -13,7 +13,7 @@ function onSay(cid, words, param)
 		id = getItemIdByName(t[1])
 		if(not id) then
 			doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Item wich such name does not exists.")
-			return true
+			return false
 		end
 	end
 
@@ -35,7 +35,7 @@ function onSay(cid, words, param)
 
 	if (ret ~= RETURNVALUE_NOERROR) then
 		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "Couldn't add item: " .. t[1])
-		return true
+		return false
 	end
 
 	doDecayItem(item)
@@ -43,5 +43,5 @@ function onSay(cid, words, param)
 		doSendMagicEffect(pos, CONST_ME_MAGIC_RED)
 	end
 
-	return true
+	return false
 end

@@ -63,12 +63,8 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] =
 {
 	//admin commands
-	{"/c", &Commands::teleportHere},
-	{"/q", &Commands::subtractMoney},
 	{"/reload", &Commands::reloadInfo},
-	{"/goto", &Commands::teleportTo},
 	{"/info", &Commands::getInfo},
-	{"/a", &Commands::teleportNTiles},
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
 	{"/gethouse", &Commands::getHouse},
@@ -229,65 +225,6 @@ bool Commands::exeCommand(Creature* creature, const std::string& cmd)
 	return true;
 }
 
-bool Commands::teleportHere(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		Creature* paramCreature = g_game.getCreatureByName(param);
-		if(paramCreature)
-		{
-			Position oldPosition = paramCreature->getPosition();
-			Position destPos = paramCreature->getPosition();
-			Position newPosition = g_game.getClosestFreeTile(player, paramCreature, player->getPosition(), false);
-			if(newPosition.x == 0)
-			{
-				char buffer[80];
-				sprintf(buffer, "You can not teleport %s to you.", paramCreature->getName().c_str());
-				player->sendCancel(buffer);
-			}
-			else if(g_game.internalTeleport(paramCreature, newPosition, true) == RET_NOERROR)
-			{
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, paramCreature->isInGhostMode());
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, paramCreature->isInGhostMode());
-				return true;
-			}
-		}
-		else
-			player->sendCancel("A creature with that name could not be found.");
-	}
-	return false;
-}
-
-bool Commands::subtractMoney(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-				
-	int32_t count = atoi(param.c_str());
-	uint32_t money = g_game.getMoney(player);
-	if(!count)
-	{
-		char info[35];
-		sprintf(info, "You have %u gold.", money);
-		player->sendCancel(info);
-		return true;
-	}
-	else if(count > (int32_t)money)
-	{
-		char info[65];
-		sprintf(info, "You have %u gold and is not sufficient.", money);
-		player->sendCancel(info);
-		return true;
-	}
-
-	if(!g_game.removeMoney(player, count))
-		player->sendCancel("Can not subtract money!");
-
-	return true;
-}
-
 bool Commands::reloadInfo(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -363,40 +300,6 @@ bool Commands::reloadInfo(Creature* creature, const std::string& cmd, const std:
 	return true;
 }
 
-bool Commands::teleportTo(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return true;
-	
-	Creature* targetCreature = g_game.getCreatureByName(param);
-	if(targetCreature)
-	{
-		Position oldPosition = player->getPosition();
-		Position newPosition = g_game.getClosestFreeTile(player, 0, targetCreature->getPosition(), true);
-		if(newPosition.x > 0)
-		{
-			if(g_game.internalTeleport(player, newPosition, true) == RET_NOERROR)
-			{
-				bool ghostMode = false;
-				if(player->isInGhostMode() || targetCreature->isInGhostMode())
-					ghostMode = true;
-
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, ghostMode);
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, ghostMode);
-				return true;
-			}
-		}
-		else
-		{
-			char buffer[75];
-			sprintf(buffer, "You can not teleport to %s.", targetCreature->getName().c_str());
-			player->sendCancel(buffer);
-		}
-	}
-	return false;
-}
-
 bool Commands::getInfo(Creature* creature, const std::string& cmd, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -426,41 +329,6 @@ bool Commands::getInfo(Creature* creature, const std::string& cmd, const std::st
 	else
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
 
-	return true;
-}
-
-bool Commands::teleportNTiles(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(player)
-	{
-		int32_t ntiles = atoi(param.c_str());
-		if(ntiles != 0)
-		{
-			Position oldPosition = player->getPosition();
-			Position newPos = player->getPosition();
-			switch(player->direction)
-			{
-				case NORTH: newPos.y -= ntiles; break;
-				case SOUTH: newPos.y += ntiles; break;
-				case EAST: newPos.x += ntiles; break;
-				case WEST: newPos.x -= ntiles; break;
-				default: break;
-			}
-
-			Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
-			if(newPosition.x == 0)
-				player->sendCancel("You can not teleport there.");
-			else if(g_game.internalTeleport(player, newPosition, true) == RET_NOERROR)
-			{
-				if(ntiles != 1)
-				{
-					g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-					g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-				}
-			}
-		}
-	}
 	return true;
 }
 

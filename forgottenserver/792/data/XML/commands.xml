@@ -2,11 +2,7 @@
 <commands>
 	<command cmd="/reload" group="1" acctype="5"/>
 	<command cmd="/owner" group="2" acctype="5"/>
-	<command cmd="/goto" group="2" acctype="4"/>
-	<command cmd="/a" group="2" acctype="5"/>
-	<command cmd="/c" group="2" acctype="4"/>
 	<command cmd="/kick" group="1" acctype="4"/>
-	<command cmd="/q" group="2" acctype="4"/>
 	<command cmd="/info" group="1" acctype="4"/>
 	<command cmd="/gethouse" group="2" acctype="4"/>
 	<command cmd="/newtype" group="2" acctype="5"/>
