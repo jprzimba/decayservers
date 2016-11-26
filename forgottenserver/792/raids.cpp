@@ -31,15 +31,12 @@ extern Game g_game;
 extern ConfigManager g_config;
 
 Raids::Raids()
-	: m_scriptInterface("Raid Interface")
 {
 	loaded = false;
 	started = false;
 	running = nullptr;
 	lastRaidEnd = 0;
 	checkRaidsEvent = 0;
-	
-	m_scriptInterface.initState();
 }
 
 Raids::~Raids()
@@ -167,8 +164,6 @@ void Raids::clear()
 	started = false;
 	running = nullptr;
 	lastRaidEnd = 0;
-	
-	m_scriptInterface.reInitState();
 }
 
 bool Raids::reload()
@@ -232,7 +227,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		} else if(strcasecmp(eventNode.name(), "areaspawn") == 0) {
 			event = new AreaSpawnEvent();
 		} else if(strcasecmp(eventNode.name(), "script") == 0) {
-			event = new ScriptEvent(&Raids::getInstance()->getScriptInterface());
+			event = new ScriptEvent();
 		} else {
 			continue;
 		}
@@ -629,9 +624,17 @@ bool AreaSpawnEvent::executeEvent()
 	return true;
 }
 
-ScriptEvent::ScriptEvent(LuaScriptInterface* _interface) :
-	Event(_interface)
+LuaScriptInterface ScriptEvent::m_scriptInterface("Raid Interface");
+
+ScriptEvent::ScriptEvent() :
+Event(&m_scriptInterface)
 {
+	m_scriptInterface.initState();
+}
+
+void ScriptEvent::reInitScriptInterface()
+{
+	m_scriptInterface.reInitState();
 }
 
 bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
@@ -661,15 +664,26 @@ std::string ScriptEvent::getScriptEventName()
 bool ScriptEvent::executeEvent()
 {
 	//onRaid()
-	if(!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
-		return false;
+	if(m_scriptInterface.reserveScriptEnv())
+	{
+		ScriptEnvironment* env = m_scriptInterface.getScriptEnv();
+	
+		#ifdef __DEBUG_LUASCRIPTS__
+		env->setEventDesc("Raid event");
+		#endif
+	
+		env->setScriptId(m_scriptId, &m_scriptInterface);
+		
+		m_scriptInterface.pushFunction(m_scriptId);
+	
+		bool result = m_scriptInterface.callFunction(0) != 0;
+		m_scriptInterface.releaseScriptEnv();
+
+		return result;
 	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	m_scriptInterface->pushFunction(m_scriptId);
-
-	return m_scriptInterface->callFunction(0);
+	else
+	{
+		std::cout << "[Error] Call stack overflow. ScriptEvent::executeEvent" << std::endl;
+		return 0;
+	}
 }
