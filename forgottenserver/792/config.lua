@@ -1,95 +1,92 @@
 	-- The Forgotten Server Config
 
-	-- SQL Conneciton
+	-- SQL Settings
 	passwordType = "plain"
 	mysqlHost = "127.0.0.1"
 	mysqlUser = "otserv"
 	mysqlPass = ""
 	mysqlPort = 3306
 	mysqlDatabase = "otserv"
-	startupDatabaseOptimization = "yes"
+	startupDatabaseOptimization = true
 
-	-- Connection Config
+	-- Connection Settings
 	ip = "127.0.0.1"
 	port = 7171
 	loginTries = 0
 	retryTimeout = 30 * 1000
 	loginTimeout = 60 * 1000
-	maxPlayers = "1000"
+	maxPlayers = 1000
 	motd = "Welcome to the Forgotten Server!"
-	onePlayerOnlinePerAccount = "yes"
-	allowClones = "no"
+	onePlayerOnlinePerAccount = true
+	allowClones = false
 	serverName = "Forgotten"
 	loginMessage = "Welcome to the Forgotten Server!"
-	statusTimeout = 5 * 60 * 1000
 
 	-- Account Manager
-	accountManager = "yes"
-	newPlayerChooseVoc = "yes"
+	accountManager = true
+	newPlayerChooseVoc = true
 	newPlayerSpawnPosX = 1000
 	newPlayerSpawnPosY = 1000
 	newPlayerSpawnPosZ = 7
 	newPlayerTownId = 1
 	newPlayerLevel = 8
 	newPlayerMagicLevel = 0
-	generateAccountNumber = "no"
+	generateAccountNumber = false
 
 	-- Skulls
 	killsToRedSkull = 3
 	timeToDecreaseFrags = 24 * 60 * 60 * 1000
 	whiteSkullTime = 15 * 60 * 1000
-	broadcastBanishments = "yes"
+	broadcastBanishments = true
 	banDays = 7
 	finalBanDays = 30
 	killsToBan = 6
 
-	-- Battle
+	-- Combat
 	worldType = "pvp"
-	hotkeyAimbotEnabled = "yes"
+	hotkeyAimbotEnabled = true
 	protectionLevel = 1
 	pzLocked = 60000
 	deathLosePercent = 10
 	criticalHitChance = 7
-	removeAmmoWhenUsingDistanceWeapon = "yes"
-	removeChargesFromRunes = "yes"
+	removeAmmoWhenUsingDistanceWeapon = true
+	removeChargesFromRunes = true
+	allowChangeOutfit = true
+	noDamageToSameLookfeet = false
+	experienceByKillingPlayers = false
 
 	-- Highscores and Deathlist
 	highscoreDisplayPlayers = 15
 	updateHighscoresAfterMinutes = 60
-	deathListEnabled = "yes"
+	deathListEnabled = true
 	maxDeathRecords = 10
 
 	-- Houses
 	housePriceEachSQM = 1000
 	houseRentPeriod = "never"
 
-	-- Item Usage
+	-- Item Usage Settings
 	timeBetweenActions = 200
 	timeBetweenExActions = 1000
 
 	-- Map
 	mapName = "Evolutions"
 	mapAuthor = "Xidaozu"
-	randomizeTiles = "yes"
+	randomizeTiles = true
 	mapStorageType = "relational"
 
 	-- Premium Account
-	freePremium = "no"
-
-	-- PVP Server
-	allowChangeOutfit = "yes"
-	noDamageToSameLookfeet = "no"
-	experienceByKillingPlayers = "no"
+	freePremium = false
 
 	-- Guilds
-	ingameGuildSystem = "yes"
+	ingameGuildSystem = true
 	levelToCreateGuild = 8
 	minGuildNameLength = 4
 	maxGuildNameLength = 20
 
 	-- Rates
 	-- NOTE: experienceStages configuration is located in data/XML/stages.xml.
-	experienceStages = "no"
+	experienceStages = false
 	rateExperience = 5
 	rateSkill = 3
 	rateLoot = 2
@@ -99,41 +96,42 @@
 	rateSpawn = 1
 	deSpawnRange = 2
 	deSpawnRadius = 50
-	monstersDropSurpriseBags = "yes"
+	monstersDropSurpriseBags = true
 	surpriseBagPercent = 0
 
 	-- Spells
-	spellNameInsteadOfWords = "no"
-	emoteSpells = "no"
+	spellNameInsteadOfWords = false
+	emoteSpells = false
 
 	-- Real Server Save
 	-- note: serverSaveHour means like 24:00, not that it will save every 24 hours,
 	-- if you want such a system use autoSaveEachMinutes. this serversave method
 	-- may be unstable, we recommend using otadmin if you want real serversaves.
-	serverSaveEnabled = "no"
+	serverSaveEnabled = false
 	serverSaveHour = 24
-	shutdownAtServerSave = "yes"
+	shutdownAtServerSave = true
 
 	-- Server saving
 	autoSaveEachMinutes = 15
-	saveGlobalStorage = "no"
+	saveGlobalStorage = false
 
 	-- Clean System
-	cleanProtectedZones = "yes"
-	cleanMapAtServerSave = "yes"
+	cleanProtectedZones = true
+	cleanMapAtServerSave = true
 
 	-- Startup
-	displayOnOrOffAtCharlist = "no"
+	displayOnOrOffAtCharlist = false
 	defaultPriority = "high"
 
 	-- Misc
-	displayGamemastersWithOnlineCommand = "no"
+	displayGamemastersWithOnlineCommand = false
 	maxMessageBuffer = 4
 	kickIdlePlayerAfterMinutes = 15
-	enableRuleViolationReports = "yes"
+	enableRuleViolationReports = true
 
 	-- Status
 	ownerName = ""
 	ownerEmail = "@otland.net"
 	url = "http://otland.net/"
 	location = "Europe"
+	statusTimeout = 5 * 60 * 1000

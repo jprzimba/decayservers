@@ -448,8 +448,8 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	};
 
 	//static size_t size = sizeof(reservedList) / sizeof(const char*);
-	//for (size_t i = 0; i < size; ++i) {
-	for (const char* reserved : reservedList) {
+	//for(size_t i = 0; i < size; ++i) {
+	for(const char* reserved : reservedList) {
 		if(strcasecmp(reserved, name.c_str()) == 0) {
 			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
 			return false;
@@ -533,7 +533,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		isAggressive = booleanString(attr.as_string());
 	}
 
-	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+	for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 		if(!(attr = vocationNode.attribute("name"))) {
 			continue;
 		}

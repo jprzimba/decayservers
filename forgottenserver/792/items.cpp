@@ -366,7 +366,7 @@ bool Items::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node itemNode = doc.child("items").first_child(); itemNode; itemNode = itemNode.next_sibling()) {
+	for(pugi::xml_node itemNode = doc.child("items").first_child(); itemNode; itemNode = itemNode.next_sibling()) {
 		pugi::xml_attribute idAttribute = itemNode.attribute("id");
 		if(idAttribute) {
 			parseItemNode(itemNode, pugi::cast<uint32_t>(idAttribute.value()));
@@ -414,7 +414,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		it.pluralName = pluralAttribute.as_string();
 	}
 
-	for (pugi::xml_node attributeNode = itemNode.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
+	for(pugi::xml_node attributeNode = itemNode.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
 		pugi::xml_attribute keyAttribute = attributeNode.attribute("key");
 		if(!keyAttribute) {
 			continue;
@@ -678,7 +678,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if(tmpStrValue == "absorbpercentall" || tmpStrValue == "absorbpercentallelements") {
 			int16_t value = pugi::cast<int16_t>(valueAttribute.value());
 			Abilities* abilities = it.getAbilities();
-			for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
+			for(uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
 				abilities->absorbPercent[i] += value;
 			}
 		} else if(tmpStrValue == "absorbpercentenergy") {
@@ -751,7 +751,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 				int32_t start = 0;
 				int32_t count = 1;
 
-				for (pugi::xml_node subAttributeNode = attributeNode.first_child(); subAttributeNode; subAttributeNode = subAttributeNode.next_sibling()) {
+				for(pugi::xml_node subAttributeNode = attributeNode.first_child(); subAttributeNode; subAttributeNode = subAttributeNode.next_sibling()) {
 					pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 					if(!subKeyAttribute) {
 						continue;
@@ -775,7 +775,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 						if(start > 0) {
 							std::list<int32_t> damageList;
 							ConditionDamage::generateDamageList(damage, start, damageList);
-							for (int32_t damageValue : damageList) {
+							for(int32_t damageValue : damageList) {
 								conditionDamage->addDamage(1, ticks, -damageValue);
 							}
 

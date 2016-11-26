@@ -250,7 +250,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 	range = Item::items[id].shootRange;
 	std::string vocationString;
-	for (const std::string& str : vocStringList)
+	for(const std::string& str : vocStringList)
 	{
 		if(!vocationString.empty())
 		{

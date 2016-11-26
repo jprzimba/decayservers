@@ -142,7 +142,7 @@ bool Outfits::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node outfitNode = doc.child("outfits").first_child(); outfitNode; outfitNode = outfitNode.next_sibling()) {
+	for(pugi::xml_node outfitNode = doc.child("outfits").first_child(); outfitNode; outfitNode = outfitNode.next_sibling()) {
 		pugi::xml_attribute typeAttribute = outfitNode.attribute("type");
 		if(!typeAttribute) {
 			std::cout << "[Warning - Outfits::loadFromXml] Missing outfit type." << std::endl;

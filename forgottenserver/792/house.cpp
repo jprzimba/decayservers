@@ -759,7 +759,7 @@ bool Houses::loadHousesXML(std::string filename)
 		return false;
 	}
 
-	for (pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
+	for(pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
 		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
 		if(!houseIdAttribute) {
 			return false;

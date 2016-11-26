@@ -47,7 +47,7 @@ bool Vocations::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node vocationNode = doc.child("vocations").first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+	for(pugi::xml_node vocationNode = doc.child("vocations").first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 		pugi::xml_attribute attr;
 		if(!(attr = vocationNode.attribute("id"))) {
 			std::cout << "[Warning - Vocations::loadFromXml] Missing vocation id" << std::endl;
@@ -114,7 +114,7 @@ bool Vocations::loadFromXml()
 			voc->fromVocation = pugi::cast<uint32_t>(attr.value());
 		}
 
-		for (pugi::xml_node childNode = vocationNode.first_child(); childNode; childNode = childNode.next_sibling()) {
+		for(pugi::xml_node childNode = vocationNode.first_child(); childNode; childNode = childNode.next_sibling()) {
 			if(strcasecmp(childNode.name(), "skill") == 0) {
 				pugi::xml_attribute skillIdAttribute = childNode.attribute("id");
 				if(skillIdAttribute) {

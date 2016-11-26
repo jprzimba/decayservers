@@ -3290,7 +3290,7 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 
 	//First, check if this was a command
 	char firstCharacter = text[0];
-	for (char commandTag : commandTags) {
+	for(char commandTag : commandTags) {
 		if(commandTag == firstCharacter) {
 			if(commands.exeCommand(player, text)) {
 				return true;
@@ -4298,7 +4298,7 @@ bool Game::closeRuleViolation(Player* player)
 
 void Game::addCommandTag(char tag)
 {
-	for (char commandTag : commandTags) {
+	for(char commandTag : commandTags) {
 		if(commandTag == tag) {
 			return;
 		}
@@ -4993,7 +4993,7 @@ bool Game::loadExperienceStages()
 		return false;
 	}
 
-	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
+	for(pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
 		if(strcasecmp(stageNode.name(), "stage") == 0){
 			uint32_t minLevel, maxLevel, multiplier;
 
@@ -5023,7 +5023,7 @@ bool Game::loadExperienceStages()
 			if(useLastStageLevel) {
 				stages[lastStageLevel] = multiplier;
 			} else {
-				for (uint32_t i = minLevel; i <= maxLevel; ++i) {
+				for(uint32_t i = minLevel; i <= maxLevel; ++i) {
 					stages[i] = multiplier;
 				}
 			}

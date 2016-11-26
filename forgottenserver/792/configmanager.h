@@ -156,11 +156,12 @@ class ConfigManager
 		std::string getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default="");
 		int32_t getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default=0);
 		std::string getGlobalStringField(lua_State* _L, const std::string& _identifier, const int32_t _key, const std::string& _default="");
+		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue);
 
 		bool m_loaded;
-		std::string m_confString[LAST_STRING_CONFIG];
-		int32_t m_confInteger[LAST_INTEGER_CONFIG];
-		bool m_confBoolean[LAST_BOOLEAN_CONFIG];
+		std::string string[LAST_STRING_CONFIG];
+		int32_t integer[LAST_INTEGER_CONFIG];
+		bool boolean[LAST_BOOLEAN_CONFIG];
 };
 
 #endif /* _CONFIG_MANAGER_H */

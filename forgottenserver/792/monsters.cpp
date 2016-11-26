@@ -250,7 +250,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 	loaded = true;
 
-	for (pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
+	for(pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
 	}
 	return true;
@@ -606,7 +606,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		combat->setPlayerCombatValues(FORMULA_VALUE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 		combatSpell = new CombatSpell(combat, needTarget, needDirection);
 
-		for (pugi::xml_node attributeNode = node.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
+		for(pugi::xml_node attributeNode = node.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
 			if((attr = attributeNode.attribute("key"))) {
 				std::string tmpStrValue = asLowerCaseString(attr.as_string());
 				if(tmpStrValue == "shooteffect") {
@@ -741,7 +741,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("flags"))) {
-		for (pugi::xml_node flagNode = node.first_child(); flagNode; flagNode = flagNode.next_sibling()) {
+		for(pugi::xml_node flagNode = node.first_child(); flagNode; flagNode = flagNode.next_sibling()) {
 			attr = flagNode.first_attribute();
 			const char* attrName = attr.name();
 			if(strcasecmp(attrName, "summonable") == 0) {
@@ -847,7 +847,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("attacks"))) {
-		for (pugi::xml_node attackNode = node.first_child(); attackNode; attackNode = attackNode.next_sibling()) {
+		for(pugi::xml_node attackNode = node.first_child(); attackNode; attackNode = attackNode.next_sibling()) {
 			spellBlock_t sb;
 			if(deserializeSpell(attackNode, sb, monster_name)) {
 				mType->spellAttackList.push_back(sb);
@@ -866,7 +866,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			mType->armor = pugi::cast<int32_t>(attr.value());
 		}
 
-		for (pugi::xml_node defenseNode = node.first_child(); defenseNode; defenseNode = defenseNode.next_sibling()) {
+		for(pugi::xml_node defenseNode = node.first_child(); defenseNode; defenseNode = defenseNode.next_sibling()) {
 			spellBlock_t sb;
 			if(deserializeSpell(defenseNode, sb, monster_name)) {
 				mType->spellDefenseList.push_back(sb);
@@ -877,7 +877,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("immunities"))) {
-		for (pugi::xml_node immunityNode = node.first_child(); immunityNode; immunityNode = immunityNode.next_sibling()) {
+		for(pugi::xml_node immunityNode = node.first_child(); immunityNode; immunityNode = immunityNode.next_sibling()) {
 			if((attr = immunityNode.attribute("name"))) {
 				std::string tmpStrValue = asLowerCaseString(attr.as_string());
 				if(tmpStrValue == "physical") {
@@ -971,7 +971,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			SHOW_XML_WARNING("Missing voices chance");
 		}
 
-		for (pugi::xml_node voiceNode = node.first_child(); voiceNode; voiceNode = voiceNode.next_sibling()) {
+		for(pugi::xml_node voiceNode = node.first_child(); voiceNode; voiceNode = voiceNode.next_sibling()) {
 			voiceBlock_t vb;
 			if((attr = voiceNode.attribute("sentence"))) {
 				vb.text = attr.as_string();
@@ -989,7 +989,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("loot"))) {
-		for (pugi::xml_node lootNode = node.first_child(); lootNode; lootNode = lootNode.next_sibling()) {
+		for(pugi::xml_node lootNode = node.first_child(); lootNode; lootNode = lootNode.next_sibling()) {
 			LootBlock lootBlock;
 			if(loadLootItem(lootNode, lootBlock)) {
 				mType->lootItems.push_back(lootBlock);
@@ -1000,7 +1000,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("elements"))) {
-		for (pugi::xml_node elementNode = node.first_child(); elementNode; elementNode = elementNode.next_sibling()) {
+		for(pugi::xml_node elementNode = node.first_child(); elementNode; elementNode = elementNode.next_sibling()) {
 			if((attr = elementNode.attribute("physicalPercent"))) {
 				mType->elementMap[COMBAT_PHYSICALDAMAGE] = pugi::cast<int32_t>(attr.value());
 			} else if((attr = elementNode.attribute("poisonPercent")) || (attr = elementNode.attribute("earthPercent"))) {
@@ -1022,7 +1022,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			SHOW_XML_WARNING("Missing summons maxSummons");
 		}
 
-		for (pugi::xml_node summonNode = node.first_child(); summonNode; summonNode = summonNode.next_sibling()) {
+		for(pugi::xml_node summonNode = node.first_child(); summonNode; summonNode = summonNode.next_sibling()) {
 			int32_t chance = 100;
 			int32_t speed = 1000;
 
@@ -1047,7 +1047,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if((node = monsterNode.child("script"))) {
-		for (pugi::xml_node eventNode = node.first_child(); eventNode; eventNode = eventNode.next_sibling()) {
+		for(pugi::xml_node eventNode = node.first_child(); eventNode; eventNode = eventNode.next_sibling()) {
 			if((attr = eventNode.attribute("name"))) {
 				mType->scriptList.push_back(attr.as_string());
 			} else {
@@ -1111,7 +1111,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 
 void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 {
-	for (pugi::xml_node subNode = node.first_child(); subNode; subNode = subNode.next_sibling()) {
+	for(pugi::xml_node subNode = node.first_child(); subNode; subNode = subNode.next_sibling()) {
 		LootBlock lootBlock;
 		if(loadLootItem(subNode, lootBlock)) {
 			lBlock.childLoot.push_back(lootBlock);

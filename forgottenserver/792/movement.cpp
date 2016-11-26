@@ -534,7 +534,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		//Gather vocation information
 		std::list<std::string> vocStringList;
-		for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+		for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
 			if(!vocationNameAttribute) {
 				continue;
@@ -553,7 +553,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			wieldInfo |= WIELDINFO_VOCREQ;
 		}
 
-		for (const std::string& str : vocStringList) {
+		for(const std::string& str : vocStringList) {
 			if(!vocationString.empty()) {
 				if(str != vocStringList.back()) {
 					vocationString += ", ";
@@ -729,7 +729,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	//skill modifiers
 	bool needUpdateSkills = false;
 
-	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+	for(int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if(it.abilities->skills[i]) {
 			needUpdateSkills = true;
 			player->setVarSkill((skills_t)i, it.abilities->skills[i]);
@@ -743,7 +743,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	//stat modifiers
 	bool needUpdateStats = false;
 
-	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
+	for(int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
 		if(it.abilities->stats[s]) {
 			needUpdateStats = true;
 			player->setVarStats((stats_t)s, it.abilities->stats[s]);
@@ -805,7 +805,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item
 	//skill modifiers
 	bool needUpdateSkills = false;
 
-	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+	for(int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if(it.abilities->skills[i] != 0) {
 			needUpdateSkills = true;
 			player->setVarSkill((skills_t)i, -it.abilities->skills[i]);
@@ -819,7 +819,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item
 	//stat modifiers
 	bool needUpdateStats = false;
 
-	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
+	for(int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
 		if(it.abilities->stats[s]) {
 			needUpdateStats = true;
 			player->setVarStats((stats_t)s, -it.abilities->stats[s]);

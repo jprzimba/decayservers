@@ -58,7 +58,7 @@ bool BaseEvents::loadFromXml()
 
 	m_loaded = true;
 
-	for (pugi::xml_node node = doc.child(scriptsName.c_str()).first_child(); node; node = node.next_sibling()) {
+	for(pugi::xml_node node = doc.child(scriptsName.c_str()).first_child(); node; node = node.next_sibling()) {
 		Event* event = getEvent(node.name());
 		if(!event) {
 			continue;

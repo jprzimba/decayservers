@@ -57,7 +57,7 @@ bool Raids::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node raidNode = doc.child("raids").first_child(); raidNode; raidNode = raidNode.next_sibling()) {
+	for(pugi::xml_node raidNode = doc.child("raids").first_child(); raidNode; raidNode = raidNode.next_sibling()) {
 		std::string name, file;
 		uint32_t interval, margin;
 
@@ -218,7 +218,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		return false;
 	}
 
-	for (pugi::xml_node eventNode = doc.child("raid").first_child(); eventNode; eventNode = eventNode.next_sibling()) {
+	for(pugi::xml_node eventNode = doc.child("raid").first_child(); eventNode; eventNode = eventNode.next_sibling()) {
 		RaidEvent* event;
 		if(strcasecmp(eventNode.name(), "announce") == 0) {
 			event = new AnnounceEvent();
@@ -522,7 +522,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		}
 	}
 
-	for (pugi::xml_node monsterNode = eventNode.child("monster").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
+	for(pugi::xml_node monsterNode = eventNode.child("monster").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		std::string name;
 
 		pugi::xml_attribute nameAttribute = monsterNode.attribute("name");
@@ -592,9 +592,9 @@ void AreaSpawnEvent::addMonster(const std::string& monsterName, uint32_t minAmou
 
 bool AreaSpawnEvent::executeEvent()
 {
-	for (MonsterSpawn* spawn : m_spawnList) {
+	for(MonsterSpawn* spawn : m_spawnList) {
 		uint32_t amount = random_range(spawn->minAmount, spawn->maxAmount);
-		for (uint32_t i = 0; i < amount; ++i) {
+		for(uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn->name);
 			if(!monster) {
 				std::cout << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn->name << std::endl;

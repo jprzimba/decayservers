@@ -192,7 +192,7 @@ bool Quests::loadFromXml()
 	}
 
 	uint16_t id = 0;
-	for (pugi::xml_node questNode = doc.child("quests").first_child(); questNode; questNode = questNode.next_sibling()) {
+	for(pugi::xml_node questNode = doc.child("quests").first_child(); questNode; questNode = questNode.next_sibling()) {
 			std::string name;
 			int32_t startStorageID = 0, startStorageValue = 0;
 			name = questNode.attribute("name").as_string();
@@ -201,7 +201,7 @@ bool Quests::loadFromXml()
 			
 			Quest *quest = new Quest(name, id, startStorageID, startStorageValue);
 
-		for (pugi::xml_node missionNode = questNode.first_child(); missionNode; missionNode = missionNode.next_sibling()) {
+		for(pugi::xml_node missionNode = questNode.first_child(); missionNode; missionNode = missionNode.next_sibling()) {
 			std::string missionName, missionState;
 			int32_t storageID = 0, startValue = 0, endValue = 0;
 			missionName = missionNode.attribute("name").as_string();
@@ -213,7 +213,7 @@ bool Quests::loadFromXml()
 			Mission* mission = new Mission(missionName, storageID, startValue, endValue);
 
 			if(missionState.empty()) {
-				for (pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
+				for(pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
 					int32_t missionID = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
 					mission->state[missionID] = new MissionState(missionStateNode.attribute("description").as_string(), missionID);
 				}
