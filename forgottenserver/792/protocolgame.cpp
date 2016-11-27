@@ -2405,9 +2405,9 @@ void ProtocolGame::sendOutfitWindow()
 {
 	#define MAX_NUMBER_OF_OUTFITS 25
 	NetworkMessage* msg = getOutputBuffer();
-	TRACK_MESSAGE(msg);
 	if(msg)
 	{
+		TRACK_MESSAGE(msg);
 		msg->AddByte(0xC8);
 		AddCreatureOutfit(msg, player, player->getDefaultOutfit());
 
@@ -2420,38 +2420,56 @@ void ProtocolGame::sendOutfitWindow()
 			return;
 
 		OutfitListType::const_iterator it, it_;
-		for(it = global_outfits.begin(); it != global_outfits.end(); ++it)
+		if(!player->hasFlag(PlayerFlag_CanUseAllOutfitAddons))
 		{
-			if((*it)->premium && !player->isPremium())
-				count_outfits--;
+			for(it = global_outfits.begin(); it != global_outfits.end(); ++it)
+			{
+				if((*it)->premium && !player->isPremium())
+					count_outfits--;
+			}
 		}
-
 		msg->AddByte(count_outfits);
 
-		bool addedAddon;
-		const OutfitListType& player_outfits = player->getPlayerOutfits();
-		for(it = global_outfits.begin(); it != global_outfits.end() && (count_outfits > 0); ++it)
+		if(player->hasFlag(PlayerFlag_CanUseAllOutfitAddons))
 		{
-			if((*it)->premium && player->isPremium() || !(*it)->premium)
+			for(it = global_outfits.begin(); it != global_outfits.end() && (count_outfits > 0); ++it)
 			{
-				addedAddon = false;
 				msg->AddU16((*it)->looktype);
 				msg->AddString(Outfits::getInstance()->getOutfitName((*it)->looktype));
-				//TODO: Try to avoid using loop to get addons
-				for(it_ = player_outfits.begin(); it_ != player_outfits.end(); ++it_)
-				{
-					if((*it_)->looktype == (*it)->looktype)
-					{
-						msg->AddByte((*it_)->addons);
-						addedAddon = true;
-						break;
-					}
-				}
-				if(!addedAddon)
-					msg->AddByte(0x00);
+				msg->AddByte(0x03);
 				count_outfits--;
 			}
 		}
+		else
+		{
+			bool addedAddon;
+			const OutfitListType& player_outfits = player->getPlayerOutfits();
+			for(it = global_outfits.begin(); it != global_outfits.end() && (count_outfits > 0); ++it)
+			{
+				if(((*it)->premium && player->isPremium()) || !(*it)->premium)
+				{
+					addedAddon = false;
+					msg->AddU16((*it)->looktype);
+					msg->AddString(Outfits::getInstance()->getOutfitName((*it)->looktype));
+					//TODO: Try to avoid using loop to get addons
+					for(it_ = player_outfits.begin(); it_ != player_outfits.end(); ++it_)
+					{
+						if((*it_)->looktype == (*it)->looktype)
+						{
+							msg->AddByte((*it_)->addons);
+							addedAddon = true;
+							break;
+						}
+					}
+
+					if(!addedAddon)
+						msg->AddByte(0x00);
+
+					count_outfits--;
+				}
+			}
+		}
+		player->setRequestedOutfit(true);
 	}
 }
 

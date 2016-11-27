@@ -159,7 +159,7 @@ class Player : public Creature, public Cylinder
 		void setGuildLevel(GuildLevel_t newGuildLevel);
 
 		bool hasRequestedOutfit() const {return requestedOutfit;}
-		void hasRequestedOutfit(bool newValue) {requestedOutfit = newValue;}
+		void setRequestedOutfit(bool newValue) {requestedOutfit = newValue;}
 
 		uint64_t getBankBalance() const {return bankBalance;}
 		void setBankBalance(uint64_t balance) {bankBalance = balance;}
