@@ -1,0 +1,212 @@
+/*
+    Copyright (C) 2007  Nicaw
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	background: #232903;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 13px;
+	color: #8b985f;
+}
+img {
+	border: none;
+}
+h1, h2, h3 {
+	margin-bottom: 15px;
+	text-transform: lowercase;
+	font-family: georgia, "times new roman", times, serif;
+	font-weight: normal;
+	color: #ceea70;
+}
+h1 {
+	letter-spacing: -1px;
+	font-size: 197%;
+}
+h2 {
+	letter-spacing: -1px;
+}
+p, ol, ul {
+	margin-bottom: 1.5em;
+	line-height: 1.5em;
+}
+legend {
+	color: #ceea70
+}
+fieldset{
+	border-color: #ceea70;
+	padding: 10px;
+	margin-bottom: 5px;
+}
+blockquote {
+	padding: 0 3em;
+	background: url(inferno/img05.gif) no-repeat 1em 0;
+	font-style: italic;
+}
+a {
+	color: #ceea70;
+}
+a:hover, a:active {
+	color: #ffffff;
+}
+.color0 {
+	background-color: #232903;
+}
+.color1 {
+	background-color: #2f300b;
+}
+.color2 {
+	background-color: #2d2e22;
+}
+.clearer {
+	clear: both; 
+}
+.top {
+	font-family: georgia, "times new roman", times, serif;
+	color: #ceea70;
+	font-size: 20px;
+}
+.task-menu{
+	cursor: pointer;
+	margin: 5px;
+}
+.task-menu li{
+	list-style-type: none;
+	height: 16px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	padding-bottom: 5px;
+}
+.task-menu li:hover {
+	color: white;
+}
+.percent_bar{
+	background-color: #130101;
+	height: 20px;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+}
+#container {
+	width: 735px;
+	margin: auto;
+	padding: 0 25px;
+	background: #34160c url(inferno/img02.gif) repeat-y center top;
+}
+#header {	
+	width: 710px;
+	height: 220px;
+	margin: auto;
+	background: #34160c url(inferno/header.jpg) no-repeat center top;
+}
+#server_name {
+	display: none;
+}
+#panel {
+	float: right;
+	width: 240px;
+	padding-right: 18px;
+}	
+#panel ul {
+	list-style: none;
+}
+#panel li {
+	background: url(inferno/img08.gif) repeat-x left bottom;
+	padding: 5px 15px;
+}
+#panel ul a {
+	background: url(inferno/img11.gif) no-repeat left center;
+	padding-left: 10px;
+	display: inline;
+	text-decoration: none;
+	color: #ceea70;
+}
+#panel ul a:hover {
+	color: #ffffff;	
+}
+#panel .top {
+	height: 33px;
+	padding: 10px 0 0 20px;
+	background: url(inferno/img09.gif) repeat-x;
+	color: #ceea70;
+	text-transform: lowercase;
+}
+#panel .mid {
+	text-align: center;
+	padding: 10px;
+}
+#content {
+	float: right;
+	width: 460px;
+}
+#content .top {
+	height: 33px;
+	text-align: center;
+	padding: 10px 0 0 10px;
+	background: url(inferno/img08.gif) repeat-x left bottom;
+}
+#content .mid {
+	padding: 10px 20px 0 20px;
+}
+#error{
+	position: absolute;
+	/*IE position: absolute;*/
+	top: 0px;
+	left: 0px;
+	border-bottom: 3px solid black;
+	background-color: #ffffe1;
+	color: black;
+	font-weight: bold;
+	background-image: url(inferno/warning.png);
+	background-repeat: no-repeat;
+	height: 48px;
+	width: 100%;
+	cursor: pointer;
+}
+#error span{
+	margin-left: 55px;
+}
+#captcha-image {
+	margin-top: 5px;
+}
+#form #iobox{
+	position: fixed;
+	/*IE position: absolute;*/
+	background-color: #303322;
+	border: 1px solid #000;
+	cursor: move;
+}
+#form #iobox fieldset {
+	cursor: default;
+}
+#footer {
+	height: 35px;
+	background: #34160c url(inferno/img12.gif) no-repeat center top;
+	padding: 15px 0 0 30px;
+}
+#footer span{
+	display: inline;
+	font-size: 8pt;
+}
+#footer span a{
+	text-decoration: none;
+}

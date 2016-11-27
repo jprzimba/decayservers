@@ -1,0 +1,180 @@
+/*
+Skin by Master-Subzero
+http://fanoftibia.com/
+*/
+
+body {
+	background-color: black;
+}
+img {
+	border: 0;
+}
+a {
+	color: black;
+}
+h2 {
+ 	background-image: url(skins/swamp/splash.gif);
+	background-repeat: no-repeat;
+	font: normal normal 1.5em "Georgia",serif;
+    	text-decoration: none;
+	height: 40px;
+	padding-left: 25px;
+}
+a:hover{
+	font-weight: normal;
+	color: gray;
+}
+.top {
+	color: black;
+}
+.online {
+	color: #51850d;
+	font-weight: bold;
+}
+.offline {
+	font-weight: bold;
+}
+.rowselect {
+	cursor: pointer;
+}
+.rowselect:hover {
+	background-color: #fcecbf;
+}
+#container {
+	width: 800px;
+	position: relative;
+}
+#header {
+	background-image: url(/*$skindir*/mushi.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	width: 800px;
+	height: 150px;
+}
+#server_name {
+	display: none;
+}
+#panel {
+	position: absolute;
+	margin-top: 150px;
+}	
+#panel a:hover {
+	font-weight: bold;
+	color: black;
+}
+#panel li {
+	background-image: url(/*$skindir*/list-item.gif);
+	background-repeat: no-repeat;
+	padding-left: 30px;
+	list-style-type: none;
+	height: 23px;
+}
+#panel .top {
+	background-image: url(/*$skindir*/top.gif);
+	width: 174px;
+	height: 25px;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 5px;
+	text-align: center;
+	font-weight: bold;
+}
+#panel .mid {
+	background-image: url(/*$skindir*/mid.gif);
+	background-repeat: repeat-y;
+	text-align: center;
+	padding: 10px;
+	width: 154px;
+}
+#panel .bot {
+	background-image: url(/*$skindir*/bot.gif);
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 174px;
+	height: 13px;
+}
+#navigation ul {
+	width: 600px;
+	padding: 0;
+	margin: 0;
+}
+#panel a {
+	text-decoration: none;
+	color: white;
+}
+#panel a:hover {
+	font-weight: bold;
+	color: white;
+}
+#content {
+	position: absolute;
+	margin-left: 174px;
+	margin-top: 150px;
+}
+#content .top {
+	background-image: url(/*$skindir*/big-top.gif);
+	width: 626px;
+	height: 25px;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 5px;
+	text-align: center;
+	font-weight: bold;
+}
+#content .mid {
+	background-image: url(/*$skindir*/big-mid.gif);
+	background-repeat: repeat-y;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 586px;
+	min-height: 200px;
+}
+#content .bot {
+	background-image: url(/*$skindir*/big-bot.gif);
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 626px;
+	height: 13px;
+}
+#error {
+	background-image: url(/*$skindir*/error.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	font-family: Verdana;
+	font-size: 8pt;
+	font-weight: bold;
+	color: white;
+	width: 175px;
+	height: 70px;
+	padding-left: 60px;
+	padding-right: 15px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-left: 240px;
+	margin-top: 100px;
+	cursor: pointer;
+}
+#captcha-image {
+	margin-top: 5px;
+}
+#account-image {
+	background-image: url(skins/swamp/swamp_monster.gif);
+	background-repeat: no-repeat;
+	padding-right: 50px;
+	width: 190px;
+	height: 160px;
+	float: right;
+}
+#choose-skill {
+	float: left;
+	margin-right: 20px;
+}
+
+#server_name {
+	display: none;
+}
