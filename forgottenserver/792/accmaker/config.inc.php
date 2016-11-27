@@ -112,7 +112,7 @@ $cfg['show_deathlist'] = true;
 $cfg['skill_names'] = array('fist', 'club', 'sword', 'axe', 'distance', 'shielding', 'fishing');
 
 # Banned names
-$cfg['invalid_names'] = array('^gm','^god','admin','fuck','gamemaster', 'owner', '^adm');
+$cfg['invalid_names'] = array('^gm','^god','admin','fuck','gamemaster', 'owner', '^adm', 'account', 'manager', 'account manager');
 
 # Accounts that are allowed to access admin panel
 # Example: array('account1', 'account2');
