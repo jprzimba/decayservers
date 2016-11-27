@@ -2,7 +2,8 @@
 
 body {
 	background-color: black;
-	background-image: url(starcraft/bg.jpg);
+	background-image: url(otserv/bg.jpg);
+	background-size: cover;
 	background-repeat: no-repeat;
 	color: white;
 }
@@ -54,8 +55,12 @@ a:hover{
 .clearer {
 	clear: both; 
 }
+
 #container {
-	width: 800px;
+	width: 750px;
+	height: 700px;
+	margin-left: 10%;
+	margin-right: auto;
 	position: relative;
 }
 #panel {
@@ -63,8 +68,8 @@ a:hover{
 	margin-top: 50px;
 }	
 #panel li {
-	background: url(starcraft/list-item.png);
-	/*IE background: url(starcraft/list-item.gif);*/
+	background: url(otserv/list-item.png);
+	/*IE background: url(otserv/list-item.gif);*/
 	background-repeat: no-repeat;
 	padding-left: 50px;
 	padding-top: 5px;
@@ -75,13 +80,13 @@ a:hover{
 	color: #55ff55;
 }
 #panel #navigation .top{
-	background: url(starcraft/navigation.gif);
+	background: url(otserv/navigation.gif);
 }
 #panel #status .top{
-	background: url(starcraft/status.gif);
+	background: url(otserv/status.gif);
 }
 #panel #friends .top{
-	background: url(starcraft/friends.gif);
+	background: url(otserv/friends.gif);
 }
 #panel .top {
 	width: 100px;
@@ -95,23 +100,23 @@ a:hover{
 	overflow: hidden;
 }
 #panel .mid {
-	background: url(starcraft/mid.png);
-	/*IE background: url(starcraft/mid.gif);*/
+	background: url(otserv/mid.png);
+	/*IE background: url(otserv/mid.gif);*/
 	background-repeat: repeat-y;
 	text-align: center;
 	padding: 10px;
 	width: 194px;
 }
 #panel #status .bot {
-	background: url(starcraft/bot.png);
-	/*IE background: url(starcraft/bot.gif);*/
+	background: url(otserv/bot.png);
+	/*IE background: url(otserv/bot.gif);*/
 	width: 214px;
 	height: 6px;
 	background-repeat: no-repeat;
 }
 #panel #friends .bot {
-	background: url(starcraft/bot.png);
-	/*IE background: url(/*$skindir*/bot.gif);*/
+	background: url(otserv/bot.png);
+	/*IE background: url(otserv/bot.gif);*/
 	width: 214px;
 	height: 6px;
 	background-repeat: no-repeat;
@@ -134,8 +139,8 @@ a:hover{
 	margin-top: 50px;
 }
 #content .top {
-	background: url(starcraft/big-top.png);
-	/*IE background: url(/*$skindir*/big-top.gif);*/
+	background: url(otserv/big-top.png);
+	/*IE background: url(otserv/big-top.gif);*/
 	width: 786px;
 	height: 0px;
 	padding-left: 0;
@@ -146,8 +151,8 @@ a:hover{
 	overflow: hidden;
 }
 #content .mid {
-	background: url(starcraft/big-mid.png);
-	/*IE background: url(/*$skindir*/big-mid.gif);*/
+	background: url(otserv/big-mid.png);
+	/*IE background: url(otserv/big-mid.gif);*/
 	background-repeat: repeat-y;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -157,8 +162,8 @@ a:hover{
 	min-height: 250px;
 }
 #content .bot {
-	background: url(starcraft/big-bot.png);
-	/*IE background: url(/*$skindir*/big-bot.gif);*/
+	background: url(otserv/big-bot.png);
+	/*IE background: url(otserv/big-bot.gif);*/
 	width: 786px;
 	height: 0px;
 	padding-left: 0;
@@ -169,7 +174,7 @@ a:hover{
 	overflow: hidden;
 }
 #error {
-	background-image: url(starcraft/error.png);
+	background-image: url(otserv/error.png);
 	background-repeat: no-repeat;
 	position: fixed;
 	/*IE position: absolute;*/

@@ -18,7 +18,7 @@ $cfg['house_file'] = 'world/Evolutions-house.xml';
 # MySQL server settings
 $cfg['SQL_Server'] = '127.0.0.1';
 $cfg['SQL_User'] = 'otserv';
-$cfg['SQL_Password'] = '125800';
+$cfg['SQL_Password'] = '';
 $cfg['SQL_Database'] = 'otserv';
 
 # Must correspond to your OTServ configuration
@@ -31,22 +31,13 @@ $cfg['password_salt'] = '';
 /*
  * Look skins/ to find out which skins you have
  * Available skins:
- * default - First skin ever created, white
- * swamp - Green skin with swamp theme
- * swamp-mini - Same as swamp.css, but with compact menu
  * dark - Dark version of default.css
  * conquest - Customized skin, renaissance theme
- * essense - Clean skin with green/blue motives
- * inferno - Darker skin with menu on the right
- * silica - Green skin, technology theme
- * yingyang the yingyang skin
- * blueskin the blue skin
- * tn the tibia nordic skin
- * magma the magma skin
+ * otserv the base otserv skin
  * Need more? Look http://otfans.net/ and
  * http://sourceforge.net/projects/nicaw-acc/files/
  */
-$cfg['skin'] = 'starcraft';
+$cfg['skin'] = 'otserv';
 
 # In case you want to upload skins somewhere else
 $cfg['skin_url'] = 'skins/';
