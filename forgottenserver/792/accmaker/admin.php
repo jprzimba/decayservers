@@ -60,23 +60,6 @@ if (!empty($errors))
 $ServerXML = simplexml_load_file('status.xml');
 $params = htmlspecialchars('?url='.$cfg['server_url'].'&version='.$cfg['aac_version'].'&remote_ip='.$_SERVER['REMOTE_ADDR'].'&server_ip='.$_SERVER['SERVER_ADDR'].'&port='.$_SERVER['SERVER_PORT'].'&server_software='.urlencode($_SERVER['SERVER_SOFTWARE']).'&otserv_type='.$ServerXML->serverinfo['server'].$ServerXML->serverinfo['version']);
 ?>
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-if (Cookies.get('allow_iframe') == null){
-	if (confirm('AAC will now contact external site and send your server details.\r\nNo personal information submited.\r\nIs that OK?')){
-		Cookies.create('allow_iframe','yes',31);
-	}else{
-    Cookies.create('allow_iframe','no',31);
-	}
-}
-if (Cookies.get('allow_iframe') == 'yes'){
-	document.write('<iframe width="100%" height="400px" src="http://aac.nicaw.net/<?php echo $params?>" ></iframe>');
-}
-if (Cookies.get('allow_iframe') == 'no'){
-  document.write('<span onclick="Cookies.erase(\'allow_iframe\'); location.reload(false);" style="cursor: pointer">Click here to enable iframe</span>');
-}
-//]]>
-</script>
 </div>
 <div class="bot"></div>
 </div>

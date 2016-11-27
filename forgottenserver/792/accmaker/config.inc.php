@@ -31,9 +31,8 @@ $cfg['password_salt'] = '';
 /*
  * Look skins/ to find out which skins you have
  * Available skins:
- * dark - Dark version of default.css
  * conquest - Customized skin, renaissance theme
- * otserv the base otserv skin
+ * otserv my otserv skin
  * Need more? Look http://otfans.net/ and
  * http://sourceforge.net/projects/nicaw-acc/files/
  */
@@ -129,7 +128,7 @@ $cfg['player_delete_interval'] = 24*3600;
 $cfg['guild_leader_level'] = 20;
 
 # Please disable guild manager if your server features guild editing
-$cfg['guild_manager_enabled'] = true;
+$cfg['guild_manager_enabled'] = false;
 
 # Online status update interval (seconds). Should match statustimeout in your otserv configuration
 $cfg['status_update_interval'] = 5*60;

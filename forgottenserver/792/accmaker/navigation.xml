@@ -4,7 +4,6 @@
 <item href="news.php">News</item>
 <item href="account.php">Account</item>
 <item href="register.php">Sign Up</item>
-<item href="bans.php">Bans</item>
 </category>
 <category name="Community">
 <item href="characters.php">Characters</item>
@@ -17,6 +16,7 @@
 <category name="Other">
 <item href="spells.php">Spells</item>
 <item href="info.php">Server Info</item>
+<item href="bans.php">Bans</item>
 <item href="voting.php">Voting</item>
 <item href="admin.php">Admin Panel</item>
 </category>

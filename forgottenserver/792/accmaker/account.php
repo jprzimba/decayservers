@@ -45,7 +45,7 @@ include ("header.inc.php");
 <li onclick="ajax('ajax','modules/account_email.php','',true)" style="background-image: url(resource/email.png);">Change Email</li>
 <li onclick="ajax('ajax','modules/account_comments.php','',true)" style="background-image: url(resource/page_edit.png);">Edit Comments</li>
 <li onclick="ajax('ajax','modules/account_options.php','',true)" style="background-image: url(resource/wrench.png);">Account Options</li>
-<li onclick="ajax('ajax','modules/guild_create.php','',true)" style="background-image: url(resource/group_add.png);">Create Guild</li>
+<!--<li onclick="ajax('ajax','modules/guild_create.php','',true)" style="background-image: url(resource/group_add.png);">Create Guild</li>-->
 <li onclick="window.location.href='login.php?logout&amp;redirect=account.php'" style="background-image: url(resource/resultset_previous.png);">Logout</li>
 </ul>
 </td><td style="width: 130px;">
