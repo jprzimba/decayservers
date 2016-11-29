@@ -113,7 +113,7 @@ bool ScriptingManager::loadScriptSystems()
 	
 	if(!g_groups->loadFromXml())
 	{
-		std::cout << "> ERROR: Unable to load GlobalEvents!" << std::endl;
+		std::cout << "> ERROR: Unable to load Groups!" << std::endl;
 		return false;
 	}
 	return true;
