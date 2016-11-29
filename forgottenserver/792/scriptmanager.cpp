@@ -29,6 +29,7 @@
 #include "weapons.h"
 #include "creatureevent.h"
 #include "globalevent.h"
+#include "group.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -37,6 +38,7 @@ TalkActions* g_talkActions = nullptr;
 MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
 GlobalEvents* g_globalEvents = nullptr;
+Groups* g_groups = nullptr;
 
 ScriptingManager* ScriptingManager::_instance = nullptr;
 
@@ -49,6 +51,7 @@ ScriptingManager::ScriptingManager()
 	g_moveEvents = new MoveEvents();
 	g_creatureEvents = new CreatureEvents();
 	g_globalEvents = new GlobalEvents();
+	g_groups = new Groups();
 }
 
 ScriptingManager::~ScriptingManager()
@@ -103,6 +106,12 @@ bool ScriptingManager::loadScriptSystems()
 	}
 
 	if(!g_globalEvents->loadFromXml())
+	{
+		std::cout << "> ERROR: Unable to load GlobalEvents!" << std::endl;
+		return false;
+	}
+	
+	if(!g_groups->loadFromXml())
 	{
 		std::cout << "> ERROR: Unable to load GlobalEvents!" << std::endl;
 		return false;
