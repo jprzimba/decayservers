@@ -22,22 +22,6 @@ DROP TABLE IF EXISTS `guild_invites`;
 DROP TABLE IF EXISTS `global_storage`;
 DROP TABLE IF EXISTS `players`;
 DROP TABLE IF EXISTS `accounts`;
-DROP TABLE IF EXISTS `groups`;
-
-CREATE TABLE `groups`
-(
-	`id` INT NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255) NOT NULL COMMENT 'group name',
-	`flags` BIGINT UNSIGNED NOT NULL DEFAULT 0,
-	`access` INT NOT NULL,
-	`maxdepotitems` INT NOT NULL,
-	`maxviplist` INT NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
-
-INSERT INTO `groups` VALUES (3, 'a god', 17589535219706, 5, 0, 0);
-INSERT INTO `groups` VALUES (2, 'a gamemaster', 3847787356154, 3, 0, 0);
-INSERT INTO `groups` VALUES (1, 'player', 0, 0, 0, 0);
 
 CREATE TABLE `accounts`
 (
@@ -50,12 +34,11 @@ CREATE TABLE `accounts`
 	`email` VARCHAR(255) NOT NULL DEFAULT '',
 	`blocked` TINYINT(1) NOT NULL DEFAULT FALSE,
 	`warnings` INT NOT NULL DEFAULT 0,
-	`group_id` INT NOT NULL DEFAULT 1,
-	PRIMARY KEY (`id`),
-	FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-INSERT INTO `accounts` VALUES (1, '1', 1, 65535, 0, '0', '', 0, 0, 1);
+INSERT INTO `accounts` VALUES (1, '1', 1, 65535, 0, '0', '', 0, 0);
+INSERT INTO `accounts` VALUES (222222, 'tibia', 5, 65535, 0, '0', '', 0, 0);
 
 CREATE TABLE `players`
 (
@@ -104,12 +87,12 @@ CREATE TABLE `players`
 	`balance` bigint(20) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`),
 	KEY (`name`),
-	FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE,
-	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`)
+	FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
-INSERT INTO `players` VALUES (1, 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 1000, 1000, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
-	
+INSERT INTO `players` VALUES (1, 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 1000, 1000, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
+INSERT INTO `players` VALUES (2, 'GM Tryller', 5, 222222, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 1000, 1000, 7, '', 400, 0, 0, 0, 1, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
+
 CREATE TABLE `bans`
 (
 	`type` INT NOT NULL COMMENT 'this field defines if its ip, accountban or namelock',

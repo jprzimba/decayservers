@@ -88,7 +88,7 @@ int32_t DatabaseManager::getDatabaseVersion()
 	if(!tableExists("server_config"))
 	{
 		Database* db = Database::getInstance();
-		db->executeQuery("CREATE TABLE `server_config` (`config` VARCHAR(50) NOT nullptr, `value` VARCHAR(256) NOT nullptr DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB;");
+		db->executeQuery("CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB;");
 		db->executeQuery("INSERT INTO `server_config` VALUES ('db_version', 0);");
 		return 0;
 	}
@@ -128,7 +128,7 @@ uint32_t DatabaseManager::updateDatabase()
 		case 2:
 		{
 			std::cout << "> Updating database to version 3 (bank balance)" << std::endl;
-			db->executeQuery("ALTER TABLE `players` ADD `balance` BIGINT UNSIGNED NOT nullptr DEFAULT 0");
+			db->executeQuery("ALTER TABLE `players` ADD `balance` BIGINT UNSIGNED NOT NULL DEFAULT 0");
 			registerDatabaseConfig("db_version", 3);
 			return 3;
 		}
