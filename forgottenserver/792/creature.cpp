@@ -112,7 +112,7 @@ Creature::~Creature()
 
 	attackedCreature = nullptr;
 
-	//std::cout << "Creature destructor " << this->getID() << std::endl;
+	//std::clog << "Creature destructor " << this->getID() << std::endl;
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, uint32_t viewRangeX, uint32_t viewRangeY)
@@ -312,7 +312,7 @@ void Creature::addEventWalk()
 {
 	if(eventWalk == 0)
 	{
-		//std::cout << "addEventWalk() - " << getName() << std::endl;
+		//std::clog << "addEventWalk() - " << getName() << std::endl;
 
 		int64_t ticks = getEventStepTicks();
 		if(ticks > 0)
@@ -381,7 +381,7 @@ void Creature::updateTileCache(const Tile* tile, int32_t dx, int32_t dy)
 	}
 #ifdef __DEBUG__
 	else
-		std::cout << "Creature::updateTileCache out of range." << std::endl;
+		std::clog << "Creature::updateTileCache out of range." << std::endl;
 #endif
 }
 
@@ -424,12 +424,12 @@ int32_t Creature::getWalkCache(const Position& pos) const
 		if(tile && (tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR))
 		{
 			if(!localMapCache[y][x])
-				std::cout << "Wrong cache value" << std::endl;
+				std::clog << "Wrong cache value" << std::endl;
 		}
 		else
 		{
 			if(localMapCache[y][x])
-				std::cout << "Wrong cache value" << std::endl;
+				std::clog << "Wrong cache value" << std::endl;
 		}
 #endif
 		if(localMapCache[y][x])
@@ -1191,7 +1191,7 @@ void Creature::onBlockHit(BlockType_t blockType)
 
 void Creature::addSummon(Creature* creature)
 {
-	//std::cout << "addSummon: " << this << " summon=" << creature << std::endl;
+	//std::clog << "addSummon: " << this << " summon=" << creature << std::endl;
 	creature->setDropLoot(false);
 	creature->setLossSkill(false);
 	creature->setMaster(this);
@@ -1201,7 +1201,7 @@ void Creature::addSummon(Creature* creature)
 
 void Creature::removeSummon(const Creature* creature)
 {
-	//std::cout << "removeSummon: " << this << " summon=" << creature << std::endl;
+	//std::clog << "removeSummon: " << this << " summon=" << creature << std::endl;
 	std::list<Creature*>::iterator cit = std::find(summons.begin(), summons.end(), creature);
 	if(cit != summons.end())
 	{

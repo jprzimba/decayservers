@@ -103,9 +103,9 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	if(root_header->minorVersionItems > (uint32_t)Items::dwMinorVersion)
-		std::cout << "Warning: [OTBM loader] This map needs an updated items OTB file." <<std::endl;
+		std::clog << "Warning: [OTBM loader] This map needs an updated items OTB file." <<std::endl;
 
-	std::cout << "> Map size: " << root_header->width << "x" << root_header->height << "." << std::endl;
+	std::clog << "> Map size: " << root_header->width << "x" << root_header->height << "." << std::endl;
 	map->mapWidth = root_header->width;
 	map->mapHeight = root_header->height;
 
@@ -298,7 +298,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 								if(isHouseTile && !item->isNotMoveable())
 								{
-									std::cout << "Warning: [OTBM loader] Moveable item in house id = " << house->getHouseId() << " Item type = " << item->getID() << std::endl;
+									std::clog << "Warning: [OTBM loader] Moveable item in house id = " << house->getHouseId() << " Item type = " << item->getID() << std::endl;
 									delete item;
 									item = nullptr;
 								}
@@ -340,7 +340,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 							{
 								if(isHouseTile && !item->isNotMoveable())
 								{
-									std::cout << "Warning: [OTBM loader] Moveable item in house id = " << house->getHouseId() << " Item type = " << item->getID() << std::endl;
+									std::clog << "Warning: [OTBM loader] Moveable item in house id = " << house->getHouseId() << " Item type = " << item->getID() << std::endl;
 									delete item;
 								}
 								else
@@ -459,6 +459,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		nodeMapData = f.getNextNode(nodeMapData, type);
 	}
 	
-	std::cout << "> Map loading time: " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+	std::clog << "> Map loading time: " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return true;
 }

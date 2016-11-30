@@ -211,7 +211,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		m_words = attr.as_string();
 	else
 	{
-		std::cout << "[Error - TalkAction::configureEvent] No words for TalkAction." << std::endl;
+		std::clog << "[Error - TalkAction::configureEvent] No words for TalkAction." << std::endl;
 		return false;
 	}
 
@@ -228,7 +228,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		else if(tmpStrValue == "word-spaced")
 			m_filter = TALKFILTER_WORD_SPACED;
 		else
-			std::cout << "[Warning - TalkAction::configureEvent] Unknown filter for TalkAction: " << tmpStrValue << ", using default." << std::endl;
+			std::clog << "[Warning - TalkAction::configureEvent] Unknown filter for TalkAction: " << tmpStrValue << ", using default." << std::endl;
 	}
 	
 	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")) || (attr = node.attribute("logged")))
@@ -279,7 +279,7 @@ bool TalkAction::loadFunction(const std::string& functionName)
 		m_function = newType;
 	else
 	{
-		std::cout << "[Warning - TalkAction::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - TalkAction::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -323,7 +323,7 @@ uint32_t TalkAction::executeSay(Creature* creature, const std::string& words, co
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. TalkAction::executeSay" << std::endl;
+		std::clog << "[Error] Call stack overflow. TalkAction::executeSay" << std::endl;
 		return 0;
 	}
 }

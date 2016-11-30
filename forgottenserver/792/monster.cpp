@@ -89,7 +89,7 @@ Creature()
 	for(it = mType->scriptList.begin(); it != mType->scriptList.end(); ++it)
 	{
 		if(!registerCreatureEvent(*it))
-			std::cout << "Warning: [Monster::Monster]. Unknown event name - " << *it << std::endl;
+			std::clog << "Warning: [Monster::Monster]. Unknown event name - " << *it << std::endl;
 	}
 }
 
@@ -102,7 +102,7 @@ Monster::~Monster()
 void Monster::onAttackedCreatureDisappear(bool isLogout)
 {
 #ifdef __DEBUG__
-	std::cout << "Attacked creature disappeared." << std::endl;
+	std::clog << "Attacked creature disappeared." << std::endl;
 #endif
 
 	attackTicks = 0;
@@ -112,7 +112,7 @@ void Monster::onAttackedCreatureDisappear(bool isLogout)
 void Monster::onFollowCreatureDisappear(bool isLogout)
 {
 #ifdef __DEBUG__
-	std::cout << "Follow creature disappeared." << std::endl;
+	std::clog << "Follow creature disappeared." << std::endl;
 #endif
 }
 
@@ -277,7 +277,7 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront /*= false*/)
 
 void Monster::onCreatureEnter(Creature* creature)
 {
-	//std::cout << "onCreatureEnter - " << creature->getName() << std::endl;
+	//std::clog << "onCreatureEnter - " << creature->getName() << std::endl;
 
 	if(getMaster() == creature)
 	{
@@ -328,7 +328,7 @@ bool Monster::isOpponent(const Creature* creature)
 
 void Monster::onCreatureLeave(Creature* creature)
 {
-	//std::cout << "onCreatureLeave - " << creature->getName() << std::endl;
+	//std::clog << "onCreatureLeave - " << creature->getName() << std::endl;
 
 	if(getMaster() == creature)
 	{
@@ -348,7 +348,7 @@ void Monster::onCreatureLeave(Creature* creature)
 		}
 #ifdef __DEBUG__
 		else
-			std::cout << "Monster: " << creature->getName() << " not found in the friendList." << std::endl;
+			std::clog << "Monster: " << creature->getName() << " not found in the friendList." << std::endl;
 #endif
 	}
 
@@ -365,7 +365,7 @@ void Monster::onCreatureLeave(Creature* creature)
 		}
 #ifdef __DEBUG__
 		else
-			std::cout << "Player: " << creature->getName() << " not found in the targetList." << std::endl;
+			std::clog << "Player: " << creature->getName() << " not found in the targetList." << std::endl;
 #endif
 	}
 }
@@ -373,7 +373,7 @@ void Monster::onCreatureLeave(Creature* creature)
 bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAULT*/)
 {
 #ifdef __DEBUG__
-	std::cout << "Searching target... " << std::endl;
+	std::clog << "Searching target... " << std::endl;
 #endif
 
 	std::list<Creature*> resultList;
@@ -393,7 +393,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		CreatureList::iterator it = resultList.begin();
 		std::advance(it, index);
 #ifdef __DEBUG__
-		std::cout << "Selecting target " << (*it)->getName() << std::endl;
+		std::clog << "Selecting target " << (*it)->getName() << std::endl;
 #endif
 		return selectTarget(*it);
 	}
@@ -407,7 +407,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		if(followCreature != (*it) && selectTarget(*it))
 		{
 #ifdef __DEBUG__
-			std::cout << "Selecting target " << (*it)->getName() << std::endl;
+			std::clog << "Selecting target " << (*it)->getName() << std::endl;
 #endif
 			return true;
 		}
@@ -483,7 +483,7 @@ bool Monster::isTarget(Creature* creature)
 bool Monster::selectTarget(Creature* creature)
 {
 #ifdef __DEBUG__
-	std::cout << "Selecting target... " << std::endl;
+	std::clog << "Selecting target... " << std::endl;
 #endif
 
 	if(!isTarget(creature))
@@ -494,7 +494,7 @@ bool Monster::selectTarget(Creature* creature)
 	{
 		//Target not found in our target list.
 #ifdef __DEBUG__
-		std::cout << "Target not found in targetList." << std::endl;
+		std::clog << "Target not found in targetList." << std::endl;
 #endif
 		return false;
 	}
@@ -646,7 +646,7 @@ void Monster::doAttacking(uint32_t interval)
 
 #ifdef __DEBUG__
 				static uint64_t prevTicks = OTSYS_TIME();
-				std::cout << "doAttacking ticks: " << OTSYS_TIME() - prevTicks << std::endl;
+				std::clog << "doAttacking ticks: " << OTSYS_TIME() - prevTicks << std::endl;
 				prevTicks = OTSYS_TIME();
 #endif
 			}
@@ -1009,7 +1009,7 @@ bool Monster::getNextStep(Direction& dir)
 		}
 #ifdef __DEBUG__
 		else
-			std::cout << "getNextStep - no tile." << std::endl;
+			std::clog << "getNextStep - no tile." << std::endl;
 #endif
 	}
 	return result;

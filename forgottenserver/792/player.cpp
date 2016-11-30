@@ -196,7 +196,7 @@ Player::~Player()
 	for(it = depots.begin();it != depots.end(); it++)
 		it->second->releaseThing2();
 
-	//std::cout << "Player destructor " << this << std::endl;
+	//std::clog << "Player destructor " << this << std::endl;
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
@@ -715,7 +715,7 @@ int32_t Player::getContainerID(const Container* container) const
 void Player::addContainer(uint32_t cid, Container* container)
 {
 #ifdef __DEBUG__
-	std::cout << getName() << ", addContainer: " << (int32_t)cid << std::endl;
+	std::clog << getName() << ", addContainer: " << (int32_t)cid << std::endl;
 #endif
 	if(cid > 0xF)
 		return;
@@ -749,7 +749,7 @@ void Player::closeContainer(uint32_t cid)
 	}
 
 #ifdef __DEBUG__
-	std::cout << getName() << ", closeContainer: " << (int32_t)cid << std::endl;
+	std::clog << getName() << ", closeContainer: " << (int32_t)cid << std::endl;
 #endif
 }
 
@@ -806,7 +806,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 			outfit.looktype = value >> 16;
 			outfit.addons = value & 0xFF;
 			if(outfit.addons > 3)
-				std::cout << "Warning: No valid addons value key:" << key << " value: " << (int32_t)(value & 0xFF) << " player: " << getName() << std::endl;
+				std::clog << "Warning: No valid addons value key:" << key << " value: " << (int32_t)(value & 0xFF) << " player: " << getName() << std::endl;
 			else
 				m_playerOutfits.addOutfit(outfit);
 
@@ -814,7 +814,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		}
 		else
 		{
-			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
+			std::clog << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
 			return;
 		}
 	}
@@ -889,7 +889,7 @@ Depot* Player::getDepot(uint32_t depotId, bool autoCreateDepot)
 		else
 		{
 			g_game.FreeThing(tmpDepot);
-			std::cout << "Failure: Creating a new depot with id: " << depotId <<
+			std::clog << "Failure: Creating a new depot with id: " << depotId <<
 				", for player: " << getName() << std::endl;
 		}
 	}
@@ -1329,11 +1329,11 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 		{
 			bed->wakeUp(this);
 			#ifdef __DEBUG__
-			std::cout << "Player " << getName() << " waking up." << std::endl;
+			std::clog << "Player " << getName() << " waking up." << std::endl;
 			#endif
 		}
 
-		std::cout << name << " has logged in." << std::endl;
+		std::clog << name << " has logged in." << std::endl;
 		g_game.checkPlayersRecord();
 		IOLoginData::getInstance()->updateOnlineStatus(guid, true);
 	}
@@ -1442,7 +1442,7 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 				g_game.closeRuleViolation(*it);
 		}
 
-		std::cout << getName() << " has logged out." << std::endl;
+		std::clog << getName() << " has logged out." << std::endl;
 		IOLoginData::getInstance()->updateOnlineStatus(guid, false);
 
 		bool saved = false;
@@ -1456,10 +1456,10 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 		}
 
 		if(!saved)
-			std::cout << "Error while saving player: " << getName() << std::endl;
+			std::clog << "Error while saving player: " << getName() << std::endl;
 
 #ifdef __DEBUG_PLAYERS__
-		std::cout << (uint32_t)g_game.getPlayersOnline() << " players online." << std::endl;
+		std::clog << (uint32_t)g_game.getPlayersOnline() << " players online." << std::endl;
 #endif
 	}
 }
@@ -2616,7 +2616,7 @@ void Player::__addThing(int32_t index, Thing* thing)
 	if(index < 0 || index > 11)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__addThing], " << "player: " << getName() << ", index: " << index << ", index < 0 || index > 11" << std::endl;
+		std::clog << "Failure: [Player::__addThing], " << "player: " << getName() << ", index: " << index << ", index < 0 || index > 11" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2625,7 +2625,7 @@ void Player::__addThing(int32_t index, Thing* thing)
 	if(index == 0)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__addThing], " << "player: " << getName() << ", index == 0" << std::endl;
+		std::clog << "Failure: [Player::__addThing], " << "player: " << getName() << ", index == 0" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTENOUGHROOM*/;
@@ -2635,7 +2635,7 @@ void Player::__addThing(int32_t index, Thing* thing)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__addThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__addThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2657,7 +2657,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	if(index == -1)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__updateThing], " << "player: " << getName() << ", index == -1" << std::endl;
+		std::clog << "Failure: [Player::__updateThing], " << "player: " << getName() << ", index == -1" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2667,7 +2667,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__updateThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__updateThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2691,7 +2691,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 	if(index < 0 || index > 11)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__replaceThing], " << "player: " << getName() << ", index: " << index << ",  index < 0 || index > 11" << std::endl;
+		std::clog << "Failure: [Player::__replaceThing], " << "player: " << getName() << ", index: " << index << ",  index < 0 || index > 11" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2701,7 +2701,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 	if(!oldItem)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__updateThing], " << "player: " << getName() << ", oldItem == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__updateThing], " << "player: " << getName() << ", oldItem == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2711,7 +2711,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__updateThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__updateThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2736,7 +2736,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__removeThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__removeThing], " << "player: " << getName() << ", item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2746,7 +2746,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 	if(index == -1)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__removeThing], " << "player: " << getName() << ", index == -1" << std::endl;
+		std::clog << "Failure: [Player::__removeThing], " << "player: " << getName() << ", index == -1" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -2941,14 +2941,14 @@ void Player::__internalAddThing(Thing* thing)
 void Player::__internalAddThing(uint32_t index, Thing* thing)
 {
 #ifdef __DEBUG__MOVESYS__NOTICE
-	std::cout << "[Player::__internalAddThing] index: " << index << std::endl;
+	std::clog << "[Player::__internalAddThing] index: " << index << std::endl;
 #endif
 
 	Item* item = thing->getItem();
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__internalAddThing] item == nullptr" << std::endl;
+		std::clog << "Failure: [Player::__internalAddThing] item == nullptr" << std::endl;
 #endif
 		return;
 	}
@@ -2957,7 +2957,7 @@ void Player::__internalAddThing(uint32_t index, Thing* thing)
 	if(index == 0)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Player::__internalAddThing] index == 0" << std::endl;
+		std::clog << "Failure: [Player::__internalAddThing] index == 0" << std::endl;
 		DEBUG_REPORT
 #endif
 		return;
@@ -2968,7 +2968,7 @@ void Player::__internalAddThing(uint32_t index, Thing* thing)
 		if(inventory[index])
 		{
 #ifdef __DEBUG__MOVESYS__
-			std::cout << "Warning: [Player::__internalAddThing], player: " << getName() << ", items[index] is not empty." << std::endl;
+			std::clog << "Warning: [Player::__internalAddThing], player: " << getName() << ", items[index] is not empty." << std::endl;
 			//DEBUG_REPORT
 #endif
 			return;
@@ -3461,7 +3461,7 @@ void Player::genReservedStorageRange()
 			base_key++;
 			if(base_key > PSTRG_OUTFITS_RANGE_START + PSTRG_OUTFITS_RANGE_SIZE)
 			{
-				std::cout << "Warning: [Player::genReservedStorageRange()] Player " << getName() << " with more than 500 outfits!." << std::endl;
+				std::clog << "Warning: [Player::genReservedStorageRange()] Player " << getName() << " with more than 500 outfits!." << std::endl;
 				break;
 			}
 		}

@@ -41,7 +41,7 @@ bool Groups::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
 	if(!result) {
-		std::cout << "[Error - Groups::loadFromXml] Failed to load data/XML/groups.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Groups::loadFromXml] Failed to load data/XML/groups.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -73,7 +73,7 @@ bool Groups::loadFromXml()
 		}
 		else
 		{
-			std::cout << "[Warning - Groups::loadFromXml] Missing group id." << std::endl;
+			std::clog << "[Warning - Groups::loadFromXml] Missing group id." << std::endl;
 			return false;
 		}
 	}
@@ -86,7 +86,7 @@ Group* Groups::getGroup(uint32_t groupId)
 	if(it != groupsMap.end())
 		return it->second;
 
-	std::cout << "[Warning - Groups::getGroup] Group " << groupId << " not found." << std::endl;
+	std::clog << "[Warning - Groups::getGroup] Group " << groupId << " not found." << std::endl;
 	return &defGroup;
 }
 

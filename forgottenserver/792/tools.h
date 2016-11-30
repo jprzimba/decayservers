@@ -33,6 +33,14 @@
 #include <boost/tokenizer.hpp>
 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
+enum FileType_t
+{
+	FILE_TYPE_XML,
+	FILE_TYPE_LOG,
+	FILE_TYPE_OTHER,
+	FILE_TYPE_CONFIG
+};
+
 enum DistributionType_t
 {
 	DISTRO_UNIFORM,
@@ -79,10 +87,11 @@ char upchar(char c);
 std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end);
 
 void formatDate(time_t time, char* buffer);
-std::string formatDate(time_t _time = 0);
+std::string formatDateString(time_t _time = 0);
 void formatDate2(time_t time, char* buffer);
 void formatIP(uint32_t ip, char* buffer);
 std::string formatTime(int32_t hours, int32_t minutes);
+std::string formatTimeEx(time_t _time = 0, bool miliseconds = false);
 
 std::string trimString(std::string& str);
 
@@ -107,4 +116,6 @@ CombatType_t getCombatType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);
 CombatType_t indexToCombatType(uint32_t v);
 uint32_t combatTypeToIndex(CombatType_t combatType);
+
+std::string getFilePath(FileType_t type, std::string name = "");
 #endif

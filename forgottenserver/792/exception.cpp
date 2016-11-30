@@ -163,10 +163,10 @@ EXCEPTION_DISPOSITION
 	g_game.saveGameState();
 
 	std::ostream *outdriver;
-	std::cout << "Error: generating report file..." << std::endl;
+	std::clog << "Error: generating report file..." << std::endl;
 	std::ofstream output("report.txt", std::ios_base::app);
 	if(output.fail()){
-		outdriver = &std::cout;
+		outdriver = &std::clog;
 		file = false;
 	}
 	else{
@@ -310,7 +310,7 @@ EXCEPTION_DISPOSITION
 	if(file)
 		((std::ofstream*)outdriver)->close();
 	MessageBox(nullptr,"Please send the file report.txt to support service ;). Thanks","Error",MB_OK |MB_ICONERROR);
-	std::cout << "Error report generated. Killing server." <<std::endl;
+	std::clog << "Error report generated. Killing server." <<std::endl;
 	exit(1); //force exit
 	return ExceptionContinueSearch;
 }
@@ -339,7 +339,7 @@ bool ExceptionHandler::LoadMap()
 	int32_t n = 0;
 	if(!input)
 	{
-		std::cout << "Failed loading symbols. forgottenserver.map not found. " << std::endl;
+		std::clog << "Failed loading symbols. forgottenserver.map not found. " << std::endl;
 		exit(1);
 		return false;
 	}
@@ -398,7 +398,7 @@ bool ExceptionHandler::LoadMap()
 	}
 	// close file
 	fclose(input);
-	//std::cout << "Loaded " << n << " stack symbols" <<std::endl;
+	//std::clog << "Loaded " << n << " stack symbols" <<std::endl;
 	maploaded = true;
 	#endif
 	return true;
@@ -419,7 +419,7 @@ void ExceptionHandler::dumpStack()
 	uint32_t foundRetAddress = 0;
 	_MEMORY_BASIC_INFORMATION mbi;
 	
-	std::cout << "Error: generating report file..." << std::endl;
+	std::clog << "Error: generating report file..." << std::endl;
 	std::ofstream output("report.txt",std::ios_base::app);
 	output.flags(std::ios::hex | std::ios::showbase);
 	time_t rawtime;

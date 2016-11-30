@@ -53,7 +53,7 @@ bool Raids::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/raids/raids.xml");
 	if(!result) {
-		std::cout << "[Error - Raids::loadFromXml] Failed to load data/raids/raids.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Raids::loadFromXml] Failed to load data/raids/raids.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -65,7 +65,7 @@ bool Raids::loadFromXml()
 		if(nameAttribute) {
 			name = nameAttribute.as_string();
 		} else {
-			std::cout << "[Error - Raids::loadFromXml] Name tag missing for raid" << std::endl;
+			std::clog << "[Error - Raids::loadFromXml] Name tag missing for raid" << std::endl;
 			continue;
 		}
 
@@ -76,12 +76,12 @@ bool Raids::loadFromXml()
 			std::ostringstream ss;
 			ss << "raids/" << name << ".xml";
 			file = ss.str();
-			std::cout << "[Warning - Raids::loadFromXml] File tag missing for raid " << name << ". Using default: " << file << std::endl;
+			std::clog << "[Warning - Raids::loadFromXml] File tag missing for raid " << name << ". Using default: " << file << std::endl;
 		}
 
 		interval = pugi::cast<uint32_t>(raidNode.attribute("interval2").value()) * 60;
 		if(interval == 0) {
-			std::cout << "[Error - Raids::loadFromXml] interval2 tag missing or zero (would divide by 0) for raid: " << name << std::endl;
+			std::clog << "[Error - Raids::loadFromXml] interval2 tag missing or zero (would divide by 0) for raid: " << name << std::endl;
 			continue;
 		}
 
@@ -89,7 +89,7 @@ bool Raids::loadFromXml()
 		if(marginAttribute) {
 			margin = pugi::cast<uint32_t>(marginAttribute.value()) * 60 * 1000;
 		} else {
-			std::cout << "[Warning - Raids::loadFromXml] margin tag missing for raid: " << name << std::endl;
+			std::clog << "[Warning - Raids::loadFromXml] margin tag missing for raid: " << name << std::endl;
 			margin = 0;
 		}
 
@@ -97,7 +97,7 @@ bool Raids::loadFromXml()
 		if(newRaid->loadFromXml("data/raids/" + file)) {
 			raidList.push_back(newRaid);
 		} else {
-			std::cout << "[Error - Raids::loadFromXml] Failed to load raid: " << name << std::endl;
+			std::clog << "[Error - Raids::loadFromXml] Failed to load raid: " << name << std::endl;
 			delete newRaid;
 		}
 	}
@@ -137,7 +137,7 @@ void Raids::checkRaids()
 					char buffer[40];
 					uint64_t tmp = time(nullptr);
 					formatDate(tmp, buffer);
-					std::cout << buffer << " [Notice] Raids: Starting raid " << (*it)->getName() << std::endl;
+					std::clog << buffer << " [Notice] Raids: Starting raid " << (*it)->getName() << std::endl;
 					#endif
 					setRunning(*it);
 					(*it)->startRaid();
@@ -214,7 +214,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
 	if(!result) {
-		std::cout << "[Error - Raid::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
+		std::clog << "[Error - Raid::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
@@ -235,7 +235,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		if(event->configureRaidEvent(eventNode)) {
 			raidEvents.push_back(event);
 		} else {
-			std::cout << "[Error - Raid::loadFromXml] In file (" << _filename << "), eventNode: " << eventNode.name() << std::endl;
+			std::clog << "[Error - Raid::loadFromXml] In file (" << _filename << "), eventNode: " << eventNode.name() << std::endl;
 			delete event;
 		}
 	}
@@ -278,7 +278,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 void Raid::resetRaid()
 {
 #ifdef __DEBUG_RAID__
-	std::cout << "[Notice] Raids: Resetting raid." << std::endl;
+	std::clog << "[Notice] Raids: Resetting raid." << std::endl;
 #endif
 
 	nextEvent = 0;
@@ -313,7 +313,7 @@ bool RaidEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 {
 	pugi::xml_attribute delayAttribute = eventNode.attribute("delay");
 	if(!delayAttribute) {
-		std::cout << "[Error] Raid: delay tag missing." << std::endl;
+		std::clog << "[Error] Raid: delay tag missing." << std::endl;
 		return false;
 	}
 
@@ -334,7 +334,7 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if(messageAttribute) {
 		m_message = messageAttribute.as_string();
 	} else {
-		std::cout << "[Error] Raid: message tag missing for announce event." << std::endl;
+		std::clog << "[Error] Raid: message tag missing for announce event." << std::endl;
 		return false;
 	}
 
@@ -356,11 +356,11 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		} else if(tmpStrValue == "redconsole") {
 			m_messageType = MSG_STATUS_CONSOLE_RED;
 		} else {
-			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
+			std::clog << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
 		}
 	} else {
 		m_messageType = MSG_EVENT_ADVANCE;
-		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
+		std::clog << "[Notice] Raid: type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
 	}
 	return true;
 }
@@ -381,7 +381,7 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if(nameAttribute) {
 		m_monsterName = nameAttribute.as_string();
 	} else {
-		std::cout << "[Error] Raid: name tag missing for singlespawn event." << std::endl;
+		std::clog << "[Error] Raid: name tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
@@ -389,7 +389,7 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if(xAttribute) {
 		m_position.x = pugi::cast<uint16_t>(xAttribute.value());
 	} else {
-		std::cout << "[Error] Raid: x tag missing for singlespawn event." << std::endl;
+		std::clog << "[Error] Raid: x tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
@@ -397,7 +397,7 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if(yAttribute) {
 		m_position.y = pugi::cast<uint16_t>(yAttribute.value());
 	} else {
-		std::cout << "[Error] Raid: y tag missing for singlespawn event." << std::endl;
+		std::clog << "[Error] Raid: y tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
@@ -405,7 +405,7 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if(zAttribute) {
 		m_position.z = pugi::cast<uint16_t>(zAttribute.value());
 	} else {
-		std::cout << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
+		std::clog << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 	return true;
@@ -416,14 +416,14 @@ bool SingleSpawnEvent::executeEvent()
 	Monster* monster = Monster::createMonster(m_monsterName);
 	if(!monster)
 	{
-		std::cout << "[Error] Raids: Cant create monster " << m_monsterName << std::endl;
+		std::clog << "[Error] Raids: Cant create monster " << m_monsterName << std::endl;
 		return false;
 	}
 
 	if(!g_game.placeCreature(monster, m_position))
 	{
 		delete monster;
-		std::cout << "[Error] Raids: Cant place monster " << m_monsterName << std::endl;
+		std::clog << "[Error] Raids: Cant place monster " << m_monsterName << std::endl;
 		return false;
 	}
 
@@ -445,7 +445,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(xAttribute) {
 			centerPos.x = pugi::cast<uint16_t>(xAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: centerx tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: centerx tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -453,7 +453,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(yAttribute) {
 			centerPos.y = pugi::cast<uint16_t>(yAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: centery tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: centery tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -461,7 +461,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(zAttribute) {
 			centerPos.z = pugi::cast<uint16_t>(zAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: centerz tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: centerz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -477,7 +477,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(fromxAttribute) {
 			m_fromPos.x = pugi::cast<uint16_t>(fromxAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: fromx tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: fromx tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -485,7 +485,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(fromyAttribute) {
 			m_fromPos.y = pugi::cast<uint16_t>(fromyAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: fromy tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: fromy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -493,7 +493,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(fromzAttribute) {
 			m_fromPos.z = pugi::cast<uint16_t>(fromzAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: fromz tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: fromz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -501,7 +501,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(toxAttribute) {
 			m_toPos.x = pugi::cast<uint16_t>(toxAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: tox tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: tox tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -509,7 +509,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(toyAttribute) {
 			m_toPos.y = pugi::cast<uint16_t>(toyAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: toy tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: toy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
@@ -517,7 +517,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(tozAttribute) {
 			m_toPos.z = pugi::cast<uint16_t>(tozAttribute.value());
 		} else {
-			std::cout << "[Error] Raid: toz tag missing for areaspawn event." << std::endl;
+			std::clog << "[Error] Raid: toz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 	}
@@ -529,7 +529,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		if(nameAttribute) {
 			name = nameAttribute.as_string();
 		} else {
-			std::cout << "[Error] Raid: name tag missing for monster node." << std::endl;
+			std::clog << "[Error] Raid: name tag missing for monster node." << std::endl;
 			return false;
 		}
 
@@ -555,7 +555,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 				minAmount = pugi::cast<uint32_t>(amountAttribute.value());
 				maxAmount = minAmount;
 			} else {
-				std::cout << "[Error] Raid: amount tag missing for monster node." << std::endl;
+				std::clog << "[Error] Raid: amount tag missing for monster node." << std::endl;
 				return false;
 			}
 		}
@@ -597,7 +597,7 @@ bool AreaSpawnEvent::executeEvent()
 		for(uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn->name);
 			if(!monster) {
-				std::cout << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn->name << std::endl;
+				std::clog << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn->name << std::endl;
 				return false;
 			}
 
@@ -645,12 +645,12 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute scriptAttribute = eventNode.attribute("script");
 	if(!scriptAttribute) {
-		std::cout << "Error: [ScriptEvent::configureRaidEvent] No script file found for raid" << std::endl;
+		std::clog << "Error: [ScriptEvent::configureRaidEvent] No script file found for raid" << std::endl;
 		return false;
 	}
 
 	if(!loadScript("data/raids/scripts/" + std::string(scriptAttribute.as_string()))) {
-		std::cout << "Error: [ScriptEvent::configureRaidEvent] Can not load raid script." << std::endl;
+		std::clog << "Error: [ScriptEvent::configureRaidEvent] Can not load raid script." << std::endl;
 		return false;
 	}
 	return true;
@@ -683,7 +683,7 @@ bool ScriptEvent::executeEvent()
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. ScriptEvent::executeEvent" << std::endl;
+		std::clog << "[Error] Call stack overflow. ScriptEvent::executeEvent" << std::endl;
 		return 0;
 	}
 }

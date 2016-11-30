@@ -565,7 +565,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 	{
 #ifdef __DEBUG__
 		if(thing->getParent() == nullptr && !hasBitSet(FLAG_NOLIMIT, flags))
-			std::cout << "Notice: Tile::__queryAdd() - thing->getParent() == nullptr" << std::endl;
+			std::clog << "Notice: Tile::__queryAdd() - thing->getParent() == nullptr" << std::endl;
 #endif
 
 		if(hasBitSet(FLAG_NOLIMIT, flags))
@@ -734,7 +734,7 @@ void Tile::__addThing(int32_t index, Thing* thing)
 		if(item == nullptr)
 		{
 #ifdef __DEBUG__MOVESYS__
-			std::cout << "Failure: [Tile::__addThing] item == nullptr" << std::endl;
+			std::clog << "Failure: [Tile::__addThing] item == nullptr" << std::endl;
 			DEBUG_REPORT
 #endif
 			return /*RET_NOTPOSSIBLE*/;
@@ -846,7 +846,7 @@ void Tile::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	if(index == -1)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Tile::__updateThing] index == -1" << std::endl;
+		std::clog << "Failure: [Tile::__updateThing] index == -1" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -856,7 +856,7 @@ void Tile::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Tile::__updateThing] item == nullptr" << std::endl;
+		std::clog << "Failure: [Tile::__updateThing] item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -878,7 +878,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 	if(item == nullptr)
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Tile::__updateThing] item == nullptr" << std::endl;
+		std::clog << "Failure: [Tile::__updateThing] item == nullptr" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -916,7 +916,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 	if(!isInserted && pos < (int32_t)creatures.size())
 	{
 #ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Tile::__updateThing] Update object is a creature" << std::endl;
+		std::clog << "Failure: [Tile::__updateThing] Update object is a creature" << std::endl;
 		DEBUG_REPORT
 #endif
 		return /*RET_NOTPOSSIBLE*/;
@@ -949,7 +949,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 	}
 
 #ifdef __DEBUG__MOVESYS__
-	std::cout << "Failure: [Tile::__updateThing] Update object not found" << std::endl;
+	std::clog << "Failure: [Tile::__updateThing] Update object not found" << std::endl;
 	DEBUG_REPORT
 #endif
 }
@@ -964,7 +964,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		if(it == creatures.end())
 		{
 #ifdef __DEBUG__MOVESYS__
-			std::cout << "Failure: [Tile::__removeThing] creature not found" << std::endl;
+			std::clog << "Failure: [Tile::__removeThing] creature not found" << std::endl;
 			DEBUG_REPORT
 #endif
 			return;
@@ -981,7 +981,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		if(item == nullptr)
 		{
 #ifdef __DEBUG__MOVESYS__
-			std::cout << "Failure: [Tile::__removeThing] item == nullptr" << std::endl;
+			std::clog << "Failure: [Tile::__removeThing] item == nullptr" << std::endl;
 			DEBUG_REPORT
 #endif
 			return;
@@ -991,7 +991,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		if(index == -1)
 		{
 #ifdef __DEBUG__MOVESYS__
-			std::cout << "Failure: [Tile::__removeThing] index == -1" << std::endl;
+			std::clog << "Failure: [Tile::__removeThing] index == -1" << std::endl;
 			DEBUG_REPORT
 #endif
 			return;
@@ -1048,7 +1048,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		}
 	}
 #ifdef __DEBUG__MOVESYS__
-	std::cout << "Failure: [Tile::__removeThing] thing not found" << std::endl;
+	std::clog << "Failure: [Tile::__removeThing] thing not found" << std::endl;
 	DEBUG_REPORT
 #endif
 }

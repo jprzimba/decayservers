@@ -43,14 +43,14 @@ bool Vocations::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
 	if(!result) {
-		std::cout << "[Error - Vocations::loadFromXml] Failed to load data/XML/vocations.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Vocations::loadFromXml] Failed to load data/XML/vocations.xml: " << result.description() << std::endl;
 		return false;
 	}
 
 	for(pugi::xml_node vocationNode = doc.child("vocations").first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 		pugi::xml_attribute attr;
 		if(!(attr = vocationNode.attribute("id"))) {
-			std::cout << "[Warning - Vocations::loadFromXml] Missing vocation id" << std::endl;
+			std::clog << "[Warning - Vocations::loadFromXml] Missing vocation id" << std::endl;
 			continue;
 		}
 
@@ -122,10 +122,10 @@ bool Vocations::loadFromXml()
 					if(skill_id <= SKILL_LAST) {
 						voc->skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
 					} else {
-						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << id << std::endl;
+						std::clog << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << id << std::endl;
 					}
 				} else {
-					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << id << std::endl;
+					std::clog << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << id << std::endl;
 				}
 			} else if(strcasecmp(childNode.name(), "formula") == 0) {
 				pugi::xml_attribute meleeDamageAttribute = childNode.attribute("meleeDamage");
@@ -160,7 +160,7 @@ Vocation* Vocations::getVocation(uint32_t vocId)
 		return it->second;
 	else
 	{
-		std::cout << "Warning: [Vocations::getVocation] Vocation " << vocId << " not found." << std::endl;
+		std::clog << "Warning: [Vocations::getVocation] Vocation " << vocId << " not found." << std::endl;
 		return &def_voc;
 	}
 }

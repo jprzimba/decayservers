@@ -82,7 +82,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1), T1 p1)
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -99,7 +99,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2), T1 p1, T2 p2)
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -118,7 +118,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3), T1 p1, T2 p2, T3 p3)
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -137,7 +137,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4), T1 p1, T2 p2, T3 p3
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -156,7 +156,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4, f5), T1 p1, T2 p2, T
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -175,7 +175,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4, f5, f6), T1 p1, T2 p
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -194,7 +194,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4, f5, f6, f7), T1 p1, 
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -213,7 +213,7 @@ void ProtocolGame::addGameTask(r (Game::*f)(f1, f2, f3, f4, f5, f6, f7, f8), T1 
 	else
 	{
 		m_rejectCount++;
-		//std::cout << "reject task" << std::endl;
+		//std::clog << "reject task" << std::endl;
 	}
 }
 
@@ -274,7 +274,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		if(!IOLoginData::getInstance()->loadPlayer(player, name, true))
 		{
 #ifdef __DEBUG__
-			std::cout << "ProtocolGame::login - loadPlayer failed - " << name << std::endl;
+			std::clog << "ProtocolGame::login - loadPlayer failed - " << name << std::endl;
 #endif
 			disconnectClient("Your character could not be loaded.");
 			return false;
@@ -860,7 +860,7 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				break;
 			
 			default:
-				std::cout << "Unknown byte received: 0x" << std::hex << (int16_t)recvbyte << std::dec << ", from player: " << player->getName() << "." << std::endl;
+				std::clog << "Unknown byte received: 0x" << std::hex << (int16_t)recvbyte << std::dec << ", from player: " << player->getName() << "." << std::endl;
 				break;
 		}
 	}
@@ -1041,7 +1041,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 {
 #ifdef __DEBUG__
 	if(z < 0 || z >= MAP_MAX_LAYERS)
-		std::cout << "WARNING! ProtocolGame::canSee() Z-value is out of range!" << std::endl;
+		std::clog << "WARNING! ProtocolGame::canSee() Z-value is out of range!" << std::endl;
 #endif
 
 	const Position& myPos = player->getPosition();

@@ -37,7 +37,6 @@ extern ConfigManager g_config;
 extern Game g_game;
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
-
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
 	std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(getIP());

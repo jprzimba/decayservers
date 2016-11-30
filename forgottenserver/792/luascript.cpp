@@ -210,7 +210,7 @@ void ScriptEnvironment::addUniqueThing(Thing* thing)
 		if(!tmp)
 			m_globalMap[uid] = thing;
 		else
-			std::cout << "Duplicate uniqueId " << uid << std::endl;
+			std::clog << "Duplicate uniqueId " << uid << std::endl;
 	}
 }
 
@@ -274,7 +274,7 @@ void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
 	if(!m_localMap[uid])
 		m_localMap[uid] = thing;
 	else
-		std::cout << std::endl << "Lua Script Error: Thing uid already taken.";
+		std::clog << std::endl << "Lua Script Error: Thing uid already taken.";
 }
 
 Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
@@ -559,9 +559,9 @@ bool LuaScriptInterface::reInitState()
 void LuaScriptInterface::dumpLuaStack()
 {
 	int32_t a = lua_gettop(m_luaState);
-	std::cout << "stack size: " << a << std::endl;
+	std::clog << "stack size: " << a << std::endl;
 	for(int32_t i = 1; i <= a ; ++i)
-		std::cout << lua_typename(m_luaState, lua_type(m_luaState,-i)) << " " << lua_topointer(m_luaState, -i) << std::endl;
+		std::clog << lua_typename(m_luaState, lua_type(m_luaState,-i)) << " " << lua_topointer(m_luaState, -i) << std::endl;
 }
 
 /// Same as lua_pcall, but adds stack trace to error strings in called function.
@@ -728,20 +728,20 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 	LuaScriptInterface* scriptInterface;
 	env->getEventInfo(scriptId, event_desc, scriptInterface, callbackId, timerEvent);
 	
-	std::cout << std::endl << "Lua Script Error: ";
+	std::clog << std::endl << "Lua Script Error: ";
 	if(scriptInterface)
 	{
-		std::cout << "[" << scriptInterface->getInterfaceName() << "] " << std::endl;
+		std::clog << "[" << scriptInterface->getInterfaceName() << "] " << std::endl;
 		if(timerEvent)
-			std::cout << "in a timer event called from: " << std::endl;
+			std::clog << "in a timer event called from: " << std::endl;
 		if(callbackId)
-			std::cout << "in callback: " << scriptInterface->getFileById(callbackId) << std::endl;
-		std::cout << scriptInterface->getFileById(scriptId) << std::endl;
+			std::clog << "in callback: " << scriptInterface->getFileById(callbackId) << std::endl;
+		std::clog << scriptInterface->getFileById(scriptId) << std::endl;
 	}
-	std::cout << event_desc << std::endl;
+	std::clog << event_desc << std::endl;
 	if(function)
-		std::cout << function << "(). ";
-	std::cout << error_desc << std::endl;
+		std::clog << function << "(). ";
+	std::clog << error_desc << std::endl;
 }
 
 bool LuaScriptInterface::pushFunction(int32_t functionId)
@@ -769,7 +769,7 @@ bool LuaScriptInterface::initState()
 	registerFunctions();
 
 	if(loadFile("data/global.lua") == -1)
-		std::cout << "Warning: [LuaScriptInterface::initState] Can not load data/global.lua." << std::endl;
+		std::clog << "Warning: [LuaScriptInterface::initState] Can not load data/global.lua." << std::endl;
 	
 	lua_newtable(m_luaState);
 	lua_setfield(m_luaState, LUA_REGISTRYINDEX, "EVENTS");
@@ -826,7 +826,7 @@ void LuaScriptInterface::executeTimerEvent(uint32_t eventIndex)
 			releaseScriptEnv();
 		}
 		else
-			std::cout << "[Error] Call stack overflow. LuaScriptInterface::executeTimerEvent" << std::endl;
+			std::clog << "[Error] Call stack overflow. LuaScriptInterface::executeTimerEvent" << std::endl;
 
 		//free resources
 		for(std::list<int32_t>::iterator lt = timerEventDesc.parameters.begin(), end = timerEventDesc.parameters.end(); lt != end; ++lt)
@@ -4967,7 +4967,7 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 			if(combat->hasArea())
 			{
 				combat->doCombat(creature, target->getPosition());
-				//std::cout << "Combat->hasArea()" << std::endl;
+				//std::clog << "Combat->hasArea()" << std::endl;
 			}
 			else
 				combat->doCombat(creature, target);

@@ -36,7 +36,7 @@ Thing::Thing()
 Thing::~Thing()
 {
 	//
-	//std::cout << "thing destructor " << this << std::endl;
+	//std::clog << "thing destructor " << this << std::endl;
 }
 
 Cylinder* Thing::getTopParent()
@@ -86,7 +86,7 @@ Tile* Thing::getTile()
 
 	#ifdef __DEBUG__MOVESYS__
 	if(!cylinder){
-		std::cout << "Failure: [Thing::getTile()],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getTile()],  nullptr tile" << std::endl;
 		DEBUG_REPORT
 		return &(Tile::null_tile);
 	}
@@ -105,7 +105,7 @@ const Tile* Thing::getTile() const
 
 	#ifdef __DEBUG__MOVESYS__
 	if(!cylinder){
-		std::cout << "Failure: [Thing::getTile() const],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getTile() const],  nullptr tile" << std::endl;
 		DEBUG_REPORT
 		return &(Tile::null_tile);
 	}
@@ -126,7 +126,7 @@ const Position& Thing::getPosition() const
 	}
 	else{
 		#ifdef __DEBUG__MOVESYS__
-		std::cout << "Failure: [Thing::getPosition],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getPosition],  nullptr tile" << std::endl;
 		DEBUG_REPORT
 		#endif
 		return Tile::null_tile.getTilePosition();

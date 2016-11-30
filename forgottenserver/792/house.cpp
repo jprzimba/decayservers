@@ -187,7 +187,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 		else
 		{
 			#ifdef __DEBUG_HOUSES__
-			std::cout << "Failure: [House::setAccessList] door == nullptr, listId = " << listId <<std::endl;
+			std::clog << "Failure: [House::setAccessList] door == nullptr, listId = " << listId <<std::endl;
 			#endif
 		}
 		//We dont have kick anyone
@@ -237,7 +237,7 @@ bool House::transferToDepot()
 		if(!IOLoginData::getInstance()->loadPlayer(player, ownerName))
 		{
 #ifdef __DEBUG__
-			std::cout << "Failure: [House::transferToDepot], can not load player: " << ownerName << std::endl;
+			std::clog << "Failure: [House::transferToDepot], can not load player: " << ownerName << std::endl;
 #endif
 			delete player;
 			return false;
@@ -304,7 +304,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 		else
 		{
 			#ifdef __DEBUG_HOUSES__
-			std::cout << "Failure: [House::getAccessList] door == nullptr, listId = " << listId <<std::endl;
+			std::clog << "Failure: [House::getAccessList] door == nullptr, listId = " << listId <<std::endl;
 			#endif
 			return false;
 		}
@@ -655,7 +655,7 @@ void Door::setHouse(House* _house)
 	if(house != nullptr)
 	{
 		#ifdef __DEBUG_HOUSES__
-		std::cout << "Warning: [Door::setHouse] house != nullptr" << std::endl;
+		std::clog << "Warning: [Door::setHouse] house != nullptr" << std::endl;
 		#endif
 		return;
 	}
@@ -680,7 +680,7 @@ void Door::setAccessList(const std::string& textlist)
 {
 	if(!house){
 		#ifdef __DEBUG_HOUSES__
-		std::cout << "Failure: [Door::setAccessList] house == nullptr" << std::endl;
+		std::clog << "Failure: [Door::setAccessList] house == nullptr" << std::endl;
 		#endif
 		return;
 	}
@@ -692,7 +692,7 @@ bool Door::getAccessList(std::string& list) const
 	if(!house)
 	{
 		#ifdef __DEBUG_HOUSES__
-		std::cout << "Failure: [Door::getAccessList] house == nullptr" << std::endl;
+		std::clog << "Failure: [Door::getAccessList] house == nullptr" << std::endl;
 		#endif
 		return false;
 	}
@@ -755,7 +755,7 @@ bool Houses::loadHousesXML(std::string filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if(!result) {
-		std::cout << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
+		std::clog << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
@@ -769,7 +769,7 @@ bool Houses::loadHousesXML(std::string filename)
 
 		House* house = Houses::getInstance().getHouse(_houseid);
 		if(!house) {
-			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
+			std::clog << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
 			return false;
 		}
 
@@ -781,7 +781,7 @@ bool Houses::loadHousesXML(std::string filename)
 			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
 		);
 		if(entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
-			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
+			std::clog << "[Warning - Houses::loadHousesXML] House entry not set"
 					    << " - Name: " << house->getName()
 					    << " - House id: " << _houseid << std::endl;
 		}
@@ -811,7 +811,7 @@ bool Houses::payHouses()
 			if(!town)
 			{
 				#ifdef __DEBUG_HOUSES__
-				std::cout << "Warning: [Houses::payHouses] town = nullptr, townid = " << 
+				std::clog << "Warning: [Houses::payHouses] town = nullptr, townid = " << 
 					house->getTownId() << ", houseid = " << house->getHouseId() << std::endl;
 				#endif
 				continue;
@@ -832,7 +832,7 @@ bool Houses::payHouses()
 				if(!IOLoginData::getInstance()->loadPlayer(player, name))
 				{
 					#ifdef __DEBUG__
-					std::cout << "Failure: [Houses::payHouses], can not load player: " << name << std::endl;
+					std::clog << "Failure: [Houses::payHouses], can not load player: " << name << std::endl;
 					#endif
 					delete player;
 					continue;

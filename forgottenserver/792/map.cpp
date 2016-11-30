@@ -66,15 +66,15 @@ bool Map::loadMap(const std::string& identifier)
 	IOMap* loader = new IOMap();
 	if(!loader->loadMap(this, identifier))
 	{
-		std::cout << "FATAL: [OTBM loader] " << loader->getLastErrorString() << std::endl;
+		std::clog << "FATAL: [OTBM loader] " << loader->getLastErrorString() << std::endl;
 		return false;
 	}
 
 	if(!loader->loadSpawns(this))
-		std::cout << "WARNING: could not load spawn data." << std::endl;
+		std::clog << "WARNING: could not load spawn data." << std::endl;
 
 	if(!loader->loadHouses(this))
-		std::cout << "WARNING: could not load house data." << std::endl;
+		std::clog << "WARNING: could not load house data." << std::endl;
 
 	delete loader;
 
@@ -169,7 +169,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newtile)
 	if(!floor->tiles[offsetX][offsetY])
 		floor->tiles[offsetX][offsetY] = newtile;
 	else
-		std::cout << "Error: Map::setTile() already exists." << std::endl;
+		std::clog << "Error: Map::setTile() already exists." << std::endl;
 
 	if(newtile->hasFlag(TILESTATE_REFRESH))
 	{
@@ -250,7 +250,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool forc
 	}
 
 #ifdef __DEBUG__
-	std::cout << "Failed to place creature onto map!" << std::endl;
+	std::clog << "Failed to place creature onto map!" << std::endl;
 #endif
 
 	return false;
@@ -1020,7 +1020,7 @@ void AStarNodes::closeNode(AStarNode* node)
 	if(pos >= MAX_NODES)
 	{
 		assert(pos >= MAX_NODES);
-		std::cout << "AStarNodes. trying to close node out of range" << std::endl;
+		std::clog << "AStarNodes. trying to close node out of range" << std::endl;
 		return;
 	}
 
@@ -1033,7 +1033,7 @@ void AStarNodes::openNode(AStarNode* node)
 	if(pos >= MAX_NODES)
 	{
 		assert(pos >= MAX_NODES);
-		std::cout << "AStarNodes. trying to open node out of range" << std::endl;
+		std::clog << "AStarNodes. trying to open node out of range" << std::endl;
 		return;
 	}
 

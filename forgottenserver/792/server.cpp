@@ -98,9 +98,9 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 				openListenSocket();
 			#ifndef __IGNORE_LISTEN_ERROR__
 			else
-				std::cout << "Error: [Server::onAccept] More than 100 listen errors." << std::endl;
+				std::clog << "Error: [Server::onAccept] More than 100 listen errors." << std::endl;
 			#else
-			std::cout << "Warning: [Server::onAccept] More than 100 listen errors." << std::endl;
+			std::clog << "Warning: [Server::onAccept] More than 100 listen errors." << std::endl;
 			#endif
 		}
 		else

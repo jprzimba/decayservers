@@ -40,13 +40,13 @@ bool DatabaseManager::optimizeTables()
 	do
 	{
 		std::string tableName = result->getDataString("TABLE_NAME");
-		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
+		std::clog << "> Optimizing table " << tableName << "..." << std::flush;
 		query.str("");
 		query << "OPTIMIZE TABLE `" << tableName << "`;";
 		if(db->executeQuery(query.str()))
-			std::cout << " [success]" << std::endl;
+			std::clog << " [success]" << std::endl;
 		else
-			std::cout << " [failed]" << std::endl;
+			std::clog << " [failed]" << std::endl;
 	}
 	
 	while(result->next());
@@ -113,21 +113,21 @@ uint32_t DatabaseManager::updateDatabase()
 	{
 		case 0:
 		{
-			std::cout << "> Updating database to version 1 (Only db ready)" << std::endl;
+			std::clog << "> Updating database to version 1 (Only db ready)" << std::endl;
 			registerDatabaseConfig("db_version", 1);
 			return 1;
 		}
 
 		case 1:
 		{
-			std::cout << "> Updating database to version 2 (Only db ready)" << std::endl;
+			std::clog << "> Updating database to version 2 (Only db ready)" << std::endl;
 			registerDatabaseConfig("db_version", 2);
 			return 2;
 		}
 
 		case 2:
 		{
-			std::cout << "> Updating database to version 3 (bank balance)" << std::endl;
+			std::clog << "> Updating database to version 3 (bank balance)" << std::endl;
 			db->executeQuery("ALTER TABLE `players` ADD `balance` BIGINT UNSIGNED NOT NULL DEFAULT 0");
 			registerDatabaseConfig("db_version", 3);
 			return 3;
@@ -214,7 +214,7 @@ void DatabaseManager::checkEncryption()
 				oldName = "plain";
 
 			g_config.setNumber(ConfigManager::PASSWORD_TYPE, oldValue);
-			std::cout << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to \"" << oldName << "\"!" << std::endl;
+			std::clog << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to \"" << oldName << "\"!" << std::endl;
 			return;
 		}
 
@@ -237,7 +237,7 @@ void DatabaseManager::checkEncryption()
 						db->freeResult(result);
 				}
 
-				std::cout << "> Password type has been updated to MD5." << std::endl;
+				std::clog << "> Password type has been updated to MD5." << std::endl;
 				break;
 			}
 
@@ -258,7 +258,7 @@ void DatabaseManager::checkEncryption()
 						db->freeResult(result);
 				}
 
-				std::cout << "> Password type has been updated to SHA1." << std::endl;
+				std::clog << "> Password type has been updated to SHA1." << std::endl;
 				break;
 			}
 

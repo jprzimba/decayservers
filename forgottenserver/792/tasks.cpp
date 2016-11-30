@@ -95,7 +95,7 @@ void Dispatcher::addTask(Task* task)
 	}
 	#ifdef _DEBUG
 	else
-		std::cout << "Error: [Dispatcher::addTask] Dispatcher thread is terminated." << std::endl;
+		std::clog << "Error: [Dispatcher::addTask] Dispatcher thread is terminated." << std::endl;
 	#endif
 
 	OTSYS_THREAD_UNLOCK(m_taskLock, "");

@@ -130,7 +130,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	}
 #ifdef _DEBUG
 	else
-		std::cout << "Error: [Scheduler::addTask] Scheduler thread is terminated." << std::endl;
+		std::clog << "Error: [Scheduler::addTask] Scheduler thread is terminated." << std::endl;
 #endif
 
 	OTSYS_THREAD_UNLOCK(m_eventLock, "");

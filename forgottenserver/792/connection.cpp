@@ -48,7 +48,7 @@ void ConnectionManager::releaseConnection(Connection* connection)
 	if(it != m_connections.end())
 		m_connections.erase(it);
 	else
-		std::cout << "Error: [ConnectionManager::releaseConnection] Connection not found" << std::endl;
+		std::clog << "Error: [ConnectionManager::releaseConnection] Connection not found" << std::endl;
 }
 
 void ConnectionManager::closeAll()
@@ -86,7 +86,7 @@ void Connection::closeConnectionTask()
 	OTSYS_THREAD_LOCK(m_connectionLock, "");
 	if(m_closeState != CLOSE_STATE_REQUESTED)
 	{
-		std::cout << "Error: [Connection::closeConnectionTask] m_closeState = " << m_closeState << std::endl;
+		std::clog << "Error: [Connection::closeConnectionTask] m_closeState = " << m_closeState << std::endl;
 		OTSYS_THREAD_UNLOCK(m_connectionLock, "");
 		return;
 	}
@@ -289,7 +289,7 @@ void Connection::onWriteOperation(OutputMessage* msg, const boost::system::error
 		}
 		else
 		{
-			std::cout << "Error: [Connection::onWriteOperation] Getting unexpected notification!" << std::endl;
+			std::clog << "Error: [Connection::onWriteOperation] Getting unexpected notification!" << std::endl;
 		}
 	}
 	else

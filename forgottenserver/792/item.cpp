@@ -54,7 +54,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 1*/)
 	if(it.group == ITEM_GROUP_DEPRECATED)
 	{
 		#ifdef __DEBUG__
-		std::cout << "Error: [Item::CreateItem] Item id " << it.id << " has been declared deprecated." << std::endl;
+		std::clog << "Error: [Item::CreateItem] Item id " << it.id << " has been declared deprecated." << std::endl;
 		#endif
 		return nullptr;
 	}
@@ -209,7 +209,7 @@ Item::Item(const uint16_t _type, uint16_t _count /*= 0*/) :
 Item::Item(const Item &i) :
 	Thing(), ItemAttributes()
 {
-	//std::cout << "Item copy constructor " << this << std::endl;
+	//std::clog << "Item copy constructor " << this << std::endl;
 	id = i.id;
 	count = i.count;	
 
@@ -477,7 +477,7 @@ bool Item::unserializeAttr(PropStream& propStream)
 		{
 			case ATTR_READ_ERROR:
 			{
-				std::cout << "Failed to unserialize attr_type: " << (AttrTypes_t)attrType << " for item: " << id << std::endl;
+				std::clog << "Failed to unserialize attr_type: " << (AttrTypes_t)attrType << " for item: " << id << std::endl;
 				return false;
 			}
 
@@ -1394,7 +1394,7 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 
 		curAttr = curAttr->next;
 	}
-	std::cout << "Warning: [ItemAttributes::getAttrConst] (type & m_attributes) != 0 but attribute not found" << std::endl;
+	std::clog << "Warning: [ItemAttributes::getAttrConst] (type & m_attributes) != 0 but attribute not found" << std::endl;
 	return nullptr;
 }
 
@@ -1418,7 +1418,7 @@ ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
 			curAttr = curAttr->next;
 		}
 	}
-	std::cout << "Warning: [ItemAttributes::getAttr] (type & m_attributes) != 0 but attribute not found" << std::endl;
+	std::clog << "Warning: [ItemAttributes::getAttr] (type & m_attributes) != 0 but attribute not found" << std::endl;
 	curAttr = new Attribute(type);
 	addAttr(curAttr);
 	return curAttr;

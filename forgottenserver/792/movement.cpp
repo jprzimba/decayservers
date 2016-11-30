@@ -216,7 +216,7 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map)
 		for(std::list<MoveEvent*>::iterator it = moveEventList.begin(); it != moveEventList.end(); ++it)
 		{
 			if((*it)->getSlot() == moveEvent->getSlot())
-				std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << id << std::endl;
+				std::clog << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << id << std::endl;
 		}
 		moveEventList.push_back(moveEvent);
 	}
@@ -286,7 +286,7 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, Position pos, MovePosListMap& ma
 	{
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[moveEvent->getEventType()];
 		if(!moveEventList.empty())
-			std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << pos << std::endl;
+			std::clog << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << pos << std::endl;
 		moveEventList.push_back(moveEvent);
 	}
 }
@@ -443,7 +443,7 @@ std::string MoveEvent::getScriptEventName()
 			break;
 
 		default:
-			std::cout << "Error: [MoveEvent::getScriptEventName()] No valid event type." << std::endl;
+			std::clog << "Error: [MoveEvent::getScriptEventName()] No valid event type." << std::endl;
 			return "";
 			break;
 	}
@@ -453,7 +453,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute eventAttr = node.attribute("event");
 	if(!eventAttr) {
-		std::cout << "[Error - MoveEvent::configureMoveEvent] Missing event" << std::endl;
+		std::clog << "[Error - MoveEvent::configureMoveEvent] Missing event" << std::endl;
 		return false;
 	}
 
@@ -471,7 +471,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	} else if(tmpStr == "removeitem") {
 		m_eventType = MOVE_EVENT_REMOVE_ITEM;
 	} else {
-		std::cout << "Error: [MoveEvent::configureMoveEvent] No valid event name " << eventAttr.as_string() << std::endl;
+		std::clog << "Error: [MoveEvent::configureMoveEvent] No valid event name " << eventAttr.as_string() << std::endl;
 		return false;
 	}
 
@@ -502,7 +502,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			} else if(tmpStr == "ammo") {
 				slot = SLOT_AMMO;
 			} else {
-				std::cout << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: " << slotAttribute.as_string() << std::endl;
+				std::clog << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: " << slotAttribute.as_string() << std::endl;
 			}
 		}
 
@@ -586,7 +586,7 @@ bool MoveEvent::loadFunction(const std::string& functionName)
 		equipFunction = DeEquipItem;
 	else
 	{
-		std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -598,7 +598,7 @@ MoveEvent_t MoveEvent::getEventType() const
 {
 	if(m_eventType == MOVE_EVENT_NONE)
 	{
-		std::cout << "Error: [MoveEvent::getEventType()] MOVE_EVENT_NONE" << std::endl;
+		std::clog << "Error: [MoveEvent::getEventType()] MOVE_EVENT_NONE" << std::endl;
 		return (MoveEvent_t)0;
 	}
 	return m_eventType;
@@ -881,7 +881,7 @@ uint32_t MoveEvent::executeStep(Creature* creature, Item* item, const Position& 
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. MoveEvent::executeStep" << std::endl;
+		std::clog << "[Error] Call stack overflow. MoveEvent::executeStep" << std::endl;
 		return 0;
 	}
 }
@@ -928,7 +928,7 @@ uint32_t MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. MoveEvent::executeEquip" << std::endl;
+		std::clog << "[Error] Call stack overflow. MoveEvent::executeEquip" << std::endl;
 		return 0;
 	}
 }
@@ -977,7 +977,7 @@ uint32_t MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. MoveEvent::executeAddRemItem" << std::endl;
+		std::clog << "[Error] Call stack overflow. MoveEvent::executeAddRemItem" << std::endl;
 		return 0;
 	}
 }

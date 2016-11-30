@@ -75,7 +75,7 @@ bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node& node)
 
 	if(creatureEvent->getEventType() == CREATURE_EVENT_NONE)
 	{
-		std::cout << "Error: [CreatureEvents::registerEvent] Trying to register event without type!." << std::endl;
+		std::clog << "Error: [CreatureEvents::registerEvent] Trying to register event without type!." << std::endl;
 		return false;
 	}
 
@@ -150,7 +150,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	// lua function to register events to reference this event
 	pugi::xml_attribute nameAttribute = node.attribute("name");
 	if(!nameAttribute) {
-		std::cout << "[Error - CreatureEvent::configureEvent] Missing name for creature event" << std::endl;
+		std::clog << "[Error - CreatureEvent::configureEvent] Missing name for creature event" << std::endl;
 		return false;
 	}
 
@@ -158,7 +158,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute typeAttribute = node.attribute("type");
 	if(!typeAttribute) {
-		std::cout << "[Error - CreatureEvent::configureEvent] Missing type for creature event: " << m_eventName << std::endl;
+		std::clog << "[Error - CreatureEvent::configureEvent] Missing type for creature event: " << m_eventName << std::endl;
 		return false;
 	}
 
@@ -176,7 +176,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	} else if(tmpStr == "kill") {
 		m_type = CREATURE_EVENT_KILL;
 	} else {
-		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
+		std::clog << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
 	}
 
@@ -258,7 +258,7 @@ uint32_t CreatureEvent::executeOnLogin(Player* player)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnLogin" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnLogin" << std::endl;
 		return 0;
 	}
 }
@@ -292,7 +292,7 @@ uint32_t CreatureEvent::executeOnLogout(Player* player)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnLogout" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnLogout" << std::endl;
 		return 0;
 	}
 }
@@ -327,7 +327,7 @@ uint32_t CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnThink" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnThink" << std::endl;
 		return 0;
 	}
 }
@@ -363,7 +363,7 @@ uint32_t CreatureEvent::executeOnPrepareDeath(Player* player, Creature* killer)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnPrepareDeath" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnPrepareDeath" << std::endl;
 		return 0;
 	}
 }
@@ -401,7 +401,7 @@ uint32_t CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creatur
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnDeath" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnDeath" << std::endl;
 		return 0;
 	}
 }
@@ -438,7 +438,7 @@ uint32_t CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. CreatureEvent::executeOnKill" << std::endl;
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnKill" << std::endl;
 		return 0;
 	}
 }

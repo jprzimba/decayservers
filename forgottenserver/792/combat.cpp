@@ -514,7 +514,7 @@ bool Combat::setCallback(CallBackParam_t key)
 
 		default:
 		{
-			std::cout << "Combat::setCallback - Unknown callback type: " << (uint32_t)key << std::endl;
+			std::clog << "Combat::setCallback - Unknown callback type: " << (uint32_t)key << std::endl;
 			break;
 		}
 	}
@@ -950,7 +950,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 
 			default:
 			{
-				std::cout << "ValueCallback::getMinMaxValues - unknown callback type" << std::endl;
+				std::clog << "ValueCallback::getMinMaxValues - unknown callback type" << std::endl;
 				return;
 				break;
 			}
@@ -973,7 +973,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. ValueCallback::getMinMaxValues" << std::endl;
+		std::clog << "[Error] Call stack overflow. ValueCallback::getMinMaxValues" << std::endl;
 		return;
 	}
 }
@@ -1006,7 +1006,7 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. TileCallback::onTileCombat" << std::endl;
+		std::clog << "[Error] Call stack overflow. TileCallback::onTileCombat" << std::endl;
 		return;
 	}
 }
@@ -1046,7 +1046,7 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. TargetCallback::onTargetCombat" << std::endl;
+		std::clog << "[Error] Call stack overflow. TargetCallback::onTargetCombat" << std::endl;
 		return;
 	}
 }

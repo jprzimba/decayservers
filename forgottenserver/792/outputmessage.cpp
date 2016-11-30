@@ -156,7 +156,7 @@ void OutputMessagePool::releaseMessage(OutputMessage* msg, bool sent /*= false*/
 			break;
 		case OutputMessage::STATE_WAITING:
 			if(!sent)
-				std::cout << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_WAITING OutputMessage." << std::endl;
+				std::clog << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_WAITING OutputMessage." << std::endl;
 			else
 			{
 				msg->freeMessage();
@@ -164,10 +164,10 @@ void OutputMessagePool::releaseMessage(OutputMessage* msg, bool sent /*= false*/
 			}
 			break;
 		case OutputMessage::STATE_FREE:
-			std::cout << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_FREE OutputMessage." << std::endl;
+			std::clog << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_FREE OutputMessage." << std::endl;
 			break;
 		default:
-			std::cout << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_?(" << msg->getState() <<") OutputMessage." << std::endl;
+			std::clog << "Error: [OutputMessagePool::releaseMessage] Releasing STATE_?(" << msg->getState() <<") OutputMessage." << std::endl;
 			break;
 	}
 }

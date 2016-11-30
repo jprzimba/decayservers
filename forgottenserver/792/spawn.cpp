@@ -53,7 +53,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
 	if(!result) {
-		std::cout << "[Error - Spawns::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
+		std::clog << "[Error - Spawns::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
@@ -102,7 +102,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 				if(interval > MINSPAWN_INTERVAL) {
 					spawn->addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
-					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					std::clog << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 				}
 			} else if(strcasecmp(childNode.name(), "npc") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
@@ -270,7 +270,7 @@ void Spawn::startup()
 void Spawn::checkSpawn()
 {
 #ifdef __DEBUG_SPAWN__
-	std::cout << "[Notice] Spawn::checkSpawn " << this << std::endl;
+	std::clog << "[Notice] Spawn::checkSpawn " << this << std::endl;
 #endif
 	checkSpawnEvent = 0;
 
@@ -328,7 +328,7 @@ void Spawn::checkSpawn()
 		checkSpawnEvent = Scheduler::getScheduler().addEvent(createSchedulerTask(getInterval(), boost::bind(&Spawn::checkSpawn, this)));
 #ifdef __DEBUG_SPAWN__
 	else
-		std::cout << "[Notice] Spawn::checkSpawn stopped " << this << std::endl;
+		std::clog << "[Notice] Spawn::checkSpawn stopped " << this << std::endl;
 #endif
 }
 
@@ -337,7 +337,7 @@ bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction
 	MonsterType* mType = g_monsters.getMonsterType(_name);
 	if(!mType)
 	{
-		std::cout << "[Spawn::addMonster] Can not find " << _name << std::endl;
+		std::clog << "[Spawn::addMonster] Can not find " << _name << std::endl;
 		return false;
 	}
 

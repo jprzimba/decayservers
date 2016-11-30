@@ -493,10 +493,10 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 					if(Depot* depot = c->getDepot())
 						player->addDepot(depot, pid);
 					else
-						std::cout << "Error loading depot " << pid << " for player " << player->getGUID() << std::endl;
+						std::clog << "Error loading depot " << pid << " for player " << player->getGUID() << std::endl;
 				}
 				else
-					std::cout << "Error loading depot " << pid << " for player " << player->getGUID() << std::endl;
+					std::clog << "Error loading depot " << pid << " for player " << player->getGUID() << std::endl;
 			}
 			else
 			{
@@ -1030,7 +1030,7 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
 		if(item)
 		{
 			if(!item->unserializeAttr(propStream))
-				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
+				std::clog << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			std::pair<Item*, int32_t> pair(item, pid);
 			itemMap[sid] = pair;
 		}

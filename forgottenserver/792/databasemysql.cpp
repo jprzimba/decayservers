@@ -42,7 +42,7 @@ DatabaseMySQL::DatabaseMySQL()
 	// connection handle initialization
 	if(!mysql_init(&m_handle))
 	{
-		std::cout << std::endl << "Failed to initialize MySQL connection handle." << std::endl;
+		std::clog << std::endl << "Failed to initialize MySQL connection handle." << std::endl;
 		return;
 	}
 
@@ -53,7 +53,7 @@ DatabaseMySQL::DatabaseMySQL()
 	// connects to database
 	if(!mysql_real_connect(&m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), nullptr, 0))
 	{
-		std::cout << "Failed to connect to database. MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "Failed to connect to database. MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		return;
 	}
 
@@ -62,7 +62,7 @@ DatabaseMySQL::DatabaseMySQL()
 		//mySQL servers < 5.0.19 has a bug where MYSQL_OPT_RECONNECT is (incorrectly) reset by mysql_real_connect calls
 		//See http://dev.mysql.com/doc/refman/5.0/en/mysql-options.html for more information.
 		mysql_options(&m_handle, MYSQL_OPT_RECONNECT, &reconnect);
-		std::cout << std::endl << "[Warning] Outdated mySQL server detected. Consider upgrading to a newer version." << std::endl;
+		std::clog << std::endl << "[Warning] Outdated mySQL server detected. Consider upgrading to a newer version." << std::endl;
 	}
 
 	m_connected = true;
@@ -80,9 +80,9 @@ DatabaseMySQL::DatabaseMySQL()
 
 			if(max_query < 16777216)
 			{
-				std::cout << std::endl << "[Warning] max_allowed_packet might be set too low for binary map storage." << std::endl;
-				std::cout << "Use the following query to raise max_allow_packet: ";
-				std::cout << "SET GLOBAL max_allowed_packet = 16777216;";
+				std::clog << std::endl << "[Warning] max_allowed_packet might be set too low for binary map storage." << std::endl;
+				std::clog << "Use the following query to raise max_allow_packet: ";
+				std::clog << "SET GLOBAL max_allowed_packet = 16777216;";
 			}
 		}
 	}
@@ -109,12 +109,12 @@ bool DatabaseMySQL::rollback()
 		return false;
 
 	#ifdef __DEBUG_SQL__
-	std::cout << "ROLLBACK" << std::endl;
+	std::clog << "ROLLBACK" << std::endl;
 	#endif
 
 	if(mysql_rollback(&m_handle) != 0)
 	{
-		std::cout << "mysql_rollback(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "mysql_rollback(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		return false;
 	}
 	return true;
@@ -126,11 +126,11 @@ bool DatabaseMySQL::commit()
 		return false;
 
 	#ifdef __DEBUG_SQL__
-	std::cout << "COMMIT" << std::endl;
+	std::clog << "COMMIT" << std::endl;
 	#endif
 	if(mysql_commit(&m_handle) != 0)
 	{
-		std::cout << "mysql_commit(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "mysql_commit(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		return false;
 	}
 	return true;
@@ -142,7 +142,7 @@ bool DatabaseMySQL::executeQuery(const std::string &query)
 		return false;
 
 	#ifdef __DEBUG_SQL__
-	std::cout << "MYSQL QUERY: " << query << std::endl;
+	std::clog << "MYSQL QUERY: " << query << std::endl;
 	#endif
 
 	bool state = true;
@@ -150,7 +150,7 @@ bool DatabaseMySQL::executeQuery(const std::string &query)
 	// executes the query
 	if(mysql_real_query(&m_handle, query.c_str(), query.length()) != 0)
 	{
-		std::cout << "mysql_real_query(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "mysql_real_query(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
 		if(error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR)
 			m_connected = false;
@@ -173,13 +173,13 @@ DBResult* DatabaseMySQL::storeQuery(const std::string &query)
 		return nullptr;
 
 	#ifdef __DEBUG_SQL__
-	std::cout << "MYSQL QUERY: " << query << std::endl;
+	std::clog << "MYSQL QUERY: " << query << std::endl;
 	#endif
 
 	// executes the query
 	if(mysql_real_query(&m_handle, query.c_str(), query.length()) != 0)
 	{
-		std::cout << "mysql_real_query(): " << query << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "mysql_real_query(): " << query << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
 		if(error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR)
 			m_connected = false;
@@ -192,7 +192,7 @@ DBResult* DatabaseMySQL::storeQuery(const std::string &query)
 	// error occured
 	if(!m_res)
 	{
-		std::cout << "mysql_store_result(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		std::clog << "mysql_store_result(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
 		if(error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR)
 			m_connected = false;
@@ -253,7 +253,7 @@ int32_t MySQLResult::getDataInt(const std::string &s)
 	listNames_t::iterator it = m_listNames.find(s);
 	if(it == m_listNames.end())
 	{
-		std::cout << "Error during getDataInt(" << s << ")." << std::endl;
+		std::clog << "Error during getDataInt(" << s << ")." << std::endl;
 		return 0;
 	}
 
@@ -268,7 +268,7 @@ int64_t MySQLResult::getDataLong(const std::string &s)
 	listNames_t::iterator it = m_listNames.find(s);
 	if(it == m_listNames.end())
 	{
-		std::cout << "Error during getDataLong(" << s << ")." << std::endl;
+		std::clog << "Error during getDataLong(" << s << ")." << std::endl;
 		return 0;
 	}
 
@@ -283,7 +283,7 @@ std::string MySQLResult::getDataString(const std::string &s)
 	listNames_t::iterator it = m_listNames.find(s);
 	if(it == m_listNames.end())
 	{
-		std::cout << "Error during getDataString(" << s << ")." << std::endl;
+		std::clog << "Error during getDataString(" << s << ")." << std::endl;
 		return std::string("");
 	}
 
@@ -298,7 +298,7 @@ const char* MySQLResult::getDataStream(const std::string &s, unsigned long &size
 	listNames_t::iterator it = m_listNames.find(s);
 	if(it == m_listNames.end())
 	{
-		std::cout << "Error during getDataStream(" << s << ")." << std::endl;
+		std::clog << "Error during getDataStream(" << s << ")." << std::endl;
 		size = 0;
 		return nullptr;
 	}

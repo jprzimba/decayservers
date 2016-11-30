@@ -190,14 +190,14 @@ int32_t Items::loadFromOtb(std::string file)
 	
 	if(Items::dwMajorVersion != 2)
 	{
-		std::cout << "Not supported items.otb version." << std::endl;
+		std::clog << "Not supported items.otb version." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 	if(Items::dwMajorVersion == 0xFFFFFFFF)
-		std::cout << "[Warning] Items::loadFromOtb items.otb using generic client version." << std::endl;
+		std::clog << "[Warning] Items::loadFromOtb items.otb using generic client version." << std::endl;
 	else if(Items::dwMinorVersion < CLIENT_VERSION_792)
 	{
-		std::cout << "Not supported items.otb client version." << std::endl;
+		std::clog << "Not supported items.otb client version." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 	node = f.getChildNode(node, type);
@@ -362,7 +362,7 @@ bool Items::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/items/items.xml");
 	if(!result) {
-		std::cout << "[Error - Items::loadFromXml] Failed to load data/items/items.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Items::loadFromXml] Failed to load data/items/items.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -381,10 +381,10 @@ bool Items::loadFromXml()
 						parseItemNode(itemNode, id++);
 					}
 				} else {
-					std::cout << "[Warning - Items::loadFromXml] fromid (" << fromIdAttribute.value() << ") without toid" << std::endl;
+					std::clog << "[Warning - Items::loadFromXml] fromid (" << fromIdAttribute.value() << ") without toid" << std::endl;
 				}
 			} else {
-				std::cout << "[Warning - Items::loadFromXml] No itemid found" << std::endl;
+				std::clog << "[Warning - Items::loadFromXml] No itemid found" << std::endl;
 			}
 		}
 	}
@@ -448,7 +448,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if(tmpStrValue == "bed") {
 				it.type = ITEM_TYPE_BED;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown type: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown type: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "description") {
 			it.description = valueAttribute.as_string();
@@ -483,7 +483,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if(tmpStrValue == "fire") {
 				it.corpseType = RACE_FIRE;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown corpseType: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown corpseType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "containersize") {
 			it.maxItems = pugi::cast<uint16_t>(valueAttribute.value());
@@ -524,7 +524,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if(tmpStrValue == "swamp") {
 				it.fluidSource = FLUID_SWAMP;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown fluidSource: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown fluidSource: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "writeable") {
 			it.canWriteText = valueAttribute.as_bool();
@@ -550,7 +550,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if(tmpStrValue == "ammunition") {
 				it.weaponType = WEAPON_AMMO;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown weaponType: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown weaponType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "slottype") {
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
@@ -571,26 +571,26 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if(tmpStrValue == "ring") {
 				it.slot_position |= SLOTP_RING;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown slotType: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown slotType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "ammotype") {
 			it.ammoType = getAmmoType(valueAttribute.as_string());
 			if(it.ammoType == AMMO_NONE) {
-				std::cout << "[Warning - Items::parseItemNode] Unknown ammoType: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown ammoType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "shoottype") {
 			ShootType_t shoot = getShootType(valueAttribute.as_string());
 			if(shoot != NM_SHOOT_UNK) {
 				it.shootType = shoot;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown shootType: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown shootType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "effect") {
 			MagicEffectClasses effect = getMagicEffect(valueAttribute.as_string());
 			if(effect != NM_ME_UNK) {
 				it.magicEffect = effect;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown effect: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown effect: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "range") {
 			it.shootRange = pugi::cast<int32_t>(valueAttribute.value());
@@ -617,7 +617,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if(tmpStrValue == "ammoaction") {
 			it.ammoAction = getAmmoAction(valueAttribute.as_string());
 			if(it.ammoAction == AMMOACTION_NONE) {
-				std::cout << "[Warning - Items::parseItemNode] Unknown ammoAction " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown ammoAction " << valueAttribute.as_string() << std::endl;
 			}
 		} else if(tmpStrValue == "hitchance") {
 			it.hitChance = std::min<int32_t>(100, std::max<int32_t>(-100, pugi::cast<int32_t>(valueAttribute.value())));
@@ -740,7 +740,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 				conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_DROWN);
 				combatType = COMBAT_DROWNDAMAGE;
 			} else {
-				std::cout << "[Warning - Items::parseItemNode] Unknown field value: " << valueAttribute.as_string() << std::endl;
+				std::clog << "[Warning - Items::parseItemNode] Unknown field value: " << valueAttribute.as_string() << std::endl;
 			}
 
 			if(combatType != COMBAT_NONE) {
@@ -832,18 +832,18 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.getAbilities()->elementDamage = pugi::cast<int16_t>(valueAttribute.value());
 			it.getAbilities()->elementType = COMBAT_ENERGYDAMAGE;
 		} else {
-			std::cout << "[Warning - Items::parseItemNode] Unknown key value: " << keyAttribute.as_string() << std::endl;
+			std::clog << "[Warning - Items::parseItemNode] Unknown key value: " << keyAttribute.as_string() << std::endl;
 		}
 	}
 
 	//check bed items
 	if((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
-		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
+		std::clog << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}
 
 	/*
 	if(!it.marketName.empty() && it.marketName != it.name) {
-		std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
+		std::clog << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
 	}
 	*/
 
@@ -857,7 +857,7 @@ ItemType& Items::getItemType(int32_t id)
 		return *iType;
 
 	#ifdef __DEBUG__
-	std::cout << "WARNING! unknown itemtypeid " << id << ". using defaults." << std::endl;
+	std::clog << "WARNING! unknown itemtypeid " << id << ". using defaults." << std::endl;
 	#endif
 	static ItemType dummyItemType; // use this for invalid ids
 	return dummyItemType;

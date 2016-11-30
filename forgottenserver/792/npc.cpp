@@ -140,13 +140,13 @@ bool Npc::loadFromXml(const std::string& filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if(!result) {
-		std::cout << "[Error - Npc::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
+		std::clog << "[Error - Npc::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
 	pugi::xml_node npcNode = doc.child("npc");
 	if(!npcNode) {
-		std::cout << "[Error - Npc::loadFromXml] Missing npc tag in " << filename << std::endl;
+		std::clog << "[Error - Npc::loadFromXml] Missing npc tag in " << filename << std::endl;
 		return false;
 	}
 
@@ -407,7 +407,7 @@ void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::
 void Npc::onCreatureChangeOutfit(const Creature* creature, const Outfit_t& outfit)
 {
 	#ifdef __DEBUG_NPC__
-	std::cout << "Npc::onCreatureChangeOutfit" << std::endl;
+	std::clog << "Npc::onCreatureChangeOutfit" << std::endl;
 	#endif
 }
 
@@ -590,7 +590,7 @@ bool NpcScriptInterface::loadNpcLib(std::string file)
 
 	if(loadFile(file) == -1)
 	{
-		std::cout << "Warning: [NpcScriptInterface::loadNpcLib] Can not load " << file << std::endl;
+		std::clog << "Warning: [NpcScriptInterface::loadNpcLib] Can not load " << file << std::endl;
 		return false;
 	}
 
@@ -991,8 +991,8 @@ NpcScript::NpcScript(std::string file, Npc* npc) :
 
 	if(m_scriptInterface->loadFile(file, npc) == -1)
 	{
-		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
-		std::cout << m_scriptInterface->getLastLuaError() << std::endl;
+		std::clog << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
+		std::clog << m_scriptInterface->getLastLuaError() << std::endl;
 		m_loaded = false;
 		return;
 	}
@@ -1040,7 +1040,7 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 		m_scriptInterface->releaseScriptEnv();
 	}
 	else
-		std::cout << "[Error - NpcScript::onCreatureAppear] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
+		std::clog << "[Error - NpcScript::onCreatureAppear] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }
 
 void NpcScript::onCreatureDisappear(const Creature* creature)
@@ -1073,7 +1073,7 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 		m_scriptInterface->releaseScriptEnv();
 	}
 	else
-		std::cout << "[Error - NpcScript::onCreatureDisappear] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
+		std::clog << "[Error - NpcScript::onCreatureDisappear] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }
 
 void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos)
@@ -1108,7 +1108,7 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 		m_scriptInterface->releaseScriptEnv();
 	}
 	else
-		std::cout << "[Error - NpcScript::onCreatureMove] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
+		std::clog << "[Error - NpcScript::onCreatureMove] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }
 
 void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
@@ -1142,7 +1142,7 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 		m_scriptInterface->releaseScriptEnv();
 	}
 	else
-		std::cout << "[Error - NpcScript::onCreatureSay] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
+		std::clog << "[Error - NpcScript::onCreatureSay] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }
 
 void NpcScript::onThink()
@@ -1170,5 +1170,5 @@ void NpcScript::onThink()
 		m_scriptInterface->releaseScriptEnv();
 	}
 	else
-		std::cout << "[Error - NpcScript::onThink] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
+		std::clog << "[Error - NpcScript::onThink] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }

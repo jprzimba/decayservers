@@ -66,7 +66,7 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 					#ifdef __DEBUG__
 					assert(destTile != nullptr);
 					#endif
-					std::cout << "Error: [HouseTile::__queryDestination] House entry not correct"
+					std::clog << "Error: [HouseTile::__queryDestination] House entry not correct"
 						<< " - Name: " << house->getName()
 						<< " - House id: " << house->getHouseId()
 						<< " - Tile not found: " << entryPos << std::endl;

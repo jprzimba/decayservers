@@ -477,55 +477,6 @@ std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end)
 	}
 }
 
-/*
-uint64_t getBanEndFromString(std::string string)
-{
-	if(string == "permanent")
-		return 0xFFFFFFFF;
-
-	uint32_t multiplier = 0;
-	uint64_t ret = 0;
-	std::string number;
-	for(size_t i = 0; i <= string.size(); i++)
-	{
-		if(string[i] == '|')
-		{
-			string = string.substr(i + 1);
-			break;
-		}
-	}
-	for(size_t i = 0; i <= string.size(); i++)
-	{
-		if(string[i] == '0' || string[i] == '1' || string[i] == '2' || string[i] == '3' || string[i] == '4' || string[i] == '5' || string[i] == '6' || string[i] == '7' || string[i] == '8' || string[i] == '9')
-		{
-			number += string[i];
-			continue;
-		}
-		else if(string[i] == 'm') 
-			multiplier = 60;
-		else if(string[i] == 'h')
-			multiplier = 60*60;
-		else if(string[i] == 'd') 
-			multiplier = 60*60*24;
-		else if(string[i] == 'w') 
-			multiplier = 60*60*24*7;
-		else if(string[i] == 'o') 
-			multiplier = 60*60*24*30;
-		else if(string[i] == 'y') 
-			multiplier = 60*60*24*365;
-		else if(string[i] == ' ')
-		{
-			number = "";
-			continue;
-		}
-		if(number != "")
-			ret = ret + atoi(number.c_str())*multiplier;
-		number = "";
-	}
-	return time(nullptr) + ret;
-}
-*/
-
 void formatIP(uint32_t ip, char* buffer/* atleast 17 */)
 {
 	sprintf(buffer, "%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
@@ -656,6 +607,43 @@ std::string formatTime(int32_t hours, int32_t minutes)
 		time << minutes << " " << (minutes > 1 ? "minutes" : "minute");
 
 	return time.str();
+}
+
+std::string formatTimeEx(time_t _time/* = 0*/, bool ms/* = false*/)
+{
+	if(!_time)
+		_time = time(NULL);
+	else if(ms)
+		ms = false;
+
+	const tm* tms = localtime(&_time);
+	std::stringstream s;
+	if(tms)
+	{
+		s << tms->tm_hour << ":" << tms->tm_min << ":";
+		if(tms->tm_sec < 10)
+			s << "0";
+
+		s << tms->tm_sec;
+		if(ms)
+		{
+			timeb t;
+			ftime(&t);
+
+			s << "."; // make it format zzz
+			if(t.millitm < 10)
+				s << "0";
+
+			if(t.millitm < 100)
+				s << "0";
+
+			s << t.millitm;
+		}
+	}
+	else
+		s << "UNIX Time: " << (int32_t)_time;
+
+	return s.str();
 }
 
 struct AmmoTypeNames
@@ -931,7 +919,7 @@ std::string getAction(int32_t actionId, bool IPBanishment)
 	return action;
 }
 
-std::string formatDate(time_t _time/* = 0*/)
+std::string formatDateString(time_t _time/* = 0*/)
 {
 	if(!_time)
 		_time = time(nullptr);
@@ -1036,4 +1024,52 @@ uint32_t combatTypeToIndex(CombatType_t combatType)
 		case COMBAT_DROWNDAMAGE: return 9;
 		default: return 0;
 	}
+}
+
+std::string getFilePath(FileType_t type, std::string name/* = ""*/)
+{
+	#ifdef __FILESYSTEM_HIERARCHY_STANDARD__
+	std::string path = "/var/lib/tfs/";
+	#endif
+	std::string path = "data/";
+	switch(type)
+	{
+		case FILE_TYPE_OTHER:
+		{
+			path += name;
+			break;
+		}
+		case FILE_TYPE_XML:
+		{
+			path += "XML/" + name;
+			break;
+		}	
+		case FILE_TYPE_LOG:
+		{
+			#ifndef __FILESYSTEM_HIERARCHY_STANDARD__
+			path = "data/logs/" + name;
+			#else
+			path = "/var/log/tfs/" + name;
+			#endif
+			break;
+		}	
+		case FILE_TYPE_CONFIG:
+		{
+			#if defined(__HOMEDIR_CONF__)
+			if(fileExists("~/.tfs/" + name))
+				path = "~/.tfs/" + name;
+			else
+			#endif
+			#if defined(__FILESYSTEM_HIERARCHY_STANDARD__)
+				path = "/etc/tfs/" + name;
+			#else
+				path = name;
+			#endif
+			break;
+		}
+		default:
+			std::clog << "> ERROR: Wrong file type!" << std::endl;
+			break;
+	}
+	return path;
 }

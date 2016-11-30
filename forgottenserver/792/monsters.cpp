@@ -244,7 +244,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
 	if(!result) {
-		std::cout << "[Error - Monsters::loadFromXml] Failed to load data/monster/monsters.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Monsters::loadFromXml] Failed to load data/monster/monsters.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -598,7 +598,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		} else if(tmpName == "effect") {
 			//
 		} else {
-			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << name << std::endl;
+			std::clog << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << name << std::endl;
 			delete combat;
 			return false;
 		}
@@ -615,7 +615,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						if(shoot != NM_SHOOT_UNK) {
 							combat->setParam(COMBATPARAM_DISTANCEEFFECT, shoot);
 						} else {
-							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
+							std::clog << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
 					}
 				} else if(tmpStrValue == "areaeffect") {
@@ -624,11 +624,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						if(effect != NM_ME_UNK) {
 							combat->setParam(COMBATPARAM_EFFECT, effect);
 						} else {
-							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;
+							std::clog << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;
 						}
 					}
 				} else {
-					std::cout << "[Warning - Monsters::deserializeSpells] Effect type \"" << attr.as_string() << "\" does not exist." << std::endl;
+					std::clog << "[Warning - Monsters::deserializeSpells] Effect type \"" << attr.as_string() << "\" does not exist." << std::endl;
 				}
 			}
 		}
@@ -638,8 +638,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	return true;
 }
 
-#define SHOW_XML_WARNING(desc) std::cout << "[Warning - Monsters::loadMonster] " << desc << ". " << file << std::endl;
-#define SHOW_XML_ERROR(desc) std::cout << "[Error - Monsters::loadMonster] " << desc << ". " << file << std::endl;
+#define SHOW_XML_WARNING(desc) std::clog << "[Warning - Monsters::loadMonster] " << desc << ". " << file << std::endl;
+#define SHOW_XML_ERROR(desc) std::clog << "[Error - Monsters::loadMonster] " << desc << ". " << file << std::endl;
 
 bool Monsters::loadMonster(const std::string& file, const std::string& monster_name, bool reloading /*= false*/)
 {
@@ -667,7 +667,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		if(new_mType) {
 			delete mType;
 		}
-		std::cout << "[Error - Monsters::loadMonster] Failed to load " << file << ": " << result.description() << std::endl;
+		std::clog << "[Error - Monsters::loadMonster] Failed to load " << file << ": " << result.description() << std::endl;
 		return false;
 	}
 
@@ -676,7 +676,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		if(new_mType) {
 			delete mType;
 		}
-		std::cout << "[Error - Monsters::loadMonster] Missing monster node in: " << file << std::endl;
+		std::clog << "[Error - Monsters::loadMonster] Missing monster node in: " << file << std::endl;
 		return false;
 	}
 
@@ -685,7 +685,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		if(new_mType) {
 			delete mType;
 		}
-		std::cout << "[Error - Monsters::loadMonster] Missing name in: " << file << std::endl;
+		std::clog << "[Error - Monsters::loadMonster] Missing name in: " << file << std::endl;
 		return false;
 	}
 	mType->name = attr.as_string();

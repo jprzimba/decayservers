@@ -22,10 +22,11 @@
 #ifndef __OTSERV_OTTHREAD_H__
 #define __OTSERV_OTTHREAD_H__
 
-#include "logger.h"
+#include "textlogger.h"
 
 #include <list>
 #include <vector>
+#include <map>
 #include <algorithm>
 
 typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;

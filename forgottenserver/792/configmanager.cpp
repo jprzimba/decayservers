@@ -46,7 +46,7 @@ bool ConfigManager::load()
 
 	if(luaL_dofile(L, "config.lua"))
 	{
-		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
+		std::clog << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
 		return false;
 	}
@@ -172,7 +172,7 @@ const std::string& ConfigManager::getString(uint32_t _what) const
 		return string[_what];
 	else
 	{
-		std::cout << "Warning: [ConfigManager::getString] " << _what << std::endl;
+		std::clog << "Warning: [ConfigManager::getString] " << _what << std::endl;
 		return string[DUMMY_STR];
 	}
 }
@@ -183,7 +183,7 @@ int32_t ConfigManager::getNumber(uint32_t _what) const
 		return integer[_what];
 	else
 	{
-		std::cout << "Warning: [ConfigManager::getNumber] " << _what << std::endl;
+		std::clog << "Warning: [ConfigManager::getNumber] " << _what << std::endl;
 		return 0;
 	}
 }
@@ -196,7 +196,7 @@ bool ConfigManager::setNumber(uint32_t _what, int32_t _value)
 	}
 	else
 	{
-		std::cout << "Warning: [ConfigManager::setNumber] " << _what << std::endl;
+		std::clog << "Warning: [ConfigManager::setNumber] " << _what << std::endl;
 		return false;
 	}
 }
@@ -246,7 +246,7 @@ bool ConfigManager::getBool(uint32_t _what) const
 		return boolean[_what];
 	else
 	{
-		std::cout << "Warning: [ConfigManager::getBool] " << _what << std::endl;
+		std::clog << "Warning: [ConfigManager::getBool] " << _what << std::endl;
 		return false;
 	}
 }

@@ -138,20 +138,20 @@ bool Outfits::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/outfits.xml");
 	if(!result) {
-		std::cout << "[Error - Outfits::loadFromXml] Failed to load data/XML/outfits.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Outfits::loadFromXml] Failed to load data/XML/outfits.xml: " << result.description() << std::endl;
 		return false;
 	}
 
 	for(pugi::xml_node outfitNode = doc.child("outfits").first_child(); outfitNode; outfitNode = outfitNode.next_sibling()) {
 		pugi::xml_attribute typeAttribute = outfitNode.attribute("type");
 		if(!typeAttribute) {
-			std::cout << "[Warning - Outfits::loadFromXml] Missing outfit type." << std::endl;
+			std::clog << "[Warning - Outfits::loadFromXml] Missing outfit type." << std::endl;
 			continue;
 		}
 
 		uint32_t type = pugi::cast<uint32_t>(typeAttribute.value());
 		if(type > 9) {
-			std::cout << "[Warning - Outfits::loadFromXml] No valid outfit type " << type << std::endl;
+			std::clog << "[Warning - Outfits::loadFromXml] No valid outfit type " << type << std::endl;
 			continue;
 		}
 
@@ -165,7 +165,7 @@ bool Outfits::loadFromXml()
 
 		pugi::xml_attribute lookTypeAttribute = outfitNode.attribute("looktype");
 		if(!lookTypeAttribute) {
-			std::cout << "[Warning - Outfits::loadFromXml] Missing looktype on outfit: " << outfitName << std::endl;
+			std::clog << "[Warning - Outfits::loadFromXml] Missing looktype on outfit: " << outfitName << std::endl;
 			continue;
 		}
 

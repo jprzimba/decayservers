@@ -208,7 +208,7 @@ void Game::setGameState(GameState_t newState)
 
 void Game::saveGameState()
 {
-	std::cout << "> Saving server..." << std::endl;
+	std::clog << "> Saving server..." << std::endl;
 	uint64_t start = OTSYS_TIME();
 	IOLoginData* io = IOLoginData::getInstance();
 	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
@@ -220,7 +220,7 @@ void Game::saveGameState()
 	map->saveMap();
 	ScriptEnvironment::saveGameState();
 
-	std::cout << "> SAVE: Complete in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+	std::clog << "> SAVE: Complete in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 }
 
 void Game::loadGameState()
@@ -262,7 +262,7 @@ void Game::refreshMap()
 				#else
 				ReturnValue ret = internalRemoveItem(item);
 				if(ret != RET_NOERROR)
-					std::cout << "Could not refresh item: " << item->getID() << "pos: " << tile->getPosition() << std::endl;
+					std::clog << "Could not refresh item: " << item->getID() << "pos: " << tile->getPosition() << std::endl;
 				#endif
 			}
 		}
@@ -283,7 +283,7 @@ void Game::refreshMap()
 			}
 			else
 			{
-				std::cout << "Could not refresh item: " << item->getID() << "pos: " << tile->getPosition() << std::endl;
+				std::clog << "Could not refresh item: " << item->getID() << "pos: " << tile->getPosition() << std::endl;
 				delete item;
 			}
 		}
@@ -309,11 +309,11 @@ OTSYS_THREAD_RETURN Game::monitorThread(void *p)
 		}
 		bool file = false;
 		std::ostream *outdriver;
-		std::cout << "Error: generating critical section file..." <<std::endl;
+		std::clog << "Error: generating critical section file..." <<std::endl;
 		std::ofstream output("deadlock.txt",std::ios_base::app);
 		if(output.fail())
 		{
-			outdriver = &std::cout;
+			outdriver = &std::clog;
 			file = false;
 		}
 		else
@@ -341,7 +341,7 @@ OTSYS_THREAD_RETURN Game::monitorThread(void *p)
 		if(file)
 			((std::ofstream*)outdriver)->close();
 
-		std::cout << "Error report generated. Killing server." <<std::endl;
+		std::clog << "Error report generated. Killing server." <<std::endl;
 		exit(1); //force exit
 	}
 }
@@ -784,7 +784,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 		return false;
 
 #ifdef __DEBUG__
-	std::cout << "removing creature " << std::endl;
+	std::clog << "removing creature " << std::endl;
 #endif
 
 	Cylinder* cylinder = creature->getTile();
@@ -1833,7 +1833,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	if(itemIndex == -1)
 	{
 #ifdef __DEBUG__
-		std::cout << "Error: transformItem, itemIndex == -1" << std::endl;
+		std::clog << "Error: transformItem, itemIndex == -1" << std::endl;
 #endif
 		return item;
 	}
@@ -1861,7 +1861,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		if(newItem == nullptr)
 		{
 			#ifdef __DEBUG__
-			std::cout << "Error: [Game::transformItem] Item of type " << item->getID() << " transforming into invalid type " << newId << std::endl;
+			std::clog << "Error: [Game::transformItem] Item of type " << item->getID() << " transforming into invalid type " << newId << std::endl;
 			#endif
 			return nullptr;
 		}
@@ -2010,7 +2010,7 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text, Speak
 
 	if(type >= SPEAK_CLASS_FIRST && type <= SPEAK_CLASS_LAST)
 	{
-		std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
+		std::clog << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 			(*it).second->sendCreatureSay(player, type, text);
 		return true;
@@ -2933,7 +2933,7 @@ bool Game::internalCloseTrade(Player* player)
 	Player* tradePartner = player->tradePartner;
 	if((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER)
 	{
-		std::cout << "Warning: [Game::playerCloseTrade] TradeState == TRADE_TRANSFER. " << 
+		std::clog << "Warning: [Game::playerCloseTrade] TradeState == TRADE_TRANSFER. " << 
 			player->getName() << " " << player->getTradeState() << " , " << 
 			tradePartner->getName() << " " << tradePartner->getTradeState() << std::endl;
 		return true;
@@ -4097,7 +4097,7 @@ void Game::internalDecayItem(Item* item)
 	{
 		ReturnValue ret = internalRemoveItem(item);
 		if(ret != RET_NOERROR)
-			std::cout << "DEBUG, internalDecayItem failed, error code: " << (int32_t) ret << "item id: " << item->getID() << std::endl;
+			std::clog << "DEBUG, internalDecayItem failed, error code: " << (int32_t) ret << "item id: " << item->getID() << std::endl;
 	}
 }
 
@@ -4248,19 +4248,19 @@ bool Game::closeRuleViolation(Player* player)
 
 void Game::shutdown()
 {
-	std::cout << "Preparing shutdown";
+	std::clog << "Preparing shutdown";
 	Scheduler::getScheduler().stop();
-	std::cout << ".";
+	std::clog << ".";
 	Dispatcher::getDispatcher().stop();
-	std::cout << ".";
+	std::clog << ".";
 	Spawns::getInstance()->clear();
-	std::cout << "." << std::endl;
+	std::clog << "." << std::endl;
 
 	if(g_server)
 		g_server->stop();
 
 	cleanup();
-	std::cout << "Exiting." << std::endl;
+	std::clog << "Exiting." << std::endl;
 	exit(1);
 }
 
@@ -4297,7 +4297,7 @@ void Game::timedHighscoreUpdate()
 	int highscoreUpdateTime = g_config.getNumber(ConfigManager::HIGHSCORES_UPDATETIME) * 1000 * 60;
 	if(highscoreUpdateTime <= 0)
 	{
-		std::cout << "[Warning - Game::timedHighscoreUpdate] Updatetime for highscores has to be atleast one minute." << std::endl;
+		std::clog << "[Warning - Game::timedHighscoreUpdate] Updatetime for highscores has to be atleast one minute." << std::endl;
 		return;
 	}
 	Scheduler::getScheduler().addEvent(createSchedulerTask(highscoreUpdateTime, boost::bind(&Game::timedHighscoreUpdate, this)));
@@ -4320,7 +4320,7 @@ bool Game::broadcastMessage(const std::string& text, MessageClasses type)
 {
 	if(type >= MSG_CLASS_FIRST && type <= MSG_CLASS_LAST)
 	{
-		std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
+		std::clog << "> Broadcasted message: \"" << text << "\"." << std::endl;
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 			(*it).second->sendTextMessage(type, text);
 		return true;
@@ -4438,7 +4438,7 @@ void Game::updatePremium(Account account)
 	}
 
 	if(save && !IOLoginData::getInstance()->saveAccount(account))
-		std::cout << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
+		std::clog << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
 }
 
 void Game::autoSave()
@@ -4581,7 +4581,7 @@ void Game::loadMotd()
 	FILE* file = fopen("lastMotd.txt", "r");
 	if(file == nullptr)
 	{
-		std::cout << "> ERROR: Failed to load lastMotd.txt" << std::endl;
+		std::clog << "> ERROR: Failed to load lastMotd.txt" << std::endl;
 		lastMotdNum = random_range(5, 500);
 		return;
 	}
@@ -4613,7 +4613,7 @@ void Game::savePlayersRecord()
 	FILE* file = fopen("playersRecord.txt", "w"); 
 	if(file == nullptr)
 	{
-		std::cout << "> ERROR: Failed to save playersRecord.txt" << std::endl;
+		std::clog << "> ERROR: Failed to save playersRecord.txt" << std::endl;
 		return;
 	}
 
@@ -4626,7 +4626,7 @@ void Game::loadPlayersRecord()
 	FILE* file = fopen("playersRecord.txt", "r");
 	if(file == nullptr)
 	{
-		std::cout << "> ERROR: Failed to load playersRecord.txt" << std::endl;
+		std::clog << "> ERROR: Failed to load playersRecord.txt" << std::endl;
 		lastPlayersRecord = 0;
 		return;
 	}
@@ -4878,7 +4878,7 @@ bool Game::loadExperienceStages()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
 	if(!result) {
-		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
+		std::clog << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
 	}
 

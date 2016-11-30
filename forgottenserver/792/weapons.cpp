@@ -148,7 +148,7 @@ bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
 		return true;
 	}
 
-	std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
+	std::clog << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	return false;
 }
 
@@ -197,7 +197,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	pugi::xml_attribute attr;
 	if(!(attr = node.attribute("id")))
 	{
-		std::cout << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
+		std::clog << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
 		return false;
 	}
 
@@ -533,7 +533,7 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. Weapon::executeUseWeapon" << std::endl;
+		std::clog << "[Error] Call stack overflow. Weapon::executeUseWeapon" << std::endl;
 		return false;
 	}
 }
@@ -988,7 +988,7 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		} else if(tmpStrValue == "fire") {
 			params.combatType = COMBAT_FIREDAMAGE;
 		} else {
-			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
+			std::clog << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 		}
 	}
 

@@ -223,7 +223,7 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 				if(item)
 				{
 					if(!item->unserializeAttr(propStream))
-						std::cout << "WARNING: Serialize error in IOMapSerialize::loadTile() [1]" << std::endl;
+						std::clog << "WARNING: Serialize error in IOMapSerialize::loadTile() [1]" << std::endl;
 
 					if(pid == 0)
 					{
@@ -255,7 +255,7 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 			if(item)
 			{
 				if(!item->unserializeAttr(propStream))
-					std::cout << "WARNING: Serialize error in IOMapSerialize::loadTile() [0]" << std::endl;
+					std::clog << "WARNING: Serialize error in IOMapSerialize::loadTile() [0]" << std::endl;
 
 				item = g_game.transformItem(item, type);
 
@@ -263,7 +263,7 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 				itemMap[sid] = myPair;
 			}
 			else
-				std::cout << "WARNING: IOMapSerialize::loadTile() - nullptr item at " << tile->getPosition() << " (type = " << type << ", sid = " << sid << ", pid = " << pid << ")." << std::endl;
+				std::clog << "WARNING: IOMapSerialize::loadTile() - nullptr item at " << tile->getPosition() << " (type = " << type << ", sid = " << sid << ", pid = " << pid << ")." << std::endl;
 		}
 		while(result->next());
 		db.freeResult(result);

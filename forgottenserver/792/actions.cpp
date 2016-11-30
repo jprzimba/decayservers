@@ -103,7 +103,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 		if(useItemMap.find(id) != useItemMap.end())
 		{
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 			return false;
 		}
 		useItemMap[id] = action;
@@ -120,7 +120,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			bool success = false;
 			if(useItemMap.find(iterId) != useItemMap.end())
 			{
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+				std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
 			}
 			else
 			{
@@ -132,7 +132,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			{
 				if(useItemMap.find(iterId) != useItemMap.end())
 				{
-					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+					std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
 					continue;
 				}
 				useItemMap[iterId] = action;
@@ -142,7 +142,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		}
 		else
 		{
-			std::cout << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
 			return false;
 		}
 	}
@@ -151,7 +151,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		uint16_t uid = pugi::cast<uint16_t>(attr.value());
 		if(uniqueItemMap.find(uid) != uniqueItemMap.end())
 		{
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
 			return false;
 		}
 		uniqueItemMap[uid] = action;
@@ -167,7 +167,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 
 			bool success = false;
 			if(uniqueItemMap.find(iterUid) != uniqueItemMap.end())
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+				std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
 			else
 			{
 				uniqueItemMap[iterUid] = action;
@@ -178,7 +178,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			{
 				if(uniqueItemMap.find(iterUid) != uniqueItemMap.end())
 				{
-					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+					std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
 					continue;
 				}
 				uniqueItemMap[iterUid] = action;
@@ -188,7 +188,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		}
 		else
 		{
-			std::cout << "[Warning - Actions::registerEvent] Missing touid in fromuid: " << attr.as_string() << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Missing touid in fromuid: " << attr.as_string() << std::endl;
 			return false;
 		}
 	}
@@ -197,7 +197,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		uint16_t aid = pugi::cast<uint16_t>(attr.value());
 		if(actionItemMap.find(aid) != actionItemMap.end())
 		{
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
 			return false;
 		}
 		actionItemMap[aid] = action;
@@ -213,7 +213,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 
 			bool success = false;
 			if(actionItemMap.find(iterAid) != actionItemMap.end())
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+				std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
 			else
 			{
 				actionItemMap[iterAid] = action;
@@ -224,7 +224,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			{
 				if(actionItemMap.find(iterAid) != actionItemMap.end())
 				{
-					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+					std::clog << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
 					continue;
 				}
 				actionItemMap[iterAid] = action;
@@ -234,7 +234,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 		}
 		else
 		{
-			std::cout << "[Warning - Actions::registerEvent] Missing toaid in fromaid: " << attr.as_string() << std::endl;
+			std::clog << "[Warning - Actions::registerEvent] Missing toaid in fromaid: " << attr.as_string() << std::endl;
 			return false;
 		}
 	}
@@ -566,7 +566,7 @@ bool Action::loadFunction(const std::string& functionName)
 		function = highscoreBook;
 	else
 	{
-		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -658,7 +658,7 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 		lua_pushnumber(L, cid);
 		LuaScriptInterface::pushThing(L, item, itemid1);
 		LuaScriptInterface::pushPosition(L, fromPos, fromPos.stackpos);
-		//std::cout << "posTo" <<  (Position)posTo << " stack" << (int32_t)posTo.stackpos <<std::endl;
+		//std::clog << "posTo" <<  (Position)posTo << " stack" << (int32_t)posTo.stackpos <<std::endl;
 		Thing* thing = g_game.internalGetThing(player, toPos, toPos.stackpos);
 		if(thing && (!extendedUse || thing != item))
 		{
@@ -679,7 +679,7 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 	}
 	else
 	{
-		std::cout << "[Error] Call stack overflow. Action::executeUse" << std::endl;
+		std::clog << "[Error] Call stack overflow. Action::executeUse" << std::endl;
 		return false;
 	}
 }

@@ -141,7 +141,7 @@ bool Mailbox::sendItem(Item* item)
 		if(!IOLoginData::getInstance()->loadPlayer(player, receiver))
 		{
 			#ifdef __DEBUG_MAILBOX__
-			std::cout << "Failure: [Mailbox::sendItem], can not load player: " << receiver << std::endl;
+			std::clog << "Failure: [Mailbox::sendItem], can not load player: " << receiver << std::endl;
 			#endif
 			delete player;
 			return false;
@@ -151,7 +151,7 @@ bool Mailbox::sendItem(Item* item)
 		std::string playerName = player->getName();
 		if(g_game.getPlayerByName(playerName))
 		{
-			std::cout << "Failure: [Mailbox::sendItem], receiver is online: " << receiver << "," << playerName << std::endl;
+			std::clog << "Failure: [Mailbox::sendItem], receiver is online: " << receiver << "," << playerName << std::endl;
 			delete player;
 			return false;
 		}
@@ -194,7 +194,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name, uint32_t& dp)
 	}
 	else if(item->getID() != ITEM_LETTER) /**The item is somehow not a parcel or letter**/
 	{
-		std::cout << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID:: " << item->getID() << "." << std::endl;
+		std::clog << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID:: " << item->getID() << "." << std::endl;
 		return false;
 	}
 	 
