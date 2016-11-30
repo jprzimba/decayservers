@@ -49,8 +49,8 @@ bool Groups::loadFromXml()
 		pugi::xml_attribute attr;
 		if(attr = groupNode.attribute("id"))
 		{
-			Group* group = new Group(pugi::cast<int32_t>(attr.value()));
-		
+			Group* group = new Group(pugi::cast<uint32_t>(attr.value()));
+			
 			if(attr = groupNode.attribute("name"))
 			{
 				group->setFullName(attr.as_string());
@@ -79,7 +79,7 @@ bool Groups::loadFromXml()
 		}
 		else
 		{
-			std::cout << "[Warning - Groups::parseGroupNode] Missing group id." << std::endl;
+			std::cout << "[Warning - Groups::loadFromXml] Missing group id." << std::endl;
 			return false;
 		}
 	}

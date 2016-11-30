@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include "iologindata.h"
+#include "group.h"
 #include <algorithm>
 #include <functional>
 #include "item.h"
@@ -979,25 +980,17 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 		return it->second;
 	else
 	{
-		Database* db = Database::getInstance();
+		Group* group = Groups::getInstance()->getGroup(groupid);
+		PlayerGroup* playerGroup = new PlayerGroup;
 
-		DBQuery query;
-		DBResult* result;
+		playerGroup->m_name = group->getName();
+		playerGroup->m_flags = group->getFlags();
+		playerGroup->m_access = group->getAccess();
+		playerGroup->m_maxdepotitems = group->getDepotLimit();
+		playerGroup->m_maxviplist = group->getMaxVips();
 
-		query << "SELECT `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` WHERE `id` = " << groupid;
-		if(!(result = db->storeQuery(query.str())))
-			return nullptr;
-
-		PlayerGroup* group = new PlayerGroup;
-		group->m_name = result->getDataString("name");
-		group->m_flags = result->getDataLong("flags");
-		group->m_access = result->getDataInt("access");
-		group->m_maxdepotitems = result->getDataInt("maxdepotitems");
-		group->m_maxviplist = result->getDataInt("maxviplist");
-
-		playerGroupMap[groupid] = group;
-		db->freeResult(result);
-		return group;
+		playerGroupMap[groupid] = playerGroup;
+		return playerGroup;
 	}
 	return nullptr;
 }

@@ -1,7 +1,7 @@
 [Project]
 FileName=TheForgottenServer.dev
 Name=TheForgottenServer
-UnitCount=148
+UnitCount=150
 Type=1
 Ver=2
 ObjFiles=
@@ -12,10 +12,10 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=
-Linker=-lboost_regex_@@_-lboost_system_@@_-lboost_thread_@@_-llua5.1_@@_-lmpir_@@_-lmysql_@@_-lwsock32_@@_-lws2_32_@@_-s_@@_
+Linker=-lboost_regex_@@_-lboost_system_@@_-lboost_thread_@@_-llua5.1_@@_-lmpir_@@_-lmysql_@@_-lwsock32_@@_-lws2_32_@@_
 IsCpp=1
 Icon=TheForgottenServer.ico
-ExeOutput=..\..\ot
+ExeOutput=..\..\..\..\testing
 ObjectOutput=obj/
 OverrideOutput=0
 OverrideOutputName=TheForgottenServer.exe
@@ -1392,7 +1392,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit149]
-FileName=..\weapons.cpp
+FileName=..\group.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -1402,7 +1402,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit150]
-FileName=..\weapons.h
+FileName=..\group.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -1489,7 +1489,7 @@ Build=0
 LanguageID=1033
 CharsetID=1252
 CompanyName=
-FileVersion=0.2
+FileVersion=0.2.0.0
 FileDescription=The Forgotten Server
 InternalName=
 LegalCopyright=

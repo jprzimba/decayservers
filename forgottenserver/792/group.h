@@ -85,8 +85,7 @@ typedef std::map<uint32_t, Group*> GroupsMap;
 class Groups
 {
 	public:
-		~Groups() {}
-		
+		virtual ~Groups() {clear();}
 		static Groups* getInstance()
 		{
 			static Groups instance;
@@ -105,8 +104,7 @@ class Groups
 		GroupsMap::iterator getLastGroup() {return groupsMap.end();}
 
 	private:
-		//virtual void clear();
-		
+		Groups() {}
 		GroupsMap groupsMap;
 		static Group defGroup;
 };

@@ -47,6 +47,7 @@
 #include "raids.h"
 #include "quests.h"
 #include "resources.h"
+#include "group.h"
 #include "databasemanager.h"
 
 #ifdef __DEBUG_CRITICALSECTION__
@@ -213,6 +214,11 @@ int main(int argc, char *argv[])
 	std::cout << ">> Loading bans" << std::endl;
 	g_bans.init();
 
+	//load groups
+	std::cout << ">> Loading groups" << std::endl;
+	if(!Groups::getInstance()->loadFromXml())
+		startupErrorMessage("Unable to load groups!");
+		
 	//load vocations
 	std::cout << ">> Loading vocations" << std::endl;
 	if(!g_vocations.loadFromXml())
