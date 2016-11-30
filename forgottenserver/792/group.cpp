@@ -59,9 +59,6 @@ bool Groups::loadFromXml()
 
 			if(attr = groupNode.attribute("flags"))
 				group->setFlags(pugi::cast<int64_t>(attr.value()));
-
-			if(attr = groupNode.attribute("customFlags"))
-				group->setCustomFlags(pugi::cast<int64_t>(attr.value()));
 			
 			if(attr = groupNode.attribute("access"))
 				group->setAccess(pugi::cast<int32_t>(attr.value()));
@@ -71,9 +68,6 @@ bool Groups::loadFromXml()
 			
 			if(attr = groupNode.attribute("maxVips"))
 				group->setMaxVips(pugi::cast<int32_t>(attr.value()));
-		
-			if(attr = groupNode.attribute("outfit"))
-				group->setOutfit(pugi::cast<int32_t>(attr.value()));
 
 			groupsMap[group->getId()] = group;
 		}
@@ -94,31 +88,4 @@ Group* Groups::getGroup(uint32_t groupId)
 
 	std::cout << "[Warning - Groups::getGroup] Group " << groupId << " not found." << std::endl;
 	return &defGroup;
-}
-
-int32_t Groups::getGroupId(const std::string& name)
-{
-	for(GroupsMap::iterator it = groupsMap.begin(); it != groupsMap.end(); ++it)
-	{
-		if(!strcasecmp(it->second->getName().c_str(), name.c_str()))
-			return it->first;
-	}
-
-	return -1;
-}
-
-uint32_t Group::getDepotLimit(bool premium) const
-{
-	if(m_depotLimit > 0)
-		return m_depotLimit;
-
-	return (premium ? 2000 : 1000);
-}
-
-uint32_t Group::getMaxVips(bool premium) const
-{
-	if(m_maxVips > 0)
-		return m_maxVips;
-
-	return (premium ? 100 : 20);
 }

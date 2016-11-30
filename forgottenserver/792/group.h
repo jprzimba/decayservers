@@ -27,14 +27,12 @@ class Group
 		Group()
 		{
 			m_name = m_fullName = "";
-			m_access = m_ghostAccess = m_outfit = m_depotLimit = m_maxVips = m_flags = m_customFlags = 0;
-			m_violationReasons = m_nameViolationFlags = m_statementViolationFlags = 0;
+			m_access = m_depotLimit = m_maxVips = m_flags = 0;
 		}
 		Group(uint32_t id): m_id(id)
 		{
 			m_name = m_fullName = "";
-			m_access = m_ghostAccess = m_outfit = m_depotLimit = m_maxVips = m_flags = m_customFlags = 0;
-			m_violationReasons = m_nameViolationFlags = m_statementViolationFlags = 0;
+			m_access = m_depotLimit = m_maxVips = m_flags = 0;
 		}
 
 		std::string getName() const {return m_name;}
@@ -45,16 +43,6 @@ class Group
 
 		uint16_t getAccess() const {return m_access;}
 		void setAccess(uint16_t v) {m_access = v;}
-		uint16_t getGhostAccess() const {return m_ghostAccess;}
-		void setGhostAccess(uint16_t v) {m_ghostAccess = v;}
-		uint8_t getViolationReasons() const {return m_violationReasons;}
-		void setViolationReasons(uint8_t v) {m_violationReasons = v;}
-		int16_t getStatementViolationFlags() const {return m_statementViolationFlags;}
-		void setStatementViolationFlags(uint8_t v) {m_statementViolationFlags = v;}
-		int16_t getNameViolationFlags() const {return m_nameViolationFlags;}
-		void setNameViolationFlags(uint8_t v) {m_nameViolationFlags = v;}
-		uint16_t getOutfit() const {return m_outfit;}
-		void setOutfit(uint16_t v) {m_outfit = v;}
 
 		uint32_t getId() const {return m_id;}
 		void setId(uint32_t v) {m_id = v;}
@@ -65,19 +53,14 @@ class Group
 
 		uint64_t getFlags() const {return m_flags;}
 		void setFlags(uint64_t v) {m_flags = v;}
-		uint64_t getCustomFlags() const {return m_customFlags;}
-		void setCustomFlags(uint64_t v) {m_customFlags = v;}
 
 		bool hasFlag(uint64_t value) const {return (m_flags & ((uint64_t)1 << value));}
-		bool hasCustomFlag(uint64_t value) const {return (m_customFlags & ((uint64_t)1 << value));}
 
 	private:
 		std::string m_name, m_fullName;
-		uint8_t m_violationReasons;
-		int16_t m_nameViolationFlags, m_statementViolationFlags;
-		uint16_t m_access, m_ghostAccess, m_outfit;
+		uint16_t m_access;
 		uint32_t m_id, m_depotLimit, m_maxVips;
-		uint64_t m_flags, m_customFlags;
+		uint64_t m_flags;
 };
 
 
