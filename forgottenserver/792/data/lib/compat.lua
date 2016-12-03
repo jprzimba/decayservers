@@ -19,3 +19,5 @@ getPlayerMasterPos = getPlayerMasterPososition
 getThingfromPosition = getThingfromPos
 getPosByDir = getPositionByDirection
 getPlayerByName = getCreatureByName
+creatureGetName = getCreatureName
+creatureGetPosition = getCreaturePosition

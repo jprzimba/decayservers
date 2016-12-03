@@ -508,12 +508,6 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 	if(m_scriptInterface->reserveScriptEnv())
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
-		#ifdef __DEBUG_LUASCRIPTS__
-		char desc[45];
-		sprintf(desc, "onUseWeapon - %s", player->getName().c_str());
-		env->setEventDesc(desc);
-		#endif
 	
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());

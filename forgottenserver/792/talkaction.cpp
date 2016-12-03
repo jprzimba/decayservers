@@ -299,12 +299,6 @@ uint32_t TalkAction::executeSay(Creature* creature, const std::string& words, co
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	
-		#ifdef __DEBUG_LUASCRIPTS__
-		std::stringstream desc;
-		desc << creature->getName() << " - " << words << " " << param;
-		env->setEventDesc(desc.str());
-		#endif
-	
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 	

@@ -69,10 +69,10 @@ bool ConfigManager::load()
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[SERVERSAVE_H] = getGlobalNumber(L, "serverSaveHour", 3);
 
-		boolean[SERVERSAVE_ENABLED] = getGlobalBoolean(L, "serverSaveEnabled", true);
-		boolean[SAVE_GLOBAL_STORAGE] = getGlobalBoolean(L, "saveGlobalStorage", false);
-		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
-		boolean[INGAME_GUILD_SYSTEM] = getGlobalBoolean(L, "ingameGuildSystem", true);
+		boolean[SERVERSAVE_ENABLED] = getGlobalBool(L, "serverSaveEnabled", true);
+		boolean[SAVE_GLOBAL_STORAGE] = getGlobalBool(L, "saveGlobalStorage", false);
+		boolean[OPTIMIZE_DATABASE] = getGlobalBool(L, "startupDatabaseOptimization", true);
+		boolean[INGAME_GUILD_SYSTEM] = getGlobalBool(L, "ingameGuildSystem", true);
 	}
 
 	string[LOGIN_MSG] = getGlobalString(L, "loginMessage", "Welcome to the Forgotten Server!");
@@ -129,29 +129,29 @@ bool ConfigManager::load()
 	integer[SUPRISEBAG_PERCENT] = getGlobalNumber(L, "surpriseBagPercent", 0);
 
 
-	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBoolean(L, "noDamageToSameLookfeet", false);
-	boolean[AIMBOT_HOTKEY_ENABLED] = getGlobalBoolean(L, "hotkeyAimbotEnabled", true);
-	boolean[REMOVE_AMMO] = getGlobalBoolean(L, "removeAmmoWhenUsingDistanceWeapon", true);
-	boolean[REMOVE_RUNE_CHARGES] = getGlobalBoolean(L, "removeChargesFromRunes", true);
-	boolean[ONE_PLAYER_ON_ACCOUNT] = getGlobalBoolean(L, "onePlayerOnlinePerAccount", true);
-	boolean[RANDOMIZE_TILES] = getGlobalBoolean(L, "randomizeTiles", true);
-	boolean[EXPERIENCE_FROM_PLAYERS] = getGlobalBoolean(L, "experienceByKillingPlayers", false);
-	boolean[SHUTDOWN_AT_SERVERSAVE] = getGlobalBoolean(L, "shutdownAtServerSave", false);
-	boolean[CLEAN_MAP_AT_SERVERSAVE] = getGlobalBoolean(L, "cleanMapAtServerSave", true);
-	boolean[BROADCAST_BANISHMENTS] = getGlobalBoolean(L, "broadcastBanishments", true);
-	boolean[GENERATE_ACCOUNT_NUMBER] = getGlobalBoolean(L, "generateAccountNumber", true);
-	boolean[ACCOUNT_MANAGER] = getGlobalBoolean(L, "accountManager", true);
-	boolean[START_CHOOSEVOC] = getGlobalBoolean(L, "newPlayerChooseVoc", false);
-	boolean[ALLOW_CLONES] = getGlobalBoolean(L, "allowClones", false);
-	boolean[FREE_PREMIUM] = getGlobalBoolean(L, "freePremium", false);
-	boolean[ON_OR_OFF_CHARLIST] = getGlobalBoolean(L, "displayOnOrOffAtCharlist", false);
-	boolean[ALLOW_CHANGEOUTFIT] = getGlobalBoolean(L, "allowChangeOutfit", true);
-	boolean[CLEAN_PZ] = getGlobalBoolean(L, "cleanProtectedZones", true);
-	boolean[ENABLE_RULE_VIOLATION_REPORTS] = getGlobalBoolean(L, "enableRuleViolationReports", false);
-	boolean[SURPRISE_BAGS] = getGlobalBoolean(L, "monstersDropSurpriseBags", false);
-	boolean[SPELL_NAME_INSTEAD_WORDS] = getGlobalBoolean(L, "spellNameInsteadOfWords", false);
-	boolean[EMOTE_SPELLS] = getGlobalBoolean(L, "emoteSpells", false);
-	boolean[EXPERIENCE_STAGES] = getGlobalBoolean(L, "experienceStages", false);
+	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBool(L, "noDamageToSameLookfeet", false);
+	boolean[AIMBOT_HOTKEY_ENABLED] = getGlobalBool(L, "hotkeyAimbotEnabled", true);
+	boolean[REMOVE_AMMO] = getGlobalBool(L, "removeAmmoWhenUsingDistanceWeapon", true);
+	boolean[REMOVE_RUNE_CHARGES] = getGlobalBool(L, "removeChargesFromRunes", true);
+	boolean[ONE_PLAYER_ON_ACCOUNT] = getGlobalBool(L, "onePlayerOnlinePerAccount", true);
+	boolean[RANDOMIZE_TILES] = getGlobalBool(L, "randomizeTiles", true);
+	boolean[EXPERIENCE_FROM_PLAYERS] = getGlobalBool(L, "experienceByKillingPlayers", false);
+	boolean[SHUTDOWN_AT_SERVERSAVE] = getGlobalBool(L, "shutdownAtServerSave", false);
+	boolean[CLEAN_MAP_AT_SERVERSAVE] = getGlobalBool(L, "cleanMapAtServerSave", true);
+	boolean[BROADCAST_BANISHMENTS] = getGlobalBool(L, "broadcastBanishments", true);
+	boolean[GENERATE_ACCOUNT_NUMBER] = getGlobalBool(L, "generateAccountNumber", true);
+	boolean[ACCOUNT_MANAGER] = getGlobalBool(L, "accountManager", true);
+	boolean[START_CHOOSEVOC] = getGlobalBool(L, "newPlayerChooseVoc", false);
+	boolean[ALLOW_CLONES] = getGlobalBool(L, "allowClones", false);
+	boolean[FREE_PREMIUM] = getGlobalBool(L, "freePremium", false);
+	boolean[ON_OR_OFF_CHARLIST] = getGlobalBool(L, "displayOnOrOffAtCharlist", false);
+	boolean[ALLOW_CHANGEOUTFIT] = getGlobalBool(L, "allowChangeOutfit", true);
+	boolean[CLEAN_PZ] = getGlobalBool(L, "cleanProtectedZones", true);
+	boolean[ENABLE_RULE_VIOLATION_REPORTS] = getGlobalBool(L, "enableRuleViolationReports", false);
+	boolean[SURPRISE_BAGS] = getGlobalBool(L, "monstersDropSurpriseBags", false);
+	boolean[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool(L, "spellNameInsteadOfWords", false);
+	boolean[EMOTE_SPELLS] = getGlobalBool(L, "emoteSpells", false);
+	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);
 
 	m_loaded = true;
 	lua_close(L);
@@ -251,13 +251,13 @@ bool ConfigManager::getBool(uint32_t _what) const
 	}
 }
 
-bool ConfigManager::getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue)
+bool ConfigManager::getGlobalBool(lua_State* L, const char* identifier, const bool defaultValue)
 {
 	lua_getglobal(L, identifier);
-	if (!lua_isboolean(L, -1)) {
-		if (!lua_isstring(L, -1)) {
+	if(!lua_isboolean(L, -1))
+	{
+		if(!lua_isstring(L, -1))
 			return defaultValue;
-		}
 
 		size_t len = lua_strlen(L, -1);
 		std::string ret(lua_tostring(L, -1), len);

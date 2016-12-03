@@ -854,12 +854,6 @@ uint32_t MoveEvent::executeStep(Creature* creature, Item* item, const Position& 
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	
-		#ifdef __DEBUG_LUASCRIPTS__
-		std::stringstream desc;
-		desc << creature->getName() << " itemid: " << item->getID() << " - " << pos;
-		env->setEventDesc(desc.str());
-		#endif
-	
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(pos);
 	
@@ -901,13 +895,7 @@ uint32_t MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 	if(m_scriptInterface->reserveScriptEnv())
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	
-		#ifdef __DEBUG_LUASCRIPTS__
-		char desc[55];
-		sprintf(desc, "%s itemid: %d slot: %d", player->getName().c_str(), item->getID(), slot);
-		env->setEventDesc(desc);
-		#endif
-	
+
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());
 	
@@ -948,14 +936,6 @@ uint32_t MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position
 	if(m_scriptInterface->reserveScriptEnv())
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	
-		#ifdef __DEBUG_LUASCRIPTS__
-		std::stringstream desc;
-		if(tileItem)
-			desc << "tileid: " << tileItem->getID();
-		desc << " itemid: " << item->getID() << " - " << pos;
-		env->setEventDesc(desc.str());
-		#endif
 	
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(pos);

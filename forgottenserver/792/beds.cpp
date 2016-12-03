@@ -236,7 +236,7 @@ void BedItem::regeneratePlayer(Player* player) const
 		{
 			regen = std::min<int32_t>((condition->getTicks() / 1000), sleptTime) / 30;
 			const int32_t newRegenTicks = condition->getTicks() - (regen * 30000);
-			if (newRegenTicks <= 0)
+			if(newRegenTicks <= 0)
 				player->removeCondition(condition);
 			else
 				condition->setTicks(newRegenTicks);

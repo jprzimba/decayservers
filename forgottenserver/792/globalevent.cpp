@@ -22,10 +22,6 @@
 #include "tools.h"
 #include "player.h"
 #include "scheduler.h"
-
-#ifdef __DEBUG_LUASCRIPTS__
-#include <sstream>
-#endif
 #include <cmath>
 
 GlobalEvents::GlobalEvents() :
@@ -311,12 +307,6 @@ uint32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 	if(m_scriptInterface->reserveScriptEnv())
 	{
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
-		#ifdef __DEBUG_LUASCRIPTS__
-		std::ostringstream ss;
-		ss << getName() << " - " << old << " to " << current;
-		env->setEventDesc(ss.str());
-		#endif
 
 		env->setScriptId(m_scriptId, m_scriptInterface);
 

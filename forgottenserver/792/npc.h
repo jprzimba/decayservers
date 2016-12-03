@@ -59,8 +59,6 @@ class NpcScriptInterface : public LuaScriptInterface
 		static int32_t luaActionMoveTo(lua_State* L);
 		static int32_t luaActionTurn(lua_State* L);
 		static int32_t luaActionFollow(lua_State* L);
-		static int32_t luaCreatureGetName(lua_State* L);
-		static int32_t luaCreatureGetPos(lua_State* L);
 		static int32_t luaSelfGetPos(lua_State* L);
 		static int32_t luagetDistanceTo(lua_State* L);
 		static int32_t luaSetNpcFocus(lua_State* L);

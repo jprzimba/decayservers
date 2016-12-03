@@ -3413,7 +3413,7 @@ bool Game::playerReportRuleViolation(Player* player, const std::string& text)
 {
 	//Do not allow reports on multiclones worlds
 	//Since reports are name-based
-	if(g_config.getBool(ConfigManager::ALLOW_CLONES))
+	if(!g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
 	{
 		player->sendTextMessage(MSG_INFO_DESCR, "Rule violation reports are disabled.");
 		return false;
@@ -4413,9 +4413,9 @@ void Game::updatePremium(Account account)
 		else
 		{
 			uint32_t days = (timeNow - account.lastDay) / 86400;
-			if (days > 0)
+			if(days > 0)
 			{
-				if (days >= account.premiumDays)
+				if(days >= account.premiumDays)
 				{
 					account.premiumDays = 0;
 					account.lastDay = 0;
