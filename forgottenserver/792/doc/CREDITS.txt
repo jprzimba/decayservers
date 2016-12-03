@@ -17,5 +17,5 @@
 
 [v1 CREDITS
 	Credits for version 1 of this server goes to,
-	The Forgotten Server, OpenTibia SVN, (Tryller) and frcento.
+	The Forgotten Server, OpenTibia SVN, Tryller and frcento.
 ]

@@ -124,7 +124,6 @@
 	defaultPriority = "high"
 
 	-- Misc
-	displayGamemastersWithOnlineCommand = false
 	maxMessageBuffer = 4
 	kickIdlePlayerAfterMinutes = 15
 	enableRuleViolationReports = true

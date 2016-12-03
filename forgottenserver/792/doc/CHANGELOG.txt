@@ -26,6 +26,7 @@
 		* Add data/libs/ for compats and funcitons.
 		* Moved all commands to talkactions.
 		* Moved grups from database to data/XML/groups.xml.
+		* Very fast clean system from Evolutions source.
 		* Add alot of lua functions from latest 0.2/0.3/0.4 The Forgotten Server and OpenTibia SVN.
 			- isPlayerGhost(cid)
 			- getPlayerParty(cid)
@@ -50,6 +51,17 @@
 			- doCreateNpc(name, pos[, displayError = true])
 			- doSummonMonster(cid, name)
 			- getExperienceStage(level)
+		* Guild system configurable in config.lua
+			- ingameGuildSystem
+			- levelToCreateGuild
+			- minGuildNameLength
+			- maxGuildNameLength
+		* New monsters configs at config.lua
+			- monstersDropSurpriseBags
+			- surpriseBagPercent
+		* Configurable spells at config.lua
+			- spellNameInsteadOfWords
+			- emoteSpells
 
 	Revbattlesys
 		* New Formula of Armor/Defense.
