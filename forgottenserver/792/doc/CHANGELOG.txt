@@ -19,7 +19,37 @@
 	Server charges
 		* Game protocol 7.9x support with 7.92 items.
 		* Global events from TFS 0.2.15.
-		* GOD's ca move items from far.
+		* GOD's can move items from far.
+		* Server supports only MySQL.
+		* Add bank balance.
+		* Removed libxml and add pugixml support.
+		* Add data/libs/ for compats and funcitons.
+		* Moved all commands to talkactions.
+		* Moved grups from database to data/XML/groups.xml.
+		* Add alot of lua functions from latest 0.2/0.3/0.4 The Forgotten Server and OpenTibia SVN.
+			- isPlayerGhost(cid)
+			- getPlayerParty(cid)
+			- doPlayerJoinParty(cid, leaderId)
+			- getPartyMembers(leaderId)
+			- doCleanMap()
+			- getPlayerBalance(cid)
+			- doPlayerSetBalance(cid, balance)
+			- isPlayerPzLocked(cid)
+			- getPlayerIp(cid)
+			- getPlayerMasterPososition(cid)
+			- isValidItemId(itemid)
+			- getGameState()
+			- doSetGameState(id)
+			- getPlayersOnline()
+			- getClosestFreeTile(cid, targetpos[, extended = false[, ignoreHouse = true]])
+			- getTownName(townId)
+			- getTownTemplePosition(townId[, displayError])
+			- getPlayerByNameWildcard(name~[, ret = false])
+			- getTownId(townName)
+			- doCreateMonster(name, pos[, displayError = true])
+			- doCreateNpc(name, pos[, displayError = true])
+			- doSummonMonster(cid, name)
+			- getExperienceStage(level)
 
 	Revbattlesys
 		* New Formula of Armor/Defense.
