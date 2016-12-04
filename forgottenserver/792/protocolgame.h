@@ -50,7 +50,8 @@ class ProtocolGame : public Protocol
 		ProtocolGame(Connection* connection);
 		virtual ~ProtocolGame();
 		
-		bool login(const std::string& name, uint32_t accnumber, const std::string& password, uint16_t operatingSystem, uint8_t gamemasterLogin);
+		bool login(const std::string& name, uint32_t accnumber, const std::string& password, 
+			OperatingSystem_t operatingSystem, uint16_t version, bool gamemaster);
 		bool logout(bool displayEffect, bool forced);
 			
 		void setPlayer(Player* p);
@@ -58,7 +59,7 @@ class ProtocolGame : public Protocol
 	private:
 		std::list<uint32_t> knownCreatureList;
 
-		bool connect(uint32_t playerId);
+		bool connect(uint32_t playerId, OperatingSystem_t operatingSystem, uint16_t version);
 		void disconnect();
 		void disconnectClient(const char* message);
 		

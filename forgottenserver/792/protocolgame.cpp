@@ -260,7 +260,8 @@ void ProtocolGame::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std::string& password, uint16_t operatingSystem, uint8_t gamemasterLogin)
+bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std::string& password,
+	OperatingSystem_t operatingSystem, uint16_t version, bool gamemaster)
 {
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
@@ -305,11 +306,9 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 			player->realAccount = accnumber;
 		}
 
-		player->setOperatingSystem((OperatingSystem_t)operatingSystem);
-
-		if(gamemasterLogin == 1 && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && player->getName() != "Account Manager")
+		if(gamemaster && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && player->getName() != "Account Manager")
 		{
-			disconnectClient("You are not a gamemaster!");
+			disconnectClient("You are not a gamemaster! Turn off the gamemaster mode in your IP changer.");
 			return false;
 		}
 
@@ -387,6 +386,8 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 			return false;
 		}
 
+		player->setClientVersion(version);
+		player->setOperatingSystem(operatingSystem);
 		if(!g_game.placeCreature(player, player->getLoginPosition()))
 		{
 			if(!g_game.placeCreature(player, player->getTemplePosition(), true))
@@ -414,17 +415,17 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		{
 			_player->disconnect();
 			_player->isConnecting = true;
-			eventConnect = Scheduler::getScheduler().addEvent(
-				createSchedulerTask(1000, boost::bind(&ProtocolGame::connect, this, _player->getID())));
+			eventConnect = Scheduler::getScheduler().addEvent(createSchedulerTask(
+				1000, boost::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem, version)));
 
 			return true;
 		}
-		return connect(_player->getID());
+		return connect(_player->getID(), operatingSystem, version);
 	}
 	return false;
 }
 
-bool ProtocolGame::connect(uint32_t playerId)
+bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem, uint16_t version)
 {
 	eventConnect = 0;
 	Player* _player = g_game.getPlayerByID(playerId);
@@ -438,7 +439,11 @@ bool ProtocolGame::connect(uint32_t playerId)
 	player->useThing2();
 	player->isConnecting = false;
 	player->client = this;
+
 	player->client->sendAddCreature(player, false);
+	player->setOperatingSystem(operatingSystem);
+	player->setClientVersion(version);
+
 	player->sendIcons();
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
@@ -494,7 +499,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint16_t clientos = msg.GetU16();
+	OperatingSystem_t operatingSystem = (OperatingSystem_t)msg.GetU16();
 	uint16_t version = msg.GetU16();
 
 	if(!RSA_decrypt(g_otservRSA, msg))
@@ -511,7 +516,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	uint8_t isSetGM = msg.GetByte();
+	bool gamemaster = msg.GetByte();
 	uint32_t accnumber = msg.GetU32();
 	const std::string name = msg.GetString();
 	std::string password = msg.GetString();
@@ -565,7 +570,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	g_bans.addLoginAttempt(getIP(), true);
 
 	Dispatcher::getDispatcher().addTask(
-		createTask(boost::bind(&ProtocolGame::login, this, name, accnumber, password, clientos, isSetGM)));
+		createTask(boost::bind(&ProtocolGame::login, this, name, accnumber, password, operatingSystem, version, gamemaster)));
 }
 
 void ProtocolGame::disconnectClient(const char* message)

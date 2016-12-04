@@ -179,6 +179,9 @@ class Player : public Creature, public Cylinder
 		OperatingSystem_t getOperatingSystem() const {return operatingSystem;}
 		void setOperatingSystem(OperatingSystem_t clientos) {operatingSystem = clientos;}
 
+		uint32_t getClientVersion() const {return clientVersion;}
+		void setClientVersion(uint32_t version) {clientVersion = version;}
+
 		secureMode_t getSecureMode() const {return secureMode;}
 
 		uint64_t getSpentMana() const {return manaSpent;}
@@ -415,6 +418,10 @@ class Player : public Creature, public Cylinder
 		void addOutfit(uint32_t _looktype, uint32_t _addons);
 		bool remOutfit(uint32_t _looktype, uint32_t _addons);
 		bool canLogout();
+
+		//creature events
+		void onAdvanceEvent(skills_t skill, uint32_t oldLevel, uint32_t newLevel);
+		bool onLookEvent(Thing* target, uint32_t itemId);
 
 		//tile
 		//send methods
@@ -687,6 +694,7 @@ class Player : public Creature, public Cylinder
 		int32_t idleTime;
 		int32_t groupId;
 		OperatingSystem_t operatingSystem;
+		uint32_t clientVersion;
 
 		bool talkState[14], accountManager;
 		int32_t newVocation;

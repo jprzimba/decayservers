@@ -222,9 +222,9 @@ void Creature::onThink(uint32_t interval)
 	}
 
 	//scripting event - onThink
-	CreatureEvent* eventThink = getCreatureEvent(CREATURE_EVENT_THINK);
-	if(eventThink)
-		eventThink->executeOnThink(this, interval);
+	CreatureEventList eventThink = getCreatureEvents(CREATURE_EVENT_THINK);
+	for(CreatureEventList::iterator it = eventThink.begin(); it != eventThink.end(); ++it)
+		(*it)->executeOnThink(this, interval);
 }
 
 void Creature::onAttacking(uint32_t interval)
@@ -812,9 +812,9 @@ void Creature::dropCorpse()
 	}
 
 	//scripting event - onDeath
-	CreatureEvent* eventDeath = getCreatureEvent(CREATURE_EVENT_DEATH);
-	if(eventDeath)
-		eventDeath->executeOnDeath(this, corpse, _lastHitCreature);
+	CreatureEventList eventDeath = getCreatureEvents(CREATURE_EVENT_DEATH);
+	for(CreatureEventList::iterator it = eventDeath.begin(); it != eventDeath.end(); ++it)
+		(*it)->executeOnDeath(this, corpse, _lastHitCreature);
 
 	g_game.removeCreature(this, false);
 }
@@ -1158,9 +1158,9 @@ void Creature::onKilledCreature(Creature* target)
 		getMaster()->onKilledCreature(target);
 
 	//scripting event - onKill
-	CreatureEvent* eventKill = getCreatureEvent(CREATURE_EVENT_KILL);
-	if(eventKill)
-		eventKill->executeOnKill(this, target);
+	CreatureEventList eventKill = getCreatureEvents(CREATURE_EVENT_KILL);
+	for(CreatureEventList::iterator it = eventKill.begin(); it != eventKill.end(); ++it)
+		(*it)->executeOnKill(this, target);
 }
 
 void Creature::onGainExperience(uint64_t gainExp, Creature* target)
@@ -1425,42 +1425,31 @@ bool Creature::registerCreatureEvent(const std::string& name)
 		CreatureEventType_t type = event->getEventType();
 		if(!hasEventRegistered(type))
 		{
-			// not was added, so set the bit in the bitfield
+			// was not added, so set the bit in the bitfield
 			scriptEventsBitField = scriptEventsBitField | ((uint32_t)1 << type);
 		}
-		else
-		{
-			//had a previous event handler for this type
-			// and have to be removed
-			CreatureEventList::iterator it = findEvent(type);
-			eventsList.erase(it);
-		}
+
 		eventsList.push_back(event);
 		return true;
 	}
+
 	return false;
 }
 
-std::list<CreatureEvent*>::iterator Creature::findEvent(CreatureEventType_t type)
+CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 {
-	CreatureEventList::iterator it;
-	for(it = eventsList.begin(); it != eventsList.end(); ++it)
-	{
-		if((*it)->getEventType() == type)
-			return it;
-	}
-	return eventsList.end();
-}
-
-CreatureEvent* Creature::getCreatureEvent(CreatureEventType_t type)
-{
+	CreatureEventList typeList;
 	if(hasEventRegistered(type))
 	{
-		CreatureEventList::iterator it = findEvent(type);
-		if(it != eventsList.end())
-			return *it;
+		CreatureEventList::iterator it;
+		for(it = eventsList.begin(); it != eventsList.end(); ++it)
+		{
+			if((*it)->getEventType() == type)
+				typeList.push_back(*it);
+		}
 	}
-	return nullptr;
+
+	return typeList;
 }
 
 FrozenPathingConditionCall::FrozenPathingConditionCall(const Position& _targetPos)

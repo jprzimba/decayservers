@@ -620,6 +620,9 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 		ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << ".";
 		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 
+		//scripting event - onAdvance
+		onAdvanceEvent((skills_t)skill, (skills[skill][SKILL_LEVEL] - 1), skills[skill][SKILL_LEVEL]);
+
 		sendUpdateSkills = true;
 		currReqTries = nextReqTries;
 		nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1);
@@ -1748,59 +1751,66 @@ void Player::addManaSpent(uint64_t amount)
 	if(amount != 0 && !hasFlag(PlayerFlag_NotGainMana))
 	{
 		manaSpent += amount * g_config.getNumber(ConfigManager::RATE_MAGIC);
-		uint64_t reqMana = vocation->getReqMana(magLevel + 1);
-		if(manaSpent >= reqMana)
+
+		uint32_t origLevel = magLevel;
+
+		uint64_t reqMana = vocation->getReqMana(origLevel + 1);
+		if(reqMana == 0)
+			return;
+
+		while(manaSpent >= reqMana)
 		{
 			manaSpent -= reqMana;
 			magLevel++;
-			char MaglvMsg[35];
-			sprintf(MaglvMsg, "You advanced to magic level %d.", magLevel);
-			sendTextMessage(MSG_EVENT_ADVANCE, MaglvMsg);
-			sendStats();
+			reqMana = vocation->getReqMana(magLevel + 1);
 		}
 
-		magLevelPercent = Player::getPercentLevel(manaSpent, vocation->getReqMana(magLevel + 1));
+		if (magLevel != origLevel)
+		{
+			std::stringstream MaglvMsg;
+			MaglvMsg << "You advanced to magic level " << magLevel << ".";
+			sendTextMessage(MSG_EVENT_ADVANCE, MaglvMsg.str());
+
+			//scripting event - onAdvance
+			onAdvanceEvent(SKILL__MAGLEVEL, origLevel, magLevel);
+		}
+
+		magLevelPercent = Player::getPercentLevel(manaSpent, reqMana);
+		sendStats();
 	}
 }
 
 void Player::addExperience(Creature* source, uint64_t exp)
 {
-	uint64_t currLevelExp = Player::getExpForLevel(level);
-	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
-	uint64_t rawExp = exp;
-	if(currLevelExp >= nextLevelExp)
+	experience += exp;
+	uint32_t prevLevel = getLevel();
+	uint32_t newLevel = getLevel();
+
+	uint64_t currLevelExp = Player::getExpForLevel(newLevel);
+	uint64_t nextLevelExp = Player::getExpForLevel(newLevel + 1);
+	if(nextLevelExp < currLevelExp)
 	{
-		//player has reached max level
+		// Cannot gain more experience
+		// Perhaps some sort of notice should be printed here?
 		levelPercent = 0;
 		sendStats();
 		return;
 	}
 
-	if(exp == 0)
-		return;
-
-	experience += exp;
-	uint32_t prevLevel = level;
-	while (experience >= nextLevelExp)
+	while(experience >= nextLevelExp)
 	{
-		++level;
+		++newLevel;
 		healthMax += vocation->getHPGain();
 		health += vocation->getHPGain();
 		manaMax += vocation->getManaGain();
 		mana += vocation->getManaGain();
 		capacity += vocation->getCapGain();
-
-		currLevelExp = nextLevelExp;
-		nextLevelExp = Player::getExpForLevel(level + 1);
-		if(currLevelExp >= nextLevelExp)
-		{
-			//player has reached max level
-			break;
-		}
+		nextLevelExp = Player::getExpForLevel(newLevel + 1);
 	}
 
-	if(prevLevel != level)
+	if(prevLevel != newLevel)
 	{
+		level = newLevel;
 		health = healthMax;
 		mana = manaMax;
 
@@ -1811,16 +1821,21 @@ void Player::addExperience(Creature* source, uint64_t exp)
 		g_game.addCreatureHealth(this);
 
 		std::ostringstream ss;
-		ss << "You advanced from Level " << prevLevel << " to Level " << level << '.';
+		ss << "You advanced from Level " << prevLevel << " to Level " << newLevel << '.';
 		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
+
+		//scripting event - onAdvance
+		onAdvanceEvent(SKILL__LEVEL, prevLevel, newLevel);
 	}
 
+	currLevelExp = Player::getExpForLevel(level);
+	nextLevelExp = Player::getExpForLevel(level + 1);
 	if(nextLevelExp > currLevelExp)
 	{
-		uint32_t newPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+		uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
 		levelPercent = newPercent;
 	}
-	else 
+	else
 		levelPercent = 0;
 
 	sendStats();
@@ -4280,4 +4295,23 @@ void Player::clearPartyInvitations()
 		for(PartyList::iterator it = list.begin(); it != list.end(); ++it)
 			(*it)->removeInvite(this);
 	}
+}
+
+void Player::onAdvanceEvent(skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+{
+	CreatureEventList advanceEvents = getCreatureEvents(CREATURE_EVENT_ADVANCE);
+	for(CreatureEventList::iterator it = advanceEvents.begin(); it != advanceEvents.end(); ++it)
+		(*it)->executeOnAdvance(this, skill, oldLevel, newLevel);
+}
+
+bool Player::onLookEvent(Thing* target, uint32_t itemId)
+{
+	CreatureEventList lookEvents = getCreatureEvents(CREATURE_EVENT_LOOK);
+	for(CreatureEventList::iterator it = lookEvents.begin(); it != lookEvents.end(); ++it)
+	{
+		if(!(*it)->executeOnLook(this, target, itemId))
+			return false;
+	}
+
+	return true;
 }

@@ -174,6 +174,10 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_DEATH;
 	else if(tmpStr == "kill")
 		m_type = CREATURE_EVENT_KILL;
+	else if(tmpStr == "advance")
+		m_type = CREATURE_EVENT_ADVANCE;
+	else if(tmpStr == "look")
+		m_type = CREATURE_EVENT_LOOK;
 	else
 	{
 		std::clog << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
@@ -201,6 +205,10 @@ std::string CreatureEvent::getScriptEventName()
 			return "onDeath";
 		case CREATURE_EVENT_KILL:
 			return "onKill";
+		case CREATURE_EVENT_ADVANCE:
+			return "onAdvance";
+		case CREATURE_EVENT_LOOK:
+			return "onLook";
 		case CREATURE_EVENT_NONE:
 		default:
 			break;
@@ -399,6 +407,81 @@ uint32_t CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	else
 	{
 		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnKill" << std::endl;
+		return 0;
+	}
+}
+
+uint32_t CreatureEvent::executeOnAdvance(Player* player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+{
+	//onAdvance(cid, type, oldlevel, newlevel)
+	if(m_scriptInterface->reserveScriptEnv())
+	{
+		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+
+		env->setScriptId(m_scriptId, m_scriptInterface);
+		env->setRealPos(player->getPosition());
+
+		uint32_t cid = env->addThing(player);
+
+		lua_State* L = m_scriptInterface->getLuaState();
+
+		m_scriptInterface->pushFunction(m_scriptId);
+		lua_pushnumber(L, cid);
+		lua_pushnumber(L, (uint32_t)skill);
+		lua_pushnumber(L, oldLevel);
+		lua_pushnumber(L, newLevel);
+
+		bool result = m_scriptInterface->callFunction(4);
+		m_scriptInterface->releaseScriptEnv();
+		return result;
+	}
+	else
+	{
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnAdvance" << std::endl;
+		return 0;
+	}
+}
+
+uint32_t CreatureEvent::executeOnLook(Player* player, Thing* target, uint16_t itemId)
+{
+	//onLook(cid, thing, itemId)
+	if(m_scriptInterface->reserveScriptEnv())
+	{
+		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+
+		env->setScriptId(m_scriptId, m_scriptInterface);
+		env->setRealPos(player->getPosition());
+
+		lua_State* L = m_scriptInterface->getLuaState();
+		m_scriptInterface->pushFunction(m_scriptId);
+		uint32_t cid = env->addThing(player);
+		lua_pushnumber(L, cid);
+
+		uint32_t target_id = 0;
+		if(target)
+		{
+			if(target->getCreature())
+				target_id = env->addThing(target->getCreature());
+			else if(target->getItem())
+				target_id = env->addThing(target->getItem());
+			else
+				target = nullptr;
+		}
+
+		if(target)
+			LuaScriptInterface::pushThing(L, target, target_id);
+		else
+			lua_pushnil(L);
+
+		lua_pushnumber(L, itemId);
+
+		bool result = m_scriptInterface->callFunction(3);
+		m_scriptInterface->releaseScriptEnv();
+		return result;
+	}
+	else
+	{
+		std::clog << "[Error] Call stack overflow. CreatureEvent::executeOnLook" << std::endl;
 		return 0;
 	}
 }

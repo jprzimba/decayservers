@@ -56,6 +56,7 @@
 #include "ioguild.h"
 #include "quests.h"
 #include "globalevent.h"
+#include "creature.h"
 
 #ifdef __EXCEPTION_TRACER__
 #include "exception.h"
@@ -2875,13 +2876,18 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	int32_t lookDistance = std::max<int32_t>(std::abs(player->getPosition().x - tradeItem->getPosition().x),
 		std::abs(player->getPosition().y - tradeItem->getPosition().y));
 
-	char buffer[475];
 	if(index == 0)
 	{
-		sprintf(buffer, "You see %s", tradeItem->getDescription(lookDistance).c_str());
-		player->sendTextMessage(MSG_INFO_DESCR, buffer);
+		if(player->onLookEvent(tradeItem, tradeItem->getID()))
+		{
+			std::stringstream ss;
+			ss << "You see " << tradeItem->getDescription(lookDistance);
+			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		}
+
 		return false;
 	}
+
 
 	Container* tradeContainer = tradeItem->getContainer();
 	if(!tradeContainer || index > (int32_t)tradeContainer->getItemHoldingCount())
@@ -2913,8 +2919,12 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	if(foundItem)
 	{
-		sprintf(buffer, "You see %s", tradeItem->getDescription(lookDistance).c_str());
-		player->sendTextMessage(MSG_INFO_DESCR, buffer);
+		if(player->onLookEvent(tradeItem, tradeItem->getID()))
+		{
+			std::stringstream ss;
+			ss << "You see " << tradeItem->getDescription(lookDistance);
+			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		}
 	}
 	return foundItem;
 }
@@ -3004,32 +3014,61 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 
 	Position playerPos = player->getPosition();
 
-	int32_t lookDistance = 0;
-	if(thing == player)
-		lookDistance = -1;
-	else
+	int32_t lookDistance = -1;
+	if(thing != player)
 	{
 		lookDistance = std::max<int32_t>(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
 		if(playerPos.z != thingPos.z)
 			lookDistance = lookDistance + 9 + 6;
 	}
 
+	uint16_t itemId = 0;
+	if(thing->getItem())
+		itemId = thing->getItem()->getID();
+	if(!player->onLookEvent(thing, itemId))
+		return true;
+
 	std::stringstream ss;
-	ss << "You see " << thing->getDescription(lookDistance) << std::endl;
+	ss << "You see " << thing->getDescription(lookDistance);
 	if(player->hasFlag(PlayerFlag_HasExtraLookDescription))
 	{
-		Item* item = thing->getItem();
-		if(item)
+		if(Item* item = thing->getItem())
 		{
-			ss << "ItemID: [" << item->getID() << "].";
+			ss << std::endl << "ItemID: [" << item->getID() << "]";
 			if(item->getActionId() > 0)
-				ss << std::endl << "ActionID: [" << item->getActionId() << "].";
+				ss << ", ActionID: [" << item->getActionId() << "]";
+
 			if(item->getUniqueId() > 0)
-				ss << std::endl << "UniqueID: [" << item->getUniqueId() << "].";
-			ss << std::endl;
+				ss << ", UniqueID: [" << item->getUniqueId() << "]";
+
+			ss << ".";
+			const ItemType& it = Item::items[item->getID()];
+			if(it.transformEquipTo)
+				ss << std::endl << "TransformTo: [" << it.transformEquipTo << "] (onEquip).";
+			else if(it.transformDeEquipTo)
+				ss << std::endl << "TransformTo: [" << it.transformDeEquipTo << "] (onDeEquip).";
+			else if(it.decayTo != -1)
+				ss << std::endl << "DecayTo: [" << it.decayTo << "].";
 		}
-		ss << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.z << "].";
+
+		if(const Creature* creature = thing->getCreature())
+		{
+			ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << "]";
+			if(creature->getMaxMana() > 0)
+				ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << "]";
+
+			ss << ".";
+			if(const Player* destPlayer = creature->getPlayer())
+			{
+				ss << std::endl << "IP: " << convertIPToString(destPlayer->getIP()) << ", Client: " << destPlayer->getClientVersion() << ".";
+				if(destPlayer->isInGhostMode())
+					ss << std::endl << "* Ghost mode *";
+			}
+		}
+
+		ss << std::endl << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.z << "].";
 	}
+
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	return true;
 }
@@ -3844,9 +3883,9 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				if(damage >= targetPlayer->getHealth())
 				{
 					//scripting event - onPrepareDeath
-					CreatureEvent* eventPrepareDeath = targetPlayer->getCreatureEvent(CREATURE_EVENT_PREPAREDEATH);
-					if(eventPrepareDeath)
-						eventPrepareDeath->executeOnPrepareDeath(targetPlayer, attacker);
+					CreatureEventList eventPrepareDeath = targetPlayer->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
+					for(CreatureEventList::iterator it = eventPrepareDeath.begin(); it != eventPrepareDeath.end(); ++it)
+						(*it)->executeOnPrepareDeath(targetPlayer, attacker);
 				}
 			}
 
