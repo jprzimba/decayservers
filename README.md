@@ -1,6 +1,6 @@
 # OTServ
 OTServ is a free MMORPG emulation, that creates a own gameworld server,
-based on the CIPSoft's Tibia.
+based on the CIPSoft's Tibia of old client protocols.
 
 # How does it work?
 This OTServ charges are based on The Forgotten Server and OpenTibia SVN.
@@ -9,4 +9,7 @@ NEVER ever enter your real acc# and/or password when not connecting to the CIP s
 Then you are logged in.
 
 # Developers
-Tryller and frcento.
+Tryller.
+
+# Contributors
+frcento
