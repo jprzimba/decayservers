@@ -34,9 +34,6 @@
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element deathPercent="-10"/>
-	</elements>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>

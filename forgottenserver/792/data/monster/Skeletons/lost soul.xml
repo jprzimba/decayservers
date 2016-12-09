@@ -37,15 +37,13 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element icePercent="50"/>
 		<element energyPercent="30"/>
-		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<voices interval="5000" chance="30">
 		<voice sentence="Forgive Meeeee!"/>

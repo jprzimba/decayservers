@@ -50,7 +50,6 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element icePercent="30"/>
 		<element firePercent="-6"/>
 		<element energyPercent="-10"/>
 	</elements>
