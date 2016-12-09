@@ -159,13 +159,6 @@
 	<monster name="Elf Scout" file="Elves/elf scout.xml"/>
 	<monster name="Elf" file="Elves/elf.xml"/>
 
-	<!-- Energy-Elementals -->
-	<monster name="Charged Energy Elemental" file="Energy-Elementals/charged energy elemental.xml"/>
-	<monster name="Energy Elemental" file="Energy-Elementals/energy elemental.xml"/>
-	<monster name="Energy Overlord" file="Energy-Elementals/energy overlord.xml"/>
-	<monster name="Massive Energy Elemental" file="Energy-Elementals/massive energy elemental.xml"/>
-	<monster name="Overcharged Energy Elemental" file="Energy-Elementals/overcharged energy elemental.xml"/>
-
 	<!-- Felines -->
 	<monster name="Cat" file="Felines/cat.xml"/>
 	<monster name="Lion" file="Felines/lion.xml"/>

@@ -23,7 +23,6 @@
 	<defenses armor="40" defense="57"/>
 	<elements>
 		<element earthPercent="20"/>
-		<element icePercent="20"/>
 		<element physicalPercent="17"/>
 		<element firePercent="-10"/>
 	</elements>

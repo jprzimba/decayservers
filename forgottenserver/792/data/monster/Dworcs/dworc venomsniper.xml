@@ -26,10 +26,7 @@
 	<defenses armor="3" defense="15"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element holyPercent="18"/>
 		<element firePercent="-15"/>
-		<element deathPercent="-9"/>
-		<element icePercent="-6"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="grak brrretz!"/>

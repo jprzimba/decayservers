@@ -50,10 +50,7 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element holyPercent="20"/>
 		<element firePercent="-15"/>
-		<element deathPercent="-10"/>
-		<element icePercent="-8"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="grak brrretz!"/>

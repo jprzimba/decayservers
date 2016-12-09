@@ -25,7 +25,6 @@
 		<element earthPercent="90"/>
 		<element physicalPercent="20"/>
 		<element firePercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

@@ -26,9 +26,7 @@
 	<defenses armor="3" defense="8"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element deathPercent="-15"/>
 		<element firePercent="-10"/>
-		<element icePercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grak brrretz!"/>

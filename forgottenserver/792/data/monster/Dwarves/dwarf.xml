@@ -24,7 +24,6 @@
 	<elements>
 		<element earthPercent="70"/>
 		<element firePercent="-5"/>
-		<element deathPercent="-3"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Hail Durin!"/>
