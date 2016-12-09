@@ -173,24 +173,14 @@
 	<monster name="Toad" file="Frogs/toad.xml"/>
 
 	<!-- Geo-Elementals -->
-	<monster name="Damaged Worker Golem" file="Geo-Elementals/damaged worker golem.xml"/>
-	<monster name="Earth Elemental" file="Geo-Elementals/earth elemental.xml"/>
-	<monster name="Earth Overlord" file="Geo-Elementals/earth overlord.xml"/>
 	<monster name="Gargoyle" file="Geo-Elementals/gargoyle.xml"/>
-	<monster name="Jagged Earth Elemental" file="Geo-Elementals/jagged earth elemental.xml"/>
-	<monster name="Massive Earth Elemental" file="Geo-Elementals/massive earth elemental.xml"/>
-	<monster name="Medusa" file="Geo-Elementals/medusa.xml"/>
-	<monster name="Muddy Earth Elemental" file="Geo-Elementals/muddy earth elemental.xml"/>
 	<monster name="Stone Golem" file="Geo-Elementals/stone golem.xml"/>
-	<monster name="War Golem" file="Geo-Elementals/war golem.xml"/>
-	<monster name="Worker Golem" file="Geo-Elementals/worker golem.xml"/>
 
 	<!-- Ghosts -->
 	<monster name="Ghost" file="Ghosts/ghost.xml"/>
 	<monster name="Phantasm Summon" file="Ghosts/phantasm summon.xml"/>
 	<monster name="Phantasm" file="Ghosts/phantasm.xml"/>
 	<monster name="Spectre" file="Ghosts/spectre.xml"/>
-	<monster name="Wisp" file="Ghosts/wisp.xml"/>
 
 	<!-- Giants -->
 	<monster name="Behemoth" file="Giants/behemoth.xml"/>
