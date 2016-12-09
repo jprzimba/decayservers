@@ -29,8 +29,6 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="50"/>
-		<element deathPercent="50"/>
 		<element physicalPercent="-15"/>
 	</elements>
 	<immunities>

@@ -26,9 +26,7 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="10"/>
 		<element physicalPercent="15"/>
-		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="4000" chance="10">
 		<voice sentence="You are no match for me!"/>

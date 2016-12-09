@@ -35,9 +35,7 @@
 	</defenses>
 	<elements>
 		<element energyPercent="50"/>
-		<element holyPercent="25"/>
 		<element earthPercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

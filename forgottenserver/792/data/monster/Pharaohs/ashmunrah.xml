@@ -48,13 +48,12 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element deathPercent="100"/>
-		<element holyPercent="-17"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<summons maxSummons="4">
 		<summon name="Ancient Scarab" interval="1000" chance="2000" max="2"/>

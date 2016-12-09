@@ -25,7 +25,6 @@
 	</attacks>
 	<defenses armor="8" defense="10"/>
 	<elements>
-		<element holyPercent="20"/>
 		<element physicalPercent="-20"/>
 	</elements>
 	<voices interval="5000" chance="10">

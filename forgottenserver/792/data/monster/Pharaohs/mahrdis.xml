@@ -45,13 +45,11 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element energyPercent="45"/>
-		<element holyPercent="-22"/>
-		<element icePercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<summons maxSummons="4">
 		<summon name="Fire Elemental" interval="2000" chance="3000"/>

@@ -26,9 +26,7 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="10"/>
 		<element physicalPercent="-12"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="An enemy!"/>

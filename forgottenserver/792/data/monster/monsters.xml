@@ -231,19 +231,11 @@
 	<monster name="Hyaena" file="Misc/hyaena.xml"/>
 	<monster name="Pig" file="Misc/pig.xml"/>
 	<monster name="Rabbit" file="Misc/rabbit.xml"/>
-	<monster name="Silver Rabbit" file="Misc/silver rabbit.xml"/>
 	<monster name="Skunk" file="Misc/skunk.xml"/>
-	<monster name="Squirrel" file="Misc/squirrel.xml"/>
 
 	<!-- Monks -->
 	<monster name="Dark Monk" file="Monks/dark monk.xml"/>
 	<monster name="Monk" file="Monks/monk.xml"/>
-
-	<!-- Mutated -->
-	<monster name="Mutated Bat" file="Mutated/mutated bat.xml"/>
-	<monster name="Mutated Human" file="Mutated/mutated human.xml"/>
-	<monster name="Mutated Rat" file="Mutated/mutated rat.xml"/>
-	<monster name="Mutated Tiger" file="Mutated/mutated tiger.xml"/>
 
 	<!-- Necromancers -->
 	<monster name="Necromancer" file="Necromancers/necromancer.xml"/>
@@ -265,7 +257,6 @@
 	<monster name="Bandit" file="Outlaws/bandit.xml"/>
 	<monster name="Black Knight" file="Outlaws/black knight.xml"/>
 	<monster name="Crazed Beggar" file="Outlaws/crazed beggar.xml"/>
-	<monster name="Gang Member" file="Outlaws/gang member.xml"/>
 	<monster name="Gladiator" file="Outlaws/gladiator.xml"/>
 	<monster name="Hero" file="Outlaws/hero.xml"/>
 	<monster name="Hunter" file="Outlaws/hunter.xml"/>

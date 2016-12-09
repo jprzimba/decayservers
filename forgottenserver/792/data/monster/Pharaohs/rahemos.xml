@@ -48,16 +48,13 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
-		<element earthPercent="100"/>
-		<element deathPercent="100"/>
 		<element firePercent="94"/>
 		<element energyPercent="92"/>
-		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<summons maxSummons="1">
 		<summon name="Demon" interval="1000" chance="12" max="1"/>

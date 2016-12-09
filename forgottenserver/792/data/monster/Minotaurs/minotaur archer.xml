@@ -26,9 +26,6 @@
 	<defenses armor="7" defense="8"/>
 	<elements>
 		<element firePercent="20"/>
-		<element holyPercent="10"/>
-		<element icePercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Ruan Wihmpy!"/>
