@@ -54,7 +54,6 @@
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
-		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="3">
