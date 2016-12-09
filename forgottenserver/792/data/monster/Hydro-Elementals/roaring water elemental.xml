@@ -32,7 +32,6 @@
 	</defenses>
 	<elements>
 		<element physicalPercent="50"/>
-		<element holyPercent="30"/>
 	</elements>
 	<immunities>
 		<immunity fire="1"/>

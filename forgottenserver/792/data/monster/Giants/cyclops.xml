@@ -23,9 +23,7 @@
 	<defenses armor="15" defense="20"/>
 	<elements>
 		<element energyPercent="25"/>
-		<element holyPercent="20"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Il lorstok human!"/>

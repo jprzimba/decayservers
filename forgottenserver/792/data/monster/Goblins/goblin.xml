@@ -26,9 +26,7 @@
 	<defenses armor="6" defense="8"/>
 	<elements>
 		<element energyPercent="20"/>
-		<element holyPercent="20"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Me have him!"/>

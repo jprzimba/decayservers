@@ -185,24 +185,17 @@
 	<!-- Giants -->
 	<monster name="Behemoth" file="Giants/behemoth.xml"/>
 	<monster name="Cyclops" file="Giants/cyclops.xml"/>
-	<monster name="Cyclops Drone" file="Giants/cyclops drone.xml"/>
-	<monster name="Cyclops Smith" file="Giants/cyclops smith.xml"/>
-	<monster name="Frost Giant" file="Giants/frost giant.xml"/>
-	<monster name="Frost Giantess" file="Giants/frost giantess.xml"/>
 	<monster name="Yeti" file="Giants/yeti.xml"/>
 
 	<!-- Goblins -->
 	<monster name="Goblin" file="Goblins/goblin.xml"/>
-	<monster name="Goblin Assassin" file="Goblins/goblin assassin.xml"/>
 	<monster name="Goblin Leader" file="Goblins/goblin leader.xml"/>
-	<monster name="Goblin Scavenger" file="Goblins/goblin scavenger.xml"/>
 	<monster name="Grynch Clan Goblin" file="Goblins/grynch clan goblin.xml"/>
 
 	<!-- Hydro-Elementals -->
 	<monster name="Ice Overlord" file="Hydro-Elementals/ice overlord.xml"/>
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive water elemental.xml"/>
 	<monster name="Roaring Water Elemental" file="Hydro-Elementals/roaring water elemental.xml"/>
-	<monster name="Slick Water Elemental" file="Hydro-Elementals/slick water elemental.xml"/>
 	<monster name="Water Elemental" file="Hydro-Elementals/water elemental.xml"/>
 
 	<!-- Insects -->
@@ -210,7 +203,6 @@
 	<monster name="Blue Butterfly" file="Insects/blue butterfly.xml"/>
 	<monster name="Bug" file="Insects/bug.xml"/>
 	<monster name="Centipede" file="Insects/centipede.xml"/>
-	<monster name="Cockroach" file="Insects/cockroach.xml"/>
 	<monster name="Larva" file="Insects/larva.xml"/>
 	<monster name="Purple Butterfly" file="Insects/purple butterfly.xml"/>
 	<monster name="Red Butterfly" file="Insects/red butterfly.xml"/>

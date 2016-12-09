@@ -36,7 +36,6 @@
 	<elements>
 		<element physicalPercent="25"/>
 		<element energyPercent="-15"/>
-		<element holyPercent="25"/>
 	</elements>
 	<immunities>
 		<immunity physical="0"/>
