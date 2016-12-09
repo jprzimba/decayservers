@@ -21,10 +21,9 @@
 		<attack name="melee" interval="2000" skill="40" attack="20"/>
 	</attacks>
 	<defenses armor="18" defense="19"/>
-	<elements>
-		<element deathPercent="100"/>
-		<element holyPercent="-20"/>
-	</elements>
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
 	<loot>
 		<item id="2148" countmax="35" chance="23000"/><!-- gold coin -->
 		<item id="2231" chance="11500"/><!-- big bone -->

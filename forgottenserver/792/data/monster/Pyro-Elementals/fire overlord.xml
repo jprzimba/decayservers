@@ -33,8 +33,6 @@
 	<elements>
 		<element physicalPercent="15"/>
 		<element energyPercent="25"/>
-		<element icePercent="-15"/>
-		<element deathPercent="20"/>
 	</elements>
 	<immunities>
 		<immunity physical="0"/>

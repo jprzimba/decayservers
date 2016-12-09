@@ -31,9 +31,6 @@
 	<immunities>
 		<immunity fire="1"/>
 	</immunities>
-	<elements>
-		<element icePercent="-25"/>
-	</elements>
 	<loot>
 		<item id="2148" countmax="65" chance="12500"/><!-- gold coin -->
 		<item id="2148" countmax="60" chance="12500"/><!-- gold coin -->

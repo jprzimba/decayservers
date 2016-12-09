@@ -26,11 +26,8 @@
 	<defenses armor="25" defense="23"/>
 	<elements>
 		<element earthPercent="25"/>
-		<element holyPercent="20"/>
-		<element deathPercent="-7"/>
 		<element firePercent="-10"/>
 		<element energyPercent="-10"/>
-		<element icePercent="-10"/>
 		<element physicalPercent="-11"/>
 	</elements>
 	<immunities>

@@ -34,8 +34,6 @@
 		<element firePercent="100"/>
 		<element energyPercent="40"/>
 		<element physicalPercent="24"/>
-		<element deathPercent="22"/>
-		<element icePercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>

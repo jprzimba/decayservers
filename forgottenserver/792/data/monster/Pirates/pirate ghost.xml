@@ -33,9 +33,7 @@
 	</defenses>
 	<elements>
 		<element physicalPercent="100"/>
-		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element holyPercent="-50"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>

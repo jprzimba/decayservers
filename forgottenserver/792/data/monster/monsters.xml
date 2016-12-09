@@ -313,11 +313,6 @@
 	<monster name="Crocodile" file="Reptiles/crocodile.xml"/>
 	<monster name="Hydra" file="Reptiles/hydra.xml"/>
 
-	<!-- Rifts -->
-	<monster name="Rift Worm" file="Rifts/rift worm.xml"/>
-	<monster name="Rift Scythe" file="Rifts/rift scythe.xml"/>
-	<monster name="Rift Brood" file="Rifts/rift brood.xml"/>
-
 	<!-- Serpents -->
 	<monster name="Cobra" file="Serpents/cobra.xml"/>
 	<monster name="Sea Serpent" file="Serpents/sea serpent.xml"/>

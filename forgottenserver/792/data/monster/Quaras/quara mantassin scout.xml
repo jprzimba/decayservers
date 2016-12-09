@@ -26,7 +26,6 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity ice="1"/>
 		<immunity fire="1"/>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
