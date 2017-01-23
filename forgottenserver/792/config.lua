@@ -21,6 +21,7 @@
 	allowClones = false
 	serverName = "Forgotten"
 	loginMessage = "Welcome to the Forgotten Server!"
+	replaceKickOnLogin = true
 
 	-- Account Manager
 	accountManager = true

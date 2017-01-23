@@ -48,9 +48,6 @@
 	<monster name="Terror Bird" file="Birds/terror bird.xml"/>
 
 	<!-- Bosses -->
-	<monster name="Annihilon" file="Bosses/annihilon.xml"/>
-	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml"/>
-	<monster name="Bones" file="Bosses/bones.xml"/>
 	<monster name="Brutus Bloodbeard" file="Bosses/brutus bloodbeard.xml"/>
 	<monster name="Countess Sorrow" file="Bosses/countess sorrow.xml"/>
 	<monster name="Deadeye Devious" file="Bosses/deadeye devious.xml"/>
@@ -68,7 +65,6 @@
 	<monster name="Grorlam" file="Bosses/grorlam.xml"/>
 	<monster name="Hairman The Huge" file="Bosses/hairman the huge.xml"/>
 	<monster name="Hellgorak" file="Bosses/hellgorak.xml"/>
-	<monster name="Koshei The Deathless" file="Bosses/koshei the deathless.xml"/>
 	<monster name="Latrivan" file="Bosses/latrivan.xml"/>
 	<monster name="Lethal Lissy" file="Bosses/lethal lissy.xml"/>
 	<monster name="Mad Technomancer" file="Bosses/mad technomancer.xml"/>
@@ -315,10 +311,8 @@
 
 	<!-- Serpents -->
 	<monster name="Cobra" file="Serpents/cobra.xml"/>
-	<monster name="Sea Serpent" file="Serpents/sea serpent.xml"/>
 	<monster name="Serpent Spawn" file="Serpents/serpent spawn.xml"/>
 	<monster name="Snake" file="Serpents/snake.xml"/>
-	<monster name="Young Sea Serpent" file="Serpents/young sea serpent.xml"/>
 
 	<!-- Sheeps -->
 	<monster name="Black Sheep" file="Sheeps/black sheep.xml"/>
@@ -336,8 +330,6 @@
 	<monster name="Dread Beast" file="Skeletons/dreadbeast.xml"/>
 	<monster name="Lost Soul" file="Skeletons/lost soul.xml"/>
 	<monster name="Skeleton" file="Skeletons/skeleton.xml"/>
-	<monster name="Skeleton Warrior" file="Skeletons/skeleton warrior.xml"/>
-	<monster name="Undead Gladiator" file="Skeletons/undead gladiator.xml"/>
 
 	<!-- Sorcerers -->
 	<monster name="Dark Apprentice" file="Sorcerers/dark apprentice.xml"/>
@@ -356,7 +348,6 @@
 	<monster name="Deathslicer" file="Traps/deathslicer.xml"/>
 	<monster name="Eye of the Seven" file="Traps/eye of the seven.xml"/>
 	<monster name="Flamethrower" file="Traps/flamethrower.xml"/>
-	<monster name="Lavahole" file="Traps/lavahole.xml"/>
 	<monster name="Magicthrower" file="Traps/magicthrower.xml"/>
 	<monster name="Plaguethrower" file="Traps/plaguethrower.xml"/>
 	<monster name="Shredderthrower" file="Traps/shredderthrower.xml"/>

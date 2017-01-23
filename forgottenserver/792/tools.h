@@ -85,15 +85,11 @@ Position getNextPosition(Direction direction, Position pos);
 char upchar(char c);
 
 std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end);
-
-void formatDate(time_t time, char* buffer);
-std::string formatDateString(time_t _time = 0);
-void formatDate2(time_t time, char* buffer);
-void formatIP(uint32_t ip, char* buffer);
-std::string formatTime(int32_t hours, int32_t minutes);
-std::string formatTimeEx(time_t _time = 0, bool miliseconds = false);
-
 std::string trimString(std::string& str);
+
+std::string formatDate(time_t _time = 0);
+std::string formatDateEx(time_t _time = 0, std::string format = "%d %b %Y, %H:%M:%S");
+std::string formatTime(time_t _time = 0, bool miliseconds = false);
 
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);
@@ -109,8 +105,7 @@ std::string getAction(int32_t actionId, bool IPBanishment);
 bool fileExists(const char* filename);
 bool booleanString(std::string);
 
-std::string convertIPToString(uint32_t ip);
-std::string formatDateShort(time_t time);
+std::string convertIPAddress(uint32_t ip);
 
 CombatType_t getCombatType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);

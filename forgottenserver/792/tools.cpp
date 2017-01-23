@@ -477,11 +477,6 @@ std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end)
 	}
 }
 
-void formatIP(uint32_t ip, char* buffer/* atleast 17 */)
-{
-	sprintf(buffer, "%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
-}
-
 void formatDate(time_t time, char* buffer/* atleast 21 */)
 {
 	const tm* tms = localtime(&time);
@@ -597,55 +592,6 @@ Position getNextPosition(Direction direction, Position pos)
 	return pos;
 }
 
-std::string formatTime(int32_t hours, int32_t minutes)
-{
-	std::stringstream time("");
-	if(hours)
-		time << hours << " " << (hours > 1 ? "hours" : "hour") << (minutes ? " and " : "");
-
-	if(minutes)
-		time << minutes << " " << (minutes > 1 ? "minutes" : "minute");
-
-	return time.str();
-}
-
-std::string formatTimeEx(time_t _time/* = 0*/, bool ms/* = false*/)
-{
-	if(!_time)
-		_time = time(NULL);
-	else if(ms)
-		ms = false;
-
-	const tm* tms = localtime(&_time);
-	std::stringstream s;
-	if(tms)
-	{
-		s << tms->tm_hour << ":" << tms->tm_min << ":";
-		if(tms->tm_sec < 10)
-			s << "0";
-
-		s << tms->tm_sec;
-		if(ms)
-		{
-			timeb t;
-			ftime(&t);
-
-			s << "."; // make it format zzz
-			if(t.millitm < 10)
-				s << "0";
-
-			if(t.millitm < 100)
-				s << "0";
-
-			s << t.millitm;
-		}
-	}
-	else
-		s << "UNIX Time: " << (int32_t)_time;
-
-	return s.str();
-}
-
 struct AmmoTypeNames
 {
 	const char* name;
@@ -739,11 +685,13 @@ CombatTypeNames combatTypeNames[] =
 	{"physical",		COMBAT_PHYSICALDAMAGE},
 	{"energy",		COMBAT_ENERGYDAMAGE},
 	{"poison",		COMBAT_POISONDAMAGE},
+	{"earth",		COMBAT_POISONDAMAGE},
 	{"fire",		COMBAT_FIREDAMAGE},
 	{"undefined",		COMBAT_UNDEFINEDDAMAGE},
 	{"lifedrain",		COMBAT_LIFEDRAIN},
 	{"manadrain",		COMBAT_MANADRAIN},
 	{"healing",		COMBAT_HEALING},
+	{"heal",		COMBAT_HEALING},
 	{"drown",		COMBAT_DROWNDAMAGE},
 };
 
@@ -919,15 +867,67 @@ std::string getAction(int32_t actionId, bool IPBanishment)
 	return action;
 }
 
-std::string formatDateString(time_t _time/* = 0*/)
+std::string formatDate(time_t _time/* = 0*/)
 {
 	if(!_time)
-		_time = time(nullptr);
+		_time = time(NULL);
 
 	const tm* tms = localtime(&_time);
 	std::stringstream s;
 	if(tms)
 		s << tms->tm_mday << "/" << (tms->tm_mon + 1) << "/" << (tms->tm_year + 1900) << " " << tms->tm_hour << ":" << tms->tm_min << ":" << tms->tm_sec;
+	else
+		s << "UNIX Time: " << (int32_t)_time;
+
+	return s.str();
+}
+
+std::string formatDateEx(time_t _time/* = 0*/, std::string format/* = "%d %b %Y, %H:%M:%S"*/)
+{
+	if(!_time)
+		_time = time(NULL);
+
+	const tm* tms = localtime(&_time);
+	char buffer[100];
+	if(tms)
+		strftime(buffer, 25, format.c_str(), tms);
+	else
+		sprintf(buffer, "UNIX Time: %d", (int32_t)_time);
+
+	return buffer;
+}
+
+std::string formatTime(time_t _time/* = 0*/, bool ms/* = false*/)
+{
+	if(!_time)
+		_time = time(NULL);
+	else if(ms)
+		ms = false;
+
+	const tm* tms = localtime(&_time);
+	std::stringstream s;
+	if(tms)
+	{
+		s << tms->tm_hour << ":" << tms->tm_min << ":";
+		if(tms->tm_sec < 10)
+			s << "0";
+
+		s << tms->tm_sec;
+		if(ms)
+		{
+			timeb t;
+			ftime(&t);
+
+			s << "."; // make it format zzz
+			if(t.millitm < 10)
+				s << "0";
+
+			if(t.millitm < 100)
+				s << "0";
+
+			s << t.millitm;
+		}
+	}
 	else
 		s << "UNIX Time: " << (int32_t)_time;
 
@@ -944,39 +944,17 @@ bool fileExists(const char* filename)
 	return exists;
 }
 
+
 bool booleanString(std::string str)
 {
 	toLowerCaseString(str);
 	return (str == "yes" || str == "true" || str == "y" || atoi(str.c_str()) > 0);
 }
 
-std::string convertIPToString(uint32_t ip)
+std::string convertIPAddress(uint32_t ip)
 {
 	char buffer[17];
-	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
-	if(res < 0)
-		return "";
-
-	return buffer;
-}
-
-std::string formatDateShort(time_t time)
-{
-	char buffer[24];
-	const tm* tms = localtime(&time);
-	int res;
-	if(tms)
-	{
-		res = strftime(buffer, 12, "%d %b %Y", tms);
-		if(res == 0)
-			return "";
-	}
-	else
-	{
-		res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
-		if(res < 0)
-			return "";
-	}
+	sprintf(buffer, "%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
 	return buffer;
 }
 

@@ -228,7 +228,7 @@ ProtocolGame::ProtocolGame(Connection* connection) :
 	m_rejectCount = 0;
 	m_debugAssertSent = false;
 	m_acceptPackets = false;
-	eventConnect = 0;
+	m_eventConnect = 0;
 }
 
 ProtocolGame::~ProtocolGame()
@@ -243,13 +243,6 @@ void ProtocolGame::setPlayer(Player* p)
 
 void ProtocolGame::deleteProtocolTask()
 {
-	//dispatcher thread
-	if(eventConnect != 0)
-	{
-		Scheduler::getScheduler().stopEvent(eventConnect);
-		eventConnect = 0;
-	}
-
 	if(player)
 	{
 		player->client = nullptr;
@@ -257,6 +250,7 @@ void ProtocolGame::deleteProtocolTask()
 		g_game.FreeThing(player);
 		player = nullptr;
 	}
+
 	Protocol::deleteProtocolTask();
 }
 
@@ -330,7 +324,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 						IOLoginData::getInstance()->getNameByGuid(bannedBy, bannedByName);
 
 					std::ostringstream ss;
-					ss << "Your account has been " << (deletion ? "deleted" : "banished") << " by:\n" << bannedByName << ", for the following reason:\n" << getReason(reason) << ".\nThe action taken was:\n" << getAction(action, false) << ".\nThe comment given was:\n" << comment << "\nYour " << (deletion ? "account was deleted on" : "banishment will be lifted at") << ":\n" << formatDateShort(banTime) << ".";
+					ss << "Your account has been " << (deletion ? "deleted" : "banished") << " by:\n" << bannedByName << ", for the following reason:\n" << getReason(reason) << ".\nThe action taken was:\n" << getAction(action, false) << ".\nThe comment given was:\n" << comment << "\nYour " << (deletion ? "account was deleted on" : "banishment will be lifted at") << ":\n" << formatDateEx(banTime) << ".";
 					disconnectClient(ss.str().c_str());
 					return false;
 				}
@@ -404,9 +398,9 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 	}
 	else
 	{
-		if(eventConnect != 0)
+		if(m_eventConnect || !g_config.getBool(ConfigManager::REPLACE_KICK_ON_LOGIN))
 		{
-			//Already trying to connect
+			// task has already been scheduled just bail out (should not be overriden)
 			disconnectClient("Your already logged in.");
 			return false;
 		}
@@ -415,7 +409,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 		{
 			_player->disconnect();
 			_player->isConnecting = true;
-			eventConnect = Scheduler::getScheduler().addEvent(createSchedulerTask(
+			m_eventConnect = Scheduler::getScheduler().addEvent(createSchedulerTask(
 				1000, boost::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem, version)));
 
 			return true;
@@ -427,7 +421,8 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, const std:
 
 bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem, uint16_t version)
 {
-	eventConnect = 0;
+	m_eventConnect = 0;
+
 	Player* _player = g_game.getPlayerByID(playerId);
 	if(!_player || _player->isRemoved() || _player->isOnline())
 	{
@@ -638,15 +633,15 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 	{
 		switch(recvbyte)
 		{
-			case 0x14: // logout
+			case 0x14:
 				parseLogout(msg);
 				break;
 	
-			case 0x1E: // keep alive / ping response
+			case 0x1E:
 				parseReceivePing(msg);
 				break;
 	
-			case 0x64: // move with steps
+			case 0x64:
 				parseAutoWalk(msg);
 				break;
 	
@@ -657,7 +652,7 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseMove(msg, (Direction)(recvbyte - 0x65));
 				break;
 	
-			case 0x69: // stop-autowalk
+			case 0x69:
 				addGameTask(&Game::playerStopAutoWalk, player->getID());
 				break;
 	
@@ -684,47 +679,47 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseTurn(msg, (Direction)(recvbyte - 0x6F));
 				break;
 	
-			case 0x78: // throw item
+			case 0x78:
 				parseThrow(msg);
 				break;
 
-			case 0x7D: // Request trade
+			case 0x7D:
 				parseRequestTrade(msg);
 				break;
 	
-			case 0x7E: // Look at an item in trade
+			case 0x7E:
 				parseLookInTrade(msg);
 				break;
 	
-			case 0x7F: // Accept trade
+			case 0x7F:
 				parseAcceptTrade(msg);
 				break;
 	
-			case 0x80: // close/cancel trade
+			case 0x80:
 				parseCloseTrade();
 				break;
 	
-			case 0x82: // use item
+			case 0x82:
 				parseUseItem(msg);
 				break;
 	
-			case 0x83: // use item
+			case 0x83:
 				parseUseItemEx(msg);
 				break;
 	
-			case 0x84: // battle window
+			case 0x84:
 				parseBattleWindow(msg);
 				break;
 	
-			case 0x85: //rotate item
+			case 0x85:
 				parseRotateItem(msg);
 				break;
 	
-			case 0x87: // close container
+			case 0x87:
 				parseCloseContainer(msg);
 				break;
 	
-			case 0x88: //"up-arrow" - container
+			case 0x88:
 				parseUpArrowContainer(msg);
 				break;
 	
@@ -736,71 +731,71 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseHouseWindow(msg);
 				break;
 	
-			case 0x8C: // throw item
+			case 0x8C:
 				parseLookAt(msg);
 				break;
 	
-			case 0x96: // say something
+			case 0x96:
 				parseSay(msg);
 				break;
 	
-			case 0x97: // request channels
+			case 0x97:
 				parseGetChannels(msg);
 				break;
 	
-			case 0x98: // open channel
+			case 0x98:
 				parseOpenChannel(msg);
 				break;
 	
-			case 0x99: // close channel
+			case 0x99:
 				parseCloseChannel(msg);
 				break;
 	
-			case 0x9A: // open priv
+			case 0x9A:
 				parseOpenPriv(msg);
 				break;
 
-			case 0x9B: //process report
+			case 0x9B:
 				parseProcessRuleViolation(msg);
 				break;
 	
-			case 0x9C: //gm closes report
+			case 0x9C:
 				parseCloseRuleViolation(msg);
 				break;
 	
-			case 0x9D: //player cancels report
+			case 0x9D:
 				parseCancelRuleViolation(msg);
 				break;
 
-			case 0xA0: // set attack and follow mode
+			case 0xA0:
 				parseFightModes(msg);
 				break;
 	
-			case 0xA1: // attack
+			case 0xA1:
 				parseAttack(msg);
 				break;
 	
-			case 0xA2: //follow
+			case 0xA2:
 				parseFollow(msg);
 				break;
 
-			case 0xA3: // invite party
+			case 0xA3:
 				parseInviteToParty(msg);
 				break;
 			
-			case 0xA4: // join party
+			case 0xA4:
 				parseJoinParty(msg);
 				break;
 
-			case 0xA5: // revoke party
+			case 0xA5:
 				parseRevokePartyInvite(msg);
 				break;
 			
-			case 0xA6: // pass leadership
+			case 0xA6:
 				parsePassPartyLeadership(msg);
 				break;
 			
-			case 0xA7: // leave party
+			case 0xA7:
 				parseLeaveParty(msg);
 				break;
 
@@ -816,23 +811,23 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseChannelExclude(msg);
 				break;
 	
-			case 0xBE: // cancel move
+			case 0xBE:
 				parseCancelMove(msg);
 				break;
 	
-			case 0xC9: //client request to resend the tile
+			case 0xC9:
 				parseUpdateTile(msg);
 				break;
 	
-			case 0xCA: //client request to resend the container (happens when you store more than container maxsize)
+			case 0xCA:
 				parseUpdateContainer(msg);
 				break;
 	
-			case 0xD2: // request outfit
+			case 0xD2:
 				parseRequestOutfit(msg);
 				break;
 	
-			case 0xD3: // set outfit
+			case 0xD3:
 				parseSetOutfit(msg);
 				break;
 	
@@ -937,10 +932,6 @@ void ProtocolGame::GetMapDescription(uint16_t x, uint16_t y, unsigned char z,
 		msg->AddByte(0xFF);
 		//cc += skip;
 	}
-
-	#ifdef __DEBUG__
-	//printf("tiles in total: %d \n", cc);
-	#endif
 }
 
 void ProtocolGame::GetFloorDescription(NetworkMessage* msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, int32_t offset, int& skip)
@@ -1442,24 +1433,15 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 {
 	if(m_debugAssertSent)
 		return;
-	m_debugAssertSent = true;
 
-	std::string assertLine = msg.GetString();
-	std::string date = msg.GetString();
-	std::string description = msg.GetString();
-	std::string comment = msg.GetString();
-	
-	FILE* file = fopen("client_assertions.txt", "a");
-	if(file)
-	{
-		char bufferDate[32], bufferIp[32];
-		uint64_t tmp = time(nullptr);
-		formatIP(getIP(), bufferIp);
-		formatDate(tmp, bufferDate);
-		fprintf(file, "----- %s - %s (%s) -----\n", bufferDate, player->getName().c_str(), bufferIp);
-		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
-		fclose(file);
-	}
+	std::stringstream s;
+	s << "----- " << formatDate() << " - " << player->getName() << " (" << convertIPAddress(getIP())
+		<< ") -----" << std::endl << msg.GetString() << std::endl << msg.GetString()
+		<< std::endl << msg.GetString() << std::endl << msg.GetString()
+		<< std::endl << std::endl;
+
+	m_debugAssertSent = true;
+	Logger::getInstance()->iFile(LOGFILE_ASSERTIONS, s.str(), false);
 }
 
 void ProtocolGame::parseBugReport(NetworkMessage& msg)
@@ -2364,11 +2346,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 
 		time_t writtenDate = item->getDate();
 		if(writtenDate > 0)
-		{
-			char date[16];
-			formatDate2(writtenDate, date);
-			msg->AddString(date);
-		}
+			msg->AddString(formatDate(writtenDate));
 		else
 			msg->AddString("");
 	}

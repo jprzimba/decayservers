@@ -318,7 +318,7 @@ class ProtocolGame : public Protocol
 		int64_t m_lastTaskCheck;
 		int32_t m_messageCount;
 		int32_t m_rejectCount;
-		uint32_t eventConnect;
+		uint32_t m_eventConnect;
 
 		bool m_debugAssertSent;
 		bool m_acceptPackets;

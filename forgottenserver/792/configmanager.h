@@ -65,6 +65,7 @@ class ConfigManager
 			SPELL_NAME_INSTEAD_WORDS,
 			EMOTE_SPELLS,
 			EXPERIENCE_STAGES,
+			REPLACE_KICK_ON_LOGIN,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

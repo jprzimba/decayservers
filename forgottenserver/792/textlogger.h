@@ -22,9 +22,8 @@
 enum LogFile_t
 {
 	LOGFILE_FIRST = 0,
-	LOGFILE_ADMIN = LOGFILE_FIRST,
-	LOGFILE_OUTPUT = 1,
-	LOGFILE_ASSERTIONS = 2,
+	LOGFILE_OUTPUT = LOGFILE_FIRST,
+	LOGFILE_ASSERTIONS = 1,
 	LOGFILE_LAST = LOGFILE_ASSERTIONS
 };
 
@@ -53,8 +52,6 @@ class Logger
 
 		void iFile(LogFile_t file, std::string output, bool newLine);
 		void eFile(std::string file, std::string output, bool newLine);
-
-		void log(const char* func, LogType_t type, std::string message, std::string channel = "", bool newLine = true);
 
 	private:
 		Logger() {m_loaded = false;}

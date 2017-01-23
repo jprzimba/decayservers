@@ -239,7 +239,12 @@ int32_t Game::loadMap(std::string filename)
 	Player::maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
 	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
 	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
-	return map->loadMap("data/world/" + filename + ".otbm");
+
+	std::string file = getFilePath(FILE_TYPE_CONFIG, "world/" + filename + ".otbm");
+	if(!fileExists(file.c_str()))
+		file = getFilePath(FILE_TYPE_OTHER, "world/" + filename + ".otbm");
+
+	return map->loadMap(file);
 }
 
 void Game::refreshMap()
@@ -3060,7 +3065,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 			ss << ".";
 			if(const Player* destPlayer = creature->getPlayer())
 			{
-				ss << std::endl << "IP: " << convertIPToString(destPlayer->getIP()) << ", Client: " << destPlayer->getClientVersion() << ".";
+				ss << std::endl << "IP: " << convertIPAddress(destPlayer->getIP()) << ", Client: " << destPlayer->getClientVersion() << ".";
 				if(destPlayer->isInGhostMode())
 					ss << std::endl << "* Ghost mode *";
 			}

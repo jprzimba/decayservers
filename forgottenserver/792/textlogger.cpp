@@ -26,7 +26,6 @@ extern Game g_game;
 
 void Logger::open()
 {
-	m_files[LOGFILE_ADMIN] = fopen("data/logs/OTAdminLog.txt", "a");
 	m_files[LOGFILE_ASSERTIONS] = fopen("data/logs/client_assertions.txt", "a");
 
 	m_loaded = true;
@@ -57,7 +56,7 @@ void Logger::eFile(std::string file, std::string output, bool newLine)
 	if(!f)
 		return;
 
-	internal(f, "[" + formatDateString() + "] " + output, newLine);
+	internal(f, "[" + formatDate() + "] " + output, newLine);
 	fclose(f);
 }
 
@@ -70,43 +69,6 @@ void Logger::internal(FILE* file, std::string output, bool newLine)
 		output += "\n";
 
 	fprintf(file, "%s", output.c_str());
-}
-
-void Logger::log(const char* func, LogType_t type, std::string message, std::string channel/* = ""*/, bool newLine/* = true*/)
-{
-	if(!m_loaded)
-		return;
-
-	std::stringstream ss;
-	ss << "[" << formatDateString() << "]" << " (";
-	switch(type)
-	{
-		case LOGTYPE_EVENT:
-			ss << "Event";
-			break;
-
-		case LOGTYPE_NOTICE:
-			ss << "Notice";
-			break;
-
-		case LOGTYPE_WARNING:
-			ss << "Warning";
-			break;
-
-		case LOGTYPE_ERROR:
-			ss << "Error";
-			break;
-
-		default:
-			break;
-	}
-
-	ss << " - " << func << ") ";
-	if(!channel.empty())
-		ss << channel << ": ";
-
-	ss << message;
-	iFile(LOGFILE_ADMIN, ss.str(), newLine);
 }
 
 OutputHandler::OutputHandler()
@@ -128,14 +90,14 @@ std::streambuf::int_type OutputHandler::overflow(std::streambuf::int_type c/* = 
 		return c;
 
 	if(m_cache.size() > 1)
-		std::cout << "[" << formatTimeEx(0, true) << "] ";
+		std::cout << "[" << formatTime(0, true) << "] ";
 
 	std::cout.write(m_cache.c_str(), m_cache.size());
 	if(Logger::getInstance()->isLoaded())
 	{
 		std::stringstream s;
 		if(m_cache.size() > 1)
-			s << "[" << formatDateString() << "] ";
+			s << "[" << formatDate() << "] ";
 
 		s.write(m_cache.c_str(), m_cache.size());
 		Logger::getInstance()->iFile(LOGFILE_OUTPUT, s.str(), false);

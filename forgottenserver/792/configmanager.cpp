@@ -152,6 +152,7 @@ bool ConfigManager::load()
 	boolean[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool(L, "spellNameInsteadOfWords", false);
 	boolean[EMOTE_SPELLS] = getGlobalBool(L, "emoteSpells", false);
 	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);
+	boolean[REPLACE_KICK_ON_LOGIN] = getGlobalBool(L, "replaceKickOnLogin", true);
 
 	m_loaded = true;
 	lua_close(L);
