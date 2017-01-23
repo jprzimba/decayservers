@@ -108,25 +108,7 @@ int main(int argc, char *argv[])
 	mainExceptionHandler.InstallHandler();
 	#endif
 
-	// ignore sigpipe...
-	#ifdef WIN32
-	//nothing yet
-	#else
-	struct sigaction sigh;
-	sigh.sa_handler = SIG_IGN;
-	sigh.sa_flags = 0;
-	sigemptyset(&sigh.sa_mask);
-	sigaction(SIGPIPE, &sigh, nullptr);
-	#endif
-
 	OutputHandler::getInstance();
-
-	OTSYS_THREAD_SIGNALVARINIT(g_loaderSignal);
-
-	//dispatcher thread
-	g_game.setGameState(GAME_STATE_STARTUP);
-
-	srand((unsigned int)OTSYS_TIME());
 	#ifdef WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 	#endif
@@ -147,19 +129,39 @@ int main(int argc, char *argv[])
 	std::clog << ">> Server modfied and updated by Tryller." << std::endl;
 	std::clog << ">> Visit http://otland.net/." << std::endl;
 
-	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
-	if(getuid() == 0 || geteuid() == 0)
-		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
-	#endif
 
 	std::clog << std::endl;
+	
+#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
+	if(getuid() == 0 || geteuid() == 0)
+		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+		return 1;
+	}
+#endif
 
+	// ignore sigpipe...
+	#ifdef WIN32
+	//nothing yet
+	#else
+	struct sigaction sigh;
+	sigh.sa_handler = SIG_IGN;
+	sigh.sa_flags = 0;
+	sigemptyset(&sigh.sa_mask);
+	sigaction(SIGPIPE, &sigh, nullptr);
+	#endif
+
+	OTSYS_THREAD_SIGNALVARINIT(g_loaderSignal);
+
+	//dispatcher thread
+	g_game.setGameState(GAME_STATE_STARTUP);
+
+	srand((unsigned int)OTSYS_TIME());
 	// read global config
 	std::clog << ">> Loading config" << std::endl;
 	if(!g_config.load())
 	{
 		startupErrorMessage("Unable to load config.lua!");
-		return 0;
+		return -1;
 	}
 
 #ifdef WIN32
@@ -174,7 +176,10 @@ int main(int argc, char *argv[])
 
 	CreateMutex(NULL, FALSE, mutexName.str().c_str());
 	if(GetLastError() == ERROR_ALREADY_EXISTS)
+	{
 		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
+		return -1;
+	}
 	
 #endif
 
@@ -191,7 +196,7 @@ int main(int argc, char *argv[])
 	if(!db->isConnected())
 	{
 		startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information.");
-		return 0;
+		return -1;
 	}
 	std::clog << " " << db->getClientName() << " " << db->getClientVersion() << std::endl;
 
@@ -200,7 +205,7 @@ int main(int argc, char *argv[])
 	if(!dbManager->isDatabaseSetup())
 	{
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema to the database.");
-		return 0;
+		return -1;
 	}
 
 	for(uint32_t version = dbManager->updateDatabase(); version != 0; version = dbManager->updateDatabase())
@@ -216,18 +221,30 @@ int main(int argc, char *argv[])
 
 	std::clog << ">> Loading groups" << std::endl;
 	if(!Groups::getInstance()->loadFromXml())
+	{
 		startupErrorMessage("Unable to load groups!");
+		return -1;
+	}
 
 	std::clog << ">> Loading vocations" << std::endl;
 	if(!g_vocations.loadFromXml())
+	{
 		startupErrorMessage("Unable to load vocations!");
+		return -1;
+	}
 
 	std::clog << ">> Loading items" << std::endl;
 	if(Item::items.loadFromOtb("data/items/items.otb"))
+	{
 		startupErrorMessage("Unable to load items (OTB)!");
+		return -1;
+	}
 	
 	if(!Item::items.loadFromXml())
+	{
 		startupErrorMessage("Unable to load items (XML)!");
+		return -1;
+	}
 	
 	std::clog << ">> Loading script systems" << std::endl;
 	if(!ScriptingManager::getInstance()->loadScriptSystems())
@@ -235,16 +252,25 @@ int main(int argc, char *argv[])
 
 	std::clog << ">> Loading monsters" << std::endl;
 	if(!g_monsters.loadFromXml())
+	{
 		startupErrorMessage("Unable to load monsters!");
+		return -1;
+	}
 	
 	std::clog << ">> Loading outfits" << std::endl;
 	Outfits* outfits = Outfits::getInstance();
 	if(!outfits->loadFromXml())
+	{
 		startupErrorMessage("Unable to load outfits!");
+		return -1;
+	}
 
 	std::clog << ">> Loading experience stages" << std::endl;
 	if(!g_game.loadExperienceStages())
+	{
 		startupErrorMessage("Unable to load experience stages!");
+		return -1;
+	}
 
 	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORDTYPE));
 	if(passwordType == "md5")
@@ -284,7 +310,7 @@ int main(int argc, char *argv[])
 	{
 		std::clog << std::endl;
 		startupErrorMessage("Unknown world type: " + g_config.getString(ConfigManager::WORLD_TYPE));
-		return 0;
+		return -1;
 	}
 
 	Status* status = Status::getInstance();
@@ -296,13 +322,11 @@ int main(int argc, char *argv[])
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
 	{
 		startupErrorMessage("Failed to load map");
-		return 0;
+		return -1;
 	}
 
-	std::clog << ">> Initializing gamestate" << std::endl;
+
 	g_game.setGameState(GAME_STATE_INIT);
-
-
 	g_game.timedHighscoreUpdate();
 
 	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
@@ -376,12 +400,6 @@ int main(int argc, char *argv[])
 	IpNetMask.second = 0;
 	serverIPs.push_back(IpNetMask);
 
-	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
-	if(getuid() == 0 || geteuid() == 0)
-		std::clog << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
-	#endif
-
-
 	Server server(INADDR_ANY, g_config.getNumber(ConfigManager::PORT));
 	std::clog << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 	g_server = &server;
@@ -390,4 +408,6 @@ int main(int argc, char *argv[])
 	IOLoginData::getInstance()->resetOnlineStatus();
 	g_game.setGameState(GAME_STATE_NORMAL);
 	OTSYS_THREAD_SIGNAL_SEND(g_loaderSignal);
+
+	return 0;
 }
