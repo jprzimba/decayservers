@@ -63,8 +63,10 @@
 	maxDeathRecords = 10
 
 	-- Houses
+	-- Set housesPerOneAccount to -1 to disable this feature.
 	housePriceEachSQM = 1000
 	houseRentPeriod = "never"
+	housesPerOneAccount = 1
 
 	-- Item Usage Settings
 	timeBetweenActions = 200

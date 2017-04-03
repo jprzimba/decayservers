@@ -127,6 +127,7 @@ bool ConfigManager::load()
 	integer[MIN_GUILD_NAME] = getGlobalNumber(L, "minGuildNameLength", 4);
 	integer[MAX_GUILD_NAME] = getGlobalNumber(L, "maxGuildNameLength", 20);
 	integer[SUPRISEBAG_PERCENT] = getGlobalNumber(L, "surpriseBagPercent", 0);
+	integer[HOUSES_PER_ACCOUNT] = getGlobalNumber(L, "housesPerOneAccount", -1);
 
 
 	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBool(L, "noDamageToSameLookfeet", false);

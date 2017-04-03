@@ -698,7 +698,16 @@ bool TalkAction::sellHouse(Creature* creature, const std::string& cmd, const std
 		player->sendCancel("Trade player already owns a house.");
 		return false;
 	}
-
+	
+	int16_t maxHouses = g_config.getNumber(ConfigManager::HOUSES_PER_ACCOUNT);
+	if(maxHouses != -1 && player->getAccountHousesCount() >= maxHouses)
+	{
+		char buffer[50];
+		sprintf(buffer, "You may own only %u %s per account.", maxHouses, (maxHouses == 1 ? "house" : "houses"));
+		player->sendCancel(buffer);
+		return false;
+	}
+ 
 	if(!Position::areInRange<2,2,0>(tradePartner->getPosition(), player->getPosition()))
 	{
 		player->sendCancel("Trade player is too far away.");

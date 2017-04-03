@@ -1225,6 +1225,21 @@ void Player::sendHouseWindow(House* house, uint32_t listId) const
 	}
 }
 
+uint16_t Player::getAccountHousesCount()
+{
+    Account account = IOLoginData::getInstance()->loadAccount(getAccount());
+    uint32_t _guid;
+    uint16_t count = 0;
+ 
+    for(std::list<std::string>::iterator it = account.charList.begin(); it != account.charList.end(); it++)
+    {
+        IOLoginData::getInstance()->getGuidByName(_guid, (*it));
+        if(Houses::getInstance().getHouseByPlayerId(_guid))
+            count++;
+    }
+    return count;
+}
+
 //container
 void Player::sendAddContainerItem(const Container* container, const Item* item)
 {

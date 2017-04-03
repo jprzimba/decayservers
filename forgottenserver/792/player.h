@@ -599,6 +599,7 @@ class Player : public Creature, public Cylinder
 		
 		House* getEditHouse(uint32_t& _windowTextId, uint32_t& _listId);
 		void setEditHouse(House* house, uint32_t listId = 0);
+		uint16_t getAccountHousesCount();
 
 		void learnInstantSpell(const std::string& name);
 		bool hasLearnedInstantSpell(const std::string& name) const;

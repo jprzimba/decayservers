@@ -141,6 +141,7 @@ class ConfigManager
 			MIN_GUILD_NAME,
 			MAX_GUILD_NAME,
 			SUPRISEBAG_PERCENT,
+			HOUSES_PER_ACCOUNT,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 
