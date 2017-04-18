@@ -71,8 +71,8 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 	protected:
 		void freeMessage()
 		{
-			setConnection(nullptr);
-			setProtocol(nullptr);
+			setConnection(NULL);
+			setProtocol(NULL);
 			m_frame = 0;
 			m_outputBufferStart = 4;
 			//setState have to be the last one

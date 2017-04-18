@@ -43,7 +43,7 @@ class BedItem : public Item
 		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
 		virtual bool serializeAttr(PropWriteStream& propWriteStream);
 
-		virtual bool canRemove() const {return (house == nullptr);}
+		virtual bool canRemove() const {return (house == NULL);}
 
 		uint32_t getSleeper() const {return sleeperGUID;}
 		void setSleeper(uint32_t guid) {sleeperGUID = guid;}

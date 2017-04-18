@@ -95,7 +95,7 @@ void Ban::addLoginAttempt(uint32_t clientip, bool isSuccess)
 
 	OTSYS_THREAD_LOCK(banLock, "");
 
-	time_t currentTime = time(nullptr);
+	time_t currentTime = time(NULL);
 	IpLoginMap::iterator it = ipLoginMap.find(clientip);
 	if(it == ipLoginMap.end())
 	{
@@ -127,7 +127,7 @@ bool Ban::isIpDisabled(uint32_t clientip)
 
 	OTSYS_THREAD_LOCK(banLock, "");
 
-	time_t currentTime = time(nullptr);
+	time_t currentTime = time(NULL);
 	IpLoginMap::iterator it = ipLoginMap.find(clientip);
 	if(it != ipLoginMap.end())
 	{
@@ -155,7 +155,7 @@ bool IOBan::isIpBanished(uint32_t clientip)
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
-	uint32_t currentTime = time(nullptr);
+	uint32_t currentTime = time(NULL);
 	do
 	{
 		uint32_t ip = result->getDataInt("ip");
@@ -202,7 +202,7 @@ bool IOBan::isAccountBanned(uint32_t account)
 
 	DBQuery query;
 	DBResult* result;
-	query << "SELECT COUNT(*) as `count` FROM `bans` WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(nullptr) << " LIMIT 1;";
+	query << "SELECT COUNT(*) as `count` FROM `bans` WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(NULL) << " LIMIT 1;";
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -217,7 +217,7 @@ bool IOBan::getBanInformation(uint32_t account, uint32_t& bannedBy, uint32_t& ba
 
 	DBQuery query;
 	DBResult* result;
-	query << "SELECT `banned_by`, `time`, `reason_id`, `action_id`, `comment` FROM `bans` WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(nullptr) << " LIMIT 1;";
+	query << "SELECT `banned_by`, `time`, `reason_id`, `action_id`, `comment` FROM `bans` WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(NULL) << " LIMIT 1;";
 	if((result = db->storeQuery(query.str())))
 	{
 		bannedBy = result->getDataInt("banned_by");
@@ -338,7 +338,7 @@ bool IOBan::removeAccountBan(uint32_t account)
 	Database* db = Database::getInstance();
 
 	DBQuery query;
-	query << "UPDATE `bans` SET `time` = " << time(nullptr) << " WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(nullptr) << db->getUpdateLimiter();
+	query << "UPDATE `bans` SET `time` = " << time(NULL) << " WHERE `type` = " << BAN_ACCOUNT << " AND `account` = " << account << " AND `time` > " << time(NULL) << db->getUpdateLimiter();
 	return db->executeQuery(query.str());
 }
 

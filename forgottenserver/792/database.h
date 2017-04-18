@@ -227,7 +227,7 @@ class _DBResult
 		DATABASE_VIRTUAL std::string getDataString(const std::string &s) { return "''"; }
 
 		/** Get the blob of a field in database
-		*\return a PropStream that is initiated with the blob data field, if not exist it returns nullptr.
+		*\return a PropStream that is initiated with the blob data field, if not exist it returns NULL.
 		*\param s The name of the field
 		*/
 		DATABASE_VIRTUAL const char* getDataStream(const std::string &s, unsigned long &size) { return 0; }

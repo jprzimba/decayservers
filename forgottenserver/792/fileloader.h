@@ -197,7 +197,7 @@ class FileLoader
 class PropStream
 {
 	public:
-		PropStream() {end = nullptr; p = nullptr;}
+		PropStream() {end = NULL; p = NULL;}
 		~PropStream() {}
 
 		void init(const char* a, uint32_t size)
@@ -211,7 +211,7 @@ class PropStream
 		{
 			if(size() < (int32_t)sizeof(T))
 			{
-				ret = nullptr;
+				ret = NULL;
 				return false;
 			}
 

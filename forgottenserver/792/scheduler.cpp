@@ -33,7 +33,7 @@ Scheduler::Scheduler()
 	OTSYS_THREAD_LOCKVARINIT(m_eventLock);
 	OTSYS_THREAD_SIGNALVARINIT(m_eventSignal);
 	m_lastEventId = 0;
-	OTSYS_CREATE_THREAD(Scheduler::schedulerThread, nullptr);
+	OTSYS_CREATE_THREAD(Scheduler::schedulerThread, NULL);
 }
 
 OTSYS_THREAD_RETURN Scheduler::schedulerThread(void *p)
@@ -45,7 +45,7 @@ OTSYS_THREAD_RETURN Scheduler::schedulerThread(void *p)
 	srand((unsigned int)OTSYS_TIME());
 	while(!Scheduler::m_shutdown)
 	{
-		SchedulerTask* task = nullptr;
+		SchedulerTask* task = NULL;
 		bool runTask = false;
 		int ret;
 		
@@ -97,7 +97,7 @@ OTSYS_THREAD_RETURN Scheduler::schedulerThread(void *p)
 	schedulerExceptionHandler.RemoveHandler();
 	#endif
 	#ifndef WIN32
-	return nullptr;
+	return NULL;
 	#endif
 }
 

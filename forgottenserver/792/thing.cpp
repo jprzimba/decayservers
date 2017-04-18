@@ -28,7 +28,7 @@
 
 Thing::Thing()
 {
-	parent = nullptr;
+	parent = NULL;
 	useCount = 0;
 }
 
@@ -42,12 +42,12 @@ Thing::~Thing()
 Cylinder* Thing::getTopParent()
 {
 	//tile
-	if(getParent() == nullptr)
+	if(getParent() == NULL)
 		return dynamic_cast<Cylinder*>(this);
 
 	Cylinder* aux = getParent();
 	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
-	while(aux->getParent() != nullptr){
+	while(aux->getParent() != NULL){
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -62,13 +62,13 @@ Cylinder* Thing::getTopParent()
 const Cylinder* Thing::getTopParent() const
 {
 	//tile
-	if(getParent() == nullptr)
+	if(getParent() == NULL)
 		return dynamic_cast<const Cylinder*>(this);
 
 	const Cylinder* aux = getParent();
 	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
 
-	while(aux->getParent() != nullptr){
+	while(aux->getParent() != NULL){
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -86,7 +86,7 @@ Tile* Thing::getTile()
 
 	#ifdef __DEBUG__MOVESYS__
 	if(!cylinder){
-		std::clog << "Failure: [Thing::getTile()],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getTile()],  NULL tile" << std::endl;
 		DEBUG_REPORT
 		return &(Tile::null_tile);
 	}
@@ -105,7 +105,7 @@ const Tile* Thing::getTile() const
 
 	#ifdef __DEBUG__MOVESYS__
 	if(!cylinder){
-		std::clog << "Failure: [Thing::getTile() const],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getTile() const],  NULL tile" << std::endl;
 		DEBUG_REPORT
 		return &(Tile::null_tile);
 	}
@@ -126,7 +126,7 @@ const Position& Thing::getPosition() const
 	}
 	else{
 		#ifdef __DEBUG__MOVESYS__
-		std::clog << "Failure: [Thing::getPosition],  nullptr tile" << std::endl;
+		std::clog << "Failure: [Thing::getPosition],  NULL tile" << std::endl;
 		DEBUG_REPORT
 		#endif
 		return Tile::null_tile.getTilePosition();
@@ -135,7 +135,7 @@ const Position& Thing::getPosition() const
 
 bool Thing::isRemoved() const
 {
-	if(parent == nullptr)
+	if(parent == NULL)
 		return true;
 
 	const Cylinder* aux = getParent();

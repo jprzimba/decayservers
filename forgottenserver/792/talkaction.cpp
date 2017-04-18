@@ -94,7 +94,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	if(nodeName == "talkaction")
 		return new TalkAction(&m_scriptInterface);
 
-	return nullptr;
+	return NULL;
 }
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -196,7 +196,7 @@ Event(_interface)
 	m_logged = false;
 	m_sensitive = false;
 	m_access = 0;
-	m_function = nullptr;
+	m_function = NULL;
 }
 
 TalkAction::~TalkAction()
@@ -340,7 +340,7 @@ bool TalkAction::banPlayer(Creature* creature, const std::string& cmd, const std
 		playerBan->sendTextMessage(MSG_STATUS_CONSOLE_RED, "You have been banned.");
 		uint32_t ip = playerBan->lastIP;
 		if(ip > 0)
-			IOBan::getInstance()->addIpBan(ip, (time(nullptr) + 86400), 0);
+			IOBan::getInstance()->addIpBan(ip, (time(NULL) + 86400), 0);
 
 		playerBan->kickPlayer(true);
 		return true;
@@ -1006,7 +1006,7 @@ bool TalkAction::removeThing(Creature* creature, const std::string& cmd, const s
 	Position pos = player->getPosition();
 	pos = getNextPosition(player->direction, pos);
 	Tile *removeTile = g_game.getMap()->getTile(pos);
-	if(removeTile != nullptr)
+	if(removeTile != NULL)
 	{
 		Thing *thing = removeTile->getTopThing();
 		if(thing)

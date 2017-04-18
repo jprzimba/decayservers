@@ -37,7 +37,7 @@ Mission::Mission(std::string _missionName, int32_t _storageID, int32_t _startVal
 	endValue = _endValue;
 	startValue = _startValue;
 	storageID = _storageID;
-	mainState = nullptr;
+	mainState = NULL;
 }
 
 Mission::~Mission()
@@ -52,7 +52,7 @@ std::string Mission::getDescription(Player* player)
 {
 	int32_t value;
 	player->getStorageValue(storageID, value);
-	if(mainState != nullptr)
+	if(mainState != NULL)
 	{
 		std::ostringstream s;
 		s << value;
@@ -236,7 +236,7 @@ Quest *Quests::getQuestByID(uint16_t id)
 		if((*it)->getID() == id)
 			return (*it);
 	}
-	return nullptr;
+	return NULL;
 }
 
 uint16_t Quests::getQuestsCount(Player* player)
@@ -259,7 +259,7 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value)
 
 		for(MissionsList::const_iterator m_it = (*it)->getFirstMission(), m_end = (*it)->getLastMission(); m_it != m_end; ++m_it)
 		{
-			if((*m_it)->mainState != nullptr)
+			if((*m_it)->mainState != NULL)
 				continue;
 
 			if((*m_it)->getStorageId() == key && value >= (*m_it)->getStartStorageValue() && value <= (*m_it)->getEndStorageValue())

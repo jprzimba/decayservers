@@ -27,7 +27,7 @@
 
 boost::recursive_mutex DBQuery::database_lock;
 
-Database* _Database::_instance = nullptr;
+Database* _Database::_instance = NULL;
 
 Database* _Database::getInstance()
 {
@@ -43,7 +43,7 @@ DBResult* _Database::verifyResult(DBResult* result)
 	if(!result->next())
 	{
 		_instance->freeResult(result);
-		return nullptr;
+		return NULL;
 	}
 	return result;
 }

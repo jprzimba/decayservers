@@ -35,11 +35,11 @@ extern ConfigManager g_config;
 
 Combat::Combat()
 {
-	params.condition = nullptr;
-	params.valueCallback = nullptr;
-	params.tileCallback = nullptr;
-	params.targetCallback = nullptr;
-	area = nullptr;
+	params.condition = NULL;
+	params.valueCallback = NULL;
+	params.tileCallback = NULL;
+	params.targetCallback = NULL;
+	area = NULL;
 
 	formulaType = FORMULA_UNDEFINED;
 	mina = 0.0;
@@ -545,7 +545,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 			break;
 		}
 	}
-	return nullptr;
+	return NULL;
 }
 
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
@@ -565,8 +565,8 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 	bool result = g_game.combatChangeHealth(params.combatType, caster, target, healthChange);
 	if(result)
 	{
-		CombatConditionFunc(caster, target, params, nullptr);
-		CombatDispelFunc(caster, target, params, nullptr);
+		CombatConditionFunc(caster, target, params, NULL);
+		CombatDispelFunc(caster, target, params, NULL);
 	}
 	return result;
 }
@@ -584,8 +584,8 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 	bool result = g_game.combatChangeMana(caster, target, manaChange);
 	if(result)
 	{
-		CombatConditionFunc(caster, target, params, nullptr);
-		CombatDispelFunc(caster, target, params, nullptr);
+		CombatConditionFunc(caster, target, params, NULL);
+		CombatDispelFunc(caster, target, params, NULL);
 	}
 	return result;
 }
@@ -620,8 +620,8 @@ bool Combat::CombatDispelFunc(Creature* caster, Creature* target, const CombatPa
 
 bool Combat::CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
-	CombatConditionFunc(caster, target, params, nullptr);
-	CombatDispelFunc(caster, target, params, nullptr);
+	CombatConditionFunc(caster, target, params, NULL);
+	CombatDispelFunc(caster, target, params, NULL);
 	return true;
 }
 
@@ -763,14 +763,14 @@ void Combat::doCombat(Creature* caster, const Position& pos) const
 	{
 		int32_t minChange = 0;
 		int32_t maxChange = 0;
-		getMinMaxValues(caster, nullptr, minChange, maxChange);
+		getMinMaxValues(caster, NULL, minChange, maxChange);
 		if(params.combatType != COMBAT_MANADRAIN)
 			doCombatHealth(caster, pos, area, minChange, maxChange, params);
 		else
 			doCombatMana(caster, pos, area, minChange, maxChange, params);
 	}
 	else
-		CombatFunc(caster, pos, area, params, CombatNullFunc, nullptr);
+		CombatFunc(caster, pos, area, params, CombatNullFunc, NULL);
 }
 
 void Combat::doCombatHealth(Creature* caster, Creature* target,
@@ -834,14 +834,14 @@ void Combat::doCombatMana(Creature* caster, const Position& pos,
 void Combat::doCombatCondition(Creature* caster, const Position& pos, const AreaCombat* area,
 	const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatConditionFunc, nullptr);
+	CombatFunc(caster, pos, area, params, CombatConditionFunc, NULL);
 }
 
 void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatParams& params)
 {
 	if(!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR))
 	{
-		CombatConditionFunc(caster, target, params, nullptr);
+		CombatConditionFunc(caster, target, params, NULL);
 		if(params.targetCallback)
 			params.targetCallback->onTargetCombat(caster, target);
 
@@ -856,14 +856,14 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 void Combat::doCombatDispel(Creature* caster, const Position& pos, const AreaCombat* area,
 	const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatDispelFunc, nullptr);
+	CombatFunc(caster, pos, area, params, CombatDispelFunc, NULL);
 }
 
 void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatParams& params)
 {
 	if(!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR))
 	{
-		CombatDispelFunc(caster, target, params, nullptr);
+		CombatDispelFunc(caster, target, params, NULL);
 		if(params.targetCallback)
 			params.targetCallback->onTargetCombat(caster, target);
 
@@ -880,7 +880,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 	if(!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR))
 	{
 		const SpectatorVec& list = g_game.getSpectators(target->getTile()->getPosition());
-		CombatNullFunc(caster, target, params, nullptr);
+		CombatNullFunc(caster, target, params, NULL);
 		combatTileEffects(list, caster, target->getTile(), params);
 		if(params.targetCallback)
 			params.targetCallback->onTargetCombat(caster, target);
@@ -958,7 +958,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 
 		int32_t size0 = lua_gettop(L);
 		if(lua_pcall(L, parameters, 2 /*nReturnValues*/, 0) != 0)
-			LuaScriptInterface::reportError(nullptr, std::string(LuaScriptInterface::popString(L)));
+			LuaScriptInterface::reportError(NULL, std::string(LuaScriptInterface::popString(L)));
 		else
 		{
 			max = LuaScriptInterface::popNumber(L);
@@ -966,7 +966,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 		}
 
 		if((lua_gettop(L) + parameters /*nParams*/  + 1) != size0)
-			LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+			LuaScriptInterface::reportError(NULL, "Stack size changed!");
 
 		env->resetCallback();
 		m_scriptInterface->releaseScriptEnv();
@@ -1036,10 +1036,10 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 		int32_t size0 = lua_gettop(L);
 		if(lua_pcall(L, 2, 0 /*nReturnValues*/, 0) != 0)
-			LuaScriptInterface::reportError(nullptr, std::string(LuaScriptInterface::popString(L)));
+			LuaScriptInterface::reportError(NULL, std::string(LuaScriptInterface::popString(L)));
 
 		if((lua_gettop(L) + 2 /*nParams*/  + 1) != size0)
-			LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+			LuaScriptInterface::reportError(NULL, "Stack size changed!");
 
 		env->resetCallback();
 		m_scriptInterface->releaseScriptEnv();

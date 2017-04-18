@@ -332,7 +332,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 
 	if(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
 	{
-		int32_t redSkullSeconds = result->getDataInt("redskulltime") - time(nullptr);
+		int32_t redSkullSeconds = result->getDataInt("redskulltime") - time(NULL);
 		if(redSkullSeconds > 0)
 		{
 			//ensure that we round up the number of ticks
@@ -693,7 +693,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 	{
 		int32_t redSkullTime = 0;
 		if(player->redSkullTicks > 0)
-			redSkullTime = time(nullptr) + player->redSkullTicks/1000;
+			redSkullTime = time(NULL) + player->redSkullTicks/1000;
 
 		query << "`redskulltime` = " << redSkullTime << ", ";
 		int32_t redSkull = 0;
@@ -992,7 +992,7 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 		playerGroupMap[groupid] = playerGroup;
 		return playerGroup;
 	}
-	return nullptr;
+	return NULL;
 }
 
 const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
@@ -1008,7 +1008,7 @@ const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
 		db->freeResult(result);
 		return getPlayerGroup(groupId);
 	}
-	return nullptr;
+	return NULL;
 }
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)

@@ -258,8 +258,8 @@ class LuaScriptInterface
 		virtual bool initState();
 		bool reInitState();
 
-		int32_t loadFile(const std::string& file, Npc* npc = nullptr);
-		int32_t loadBuffer(const std::string& text, Npc* npc /* = nullptr*/);
+		int32_t loadFile(const std::string& file, Npc* npc = NULL);
+		int32_t loadBuffer(const std::string& text, Npc* npc /* = NULL*/);
 		const std::string& getFileById(int32_t scriptId);
 
 		int32_t getEvent(const std::string& eventName);

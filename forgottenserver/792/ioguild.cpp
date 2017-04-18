@@ -83,7 +83,7 @@ std::string IOGuild::getRankName(int16_t guildLevel, uint32_t guildId)
 
 	query << "SELECT `name` FROM `guild_ranks` WHERE `level` = " << guildLevel << " AND `guild_id` = " << guildId;
 	if(!(result = db->storeQuery(query.str())))
-		return nullptr;
+		return NULL;
 
 	const std::string name = result->getDataString("name");
 	db->freeResult(result);
@@ -139,7 +139,7 @@ bool IOGuild::createGuild(Player* player)
 	DBQuery query;
 	DBResult* result;
 
-	query << "INSERT INTO `guilds` (`id`, `name`, `ownerid`, `creationdata`, `motd`) VALUES (NULL, " << db->escapeString(player->getGuildName()) << ", " << player->getGUID() << ", " << time(nullptr) << ", 'Your guild has successfully been created, to view all available commands use: <!commands>. If you would like to remove this message use <!cleanmotd>, if you would like to edit it, use <!setmotd newMotd>.');";
+	query << "INSERT INTO `guilds` (`id`, `name`, `ownerid`, `creationdata`, `motd`) VALUES (NULL, " << db->escapeString(player->getGuildName()) << ", " << player->getGUID() << ", " << time(NULL) << ", 'Your guild has successfully been created, to view all available commands use: <!commands>. If you would like to remove this message use <!cleanmotd>, if you would like to edit it, use <!setmotd newMotd>.');";
 	if(!db->executeQuery(query.str()))
 		return false;
 

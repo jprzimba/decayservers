@@ -47,7 +47,7 @@ Items Item::items;
 
 Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 1*/)
 {
-	Item* newItem = nullptr;
+	Item* newItem = NULL;
 
 	const ItemType& it = Item::items[_type];
 
@@ -56,7 +56,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 1*/)
 		#ifdef __DEBUG__
 		std::clog << "Error: [Item::CreateItem] Item id " << it.id << " has been declared deprecated." << std::endl;
 		#endif
-		return nullptr;
+		return NULL;
 	}
 
 	if(it.stackable && _count == 0)
@@ -103,7 +103,7 @@ Item* Item::CreateItem(PropStream& propStream)
 {
 	uint16_t _id;
 	if(!propStream.GET_USHORT(_id))
-		return nullptr;
+		return NULL;
 
 	const ItemType& iType = Item::items[_id];
 	uint8_t _count = 0;
@@ -111,7 +111,7 @@ Item* Item::CreateItem(PropStream& propStream)
 	if(iType.stackable || iType.isSplash() || iType.isFluidContainer())
 	{
 		if(!propStream.GET_UCHAR(_count))
-			return nullptr;
+			return NULL;
 	}
 
 	if(g_config.getBool(ConfigManager::RANDOMIZE_TILES))
@@ -649,7 +649,7 @@ double Item::getWeight() const
 }
 
 std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
-	const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+	const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	std::ostringstream s;
 	s << getNameDescription(it, item, subType, addArticle);
@@ -1081,7 +1081,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 	if(lookDistance <= 1)
 	{
-		double weight = (item == nullptr ? it.weight : item->getWeight());
+		double weight = (item == NULL ? it.weight : item->getWeight());
 		if(weight > 0 && it.pickupable)
 		{
 			int32_t count = weight / it.weight;
@@ -1106,7 +1106,7 @@ std::string Item::getDescription(int32_t lookDistance) const
 	return getDescription(it, lookDistance, this);
 }
 
-std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+std::string Item::getNameDescription(const ItemType& it, const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	if(item)
 		subType = item->getSubType();
@@ -1265,9 +1265,9 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	if((type & m_attributes) != 0)
 	{
 		//go trough the linked list until find it
-		Attribute* prevAttr = nullptr;
+		Attribute* prevAttr = NULL;
 		Attribute* curAttr = m_firstAttr;
-		while(curAttr != nullptr)
+		while(curAttr != NULL)
 		{
 			if(curAttr->type == type)
 			{
@@ -1384,7 +1384,7 @@ void ItemAttributes::addAttr(Attribute* attr)
 ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
 {
 	if((type & m_attributes) == 0)
-		return nullptr;
+		return NULL;
 	
 	Attribute* curAttr = m_firstAttr;
 	while(curAttr)
@@ -1395,7 +1395,7 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 		curAttr = curAttr->next;
 	}
 	std::clog << "Warning: [ItemAttributes::getAttrConst] (type & m_attributes) != 0 but attribute not found" << std::endl;
-	return nullptr;
+	return NULL;
 }
 
 ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
@@ -1432,7 +1432,7 @@ void ItemAttributes::deleteAttrs(Attribute* attr)
 			delete (std::string*)attr->value;
 
 		Attribute* next_attr = attr->next;
-		attr->next = nullptr;
+		attr->next = NULL;
 		if(next_attr)
 			deleteAttrs(next_attr);
 

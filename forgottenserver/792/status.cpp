@@ -218,7 +218,7 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage* output, NetworkMessa
 	{
 		output->AddByte(0x22); // players info - online status info of a player
 		const std::string name = msg.GetString();
-		if(g_game.getPlayerByName(name) != nullptr)
+		if(g_game.getPlayerByName(name) != NULL)
 			output->AddByte(0x01);
 		else
 			output->AddByte(0x00);

@@ -41,7 +41,7 @@ class Protocol : boost::noncopyable
 			m_key[1] = 0;
 			m_key[2] = 0;
 			m_key[3] = 0;
-			m_outputBuffer = nullptr;
+			m_outputBuffer = NULL;
 		}
 	
 		virtual ~Protocol() {}

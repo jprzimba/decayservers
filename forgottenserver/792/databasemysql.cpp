@@ -51,7 +51,7 @@ DatabaseMySQL::DatabaseMySQL()
 	mysql_options(&m_handle, MYSQL_OPT_RECONNECT, &reconnect);
 
 	// connects to database
-	if(!mysql_real_connect(&m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), nullptr, 0))
+	if(!mysql_real_connect(&m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), NULL, 0))
 	{
 		std::clog << "Failed to connect to database. MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		return;
@@ -170,7 +170,7 @@ bool DatabaseMySQL::executeQuery(const std::string &query)
 DBResult* DatabaseMySQL::storeQuery(const std::string &query)
 {
 	if(!m_connected)
-		return nullptr;
+		return NULL;
 
 	#ifdef __DEBUG_SQL__
 	std::clog << "MYSQL QUERY: " << query << std::endl;
@@ -197,7 +197,7 @@ DBResult* DatabaseMySQL::storeQuery(const std::string &query)
 		if(error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR)
 			m_connected = false;
 
-		return nullptr;
+		return NULL;
 	}
 
 	// retriving results of query
@@ -257,7 +257,7 @@ int32_t MySQLResult::getDataInt(const std::string &s)
 		return 0;
 	}
 
-	if(m_row[it->second] == nullptr)
+	if(m_row[it->second] == NULL)
 		return 0;
 
 	return atoi(m_row[it->second]);
@@ -272,7 +272,7 @@ int64_t MySQLResult::getDataLong(const std::string &s)
 		return 0;
 	}
 
-	if(m_row[it->second] == nullptr)
+	if(m_row[it->second] == NULL)
 		return 0;
 
 	return ATOI64(m_row[it->second]);
@@ -287,7 +287,7 @@ std::string MySQLResult::getDataString(const std::string &s)
 		return std::string("");
 	}
 
-	if(m_row[it->second] == nullptr)
+	if(m_row[it->second] == NULL)
 		return std::string("");
 
 	return std::string(m_row[it->second]);
@@ -300,13 +300,13 @@ const char* MySQLResult::getDataStream(const std::string &s, unsigned long &size
 	{
 		std::clog << "Error during getDataStream(" << s << ")." << std::endl;
 		size = 0;
-		return nullptr;
+		return NULL;
 	}
 
-	if(m_row[it->second] == nullptr)
+	if(m_row[it->second] == NULL)
 	{
 		size = 0;
-		return nullptr;
+		return NULL;
 	}
 
 	size = mysql_fetch_lengths(m_handle)[it->second];
@@ -317,7 +317,7 @@ const char* MySQLResult::getDataStream(const std::string &s, unsigned long &size
 bool MySQLResult::next()
 {
 	m_row = mysql_fetch_row(m_handle);
-	return m_row != nullptr;
+	return m_row != NULL;
 }
 
 MySQLResult::MySQLResult(MYSQL_RES* res)

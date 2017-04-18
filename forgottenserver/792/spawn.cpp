@@ -189,9 +189,9 @@ Spawn::~Spawn()
 	for(SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end(); ++it)
 	{
 		monster = it->second;
-		it->second = nullptr;
+		it->second = NULL;
 
-		monster->setSpawn(nullptr);
+		monster->setSpawn(NULL);
 		if(monster->isRemoved())
 			monster->releaseThing2();
 	}
@@ -208,7 +208,7 @@ bool Spawn::findPlayer(const Position& pos)
 	SpectatorVec::iterator it;
 	g_game.getSpectators(list, pos);
 
-	Player* tmpPlayer = nullptr;
+	Player* tmpPlayer = NULL;
 	for(it = list.begin(); it != list.end(); ++it)
 	{
 		if((tmpPlayer = (*it)->getPlayer()) && !tmpPlayer->hasFlag(PlayerFlag_IgnoredByMonsters))

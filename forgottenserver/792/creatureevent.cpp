@@ -61,7 +61,7 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 	if(tmpNodeName == "event" || tmpNodeName == "creaturevent" || tmpNodeName == "creatureevent" || tmpNodeName == "creaturescript")
 		return new CreatureEvent(&m_scriptInterface);
 
-	return nullptr;
+	return NULL;
 }
 
 bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -101,7 +101,7 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 		if(!forceLoaded || it->second->isLoaded())
 			return it->second;
 	}
-	return nullptr;
+	return NULL;
 }
 
 uint32_t CreatureEvents::playerLogin(Player* player)
@@ -228,7 +228,7 @@ void CreatureEvent::copyEvent(CreatureEvent* creatureEvent)
 void CreatureEvent::clearEvent()
 {
 	m_scriptId = 0;
-	m_scriptInterface = nullptr;
+	m_scriptInterface = NULL;
 	m_scripted = false;
 	m_loaded = false;
 }
@@ -465,7 +465,7 @@ uint32_t CreatureEvent::executeOnLook(Player* player, Thing* target, uint16_t it
 			else if(target->getItem())
 				target_id = env->addThing(target->getItem());
 			else
-				target = nullptr;
+				target = NULL;
 		}
 
 		if(target)

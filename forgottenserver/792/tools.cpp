@@ -937,7 +937,7 @@ std::string formatTime(time_t _time/* = 0*/, bool ms/* = false*/)
 bool fileExists(const char* filename)
 {
 	FILE* f = fopen(filename, "rb");
-	bool exists = (f != nullptr);
+	bool exists = (f != NULL);
 	if(exists)
 		fclose(f);
 

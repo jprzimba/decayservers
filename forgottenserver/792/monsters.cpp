@@ -89,7 +89,7 @@ void MonsterType::reset()
 		if(it->combatSpell)
 		{
 			delete it->spell;
-			it->spell = nullptr;
+			it->spell = NULL;
 		}
 	}
 
@@ -100,7 +100,7 @@ void MonsterType::reset()
 		if(it->combatSpell)
 		{
 			delete it->spell;
-			it->spell = nullptr;
+			it->spell = NULL;
 		}
 	}
 
@@ -176,7 +176,7 @@ void MonsterType::createSurpriseBag(Container* corpse, std::string name)
 
 Item* MonsterType::createLootItem(const LootBlock& lootBlock)
 {
-	Item* tmpItem = nullptr;
+	Item* tmpItem = NULL;
 	if(Item::items[lootBlock.id].stackable)
 	{
 		uint32_t randvalue = Monsters::getLootRandom();
@@ -206,7 +206,7 @@ Item* MonsterType::createLootItem(const LootBlock& lootBlock)
 		return tmpItem;
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 void MonsterType::createLootContainer(Container* parent, const LootBlock& lootblock)
@@ -338,7 +338,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		return true;
 	}
 
-	CombatSpell* combatSpell = nullptr;
+	CombatSpell* combatSpell = NULL;
 	bool needTarget = false;
 	bool needDirection = false;
 
@@ -351,7 +351,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			needTarget = attr.as_bool();
 		}
 
-		combatSpell = new CombatSpell(nullptr, needTarget, needDirection);
+		combatSpell = new CombatSpell(NULL, needTarget, needDirection);
 		if(!combatSpell->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
 			delete combatSpell;
 			return false;
@@ -643,14 +643,14 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 bool Monsters::loadMonster(const std::string& file, const std::string& monster_name, bool reloading /*= false*/)
 {
-	MonsterType* mType = nullptr;
+	MonsterType* mType = NULL;
 	bool new_mType = true;
 
 	if(reloading) {
 		uint32_t id = getIdByName(monster_name);
 		if(id != 0) {
 			mType = getMonsterType(id);
-			if(mType != nullptr) {
+			if(mType != NULL) {
 				new_mType = false;
 				mType->reset();
 			}
@@ -1123,7 +1123,7 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 {
 	uint32_t mId = getIdByName(name);
 	if(mId == 0)
-		return nullptr;
+		return NULL;
 
 	return getMonsterType(mId);
 }
@@ -1134,7 +1134,7 @@ MonsterType* Monsters::getMonsterType(uint32_t mid)
 	if(it != monsters.end())
 		return it->second;
 	else
-		return nullptr;
+		return NULL;
 }
 
 uint32_t Monsters::getIdByName(const std::string& name)

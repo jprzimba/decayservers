@@ -78,8 +78,8 @@ extern Spells* g_spells;
 extern TalkActions* g_talkActions;
 extern GlobalEvents* g_globalEvents;
 
-RSA* g_otservRSA = nullptr;
-Server* g_server = nullptr;
+RSA* g_otservRSA = NULL;
+Server* g_server = NULL;
 
 OTSYS_THREAD_SIGNALVAR g_loaderSignal;
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	sigh.sa_handler = SIG_IGN;
 	sigh.sa_flags = 0;
 	sigemptyset(&sigh.sa_mask);
-	sigaction(SIGPIPE, &sigh, nullptr);
+	sigaction(SIGPIPE, &sigh, NULL);
 	#endif
 
 	OTSYS_THREAD_SIGNALVARINIT(g_loaderSignal);
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
 		if(serverSaveHour >= 0 && serverSaveHour <= 24)
 		{
-			time_t timeNow = time(nullptr);
+			time_t timeNow = time(NULL);
 			tm* timeinfo = localtime(&timeNow);
 
 			if(serverSaveHour == 0)
@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
 		if(he)
 		{
 			unsigned char** addr = (unsigned char**)he->h_addr_list;
-			while(addr[0] != nullptr)
+			while(addr[0] != NULL)
 			{
 				IpNetMask.first  = *(uint32_t*)(*addr);
 				IpNetMask.second = 0x0000FFFF;

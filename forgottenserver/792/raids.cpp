@@ -34,7 +34,7 @@ Raids::Raids()
 {
 	loaded = false;
 	started = false;
-	running = nullptr;
+	running = NULL;
 	lastRaidEnd = 0;
 	checkRaidsEvent = 0;
 }
@@ -135,7 +135,7 @@ void Raids::checkRaids()
 				{
 					#ifdef __DEBUG_RAID__
 					char buffer[40];
-					uint64_t tmp = time(nullptr);
+					uint64_t tmp = time(NULL);
 					formatDate(tmp, buffer);
 					std::clog << buffer << " [Notice] Raids: Starting raid " << (*it)->getName() << std::endl;
 					#endif
@@ -162,7 +162,7 @@ void Raids::clear()
 
 	loaded = false;
 	started = false;
-	running = nullptr;
+	running = NULL;
 	lastRaidEnd = 0;
 }
 
@@ -181,7 +181,7 @@ Raid* Raids::getRaidByName(const std::string& name)
 			return (*it);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 Raid::Raid(const std::string& _name, uint32_t _interval, uint32_t _marginTime)
@@ -283,7 +283,7 @@ void Raid::resetRaid()
 
 	nextEvent = 0;
 	state = RAIDSTATE_IDLE;
-	Raids::getInstance()->setRunning(nullptr);
+	Raids::getInstance()->setRunning(NULL);
 	Raids::getInstance()->setLastRaidEnd(OTSYS_TIME());
 }
 
@@ -301,7 +301,7 @@ RaidEvent* Raid::getNextRaidEvent()
 	if(nextEvent < raidEvents.size())
 		return raidEvents[nextEvent];
 	else
-		return nullptr;
+		return NULL;
 }
 
 void Raid::addEvent(RaidEvent* event)

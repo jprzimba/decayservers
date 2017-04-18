@@ -102,7 +102,7 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 	if(asLowerCaseString(nodeName) == "movevent")
 		return new MoveEvent(&m_scriptInterface);
 	else
-		return nullptr;
+		return NULL;
 }
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -234,7 +234,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 				return *it;
 		}
 	}
-	return nullptr;
+	return NULL;
 }
 
 MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
@@ -270,7 +270,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 			return *moveEventList.begin();
 	}
 	
-	return nullptr;
+	return NULL;
 }
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, Position pos, MovePosListMap& map)
@@ -300,7 +300,7 @@ MoveEvent* MoveEvents::getEvent(Tile* tile, MoveEvent_t eventType)
 		if(!moveEventList.empty())
 			return *moveEventList.begin();
 	}
-	return nullptr;
+	return NULL;
 }
 
 uint32_t MoveEvents::onCreatureMove(Creature* creature, Tile* tile, bool isIn)
@@ -314,10 +314,10 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, Tile* tile, bool isIn)
 	uint32_t ret = 1;
 	MoveEvent* moveEvent = getEvent(tile, eventType);
 	if(moveEvent)
-		ret = ret & moveEvent->fireStepEvent(creature, nullptr, tile->getPosition());
+		ret = ret & moveEvent->fireStepEvent(creature, NULL, tile->getPosition());
 
 	int32_t j = tile->__getLastIndex();
-	Item* tileItem = nullptr;
+	Item* tileItem = NULL;
 	for(int32_t i = tile->__getFirstIndex(); i < j; ++i)
 	{
 		Thing* thing = tile->__getThing(i);
@@ -365,14 +365,14 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	uint32_t ret = 1;
 	MoveEvent* moveEvent = getEvent(tile, eventType1);
 	if(moveEvent)
-		ret = ret & moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
+		ret = ret & moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
 
 	moveEvent = getEvent(item, eventType1);
 	if(moveEvent)
-		ret = ret & moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
+		ret = ret & moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
 
 	int32_t j = tile->__getLastIndex();
-	Item* tileItem = nullptr;
+	Item* tileItem = NULL;
 	for(int32_t i = tile->__getFirstIndex(); i < j; ++i)
 	{
 		Thing* thing = tile->__getThing(i);
@@ -390,9 +390,9 @@ MoveEvent::MoveEvent(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
 	m_eventType = MOVE_EVENT_NONE;
-	stepFunction = nullptr;
-	moveFunction = nullptr;
-	equipFunction = nullptr;
+	stepFunction = NULL;
+	moveFunction = NULL;
+	equipFunction = NULL;
 	slot = SLOT_WHEREEVER;
 	reqLevel = 0;
 	reqMagLevel = 0;

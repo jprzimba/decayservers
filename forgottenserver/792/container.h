@@ -38,8 +38,8 @@ class Container : public Item, public Cylinder
 
 		virtual Container* getContainer() {return this;}
 		virtual const Container* getContainer() const {return this;}
-		virtual Depot* getDepot() {return nullptr;}
-		virtual const Depot* getDepot() const {return nullptr;}
+		virtual Depot* getDepot() {return NULL;}
+		virtual const Depot* getDepot() const {return NULL;}
 
 		//serialization
 		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);

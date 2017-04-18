@@ -77,7 +77,7 @@ class Connection : boost::noncopyable
 	private:
 		Connection(boost::asio::io_service& io_service) : m_socket(io_service)
 		{
-			m_protocol = nullptr;
+			m_protocol = NULL;
 			m_pendingWrite = 0;
 			m_pendingRead = 0;
 			m_closeState = CLOSE_STATE_NONE;

@@ -27,7 +27,7 @@
 Server::Server(uint32_t serverip, uint16_t port)
 : m_io_service()
 {
-	m_acceptor = nullptr;
+	m_acceptor = NULL;
 	m_listenErrors = 0;
 	m_serverIp = serverip;
 	m_serverPort = port;
@@ -66,7 +66,7 @@ void Server::closeListenSocket()
 			}
 		}
 		delete m_acceptor;
-		m_acceptor = nullptr;
+		m_acceptor = NULL;
 	}
 }
 

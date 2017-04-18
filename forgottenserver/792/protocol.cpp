@@ -41,7 +41,7 @@ void Protocol::onSendMessage(OutputMessage* msg)
 	}
 
 	if(msg == m_outputBuffer)
-		m_outputBuffer = nullptr;
+		m_outputBuffer = NULL;
 }
 
 void Protocol::onRecvMessage(NetworkMessage& msg)
@@ -62,7 +62,7 @@ OutputMessage* Protocol::getOutputBuffer()
 		return m_outputBuffer;
 	}
 	else
-		return nullptr;
+		return NULL;
 }
 
 void Protocol::deleteProtocolTask()

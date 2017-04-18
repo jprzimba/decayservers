@@ -65,7 +65,7 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 		int threadid;
 	};
 
-	#define OTSYS_THREAD_LOCKVARINIT(a)    a = CreateMutex(nullptr, FALSE, nullptr);
+	#define OTSYS_THREAD_LOCKVARINIT(a)    a = CreateMutex(NULL, FALSE, NULL);
 	#define OTSYS_THREAD_LOCKVARRELEASE(a) CloseHandle(a);
 	#define OTSYS_THREAD_LOCK(a, b) { WaitForSingleObject(a,INFINITE); addLockLog(&a, b, true);}
 	inline int OTSYS_THREAD_LOCKEX(HANDLE a, int b)   {return WaitForSingleObject(a, b);}
@@ -74,7 +74,7 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 #endif
 
 	#define OTSYS_THREAD_TIMEOUT			  WAIT_TIMEOUT
-	#define OTSYS_THREAD_SIGNALVARINIT(a) a = CreateEvent(nullptr, FALSE, FALSE, nullptr)
+	#define OTSYS_THREAD_SIGNALVARINIT(a) a = CreateEvent(NULL, FALSE, FALSE, NULL)
 	#define OTSYS_THREAD_SIGNAL_SEND(a)   SetEvent(a);
 
 typedef HANDLE OTSYS_THREAD_SIGNALVAR;
@@ -161,7 +161,7 @@ inline void OTSYS_THREAD_LOCKVARINIT(OTSYS_THREAD_LOCKVAR& l)
 #define OTSYS_THREAD_UNLOCK(a, b)        pthread_mutex_unlock(&a);
 #define OTSYS_THREAD_UNLOCK_PTR(a, b)    pthread_mutex_unlock(a);
 #define OTSYS_THREAD_TIMEOUT			  ETIMEDOUT
-#define OTSYS_THREAD_SIGNALVARINIT(a) pthread_cond_init(&a, nullptr);
+#define OTSYS_THREAD_SIGNALVARINIT(a) pthread_cond_init(&a, NULL);
 #define OTSYS_THREAD_SIGNAL_SEND(a)   pthread_cond_signal(&a);
 
 typedef pthread_cond_t OTSYS_THREAD_SIGNALVAR;
@@ -171,7 +171,7 @@ inline void OTSYS_SLEEP(int t)
 	timespec tv;
 	tv.tv_sec  = t / 1000;
 	tv.tv_nsec = (t % 1000)*1000000;
-	nanosleep(&tv, nullptr);
+	nanosleep(&tv, NULL);
 }
 
 inline int64_t OTSYS_TIME()
@@ -203,15 +203,15 @@ class OTSYS_THREAD_LOCK_CLASS{
 public:
 	inline OTSYS_THREAD_LOCK_CLASS(OTSYS_THREAD_LOCKVAR &a)
 	{
-		logmsg = nullptr;
+		logmsg = NULL;
 		mutex = &a;
-		OTSYS_THREAD_LOCK(a, nullptr)
+		OTSYS_THREAD_LOCK(a, NULL)
 	};
 
 	inline OTSYS_THREAD_LOCK_CLASS(OTSYS_THREAD_LOCKVAR &a, const char* s)
 	{
 		mutex = &a;
-		OTSYS_THREAD_LOCK(a, nullptr)
+		OTSYS_THREAD_LOCK(a, NULL)
 
 		logmsg = s;
 
@@ -220,7 +220,7 @@ public:
 
 	static void addLog(OTSYS_THREAD_LOCKVAR* a, const char *s, bool lock)
 	{
-		if(s == nullptr)
+		if(s == NULL)
 			return;
 
 		logBlock lb;
@@ -239,7 +239,7 @@ public:
 
 	inline ~OTSYS_THREAD_LOCK_CLASS(){
 		OTSYS_THREAD_LOCK_CLASS::addLog(mutex, logmsg, false);
-		OTSYS_THREAD_UNLOCK_PTR(mutex, nullptr)
+		OTSYS_THREAD_UNLOCK_PTR(mutex, NULL)
 	};
 		
 	OTSYS_THREAD_LOCKVAR *mutex;
@@ -261,17 +261,17 @@ class OTSYS_THREAD_LOCK_CLASS
 		inline OTSYS_THREAD_LOCK_CLASS(OTSYS_THREAD_LOCKVAR &a)
 		{
 			mutex = &a;
-			OTSYS_THREAD_LOCK(a, nullptr)
+			OTSYS_THREAD_LOCK(a, NULL)
 		};
 	
 		inline OTSYS_THREAD_LOCK_CLASS(OTSYS_THREAD_LOCKVAR &a, const char* s)
 		{
 			mutex = &a;
-			OTSYS_THREAD_LOCK(a, nullptr)
+			OTSYS_THREAD_LOCK(a, NULL)
 		}
 	
 		inline ~OTSYS_THREAD_LOCK_CLASS(){
-			OTSYS_THREAD_UNLOCK_PTR(mutex, nullptr)
+			OTSYS_THREAD_UNLOCK_PTR(mutex, NULL)
 		};
 			
 		OTSYS_THREAD_LOCKVAR *mutex;

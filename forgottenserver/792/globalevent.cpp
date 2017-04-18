@@ -64,7 +64,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 	if(asLowerCaseString(nodeName) == "globalevent")
 		return new GlobalEvent(&m_scriptInterface);
 
-	return nullptr;
+	return NULL;
 }
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -122,7 +122,7 @@ void GlobalEvents::startup()
 
 void GlobalEvents::timer()
 {
-	time_t now = time(nullptr);
+	time_t now = time(NULL);
 	for(GlobalEventMap::iterator it = timerMap.begin(), end = timerMap.end(); it != end; ++it)
 	{
 		GlobalEvent* globalEvent = it->second;
@@ -247,7 +247,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			}
 		}
 
-		time_t current_time = time(nullptr);
+		time_t current_time = time(NULL);
 		tm* timeinfo = localtime(&current_time);
 		timeinfo->tm_hour = hour;
 		timeinfo->tm_min = min;
