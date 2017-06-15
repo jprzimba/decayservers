@@ -97,11 +97,8 @@ bool ConfigManager::load()
 		m_confBool[EXPERIENCE_STAGES] = getGlobalBool("experienceStages", false);
 		m_confString[DEFAULT_PRIORITY] = getGlobalString("defaultPriority", "high");
 		m_confBool[GUILD_HALLS] = getGlobalBool("guildHalls", false);
-		#ifndef __LOGIN_SERVER__
-		m_confBool[LOGIN_ONLY_LOGINSERVER] = getGlobalBool("loginOnlyWithLoginServer", false);
-		#endif
-		m_confString[ENCRYPTION_TYPE] = getGlobalString("encryptionType", "plain");
-		m_confNumber[ENCRYPTION] = ENCRYPTION_PLAIN;
+		m_confString[PASSWORD_TYPE] = getGlobalString("encryptionType", "plain");
+		m_confNumber[PASSWORDTYPE] = PASSWORD_TYPE_PLAIN;
 	}
 
 	m_confString[MAP_AUTHOR] = getGlobalString("mapAuthor", "Unknown");

@@ -396,9 +396,7 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerNameByGUID(lua_State* L);
 		static int32_t luaGetPlayersByAccountId(lua_State* L);
 		static int32_t luaGetAccountIdByName(lua_State* L);
-		static int32_t luaGetAccountByName(lua_State* L);
 		static int32_t luaGetAccountIdByAccount(lua_State* L);
-		static int32_t luaGetAccountByAccountId(lua_State* L);
 		static int32_t luaGetIpByName(lua_State* L);
 		static int32_t luaGetPlayersByIp(lua_State* L);
 		static int32_t luaIsIpBanished(lua_State* L);
@@ -483,7 +481,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerLastLogin(lua_State* L);
 		static int32_t luaGetPlayerAccountManager(lua_State* L);
 		static int32_t luaGetPlayerAccountId(lua_State* L);
-		static int32_t luaGetPlayerAccount(lua_State* L);
 		static int32_t luaGetPlayerDepotItems(lua_State* L);
 		static int32_t luaGetPlayerGuildId(lua_State* L);
 		static int32_t luaGetPlayerGuildName(lua_State* L);
@@ -704,7 +701,6 @@ class LuaScriptInterface
 			PlayerInfoGroupId,
 			PlayerInfoGUID,
 			PlayerInfoAccountId,
-			PlayerInfoAccount,
 			PlayerInfoPremiumDays,
 			PlayerInfoBalance,
 			PlayerInfoStamina,

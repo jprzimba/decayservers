@@ -21,9 +21,6 @@
 #include "iologindata.h"
 #include "tools.h"
 
-#ifdef __LOGIN_SERVER__
-#include "gameservers.h"
-#endif
 #include "town.h"
 #include "house.h"
 
@@ -47,13 +44,12 @@ Account IOLoginData::loadAccount(uint32_t accountId, bool preLoad/* = false*/)
 	Database* db = Database::getInstance();
 	DBQuery query;
 
-	query << "SELECT `id`, `name`, `password`, `premdays`, `lastday`, `key`, `warnings` FROM `accounts` WHERE `id` = " << accountId << " LIMIT 1";
+	query << "SELECT `id`, `password`, `premdays`, `lastday`, `key`, `warnings` FROM `accounts` WHERE `id` = " << accountId << " LIMIT 1";
 	DBResult* result;
 	if(!(result = db->storeQuery(query.str())))
 		return account;
 
-	account.number = result->getDataInt("id");
-	account.name = result->getDataString("name");
+	account.accnumber = result->getDataInt("id");
 	account.password = result->getDataString("password");
 	account.premiumDays = result->getDataInt("premdays");
 	account.lastDay = result->getDataInt("lastday");
@@ -65,32 +61,20 @@ Account IOLoginData::loadAccount(uint32_t accountId, bool preLoad/* = false*/)
 	if(preLoad)
 		return account;
 
-#ifndef __LOGIN_SERVER__
 	query << "SELECT `name` FROM `players` WHERE `account_id` = " << accountId << " AND `world_id` = " << g_config.getNumber(ConfigManager::WORLD_ID) << " AND `deleted` = 0";
-#else
-	query << "SELECT `name`, `world_id` FROM `players` WHERE `account_id` = " << accountId << " AND `deleted` = 0";
-#endif
+
 	if(!(result = db->storeQuery(query.str())))
 		return account;
 
 	do
 	{
 		std::string ss = result->getDataString("name");
-#ifndef __LOGIN_SERVER__
 		account.charList.push_back(ss.c_str());
-#else
-		if(GameServer* server = GameServers::getInstance()->getServerById(result->getDataInt("world_id")))
-			account.charList[ss] = server;
-		else
-			std::cout << "[Warning - IOLoginData::loadAccount] Invalid server for player '" << ss << "'." << std::endl;
-#endif
 	}
 	while(result->next());
 	result->free();
-#ifndef __LOGIN_SERVER__
 
 	account.charList.sort();
-#endif
 	return account;
 }
 
@@ -98,7 +82,7 @@ bool IOLoginData::saveAccount(Account account)
 {
 	Database* db = Database::getInstance();
 	DBQuery query;
-	query << "UPDATE `accounts` SET `premdays` = " << account.premiumDays << ", `warnings` = " << account.warnings << ", `lastday` = " << account.lastDay << " WHERE `id` = " << account.number << db->getUpdateLimiter();
+	query << "UPDATE `accounts` SET `premdays` = " << account.premiumDays << ", `warnings` = " << account.warnings << ", `lastday` = " << account.lastDay << " WHERE `id` = " << account.accnumber;
 	return db->executeQuery(query.str());
 }
 
@@ -116,27 +100,6 @@ bool IOLoginData::getAccountId(const std::string& name, uint32_t& number)
 		return false;
 
 	number = result->getDataInt("id");
-	result->free();
-	return true;
-}
-
-bool IOLoginData::getAccountName(uint32_t number, std::string& name)
-{
-	if(number < 2)
-	{
-		name = number ? "1" : "";
-		return true;
-	}
-
-	Database* db = Database::getInstance();
-	DBQuery query;
-	query << "SELECT `name` FROM `accounts` WHERE `id` = " << number << " LIMIT 1";
-
-	DBResult* result;
-	if(!(result = db->storeQuery(query.str())))
-		return false;
-
-	name = result->getDataString("name");
 	result->free();
 	return true;
 }
@@ -229,13 +192,13 @@ bool IOLoginData::accountNameExists(const std::string& name)
 	return true;
 }
 
-bool IOLoginData::getPassword(uint32_t accountId, std::string& password, std::string name/* = ""*/)
+bool IOLoginData::getPassword(uint32_t accno, const std::string& name, std::string& password)
 {
 	Database* db = Database::getInstance();
 	DBQuery query;
-	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accountId << " LIMIT 1";
-
 	DBResult* result;
+
+	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accno;
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -250,7 +213,7 @@ bool IOLoginData::getPassword(uint32_t accountId, std::string& password, std::st
 	result->free();
 	query.str("");
 
-	query << "SELECT `name` FROM `players` WHERE `account_id` = " << accountId;
+	query << "SELECT `name` FROM `players` WHERE `account_id` = " << accno;
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -270,8 +233,11 @@ bool IOLoginData::getPassword(uint32_t accountId, std::string& password, std::st
 
 bool IOLoginData::setPassword(uint32_t accountId, std::string newPassword)
 {
-	_encrypt(newPassword, false);
 	Database* db = Database::getInstance();
+	if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_MD5)
+		newPassword = transformToMD5(newPassword);
+	else if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_SHA1)
+		newPassword = transformToSHA1(newPassword);
 
 	DBQuery query;
 	query << "UPDATE `accounts` SET `password` = " << db->escapeString(newPassword) << " WHERE `id` = " << accountId << db->getUpdateLimiter();
@@ -280,14 +246,11 @@ bool IOLoginData::setPassword(uint32_t accountId, std::string newPassword)
 
 bool IOLoginData::validRecoveryKey(uint32_t accountId, std::string recoveryKey)
 {
-	_encrypt(recoveryKey, false);
 	Database* db = Database::getInstance();
-
 	DBQuery query;
-	query << "SELECT `id` FROM `accounts` WHERE `id` = " << accountId << " AND `key` ";
-	query << db->getStringComparison() << db->escapeString(recoveryKey) << " LIMIT 1";
-
 	DBResult* result;
+
+	query << "SELECT `id` FROM `accounts` WHERE `key` = " << db->escapeString(recoveryKey) << " AND `id` = " << accountId;
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -297,25 +260,23 @@ bool IOLoginData::validRecoveryKey(uint32_t accountId, std::string recoveryKey)
 
 bool IOLoginData::setRecoveryKey(uint32_t accountId, std::string newRecoveryKey)
 {
-	_encrypt(newRecoveryKey, false);
 	Database* db = Database::getInstance();
-
 	DBQuery query;
-	query << "UPDATE `accounts` SET `key` = " << db->escapeString(newRecoveryKey) << " WHERE `id` = " << accountId << db->getUpdateLimiter();
+	query << "UPDATE `accounts` SET `key` = " << db->escapeString(newRecoveryKey) << " WHERE `id` = " << accountId;
 	return db->executeQuery(query.str());
 }
 
 uint64_t IOLoginData::createAccount(std::string name, std::string password)
 {
-	_encrypt(password, false);
 	Database* db = Database::getInstance();
+	if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_MD5)
+		password = transformToMD5(password);
+	else if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_SHA1)
+		password = transformToSHA1(password);
 
 	DBQuery query;
-	query << "INSERT INTO `accounts` (`id`, `name`, `password`) VALUES (NULL, " << db->escapeString(name) << ", " << db->escapeString(password) << ")";
-	if(!db->executeQuery(query.str()))
-		return 0;
-
-	return db->getLastInsertId();
+	query << "INSERT INTO `accounts` (`id`, `password`, `premdays`, `lastday`, `key`, `warnings`, `group_id`) VALUES (" << name << ", " << db->escapeString(password) << ", 0, 0, 0, 0, 1)";
+	return db->executeQuery(query.str());
 }
 
 void IOLoginData::removePremium(Account account)
@@ -338,7 +299,7 @@ void IOLoginData::removePremium(Account account)
 		account.lastDay = timeNow;
 
 	if(!saveAccount(account))
-		std::cout << "> ERROR: Failed to save account: " << account.name << "!" << std::endl;
+		std::cout << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
 }
 
 const Group* IOLoginData::getPlayerGroupByAccount(uint32_t accountId)
@@ -373,16 +334,15 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
-	uint32_t accountId = result->getDataInt("account_id");
-	if(accountId < 1)
+	uint32_t accno = result->getDataInt("account_id");
+	if(accno < 1)
 	{
 		result->free();
 		return false;
 	}
 
-	Account account = loadAccount(accountId, true);
-	player->accountId = accountId;
-	player->account = account.name;
+	Account account = loadAccount(accno, true);
+	player->accountId = accno;
 
 	Group* group = Groups::getInstance()->getGroup(result->getDataInt("group_id"));
 	player->setGroup(group);
@@ -548,7 +508,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 	}
 
 	query.str("");
-	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accountId << " LIMIT 1";
+	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accno << " LIMIT 1";
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -673,7 +633,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 	//load vip
 	query.str("");
 	if(!g_config.getBool(ConfigManager::VIPLIST_PER_PLAYER))
-		query << "SELECT `player_id` AS `vip` FROM `account_viplist` WHERE `account_id` = " << account.number << " AND `world_id` = " << g_config.getNumber(ConfigManager::WORLD_ID);
+		query << "SELECT `player_id` AS `vip` FROM `account_viplist` WHERE `account_id` = " << account.accnumber << " AND `world_id` = " << g_config.getNumber(ConfigManager::WORLD_ID);
 	else
 		query << "SELECT `vip_id` AS `vip` FROM `player_viplist` WHERE `player_id` = " << player->getGUID();
 

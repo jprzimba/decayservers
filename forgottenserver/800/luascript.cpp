@@ -1501,9 +1501,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerAccountId(cid)
 	lua_register(m_luaState, "getPlayerAccountId", LuaScriptInterface::luaGetPlayerAccountId);
 
-	//getPlayerAccount(cid)
-	lua_register(m_luaState, "getPlayerAccount", LuaScriptInterface::luaGetPlayerAccount);
-
 	//getPlayerFlagValue(cid, flag)
 	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
@@ -2049,14 +2046,8 @@ void LuaScriptInterface::registerFunctions()
 	//getAccountIdByName(name)
 	lua_register(m_luaState, "getAccountIdByName", LuaScriptInterface::luaGetAccountIdByName);
 
-	//getAccountByName(name)
-	lua_register(m_luaState, "getAccountByName", LuaScriptInterface::luaGetAccountByName);
-
 	//getAccountIdByAccount(accName)
 	lua_register(m_luaState, "getAccountIdByAccount", LuaScriptInterface::luaGetAccountIdByAccount);
-
-	//getAccountByAccountId(accId)
-	lua_register(m_luaState, "getAccountByAccountId", LuaScriptInterface::luaGetAccountByAccountId);
 
 	//getIpByName(name)
 	lua_register(m_luaState, "getIpByName", LuaScriptInterface::luaGetIpByName);
@@ -2491,9 +2482,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 		case PlayerInfoAccountId:
 			value = player->getAccount();
 			break;
-		case PlayerInfoAccount:
-			lua_pushstring(L, player->getAccountName().c_str());
-			return 1;
 		case PlayerInfoPremiumDays:
 			value = player->getPremiumDays();
 			break;
@@ -2696,11 +2684,6 @@ int32_t LuaScriptInterface::luaGetPlayerGUID(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerAccountId(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoAccountId);
-}
-
-int32_t LuaScriptInterface::luaGetPlayerAccount(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoAccount);
 }
 
 int32_t LuaScriptInterface::luaGetPlayerPremiumDays(lua_State* L)
@@ -7181,38 +7164,12 @@ int32_t LuaScriptInterface::luaGetAccountIdByName(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetAccountByName(lua_State* L)
-{
-	//getAccountByName(name)
-	std::string name = popString(L);
-
-	if(Player* player = g_game.getPlayerByName(name))
-		lua_pushstring(L, player->getAccountName().c_str());
-	else
-	{
-		std::string tmp;
-		IOLoginData::getInstance()->getAccountName(IOLoginData::getInstance()->getAccountIdByName(name), tmp);
-		lua_pushstring(L, tmp.c_str());
-	}
-
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetAccountIdByAccount(lua_State* L)
 {
 	//getAccountIdByAccount(accName)
 	uint32_t value = 0;
 	IOLoginData::getInstance()->getAccountId(popString(L), value);
 	lua_pushnumber(L, value);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetAccountByAccountId(lua_State* L)
-{
-	//getAccountByAccountId(accId)
-	std::string value = 0;
-	IOLoginData::getInstance()->getAccountName(popNumber(L), value);
-	lua_pushstring(L, value.c_str());
 	return 1;
 }
 

@@ -262,7 +262,6 @@ class Player : public Creature, public Cylinder
 		bool isTrading() const {return tradePartner;}
 
 		uint32_t getAccount() const {return accountId;}
-		std::string getAccountName() const {return account;}
 		uint16_t getAccess() const {return group ? group->getAccess() : 0;}
 		uint16_t getGhostAccess() const {return group ? group->getGhostAccess() : 0;}
 
@@ -862,7 +861,7 @@ class Player : public Creature, public Cylinder
 		char managerChar[100];
 
 		std::string managerString, managerString2;
-		std::string account, password;
+		std::string password;
 		std::string name, nameDescription, specialDescription;
 		std::string guildName, rankName, guildNick;
 

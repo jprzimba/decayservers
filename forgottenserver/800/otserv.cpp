@@ -26,9 +26,6 @@
 #include <boost/config.hpp>
 
 #include "server.h"
-#ifdef __LOGIN_SERVER__
-#include "gameservers.h"
-#endif
 #include "networkmessage.h"
 
 #include "game.h"
@@ -102,69 +99,6 @@ boost::condition_variable g_loaderSignal;
 boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
 #ifdef __REMOTE_CONTROL__
 extern Admin* g_admin;
-#endif
-
-#if !defined(WINDOWS) || defined(__CONSOLE__)
-bool argumentsHandler(StringVec args)
-{
-	StringVec tmp;
-	for(StringVec::iterator it = args.begin(); it != args.end(); ++it)
-	{
-		if((*it) == "--help")
-		{
-			std::cout << "Usage:\n"
-			"\n"
-			"\t--config=$1\t\tAlternate configuration file path.\n"
-			"\t--data-directory=$1\tAlternate data directory path.\n"
-			"\t--ip=$1\t\t\tIP address of gameworld server.\n"
-			"\t\t\t\tShould be equal to the global IP.\n"
-			"\t--login-port=$1\tPort for login server to listen on.\n"
-			"\t--game-port=$1\tPort for game server to listen on.\n"
-			"\t--admin-port=$1\tPort for admin server to listen on.\n"
-			"\t--status-port=$1\tPort for status server to listen on.\n";
-#ifndef WINDOWS
-			std::cout << "\t--runfile=$1\t\tSpecifies run file. Will contain the pid\n"
-			"\t\t\t\tof the server process as long as it is running.\n";
-#endif
-			std::cout << "\t--output-log=$1\t\tAll standard output will be logged to\n"
-			"\t\t\t\tthis file.\n"
-			"\t--error-log=$1\t\tAll standard errors will be logged to\n"
-			"\t\t\t\tthis file.\n";
-			return false;
-		}
-
-		if((*it) == "--version")
-		{
-			std::cout << STATUS_SERVER_NAME << ", version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")\n"
-			"Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << ".\n"
-			"A server developed by Elf, slawkens, Talaturen, Lithium, KaczooH, Kiper, Kornholijo.\n"
-			"Visit our forum for updates, support and resources: http://otland.net.\n";
-			return false;
-		}
-
-		tmp = explodeString((*it), "=");
-		if(tmp[0] == "--config")
-			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
-		else if(tmp[0] == "--data-directory")
-			g_config.setString(ConfigManager::DATA_DIRECTORY, tmp[1]);
-		else if(tmp[0] == "--ip")
-			g_config.setString(ConfigManager::IP, tmp[1]);
-		else if(tmp[0] == "--login-port")
-			g_config.setNumber(ConfigManager::LOGIN_PORT, atoi(tmp[1].c_str()));
-		else if(tmp[0] == "--admin-port")
-			g_config.setNumber(ConfigManager::ADMIN_PORT, atoi(tmp[1].c_str()));
-#ifndef WINDOWS
-		else if(tmp[0] == "--runfile")
-			g_config.setString(ConfigManager::RUNFILE, tmp[1]);
-#endif
-		else if(tmp[0] == "--output-log")
-			g_config.setString(ConfigManager::OUT_LOG, tmp[1]);
-		else if(tmp[0] == "--error-log")
-			g_config.setString(ConfigManager::ERROR_LOG, tmp[1]);
-	}
-
-	return true;
-}
 #endif
 
 #ifndef WINDOWS
@@ -500,21 +434,22 @@ void mainLoader()
 
 	if(!nice(g_config.getNumber(ConfigManager::NICE_LEVEL))) {}
 	#endif
-	std::string encryptionType = asLowerCaseString(g_config.getString(ConfigManager::ENCRYPTION_TYPE));
-	if(encryptionType == "md5")
+
+	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORD_TYPE));
+	if(passwordType == "md5")
 	{
-		g_config.setNumber(ConfigManager::ENCRYPTION, ENCRYPTION_MD5);
-		std::cout << "> Using MD5 encryption" << std::endl;
+		g_config.setNumber(ConfigManager::PASSWORDTYPE, PASSWORD_TYPE_MD5);
+		std::cout << ">> Using MD5 passwords" << std::endl;
 	}
-	else if(encryptionType == "sha1")
+	else if(passwordType == "sha1")
 	{
-		g_config.setNumber(ConfigManager::ENCRYPTION, ENCRYPTION_SHA1);
-		std::cout << "> Using SHA1 encryption" << std::endl;
+		g_config.setNumber(ConfigManager::PASSWORDTYPE, PASSWORD_TYPE_SHA1);
+		std::cout << ">> Using SHA1 passwords" << std::endl;
 	}
 	else
 	{
-		g_config.setNumber(ConfigManager::ENCRYPTION, ENCRYPTION_PLAIN);
-		std::cout << "> Using plaintext encryption" << std::endl;
+		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_PLAIN);
+		std::cout << ">> Using PLAIN-TEXT passwords" << std::endl;
 	}
 /*
 	std::cout << ">> Checking software version... ";
@@ -714,15 +649,6 @@ void mainLoader()
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
 		startupErrorMessage("");
 
-	#ifdef __LOGIN_SERVER__
-	std::cout << ">> Loading game servers" << std::endl;
-	#if defined(WINDOWS) && !defined(__CONSOLE__)
-	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Loading game servers");
-	#endif
-	if(!GameServers::getInstance()->loadFromXml(true))
-		startupErrorMessage("Unable to load game servers!");
-	#endif
-
 	#ifdef __REMOTE_CONTROL__
 	std::cout << ">> Loading administration protocol" << std::endl;
 	#if defined(WINDOWS) && !defined(__CONSOLE__)
@@ -764,59 +690,7 @@ void mainLoader()
 	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Initializing game state and registering services...");
 	#endif
 	g_game.setGameState(GAME_STATE_INIT);
-/*
-	std::string ip = g_config.getString(ConfigManager::IP);
-	std::cout << "> Global address: " << ip << std::endl;
-	serverIps.push_back(std::make_pair(LOCALHOST, 0xFFFFFFFF));
 
-	char hostName[128];
-	hostent* host = NULL;
-	if(!gethostname(hostName, 128) && (host = gethostbyname(hostName)))
-	{
-		uint8_t** address = (uint8_t**)host->h_addr_list;
-		while(address[0] != NULL)
-		{
-			serverIps.push_back(std::make_pair(*(uint32_t*)(*address), 0x0000FFFF));
-			address++;
-		}
-	}
-
-	uint32_t resolvedIp = inet_addr(ip.c_str());
-	if(resolvedIp == INADDR_NONE)
-	{
-		if((host = gethostbyname(ip.c_str())))
-			resolvedIp = *(uint32_t*)host->h_addr;
-		else
-			startupErrorMessage("Cannot resolve " + ip + "!");
-	}
-
-	serverIps.push_back(std::make_pair(resolvedIp, 0));
-	Status::getInstance()->setMapName(g_config.getString(ConfigManager::MAP_NAME));
-
-	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
-	if(
-#ifdef __LOGIN_SERVER__
-	true
-#else
-	!g_config.getBool(ConfigManager::LOGIN_ONLY_LOGINSERVER)
-#endif
-	)
-	{
-		services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
-	}
-
-	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	std::cout << "> Local ports: ";
-
-	std::list<uint16_t> ports = services->getPorts();
-	for(std::list<uint16_t>::iterator it = ports.begin(); it != ports.end(); ++it)
-		std::cout << (*it) << "\t";
-
-	std::cout << std::endl << ">> All modules were loaded, server is starting up..." << std::endl;
-	#if defined(WINDOWS) && !defined(__CONSOLE__)
-	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> All modules were loaded, server is starting up...");
-	#endif
-*/
 	std::pair<uint32_t, uint32_t> IpNetMask;
 
 	IpNetMask.first  = inet_addr("127.0.0.1");
@@ -1174,19 +1048,6 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 					break;
 				}
 
-				#ifdef __LOGIN_SERVER__
-				case ID_MENU_RELOAD_GAMESERVERS:
-				{
-					if(g_game.getGameState() != GAME_STATE_STARTUP)
-					{
-						if(g_game.reloadInfo(RELOAD_GAMESERVERS))
-							std::cout << "Reloaded game servers." << std::endl;
-					}
-
-					break;
-				}
-
-				#endif
 				case ID_MENU_RELOAD_GLOBALEVENTS:
 				{
 					if(g_game.getGameState() != GAME_STATE_STARTUP)

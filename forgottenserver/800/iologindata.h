@@ -51,7 +51,6 @@ class IOLoginData
 		bool saveAccount(Account account);
 
 		bool getAccountId(const std::string& name, uint32_t& number);
-		bool getAccountName(uint32_t number, std::string& name);
 
 		bool hasFlag(uint32_t accountId, PlayerFlags value);
 		bool hasCustomFlag(uint32_t accountId, PlayerCustomFlags value);
@@ -61,7 +60,7 @@ class IOLoginData
 		bool accountIdExists(uint32_t accountId);
 		bool accountNameExists(const std::string& name);
 
-		bool getPassword(uint32_t accountId, std::string& password, std::string name = "");
+		bool getPassword(uint32_t accno, const std::string& name, std::string& password);
 		bool setPassword(uint32_t accountId, std::string newPassword);
 		bool validRecoveryKey(uint32_t accountId, std::string recoveryKey);
 		bool setRecoveryKey(uint32_t accountId, std::string newRecoveryKey);

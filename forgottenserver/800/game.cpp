@@ -18,9 +18,7 @@
 #include "game.h"
 
 #include "configmanager.h"
-#ifdef __LOGIN_SERVER__
-#include "gameservers.h"
-#endif
+
 #include "server.h"
 #include "chat.h"
 
@@ -4989,14 +4987,14 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 
 		case ACTION_NOTATION:
 		{
-			if(!IOBan::getInstance()->addNotation(account.number, reason,
+			if(!IOBan::getInstance()->addNotation(account.accnumber, reason,
 				comment, player->getGUID(), target->getGUID()))
 			{
 				player->sendCancel("Unable to perform action.");
 				return false;
 			}
 
-			if(IOBan::getInstance()->getNotationsCount(account.number) < (uint32_t)
+			if(IOBan::getInstance()->getNotationsCount(account.accnumber) < (uint32_t)
 				g_config.getNumber(ConfigManager::NOTATIONS_TO_BAN))
 			{
 				kickAction = NONE;
@@ -5023,7 +5021,7 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 			else
 				banTime = time(NULL) + g_config.getNumber(ConfigManager::BAN_LENGTH);
 
-			if(!IOBan::getInstance()->addAccountBanishment(account.number, banTime, reason, action,
+			if(!IOBan::getInstance()->addAccountBanishment(account.accnumber, banTime, reason, action,
 				comment, player->getGUID(), target->getGUID()))
 			{
 				account.warnings--;
@@ -5063,7 +5061,7 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 			else
 				banTime = time(NULL) + g_config.getNumber(ConfigManager::FINALBAN_LENGTH);
 
-			if(!IOBan::getInstance()->addAccountBanishment(account.number, banTime, reason, action,
+			if(!IOBan::getInstance()->addAccountBanishment(account.accnumber, banTime, reason, action,
 				comment, player->getGUID(), target->getGUID()))
 			{
 				account.warnings--;
@@ -5086,7 +5084,7 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 		{
 			//completely internal
 			account.warnings++;
-			if(!IOBan::getInstance()->addAccountBanishment(account.number, -1, reason, ACTION_DELETION,
+			if(!IOBan::getInstance()->addAccountBanishment(account.accnumber, -1, reason, ACTION_DELETION,
 				comment, player->getGUID(), target->getGUID()))
 			{
 				account.warnings--;
@@ -5111,7 +5109,7 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 	}
 
 	if(kickAction == FULL_KICK)
-		IOBan::getInstance()->removeNotations(account.number);
+		IOBan::getInstance()->removeNotations(account.accnumber);
 
 	std::stringstream ss;
 	if(g_config.getBool(ConfigManager::BROADCAST_BANISHMENTS))
@@ -5125,7 +5123,7 @@ bool Game::playerViolationWindow(uint32_t playerId, std::string name, uint8_t re
 		case ACTION_NOTATION:
 		{
 			ss << " (" << (g_config.getNumber(ConfigManager::NOTATIONS_TO_BAN) - IOBan::getInstance()->getNotationsCount(
-				account.number)) << " left to banishment)";
+				account.accnumber)) << " left to banishment)";
 			break;
 		}
 		case ACTION_STATEMENT:
@@ -5772,13 +5770,6 @@ bool Game::reloadInfo(ReloadInfo_t reload, uint32_t playerId/* = 0*/)
 
 		case RELOAD_GAMESERVERS:
 		{
-			#ifdef __LOGIN_SERVER__
-			if(GameServers::getInstance()->reload())
-				done = true;
-			else
-				std::cout << "[Error - Game::reloadInfo] Failed to reload game servers." << std::endl;
-
-			#endif
 			break;
 		}
 

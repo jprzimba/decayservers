@@ -53,9 +53,7 @@
 	#define ID_MENU_RELOAD_CHAT 216
 	#define ID_MENU_RELOAD_CONFIG 217
 	#define ID_MENU_RELOAD_CREATUREEVENTS 218
-	#ifdef __LOGIN_SERVER__
-	#define ID_MENU_RELOAD_GAMESERVERS 219
-	#endif
+
 	#define ID_MENU_RELOAD_GLOBALEVENTS 220
 	#define ID_MENU_RELOAD_GROUPS 221
 	#define ID_MENU_RELOAD_HIGHSCORES 222
@@ -83,7 +81,7 @@
 #define STATUS_SERVER_NAME "The Forgotten Server"
 #define STATUS_SERVER_VERSION "0.3.6 Old"
 #define STATUS_SERVER_CODENAME "Crying Damson"
-#define STATUS_SERVER_PROTOCOL "8.54"
+#define STATUS_SERVER_PROTOCOL "8.0"
 
 #define VERSION_CHECK "http://forgottenserver.otland.net/version.xml"
 #define VERSION_DATABASE 23

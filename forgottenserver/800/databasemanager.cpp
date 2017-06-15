@@ -1040,7 +1040,10 @@ uint32_t DatabaseManager::updateDatabase()
 					do
 					{
 						std::string key = result->getDataString("key");
-						_encrypt(key, false);
+						if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_MD5)
+							key = transformToMD5(key);
+						else if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_SHA1)
+							key = transformToSHA1(key);
 
 						query << "UPDATE `accounts` SET `key` = " << db->escapeString(key) << " WHERE `id` = " << result->getDataInt("id") << db->getUpdateLimiter();
 						db->executeQuery(query.str());
@@ -1055,7 +1058,7 @@ uint32_t DatabaseManager::updateDatabase()
 			db->executeQuery(query.str());
 			query.str("");
 
-			registerDatabaseConfig("encryption", g_config.getNumber(ConfigManager::ENCRYPTION));
+			registerDatabaseConfig("encryption", g_config.getNumber(ConfigManager::PASSWORDTYPE));
 			registerDatabaseConfig("db_version", 23);
 			return 23;
 		}
@@ -1100,17 +1103,17 @@ void DatabaseManager::registerDatabaseConfig(std::string config, int32_t value)
 
 void DatabaseManager::checkEncryption()
 {
-	Encryption_t newValue = (Encryption_t)g_config.getNumber(ConfigManager::ENCRYPTION);
-	int32_t value = (int32_t)ENCRYPTION_PLAIN;
+	passwordType_t newValue = (passwordType_t)g_config.getNumber(ConfigManager::PASSWORDTYPE);
+	int32_t value = (int32_t)PASSWORD_TYPE_PLAIN;
 	if(getDatabaseConfig("encryption", value))
 	{
-		if(newValue != (Encryption_t)value)
+		if(newValue != (passwordType_t)value)
 		{
 			switch(newValue)
 			{
-				case ENCRYPTION_MD5:
+				case PASSWORD_TYPE_MD5:
 				{
-					if((Encryption_t)value != ENCRYPTION_PLAIN)
+					if((passwordType_t)value != PASSWORD_TYPE_PLAIN)
 					{
 						std::cout << "> WARNING: You cannot change the encryption to MD5, change it back in config.lua to \"sha1\"." << std::endl;
 						return;
@@ -1139,9 +1142,9 @@ void DatabaseManager::checkEncryption()
 					break;
 				}
 
-				case ENCRYPTION_SHA1:
+				case PASSWORD_TYPE_SHA1:
 				{
-					if((Encryption_t)value != ENCRYPTION_PLAIN)
+					if((passwordType_t)value != PASSWORD_TYPE_PLAIN)
 					{
 						std::cout << "> WARNING: You cannot change the encryption to SHA1, change it back in config.lua to \"md5\"." << std::endl;
 						return;
@@ -1185,7 +1188,7 @@ void DatabaseManager::checkEncryption()
 		{
 			switch(newValue)
 			{
-				case ENCRYPTION_MD5:
+				case PASSWORD_TYPE_MD5:
 				{
 					Database* db = Database::getInstance();
 					DBQuery query;
@@ -1194,7 +1197,7 @@ void DatabaseManager::checkEncryption()
 					break;
 				}
 
-				case ENCRYPTION_SHA1:
+				case PASSWORD_TYPE_SHA1:
 				{
 					Database* db = Database::getInstance();
 					DBQuery query;

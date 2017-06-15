@@ -425,16 +425,17 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	setXTEAKey(key);
 
 	bool gamemaster = msg.GetByte();
-	std::string name = msg.GetString(), character = msg.GetString(), password = msg.GetString();
+	uint32_t accnumber = msg.GetU32();
+	const std::string name = msg.GetString();
+	std::string password = msg.GetString();
 
-	msg.SkipBytes(6); //841- wtf?
 	if(version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX)
 	{
 		disconnectClient(0x14, CLIENT_VERSION_STRING);
 		return false;
 	}
 
-	if(name.empty())
+	if(!accnumber)
 	{
 		if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
@@ -442,7 +443,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 			return false;
 		}
 
-		name = "1";
+		accnumber = 1;
 		password = "1";
 	}
 
@@ -470,27 +471,19 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	uint32_t id = 1;
-	if(!IOLoginData::getInstance()->getAccountId(name, id))
+	std::string acc_pass;
+	if(!(IOLoginData::getInstance()->getPassword(accnumber, name, acc_pass) && passwordTest(password, acc_pass)) && name != "Account Manager")
 	{
 		ConnectionManager::getInstance()->addLoginAttempt(getIP(), false);
-		disconnectClient(0x14, "Invalid account name.");
-		return false;
-	}
-
-	std::string hash;
-	if(!IOLoginData::getInstance()->getPassword(id, hash, character) || !encryptTest(password, hash))
-	{
-		ConnectionManager::getInstance()->addLoginAttempt(getIP(), false);
-		disconnectClient(0x14, "Invalid password.");
+		getConnection()->closeConnection();
 		return false;
 	}
 
 	Ban ban;
-	ban.value = id;
+	ban.value = accnumber;
 
 	ban.type = BAN_ACCOUNT;
-	if(IOBan::getInstance()->getData(ban) && !IOLoginData::getInstance()->hasFlag(id, PlayerFlag_CannotBeBanned))
+	if(IOBan::getInstance()->getData(ban) && !IOLoginData::getInstance()->hasFlag(accnumber, PlayerFlag_CannotBeBanned))
 	{
 		bool deletion = ban.expires < 0;
 		std::string name_ = "Automatic ";
@@ -512,7 +505,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	ConnectionManager::getInstance()->addLoginAttempt(getIP(), true);
 	Dispatcher::getInstance().addTask(createTask(boost::bind(
-		&ProtocolGame::login, this, character, id, password, operatingSystem, version, gamemaster)));
+		&ProtocolGame::login, this, name, accnumber, password, operatingSystem, version, gamemaster)));
 	return true;
 }
 
@@ -822,7 +815,7 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 					else
 						banTime = time(NULL) + g_config.getNumber(ConfigManager::BAN_LENGTH);
 
-					if(IOBan::getInstance()->addAccountBanishment(tmp.number, banTime, 13, action,
+					if(IOBan::getInstance()->addAccountBanishment(tmp.accnumber, banTime, 13, action,
 						"Sending unknown packets to the server.", 0, player->getGUID()))
 					{
 						IOLoginData::getInstance()->saveAccount(tmp);

@@ -26,7 +26,7 @@
 #include "configmanager.h"
 extern ConfigManager g_config;
 
-std::string transformToSHA1(std::string plainText, bool upperCase)
+std::string transformToSHA1(std::string plainText, bool upperCase /*= false*/)
 {
 	SHA1 sha1;
 	unsigned sha1Hash[5];
@@ -46,7 +46,7 @@ std::string transformToSHA1(std::string plainText, bool upperCase)
 	return hexStr;
 }
 
-std::string transformToMD5(std::string plainText, bool upperCase)
+std::string transformToMD5(std::string plainText, bool upperCase /*= false*/)
 {
 	MD5_CTX m_md5;
 	std::stringstream hexStream;
@@ -66,31 +66,31 @@ std::string transformToMD5(std::string plainText, bool upperCase)
 	return hexStr;
 }
 
-void _encrypt(std::string& str, bool upperCase)
+bool passwordTest(const std::string &plain, std::string &hash)
 {
-	switch(g_config.getNumber(ConfigManager::ENCRYPTION))
+	switch(g_config.getNumber(ConfigManager::PASSWORDTYPE))
 	{
-		case ENCRYPTION_MD5:
-			str = transformToMD5(str, upperCase);
+		case PASSWORD_TYPE_MD5:
+		{
+			std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
+			return transformToMD5(plain, true) == hash;
 			break;
-		case ENCRYPTION_SHA1:
-			str = transformToSHA1(str, upperCase);
+		}
+
+		case PASSWORD_TYPE_SHA1:
+		{
+			std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
+			return transformToSHA1(plain, true) == hash;
 			break;
+		}
+
 		default:
 		{
-			if(upperCase)
-				std::transform(str.begin(), str.end(), str.begin(), upchar);
-
+			return plain == hash;
 			break;
 		}
 	}
-}
-
-bool encryptTest(std::string plain, std::string& hash)
-{
-	std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
-	_encrypt(plain, true);
-	return plain == hash;
+	return false;
 }
 
 void replaceString(std::string& text, const std::string key, const std::string value)

@@ -78,22 +78,32 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	uint32_t clientIp = getConnection()->getIP();
-	/*uint16_t operatingSystem = msg.GetU16();*/msg.SkipBytes(2);
+	/*uint16_t operatingSystem =*/ msg.GetU16();
 	uint16_t version = msg.GetU16();
 
 	msg.SkipBytes(12);
+
+	if(version <= 760)
+		disconnectClient(0x0A, CLIENT_VERSION_STRING);
+
 	if(!RSA_decrypt(g_otservRSA, msg))
 	{
 		getConnection()->closeConnection();
 		return false;
 	}
 
-	uint32_t key[4] = {msg.GetU32(), msg.GetU32(), msg.GetU32(), msg.GetU32()};
+	uint32_t key[4];
+	key[0] = msg.GetU32();
+	key[1] = msg.GetU32();
+	key[2] = msg.GetU32();
+	key[3] = msg.GetU32();
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	std::string name = msg.GetString(), password = msg.GetString();
-	if(name.empty())
+	uint32_t accnumber = msg.GetU32();
+	std::string password = msg.GetString();
+
+	if(!accnumber)
 	{
 		if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
@@ -101,7 +111,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 			return false;
 		}
 
-		name = "1";
+		accnumber = 1;
 		password = "1";
 	}
 
@@ -135,27 +145,30 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	uint32_t id = 1;
-	if(!IOLoginData::getInstance()->getAccountId(name, id))
+	uint32_t serverIp = serverIps[0].first;
+	for(IpList::iterator it = serverIps.begin(); it != serverIps.end(); ++it)
 	{
-		ConnectionManager::getInstance()->addLoginAttempt(clientIp, false);
-		disconnectClient(0x0A, "Please enter a valid account number and password.");
-		return false;
+		if((it->first & it->second) != (clientIp & it->second))
+			continue;
+
+		serverIp = it->first;
+		break;
 	}
 
-	Account account = IOLoginData::getInstance()->loadAccount(id);
-	if(!encryptTest(password, account.password))
+	Account account = IOLoginData::getInstance()->loadAccount(accnumber);
+	if(!(accnumber != 0 && account.accnumber == accnumber &&
+		passwordTest(password, account.password)))
 	{
 		ConnectionManager::getInstance()->addLoginAttempt(clientIp, false);
-		disconnectClient(0x0A, "Invalid password.");
+		disconnectClient(0x0A, "Account number or password is not correct.");
 		return false;
 	}
 
 	Ban ban;
-	ban.value = account.number;
+	ban.value = account.accnumber;
 
 	ban.type = BAN_ACCOUNT;
-	if(IOBan::getInstance()->getData(ban) && !IOLoginData::getInstance()->hasFlag(account.number, PlayerFlag_CannotBeBanned))
+	if(IOBan::getInstance()->getData(ban) && !IOLoginData::getInstance()->hasFlag(account.accnumber, PlayerFlag_CannotBeBanned))
 	{
 		bool deletion = ban.expires < 0;
 		std::string name_ = "Automatic ";
@@ -190,25 +203,15 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		TRACK_MESSAGE(output);
 		output->AddByte(0x14);
 
-		char motd[1300];
+		char motd[750];
 		sprintf(motd, "%d\n%s", g_game.getMotdId(), g_config.getString(ConfigManager::MOTD).c_str());
 		output->AddString(motd);
 
-		uint32_t serverIp = serverIps[0].first;
-		for(IpList::iterator it = serverIps.begin(); it != serverIps.end(); ++it)
-		{
-			if((it->first & it->second) != (clientIp & it->second))
-				continue;
-
-			serverIp = it->first;
-			break;
-		}
-
 		//Add char list
 		output->AddByte(0x64);
-		if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER) && id != 1)
+		if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER) && accnumber != 1)
 		{
-			output->AddByte(account.charList.size() + 1);
+			output->AddByte((uint8_t)account.charList.size() + 1);
 			output->AddString("Account Manager");
 			output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
 			output->AddU32(serverIp);
@@ -219,7 +222,6 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 		for(Characters::iterator it = account.charList.begin(); it != account.charList.end(); it++)
 		{
-			#ifndef __LOGIN_SERVER__
 			output->AddString((*it));
 			if(g_config.getBool(ConfigManager::ON_OR_OFF_CHARLIST))
 			{
@@ -233,15 +235,6 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 			output->AddU32(serverIp);
 			output->AddU16(g_config.getNumber(ConfigManager::LOGIN_PORT));
-			#else
-			if(version < it->second->getVersionMin() || version > it->second->getVersionMax())
-				continue;
-
-			output->AddString(it->first);
-			output->AddString(it->second->getName());
-			output->AddU32(it->second->getAddress());
-			output->AddU16(it->second->getPort());
-			#endif
 		}
 
 		//Add premium days

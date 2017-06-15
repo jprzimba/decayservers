@@ -258,7 +258,7 @@ void Connection::acceptConnection()
 	// Read size of te first packet
 	m_pendingRead++;
 	boost::asio::async_read(m_socket,
-		boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::headerLength),
+		boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
 		boost::bind(&Connection::parseHeader, this, boost::asio::placeholders::error));
 }
 
@@ -279,7 +279,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	{
 		// Read packet content
 		m_pendingRead++;
-		m_msg.setMessageLength(size + NetworkMessage::headerLength);
+		m_msg.setMessageLength(size + NetworkMessage::header_length);
 		boost::asio::async_read(m_socket, boost::asio::buffer(m_msg.getBodyBuffer(), size),
 			boost::bind(&Connection::parsePacket, this, boost::asio::placeholders::error));
 	}
@@ -337,7 +337,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		// Wait to the next packet
 		m_pendingRead++;
 		boost::asio::async_read(m_socket,
-			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::headerLength),
+			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
 			boost::bind(&Connection::parseHeader, this, boost::asio::placeholders::error));
 	}
 	else
