@@ -40,7 +40,7 @@ class ProtocolGame : public Protocol
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 		static uint32_t protocolGameCount;
 #endif
-		ProtocolGame(Connection_ptr connection): Protocol(connection)
+		ProtocolGame(Connection* connection): Protocol(connection)
 		{
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 			protocolGameCount++;
@@ -58,7 +58,6 @@ class ProtocolGame : public Protocol
 			player = NULL;
 		}
 
-		enum {protocolId = 0x0A};
 		enum {isSingleSocket = true};
 		enum {hasChecksum = true};
 		static const char* protocolName() {return "game protocol";}

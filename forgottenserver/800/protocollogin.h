@@ -30,7 +30,7 @@ class ProtocolLogin : public Protocol
 #endif
 		virtual void onRecvFirstMessage(NetworkMessage& msg) {parseFirstPacket(msg);}
 
-		ProtocolLogin(Connection_ptr connection) : Protocol(connection)
+		ProtocolLogin(Connection* connection) : Protocol(connection)
 		{
 			enableChecksum();
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -44,7 +44,6 @@ class ProtocolLogin : public Protocol
 #endif
 		}
 
-		enum {protocolId = 0x01};
 		enum {isSingleSocket = false};
 		enum {hasChecksum = true};
 		static const char* protocolName() {return "login protocol";}

@@ -235,7 +235,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t id, const std::string
 				OutputMessagePool::getInstance()->send(output);
 			}
 
-			getConnection()->close();
+			getConnection()->closeConnection();
 			return false;
 		}
 
@@ -323,8 +323,8 @@ bool ProtocolGame::logout(bool displayEffect, bool forceLogout)
 	if(displayEffect && !player->isGhost())
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
 
-	if(Connection_ptr connection = getConnection())
-		connection->close();
+	if(Connection* connection = getConnection())
+		connection->closeConnection();
 
 	return g_game.removeCreature(player);
 }
@@ -362,7 +362,7 @@ bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem,
 void ProtocolGame::disconnect()
 {
 	if(getConnection())
-		getConnection()->close();
+		getConnection()->closeConnection();
 }
 
 void ProtocolGame::disconnectClient(uint8_t error, const char* message)
@@ -407,7 +407,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 #endif
 		g_game.getGameState() == GAME_STATE_SHUTDOWN)
 	{
-		getConnection()->close();
+		getConnection()->closeConnection();
 		return false;
 	}
 
@@ -415,7 +415,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	uint16_t version = msg.GetU16();
 	if(!RSA_decrypt(msg))
 	{
-		getConnection()->close();
+		getConnection()->closeConnection();
 		return false;
 	}
 
@@ -457,7 +457,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	if(ConnectionManager::getInstance()->isDisabled(getIP(), protocolId))
+	if(ConnectionManager::getInstance()->isDisabled(getIP()))
 	{
 		disconnectClient(0x14, "Too many connections attempts from your IP address, please try again later.");
 		return false;
@@ -472,7 +472,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	uint32_t id = 1;
 	if(!IOLoginData::getInstance()->getAccountId(name, id))
 	{
-		ConnectionManager::getInstance()->addAttempt(getIP(), protocolId, false);
+		ConnectionManager::getInstance()->addLoginAttempt(getIP(), false);
 		disconnectClient(0x14, "Invalid account name.");
 		return false;
 	}
@@ -480,7 +480,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	std::string hash;
 	if(!IOLoginData::getInstance()->getPassword(id, hash, character) || !encryptTest(password, hash))
 	{
-		ConnectionManager::getInstance()->addAttempt(getIP(), protocolId, false);
+		ConnectionManager::getInstance()->addLoginAttempt(getIP(), false);
 		disconnectClient(0x14, "Invalid password.");
 		return false;
 	}
@@ -509,7 +509,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	ConnectionManager::getInstance()->addAttempt(getIP(), protocolId, true);
+	ConnectionManager::getInstance()->addLoginAttempt(getIP(), true);
 	Dispatcher::getInstance().addTask(createTask(boost::bind(
 		&ProtocolGame::login, this, character, id, password, operatingSystem, version, gamemaster)));
 	return true;

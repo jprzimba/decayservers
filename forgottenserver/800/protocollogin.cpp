@@ -62,7 +62,7 @@ void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->close();
+	getConnection()->closeConnection();
 }
 
 bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
@@ -73,7 +73,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 #endif
 		g_game.getGameState() == GAME_STATE_SHUTDOWN)
 	{
-		getConnection()->close();
+		getConnection()->closeConnection();
 		return false;
 	}
 
@@ -84,7 +84,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	msg.SkipBytes(12);
 	if(!RSA_decrypt(msg))
 	{
-		getConnection()->close();
+		getConnection()->closeConnection();
 		return false;
 	}
 
@@ -123,7 +123,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	if(ConnectionManager::getInstance()->isDisabled(clientIp, protocolId))
+	if(ConnectionManager::getInstance()->isDisabled(clientIp))
 	{
 		disconnectClient(0x0A, "Too many connections attempts from your IP address, please try again later.");
 		return false;
@@ -138,15 +138,15 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	uint32_t id = 1;
 	if(!IOLoginData::getInstance()->getAccountId(name, id))
 	{
-		ConnectionManager::getInstance()->addAttempt(clientIp, protocolId, false);
-		disconnectClient(0x0A, "Invalid account name.");
+		ConnectionManager::getInstance()->addLoginAttempt(clientIp, false);
+		disconnectClient(0x0A, "Please enter a valid account number and password.");
 		return false;
 	}
 
 	Account account = IOLoginData::getInstance()->loadAccount(id);
 	if(!encryptTest(password, account.password))
 	{
-		ConnectionManager::getInstance()->addAttempt(clientIp, protocolId, false);
+		ConnectionManager::getInstance()->addLoginAttempt(clientIp, false);
 		disconnectClient(0x0A, "Invalid password.");
 		return false;
 	}
@@ -184,7 +184,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	ConnectionManager::getInstance()->addAttempt(clientIp, protocolId, true);
+	ConnectionManager::getInstance()->addLoginAttempt(clientIp, true);
 	if(OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false))
 	{
 		TRACK_MESSAGE(output);
@@ -212,7 +212,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 			output->AddString("Account Manager");
 			output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
 			output->AddU32(serverIp);
-			output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+			output->AddU16(g_config.getNumber(ConfigManager::LOGIN_PORT));
 		}
 		else
 			output->AddByte((uint8_t)account.charList.size());
@@ -232,7 +232,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 				output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
 
 			output->AddU32(serverIp);
-			output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+			output->AddU16(g_config.getNumber(ConfigManager::LOGIN_PORT));
 			#else
 			if(version < it->second->getVersionMin() || version > it->second->getVersionMax())
 				continue;
@@ -253,6 +253,6 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->close();
+	getConnection()->closeConnection();
 	return true;
 }

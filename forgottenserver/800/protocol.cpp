@@ -101,7 +101,8 @@ void Protocol::deleteProtocolTask()
 {
 	//dispather thread
 	assert(!m_refCount);
-	setConnection(Connection_ptr());
+	setConnection(NULL);
+
 	delete this;
 }
 

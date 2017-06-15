@@ -31,7 +31,6 @@
 #include "npc.h"
 #include "monster.h"
 
-class ServiceManager;
 class Creature;
 class Player;
 class Monster;
@@ -148,7 +147,7 @@ class Game
 	public:
 		Game();
 		virtual ~Game();
-		void start(ServiceManager* servicer);
+		void start();
 
 		Highscore getHighscore(uint16_t skill);
 		std::string getHighscoreString(uint16_t skill);
@@ -648,7 +647,6 @@ class Game
 		GameState_t gameState;
 		WorldType_t worldType;
 
-		ServiceManager* services;
 		Map* map;
 
 		std::string lastMotd;

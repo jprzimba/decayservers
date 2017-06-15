@@ -85,9 +85,11 @@ ConfigManager g_config;
 Game g_game;
 Monsters g_monsters;
 Npcs g_npcs;
+Chat g_chat;
 
 RSA g_RSA;
-Chat g_chat;
+Server* g_server = NULL;
+
 #if defined(WINDOWS) && !defined(__CONSOLE__)
 GUILogger g_logger;
 NOTIFYICONDATA NID;
@@ -149,12 +151,8 @@ bool argumentsHandler(StringVec args)
 			g_config.setString(ConfigManager::IP, tmp[1]);
 		else if(tmp[0] == "--login-port")
 			g_config.setNumber(ConfigManager::LOGIN_PORT, atoi(tmp[1].c_str()));
-		else if(tmp[0] == "--game-port")
-			g_config.setNumber(ConfigManager::GAME_PORT, atoi(tmp[1].c_str()));
 		else if(tmp[0] == "--admin-port")
 			g_config.setNumber(ConfigManager::ADMIN_PORT, atoi(tmp[1].c_str()));
-		else if(tmp[0] == "--status-port")
-			g_config.setNumber(ConfigManager::STATUS_PORT, atoi(tmp[1].c_str()));
 #ifndef WINDOWS
 		else if(tmp[0] == "--runfile")
 			g_config.setString(ConfigManager::RUNFILE, tmp[1]);
@@ -245,28 +243,26 @@ void startupErrorMessage(const std::string& error)
 	exit(-1);
 }
 
-void otserv(
-#if !defined(WINDOWS) || defined(__CONSOLE__)
-StringVec args,
+void mainLoader(
+#ifdef __CONSOLE__
+	int argc, char *argv[]
 #endif
-ServiceManager* services);
+);
 
-#if !defined(WINDOWS) || defined(__CONSOLE__)
-int main(int argc, char *argv[])
-{
-	StringVec args = StringVec(argv, argv + argc);
-	if(argc > 1 && !argumentsHandler(args))
-		return 0;
-
+#ifndef __CONSOLE__
+void serverMain(void *param)
 #else
-void serverMain(void* param)
+int main(int argc, char *argv[])
+#endif
 {
+	#ifdef WIN32
+	#ifndef __CONSOLE__
 	std::cout.rdbuf(&g_logger);
 	std::cerr.rdbuf(&g_logger);
+	#endif
+	#endif
 
-#endif
 	std::set_new_handler(allocationHandler);
-	ServiceManager servicer;
 	g_config.startup();
 
 	#ifdef __OTSERV_ALLOCATOR_STATS__
@@ -297,11 +293,12 @@ void serverMain(void* param)
 	signal(SIGTERM, signalHandler); //shutdown
 	#endif
 
-	Dispatcher::getInstance().addTask(createTask(boost::bind(otserv,
-	#if !defined(WINDOWS) || defined(__CONSOLE__)
-	args,
-	#endif
-	&servicer)));
+	Dispatcher::getInstance().addTask(createTask(boost::bind(mainLoader
+#ifdef __CONSOLE__
+	, argc, argv
+#endif
+	)));
+
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	#if !defined(WINDOWS) || defined(__CONSOLE__)
@@ -345,23 +342,16 @@ void serverMain(void* param)
 	}
 	#endif
 
-	if(servicer.isRunning())
-	{
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " server Online!" << std::endl << std::endl;
-		#if defined(WINDOWS) && !defined(__CONSOLE__)
-		SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Status: Online!");
-		GUI::getInstance()->m_connections = true;
-		#endif
-		servicer.run();
-	}
-	else
-	{
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " server Offline! No services available..." << std::endl << std::endl;
-		#if defined(WINDOWS) && !defined(__CONSOLE__)
-		SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Status: Offline!");
-		GUI::getInstance()->m_connections = true;
-		#endif
-	}
+	Server server(INADDR_ANY, g_config.getNumber(ConfigManager::LOGIN_PORT));
+
+	std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
+	#ifndef __CONSOLE__
+	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Status: Online!");
+	GUI::getInstance()->m_connections = true;
+	#endif
+
+	g_server = &server;
+	server.run();
 
 #ifdef __EXCEPTION_TRACER__
 	mainExceptionHandler.RemoveHandler();
@@ -371,12 +361,13 @@ void serverMain(void* param)
 #endif
 }
 
-void otserv(
-#if !defined(WINDOWS) || defined(__CONSOLE__)
-StringVec args,
+#ifdef __CONSOLE__
+void mainLoader(int argc, char *argv[])
+#else
+void mainLoader()
 #endif
-ServiceManager* services)
 {
+	//dispatcher thread
 	srand((uint32_t)OTSYS_TIME());
 	#if defined(WINDOWS)
 	#if defined(__CONSOLE__)
@@ -772,7 +763,7 @@ ServiceManager* services)
 	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> Initializing game state and registering services...");
 	#endif
 	g_game.setGameState(GAME_STATE_INIT);
-
+/*
 	std::string ip = g_config.getString(ConfigManager::IP);
 	std::cout << "> Global address: " << ip << std::endl;
 	serverIps.push_back(std::make_pair(LOCALHOST, 0xFFFFFFFF));
@@ -824,9 +815,63 @@ ServiceManager* services)
 	#if defined(WINDOWS) && !defined(__CONSOLE__)
 	SendMessage(GUI::getInstance()->m_statusBar, WM_SETTEXT, 0, (LPARAM)">> All modules were loaded, server is starting up...");
 	#endif
+*/
+	std::pair<uint32_t, uint32_t> IpNetMask;
+
+	IpNetMask.first  = inet_addr("127.0.0.1");
+	IpNetMask.second = 0xFFFFFFFF;
+	serverIps.push_back(IpNetMask);
+
+	char szHostName[128];
+	if(gethostname(szHostName, 128) == 0)
+	{
+		hostent *he = gethostbyname(szHostName);
+		if(he)
+		{
+			unsigned char** addr = (unsigned char**)he->h_addr_list;
+			while(addr[0] != NULL)
+			{
+				IpNetMask.first  = *(uint32_t*)(*addr);
+				IpNetMask.second = 0x0000FFFF;
+				serverIps.push_back(IpNetMask);
+				addr++;
+			}
+		}
+	}
+
+	std::string ip = g_config.getString(ConfigManager::IP);
+
+	uint32_t resolvedIp = inet_addr(ip.c_str());
+	if(resolvedIp == INADDR_NONE)
+	{
+		struct hostent* he = gethostbyname(ip.c_str());
+		if(he != 0)
+			resolvedIp = *(uint32_t*)he->h_addr;
+		else
+		{
+			std::cout << "ERROR: Cannot resolve " << ip << "!" << std::endl;
+			#ifndef __CONSOLE__
+			GUI::getInstance()->m_connections = false;
+			#else
+			#ifdef WIN32
+			getchar();
+			#endif
+			#endif
+			exit(-1);
+		}
+	}
+
+	IpNetMask.first  = resolvedIp;
+	IpNetMask.second = 0;
+	serverIps.push_back(IpNetMask);
+
+	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
+	if(getuid() == 0 || geteuid() == 0)
+		std::cout << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+	#endif
 	g_game.setGameState(GAME_STATE_NORMAL);
 
-	g_game.start(services);
+	g_game.start();
 	g_loaderSignal.notify_all();
 }
 
