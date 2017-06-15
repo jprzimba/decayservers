@@ -52,6 +52,7 @@
 extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
+extern RSA* g_otservRSA;
 extern CreatureEvents* g_creatureEvents;
 extern Chat g_chat;
 
@@ -413,7 +414,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	OperatingSystem_t operatingSystem = (OperatingSystem_t)msg.GetU16();
 	uint16_t version = msg.GetU16();
-	if(!RSA_decrypt(msg))
+	if(!RSA_decrypt(g_otservRSA, msg))
 	{
 		getConnection()->closeConnection();
 		return false;

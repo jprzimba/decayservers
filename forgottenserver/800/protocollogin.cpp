@@ -36,7 +36,7 @@
 
 extern ConfigManager g_config;
 extern Game g_game;
-
+extern RSA* g_otservRSA;
 extern IpList serverIps;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -82,7 +82,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	uint16_t version = msg.GetU16();
 
 	msg.SkipBytes(12);
-	if(!RSA_decrypt(msg))
+	if(!RSA_decrypt(g_otservRSA, msg))
 	{
 		getConnection()->closeConnection();
 		return false;
