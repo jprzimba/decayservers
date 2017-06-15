@@ -48,7 +48,7 @@ theforgottenserver_SOURCES = account.h actions.cpp actions.h $(MAYBE_REMOTE) \
 	outputmessage.h party.cpp party.h playerbox.cpp playerbox.h \
 	player.cpp player.h position.cpp position.h protocol.cpp protocol.h \
 	protocolgame.cpp protocolgame.h protocollogin.cpp protocollogin.h \
-	protocolold.cpp protocolold.h quests.cpp quests.h raids.cpp raids.h \
+	quests.cpp quests.h raids.cpp raids.h \
 	resources.h rsa.cpp rsa.h scheduler.cpp scheduler.h scriptmanager.cpp \
 	scriptmanager.h server.cpp server.h sha1.cpp sha1.h spawn.cpp spawn.h \
 	spells.cpp spells.h status.cpp status.h talkaction.cpp talkaction.h \

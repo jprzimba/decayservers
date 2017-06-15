@@ -38,7 +38,6 @@
 #include "connection.h"
 #include "admin.h"
 #include "protocollogin.h"
-#include "protocolold.h"
 #endif
 
 #include "configmanager.h"
@@ -1088,8 +1087,7 @@ bool TalkAction::diagnostics(Creature* creature, const std::string& cmd, const s
 #ifdef __REMOTE_CONTROL__
 	text << "ProtocolAdmin: " << ProtocolAdmin::protocolAdminCount << std::endl;
 #endif
-	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << std::endl;
-	text << "ProtocolOld: " << ProtocolOld::protocolOldCount << std::endl << std::endl;
+	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << std::endl << std::endl;
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
 
 	text.str("");

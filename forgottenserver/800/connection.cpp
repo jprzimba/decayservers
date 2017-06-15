@@ -20,7 +20,6 @@
 
 #include "protocol.h"
 #include "protocolgame.h"
-#include "protocolold.h"
 #include "admin.h"
 #include "status.h"
 

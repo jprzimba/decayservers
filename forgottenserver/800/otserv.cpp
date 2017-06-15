@@ -39,7 +39,6 @@
 
 #include "protocollogin.h"
 #include "protocolgame.h"
-#include "protocolold.h"
 #include "status.h"
 #ifdef __REMOTE_CONTROL__
 #include "admin.h"
@@ -812,11 +811,9 @@ ServiceManager* services)
 	)
 	{
 		services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
-		services->add<ProtocolOldLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 	}
 
 	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 	std::cout << "> Local ports: ";
 
 	std::list<uint16_t> ports = services->getPorts();
