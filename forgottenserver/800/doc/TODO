@@ -1,0 +1,24 @@
+[ TODO
+	Project Name
+		The Forgotten Server
+
+	Version
+		0.3.6
+
+	Codenamed
+		Crying Damson
+
+	License
+		GNU GPLv3
+
+	Forum
+		http://otland.net/
+]
+
+[ BUGS
+	Ghosts stacking may cause debug to the stacker (8.53+)
+		Assigned to: Elf
+
+	RVW control through the Comment not working
+		Assigned to: Elf
+]
