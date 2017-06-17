@@ -927,11 +927,11 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 	// ... but not in future
 	knownCreatureList.push_back(id);
 	// too many known creatures?
-	if(knownCreatureList.size() > 250)
+	if(knownCreatureList.size() > 150) //250?
 	{
 		// lets try to remove one from the end of the list
 		Creature* c = NULL;
-		for(int32_t n = 0; n < 250; n++)
+		for(int32_t n = 0; n < 150; n++) //250?
 		{
 			removedKnown = knownCreatureList.front();
 			if(!(c = g_game.getCreatureByID(removedKnown)) || !canSee(c))
@@ -1121,8 +1121,6 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	Outfit_t newOutfit = player->defaultOutfit;
 	if(g_config.getBool(ConfigManager::ALLOW_CHANGEOUTFIT))
 		newOutfit.lookType = msg.GetU16();
-	else
-		msg.SkipBytes(2);
 
 	if(g_config.getBool(ConfigManager::ALLOW_CHANGECOLORS))
 	{
@@ -1131,13 +1129,9 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		newOutfit.lookLegs = msg.GetByte();
 		newOutfit.lookFeet = msg.GetByte();
 	}
-	else
-		msg.SkipBytes(4);
 
 	if(g_config.getBool(ConfigManager::ALLOW_CHANGEADDONS))
 		newOutfit.lookAddons = msg.GetByte();
-	else
-		msg.SkipBytes(1);
 
 	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
 }
@@ -2475,17 +2469,17 @@ void ProtocolGame::AddDistanceShoot(NetworkMessage_ptr msg, const Position& from
 
 void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature, bool known, uint32_t remove)
 {
-	if(!known)
+	if(known)
+	{
+		msg->AddU16(0x62);
+		msg->AddU32(creature->getID());
+	}
+	else
 	{
 		msg->AddU16(0x61);
 		msg->AddU32(remove);
 		msg->AddU32(creature->getID());
 		msg->AddString(creature->getHideName() ? "" : creature->getName());
-	}
-	else
-	{
-		msg->AddU16(0x62);
-		msg->AddU32(creature->getID());
 	}
 
 	if(!creature->getHideHealth())
@@ -2504,10 +2498,6 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 	msg->AddU16(creature->getStepSpeed());
 	msg->AddByte(player->getSkullClient(creature));
 	msg->AddByte(player->getPartyShield(creature));
-	if(!known)
-		msg->AddByte(0x00); // war emblem
-
-	msg->AddByte(!player->canWalkthrough(creature));
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
@@ -2730,7 +2720,7 @@ void ProtocolGame::AddTileItem(NetworkMessage_ptr msg, const Position& pos, uint
 
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-	msg->AddByte(stackpos);
+	//msg->AddByte(stackpos);
 	msg->AddItem(item);
 }
 
@@ -2741,7 +2731,7 @@ void ProtocolGame::AddTileCreature(NetworkMessage_ptr msg, const Position& pos, 
 
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-	msg->AddByte(stackpos);
+//	msg->AddByte(stackpos);
 
 	bool known;
 	uint32_t removedKnown;
@@ -2856,14 +2846,17 @@ void ProtocolGame::MoveDownCreature(NetworkMessage_ptr msg, const Creature* crea
 //inventory
 void ProtocolGame::AddInventoryItem(NetworkMessage_ptr msg, slots_t slot, const Item* item)
 {
-	if(item)
+	if(item == NULL)
+	{
+		msg->AddByte(0x79);
+		msg->AddByte(slot);
+	}
+	else
 	{
 		msg->AddByte(0x78);
 		msg->AddByte(slot);
 		msg->AddItem(item);
 	}
-	else
-		RemoveInventoryItem(msg, slot);
 }
 
 void ProtocolGame::RemoveInventoryItem(NetworkMessage_ptr msg, slots_t slot)
