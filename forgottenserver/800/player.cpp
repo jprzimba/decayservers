@@ -1145,10 +1145,6 @@ void Player::sendCancelMessage(ReturnValue message) const
 			sendCancel("You are not the owner.");
 			break;
 
-		case RET_YOUMAYNOTCASTAREAONBLACKSKULL:
-			sendCancel("You may not cast area spells while you have a black skull.");
-			break;
-
 		case RET_TILEISFULL:
 			sendCancel("You cannot add more items on this tile.");
 			break;
@@ -3986,35 +3982,20 @@ bool Player::addUnjustifiedKill(const Player* attacked)
 	if(skull < SKULL_RED && ((d > 0 && tc >= d) || (w > 0 && wc >= w) || (m > 0 && mc >= m)))
 		setSkullEnd(now + g_config.getNumber(ConfigManager::RED_SKULL_LENGTH), false, SKULL_RED);
 
-	if(!g_config.getBool(ConfigManager::USE_BLACK_SKULL))
-	{
-		d += g_config.getNumber(ConfigManager::BAN_DAILY_LIMIT);
-		w += g_config.getNumber(ConfigManager::BAN_WEEKLY_LIMIT);
-		m += g_config.getNumber(ConfigManager::BAN_MONTHLY_LIMIT);
-		if((d <= 0 || tc < d) && (w <= 0 || wc < w) && (m <= 0 || mc < m))
-			return true;
+	d += g_config.getNumber(ConfigManager::BAN_DAILY_LIMIT);
+	w += g_config.getNumber(ConfigManager::BAN_WEEKLY_LIMIT);
+	m += g_config.getNumber(ConfigManager::BAN_MONTHLY_LIMIT);
+	if((d <= 0 || tc < d) && (w <= 0 || wc < w) && (m <= 0 || mc < m))
+		return true;
 
-		if(!IOBan::getInstance()->addAccountBanishment(accountId, (now + g_config.getNumber(
-			ConfigManager::KILLS_BAN_LENGTH)), 20, ACTION_BANISHMENT, "Unjustified player killing.", 0, guid))
-			return true;
+	if(!IOBan::getInstance()->addAccountBanishment(accountId, (now + g_config.getNumber(
+		ConfigManager::KILLS_BAN_LENGTH)), 20, ACTION_BANISHMENT, "Unjustified player killing.", 0, guid))
+		return true;
 
-		sendTextMessage(MSG_INFO_DESCR, "You have been banished.");
-		g_game.addMagicEffect(getPosition(), MAGIC_EFFECT_WRAPS_GREEN);
-		Scheduler::getInstance().addEvent(createSchedulerTask(1000, boost::bind(
-			&Game::kickPlayer, &g_game, getID(), false)));
-	}
-	else
-	{
-		d += g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT);
-		w += g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT);
-		m += g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT);
-		if(skull < SKULL_BLACK && ((d > 0 && tc >= d) || (w > 0 && wc >= w) || (m > 0 && mc >= m)))
-		{
-			setSkullEnd(now + g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH), false, SKULL_BLACK);
-			setAttackedCreature(NULL);
-			destroySummons();
-		}
-	}
+	sendTextMessage(MSG_INFO_DESCR, "You have been banished.");
+	g_game.addMagicEffect(getPosition(), MAGIC_EFFECT_WRAPS_GREEN);
+	Scheduler::getInstance().addEvent(createSchedulerTask(1000, boost::bind(
+		&Game::kickPlayer, &g_game, getID(), false)));
 
 	return true;
 }

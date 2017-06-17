@@ -730,16 +730,6 @@ bool Spell::playerInstantSpellCheck(Player* player, Creature* creature)
 		return false;
 	}
 
-	if(!needTarget)
-	{
-		if(!isAggressive || player->getSkull() != SKULL_BLACK)
-			return true;
-
-		player->sendCancelMessage(RET_YOUMAYNOTCASTAREAONBLACKSKULL);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
-
 	if(!creature)
 	{
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
@@ -755,13 +745,6 @@ bool Spell::playerInstantSpellCheck(Player* player, Creature* creature)
 	if(player->getSecureMode() == SECUREMODE_ON)
 	{
 		player->sendCancelMessage(RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
-
-	if(player->getSkull() == SKULL_BLACK)
-	{
-		player->sendCancelMessage(RET_YOUMAYNOTATTACKTHISPLAYER);
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
 		return false;
 	}
@@ -817,13 +800,6 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 	if(blockingSolid && tile->hasProperty(BLOCKSOLID))
 	{
 		player->sendCancelMessage(RET_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
-
-	if(player->getSkull() == SKULL_BLACK && isAggressive && range == -1) //-1 is (usually?) an area spell
-	{
-		player->sendCancelMessage(RET_YOUMAYNOTCASTAREAONBLACKSKULL);
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
 		return false;
 	}
@@ -892,16 +868,6 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if(!needTarget)
-	{
-		if(!isAggressive || player->getSkull() != SKULL_BLACK)
-			return true;
-
-		player->sendCancelMessage(RET_YOUMAYNOTCASTAREAONBLACKSKULL);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
-
 	if(!targetCreature)
 	{
 		player->sendCancelMessage(RET_CANONLYUSETHISRUNEONCREATURES);
@@ -917,13 +883,6 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	if(player->getSecureMode() == SECUREMODE_ON)
 	{
 		player->sendCancelMessage(RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
-
-	if(player->getSkull() == SKULL_BLACK)
-	{
-		player->sendCancelMessage(RET_YOUMAYNOTATTACKTHISPLAYER);
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
 		return false;
 	}
@@ -1346,13 +1305,6 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 	int32_t manaCost = (int32_t)(mType->manaCost * g_config.getDouble(ConfigManager::RATE_MONSTER_MANA));
 	if(!player->hasFlag(PlayerFlag_CanSummonAll))
 	{
-		if(player->getSkull() == SKULL_BLACK)
-		{
-			player->sendCancelMessage(RET_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-			return false;
-		}
-
 		if(!mType->isSummonable)
 		{
 			player->sendCancelMessage(RET_NOTPOSSIBLE);
@@ -1790,13 +1742,6 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 
 	if(!player->hasFlag(PlayerFlag_CanConvinceAll))
 	{
-		if(player->getSkull() == SKULL_BLACK)
-		{
-			player->sendCancelMessage(RET_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-			return false;
-		}
-
 		if((int32_t)player->getSummonCount() >= g_config.getNumber(ConfigManager::MAX_PLAYER_SUMMONS))
 		{
 			player->sendCancelMessage(RET_NOTPOSSIBLE);

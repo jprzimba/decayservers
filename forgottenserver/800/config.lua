@@ -13,32 +13,21 @@
 	generateAccountNumber = false
 
 	-- Unjustified kills
-	-- NOTE: *Banishment and *BlackSkull variables are >summed up<
-	-- (dailyFragsToRedSkull + dailyFragsToBanishment) with their
-	-- *RedSkull equivalents.
-	-- Auto banishing works only if useBlackSkull set to negative.
+	-- Auto banishing works.
 	-- advancedFragList is not advised if you use huge frags
 	-- requirements.
 	redSkullLength = 30 * 24 * 60 * 60
-	blackSkullLength = 45 * 24 * 60 * 60
 	dailyFragsToRedSkull = 3
 	weeklyFragsToRedSkull = 5
 	monthlyFragsToRedSkull = 10
-	dailyFragsToBlackSkull = dailyFragsToRedSkull
-	weeklyFragsToBlackSkull = weeklyFragsToRedSkull
-	monthlyFragsToBlackSkull = monthlyFragsToRedSkull
 	dailyFragsToBanishment = dailyFragsToRedSkull
 	weeklyFragsToBanishment = weeklyFragsToRedSkull
 	monthlyFragsToBanishment = monthlyFragsToRedSkull
-	blackSkulledDeathHealth = 40
-	blackSkulledDeathMana = 0
-	useBlackSkull = true
 	useFragHandler = true
 	advancedFragList = false
 
 	-- Banishments
 	-- violationNameReportActionType 1 = just a report, 2 = name lock, 3 = player banishment
-	-- killsBanLength works only if useBlackSkull option is disabled.
 	notationsToBan = 3
 	warningsToFinalBan = 4
 	warningsToDeletion = 5

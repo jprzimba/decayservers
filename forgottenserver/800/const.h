@@ -393,8 +393,7 @@ enum Skulls_t
 	SKULL_GREEN = 2,
 	SKULL_WHITE = 3,
 	SKULL_RED = 4,
-	SKULL_BLACK = 5,
-	SKULL_LAST = SKULL_BLACK
+	SKULL_LAST = SKULL_RED
 };
 
 enum PartyShields_t

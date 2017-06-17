@@ -175,7 +175,6 @@ bool ConfigManager::load()
 	m_confBool[HOUSE_RENTASPRICE] = getGlobalBool("houseRentAsPrice", false);
 	m_confBool[HOUSE_PRICEASRENT] = getGlobalBool("housePriceAsRent", false);
 	m_confNumber[RED_SKULL_LENGTH] = getGlobalNumber("redSkullLength", 30 * 24 * 60 * 60);
-	m_confNumber[BLACK_SKULL_LENGTH] = getGlobalNumber("blackSkullLength", 45 * 24 * 60 * 60);
 	m_confNumber[MAX_VIOLATIONCOMMENT_SIZE] = getGlobalNumber("maxViolationCommentSize", 60);
 	m_confNumber[NOTATIONS_TO_BAN] = getGlobalNumber("notationsToBan", 3);
 	m_confNumber[WARNINGS_TO_FINALBAN] = getGlobalNumber("warningsToFinalBan", 4);
@@ -250,14 +249,9 @@ bool ConfigManager::load()
 	m_confNumber[RED_DAILY_LIMIT] = getGlobalNumber("dailyFragsToRedSkull", 3);
 	m_confNumber[RED_WEEKLY_LIMIT] = getGlobalNumber("weeklyFragsToRedSkull", 5);
 	m_confNumber[RED_MONTHLY_LIMIT] = getGlobalNumber("monthlyFragsToRedSkull", 10);
-	m_confNumber[BLACK_DAILY_LIMIT] = getGlobalNumber("dailyFragsToBlackSkull", m_confNumber[RED_DAILY_LIMIT]);
-	m_confNumber[BLACK_WEEKLY_LIMIT] = getGlobalNumber("weeklyFragsToBlackSkull", m_confNumber[RED_WEEKLY_LIMIT]);
-	m_confNumber[BLACK_MONTHLY_LIMIT] = getGlobalNumber("monthlyFragsToBlackSkull", m_confNumber[RED_MONTHLY_LIMIT]);
 	m_confNumber[BAN_DAILY_LIMIT] = getGlobalNumber("dailyFragsToBanishment", m_confNumber[RED_DAILY_LIMIT]);
 	m_confNumber[BAN_WEEKLY_LIMIT] = getGlobalNumber("weeklyFragsToBanishment", m_confNumber[RED_WEEKLY_LIMIT]);
 	m_confNumber[BAN_MONTHLY_LIMIT] = getGlobalNumber("monthlyFragsToBanishment", m_confNumber[RED_MONTHLY_LIMIT]);
-	m_confNumber[BLACK_SKULL_DEATH_HEALTH] = getGlobalNumber("blackSkulledDeathHealth", 40);
-	m_confNumber[BLACK_SKULL_DEATH_MANA] = getGlobalNumber("blackSkulledDeathMana", 0);
 	m_confNumber[DEATHLIST_REQUIRED_TIME] = getGlobalNumber("deathListRequiredTime", 1 * 60 * 1000);
 	m_confNumber[EXPERIENCE_SHARE_ACTIVITY] = getGlobalNumber("experienceShareActivity", 2 * 60 * 1000);
 	m_confBool[GHOST_SPELL_EFFECTS] = getGlobalBool("ghostModeSpellEffects", true);
@@ -266,7 +260,6 @@ bool ConfigManager::load()
 	m_confNumber[ITEMLIMIT_HOUSETILE] = getGlobalNumber("maxItemsPerHouseTile", 0);
 	m_confString[MAILBOX_DISABLED_TOWNS] = getGlobalString("mailboxDisabledTowns", "-1");
 	m_confNumber[SQUARE_COLOR] = getGlobalNumber("squareColor", 0);
-	m_confBool[USE_BLACK_SKULL] = getGlobalBool("useBlackSkull", false);
 	m_confBool[USE_FRAG_HANDLER] = getGlobalBool("useFragHandler", true);
 	m_confNumber[LOOT_MESSAGE] = getGlobalNumber("monsterLootMessage", 3);
 	m_confNumber[LOOT_MESSAGE_TYPE] = getGlobalNumber("monsterLootMessageType", 25);

@@ -450,11 +450,12 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 	player->defaultOutfit.lookAddons = result->getDataInt("lookaddons");
 
 	player->currentOutfit = player->defaultOutfit;
-	Skulls_t skull = SKULL_RED;
-	if(g_config.getBool(ConfigManager::USE_BLACK_SKULL))
-		skull = (Skulls_t)result->getDataInt("skull");
 
+	//TRYLLER: NOT TESTED
+	Skulls_t skull = SKULL_RED;
+	skull = (Skulls_t)result->getDataInt("skull");
 	player->setSkullEnd((time_t)result->getDataInt("skulltime"), true, skull);
+
 	player->town = result->getDataInt("town_id");
 	if(Town* town = Towns::getInstance()->getTown(player->town))
 		player->setMasterPosition(town->getPosition());
@@ -680,16 +681,8 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 {
 	if(preSave && player->health <= 0)
 	{
-		if(player->getSkull() == SKULL_BLACK)
-		{
-			player->health = g_config.getNumber(ConfigManager::BLACK_SKULL_DEATH_HEALTH);
-			player->mana = g_config.getNumber(ConfigManager::BLACK_SKULL_DEATH_MANA);
-		}
-		else
-		{
-			player->health = player->healthMax;
-			player->mana = player->manaMax;
-		}
+		player->health = player->healthMax;
+		player->mana = player->manaMax;
 	}
 
 	Database* db = Database::getInstance();
@@ -746,9 +739,6 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 	if(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
 	{
 		Skulls_t skull = SKULL_RED;
-		if(g_config.getBool(ConfigManager::USE_BLACK_SKULL))
-			skull = player->getSkull();
-
 		query << "`skull` = " << skull << ", ";
 		query << "`skulltime` = " << player->getSkullEnd() << ", ";
 	}

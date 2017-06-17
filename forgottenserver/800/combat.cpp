@@ -355,9 +355,6 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 	{
 		if(player->getSecureMode() == SECUREMODE_ON)
 			return RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
-
-		if(player->getSkull() == SKULL_BLACK)
-			return RET_YOUMAYNOTATTACKTHISPLAYER;
 	}
 
 	return Combat::canDoCombat(player, target);
@@ -536,8 +533,11 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 	if(g_game.combatBlockHit(params.combatType, caster, target, change, params.blockedByShield, params.blockedByArmor))
 		return false;
 
-	if(change < 0 && caster && caster->getPlayer() && target->getPlayer() && target->getPlayer()->getSkull() != SKULL_BLACK)
-		change = change / 2;
+	if(change < 0)
+	{
+		if(caster && caster->getPlayer() && target->getPlayer())
+			change = change / 2;
+	}
 
 	if(!g_game.combatChangeHealth(params.combatType, caster, target, change, params.effects.hit, params.effects.color))
 		return false;
@@ -557,8 +557,11 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 			change = random_range(var->minChange, var->maxChange, DISTRO_NORMAL);
 	}
 
-	if(change < 0 && caster && caster->getPlayer() && target->getPlayer() && target->getPlayer()->getSkull() != SKULL_BLACK)
-		change = change / 2;
+	if(change < 0)
+	{
+		if(caster && caster->getPlayer() && target->getPlayer())
+			change = change / 2;
+	}
 
 	if(!g_game.combatChangeMana(caster, target, change))
 		return false;
