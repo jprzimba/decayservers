@@ -119,15 +119,6 @@ bool Tile::hasHeight(uint32_t n) const
 	return false;
 }
 
-bool Tile::isSwimmingPool(bool checkPz /*= true*/) const
-{
-	if(TrashHolder* trashHolder = getTrashHolder())
-		return trashHolder->getEffect() == MAGIC_EFFECT_LOSE_ENERGY && (!checkPz ||
-			getZone() == ZONE_PROTECTION || getZone() == ZONE_NOPVP);
-
-	return false;
-}
-
 uint32_t Tile::getCreatureCount() const
 {
 	if(const CreatureVector* creatures = getCreatures())
@@ -1022,9 +1013,6 @@ void Tile::__addThing(Creature* actor, int32_t index, Thing* thing)
 				}
 			}
 		}
-
-		if(item->getID() == ITEM_WATERBALL_SPLASH && !hasFlag(TILESTATE_TRASHHOLDER))
-			item->setID(ITEM_WATERBALL);
 
 		items = makeItemList();
 		items->insert(items->getBeginDownItem(), item);

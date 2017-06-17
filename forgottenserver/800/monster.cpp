@@ -1132,9 +1132,6 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 		return false;
 
 	Tile* tile = g_game.getTile(pos);
-	if(!tile || getTile()->isSwimmingPool(false) != tile->isSwimmingPool(false)) // prevent monsters entering/exiting to swimming pool
-		return false;
-
 	return !tile->getTopVisibleCreature(this) && tile->__queryAdd(
 		0, this, 1, FLAG_PATHFINDING) == RET_NOERROR;
 }

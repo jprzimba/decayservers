@@ -29,32 +29,9 @@ void TrashHolder::__addThing(Creature* actor, int32_t index, Thing* thing)
 		if(item == this || !item->isMoveable())
 			return;
 
-		if(getTile()->isSwimmingPool())
-		{
-			if(item->getID() == ITEM_WATERBALL_SPLASH)
-				return;
-
-			if(item->getID() == ITEM_WATERBALL)
-			{
-				g_game.transformItem(item, ITEM_WATERBALL_SPLASH);
-				return;
-			}
-		}
-
 		g_game.internalRemoveItem(actor, item);
 		if(effect != MAGIC_EFFECT_NONE)
 			g_game.addMagicEffect(getPosition(), effect);
-	}
-	else if(getTile()->isSwimmingPool(false) && thing->getCreature())
-	{
-		Player* player = thing->getCreature()->getPlayer();
-		if(player && player->getPosition() == player->getLastPosition())
-		{
-			//player has just logged in a swimming pool
-			static Outfit_t outfit;
-			outfit.lookType = 267;
-			Spell::CreateIllusion(player, outfit, -1);
-		}
 	}
 }
 

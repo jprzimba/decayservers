@@ -230,7 +230,6 @@ class Tile : public Cylinder
 			return ZONE_NORMAL;
 		}
 
-		bool isSwimmingPool(bool checkPz = true) const;
 		bool hasHeight(uint32_t n) const;
 
 		void moveCreature(Creature* actor, Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
