@@ -379,22 +379,6 @@ void ProtocolGame::disconnectClient(uint8_t error, const char* message)
 	disconnect();
 }
 
-void ProtocolGame::onConnect()
-{
-	if(OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false))
-	{
-		TRACK_MESSAGE(output);
-		enableChecksum();
-
-		output->AddByte(0x1F);
-		output->AddU16(random_range(0, 0xFFFF));
-		output->AddU16(0x00);
-		output->AddByte(random_range(0, 0xFF));
-
-		OutputMessagePool::getInstance()->send(output);
-	}
-}
-
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	parseFirstPacket(msg);

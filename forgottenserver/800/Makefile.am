@@ -19,9 +19,6 @@ endif
 if USE_ODBC
 MAYBE_ODBC = databaseodbc.cpp databaseodbc.h
 endif
-if LOGIN_SERVER
-MAYBE_LOGIN = gameservers.cpp gameservers.h
-endif
 if REMOTE_CONTROL
 MAYBE_REMOTE = admin.cpp admin.h
 endif
@@ -35,7 +32,7 @@ theforgottenserver_SOURCES = account.h actions.cpp actions.h $(MAYBE_REMOTE) \
 	database.cpp database.h databasemanager.cpp databasemanager.h \
 	$(MAYBE_MYSQL) $(MAYBE_SQLITE) $(MAYBE_PGSQL) $(MAYBE_ODBC) \
 	depot.cpp depot.h exception.cpp exception.h fileloader.cpp \
-	fileloader.h game.cpp game.h $(MAYBE_LOGIN) globalevent.cpp \
+	fileloader.h game.cpp game.h globalevent.cpp \
 	globalevent.h group.cpp group.h gui.cpp gui.h house.cpp house.h \
 	housetile.cpp housetile.h inputbox.cpp inputbox.h ioban.cpp ioban.h \
 	ioguild.cpp ioguild.h iologindata.cpp iologindata.h iomap.cpp \

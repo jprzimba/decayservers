@@ -79,7 +79,7 @@ void RSA::setKey(const char* p, const char* q, const char* d)
 	mpz_clear(qm1);
 }
 
-void RSA::decrypt(char* msg, int32_t size)
+bool RSA::decrypt(char* msg, int32_t size)
 {
 	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
 
@@ -89,7 +89,7 @@ void RSA::decrypt(char* msg, int32_t size)
 	mpz_init2(v2, 1024);
 	mpz_init2(u2, 1024);
 	mpz_init2(tmp, 1024);
-
+	
 	mpz_import(c, 128, 1, 1, 0, 0, msg);
 
 	mpz_mod(tmp, c, m_p);
@@ -107,16 +107,17 @@ void RSA::decrypt(char* msg, int32_t size)
 	mpz_mul(tmp, u2, m_p);
 	mpz_set_ui(c, 0);
 	mpz_add(c, v1, tmp);
-
+		
 	size_t count = (mpz_sizeinbase(c, 2) + 7)/8;
 	memset(msg, 0, 128 - count);
 	mpz_export(&msg[128 - count], NULL, 1, 1, 0, 0, c);
-
+	
 	mpz_clear(c);
 	mpz_clear(v1);
 	mpz_clear(v2);
 	mpz_clear(u2);
 	mpz_clear(tmp);
+	return true;
 }
 
 int32_t RSA::getKeySize()

@@ -45,13 +45,19 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 		char* getOutputBuffer() {return (char*)&m_MsgBuf[m_outputBufferStart];}
 		uint64_t getFrame() const {return m_frame;}
 
-		void writeMessageLength() {addHeader((uint16_t)(m_MsgSize));}
-		void addCryptoHeader(bool addChecksum)
+		void writeMessageLength()
 		{
-			if(addChecksum)
-				addHeader((uint32_t)(adlerChecksum((uint8_t*)(m_MsgBuf + m_outputBufferStart), m_MsgSize)));
+			*(uint16_t*)(m_MsgBuf + 2) = m_MsgSize;
+			//added header size to the message size
+			m_MsgSize = m_MsgSize + 2;
+			m_outputBufferStart = 2;
+		}
 
-			addHeader((uint16_t)(m_MsgSize));
+		void addCryptoHeader()
+		{
+			*(uint16_t*)(m_MsgBuf) = m_MsgSize;
+			m_MsgSize = m_MsgSize + 2;
+			m_outputBufferStart = 0;
 		}
 
 #ifdef __TRACK_NETWORK__
@@ -87,20 +93,6 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 		};
 
 	protected:
-		template <typename T>
-		inline void addHeader(T value)
-		{
-			if((int32_t)m_outputBufferStart - (int32_t)sizeof(T) < 0)
-			{
-				std::cout << "[Error - OutputMessage::addHeader] m_outputBufferStart(" << m_outputBufferStart << ") < " << sizeof(T) << std::endl;
-				return;
-			}
-
-			m_outputBufferStart -= sizeof(T);
-			*(T*)(m_MsgBuf + m_outputBufferStart) = value;
-			m_MsgSize += sizeof(T);
-		}
-
 		void freeMessage()
 		{
             setConnection(NULL);

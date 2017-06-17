@@ -32,7 +32,6 @@ class ProtocolLogin : public Protocol
 
 		ProtocolLogin(Connection* connection) : Protocol(connection)
 		{
-			enableChecksum();
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 			protocolLoginCount++;
 #endif

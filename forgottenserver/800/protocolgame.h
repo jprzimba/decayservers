@@ -84,7 +84,6 @@ class ProtocolGame : public Protocol
 		bool canSee(const Creature*) const;
 		bool canSee(const Position& pos) const;
 
-		virtual void onConnect();
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 		bool parseFirstPacket(NetworkMessage& msg);
