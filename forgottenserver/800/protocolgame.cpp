@@ -711,10 +711,6 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseLeaveParty(msg);
 				break;
 
-			case 0xA8: // share exp
-				parseSharePartyExperience(msg);
-				break;
-
 			case 0xAA:
 				parseCreatePrivateChannel(msg);
 				break;
@@ -1462,13 +1458,6 @@ void ProtocolGame::parsePassPartyLeadership(NetworkMessage& msg)
 void ProtocolGame::parseLeaveParty(NetworkMessage& msg)
 {
 	addGameTask(&Game::playerLeaveParty, player->getID());
-}
-
-void ProtocolGame::parseSharePartyExperience(NetworkMessage& msg)
-{
-	bool activate = msg.GetByte();
-	uint8_t unknown = msg.GetByte(); //TODO: find out what is this byte
-	addGameTask(&Game::playerSharePartyExperience, player->getID(), activate, unknown);
 }
 
 void ProtocolGame::parseQuests(NetworkMessage& msg)

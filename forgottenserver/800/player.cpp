@@ -1522,9 +1522,6 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 	if(creature != this)
 		return;
 
-	if(getParty())
-		getParty()->updateSharedExperience();
-
 	//check if we should close trade
 	if(tradeState != TRADE_TRANSFER && ((tradeItem && !Position::areInRange<1,1,0>(tradeItem->getPosition(), getPosition()))
 		|| (tradePartner && !Position::areInRange<2,2,0>(tradePartner->getPosition(), getPosition()))))
@@ -1881,8 +1878,6 @@ void Player::addExperience(uint64_t exp)
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
-		if(getParty())
-			getParty()->updateSharedExperience();
 
 		char advMsg[60];
 		sprintf(advMsg, "You advanced from Level %d to Level %d.", prevLevel, level);
@@ -3723,21 +3718,8 @@ bool Player::rateExperience(double& gainExp, bool fromMonster)
 
 void Player::onGainExperience(double& gainExp, bool fromMonster, bool multiplied)
 {
-	if(party && party->isSharedExperienceEnabled() && party->isSharedExperienceActive())
-	{
-		party->shareExperience(gainExp, fromMonster, multiplied);
-		rateExperience(gainExp, fromMonster);
-		return; //we will get a share of the experience through the sharing mechanism
-	}
-
 	if(gainExperience(gainExp, fromMonster))
 		Creature::onGainExperience(gainExp, fromMonster, true);
-}
-
-void Player::onGainSharedExperience(double& gainExp, bool fromMonster, bool multiplied)
-{
-	if(gainExperience(gainExp, fromMonster))
-		Creature::onGainSharedExperience(gainExp, fromMonster, true);
 }
 
 bool Player::isImmune(CombatType_t type) const
@@ -4730,36 +4712,10 @@ PartyShields_t Player::getPartyShield(const Creature* creature) const
 	if(Party* party = getParty())
 	{
 		if(party->getLeader() == player)
-		{
-			if(party->isSharedExperienceActive())
-			{
-				if(party->isSharedExperienceEnabled())
-					return SHIELD_YELLOW_SHAREDEXP;
-
-				if(party->canUseSharedExperience(player))
-					return SHIELD_YELLOW_NOSHAREDEXP;
-
-				return SHIELD_YELLOW_NOSHAREDEXP_BLINK;
-			}
-
 			return SHIELD_YELLOW;
-		}
 
 		if(party->isPlayerMember(player))
-		{
-			if(party->isSharedExperienceActive())
-			{
-				if(party->isSharedExperienceEnabled())
-					return SHIELD_BLUE_SHAREDEXP;
-
-				if(party->canUseSharedExperience(player))
-					return SHIELD_BLUE_NOSHAREDEXP;
-
-				return SHIELD_BLUE_NOSHAREDEXP_BLINK;
-			}
-
 			return SHIELD_BLUE;
-		}
 
 		if(isInviting(player))
 			return SHIELD_WHITEBLUE;

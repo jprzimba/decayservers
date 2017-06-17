@@ -670,19 +670,7 @@ Skulls_t getSkull(std::string strValue)
 PartyShields_t getPartyShield(std::string strValue)
 {
 	std::string tmpStrValue = asLowerCaseString(strValue);
-	if(tmpStrValue == "whitenoshareoff" || tmpStrValue == "10")
-		return SHIELD_YELLOW_NOSHAREDEXP;
-	else if(tmpStrValue == "blueshareoff" || tmpStrValue == "9")
-		return SHIELD_BLUE_NOSHAREDEXP;
-	else if(tmpStrValue == "yellowshareblink" || tmpStrValue == "8")
-		return SHIELD_YELLOW_NOSHAREDEXP_BLINK;
-	else if(tmpStrValue == "blueshareblink" || tmpStrValue == "7")
-		return SHIELD_BLUE_NOSHAREDEXP_BLINK;
-	else if(tmpStrValue == "yellowshareon" || tmpStrValue == "6")
-		return SHIELD_YELLOW_SHAREDEXP;
-	else if(tmpStrValue == "blueshareon" || tmpStrValue == "5")
-		return SHIELD_BLUE_SHAREDEXP;
-	else if(tmpStrValue == "yellow" || tmpStrValue == "4")
+	if(tmpStrValue == "yellow" || tmpStrValue == "4")
 		return SHIELD_YELLOW;
 	else if(tmpStrValue == "blue" || tmpStrValue == "3")
 		return SHIELD_BLUE;

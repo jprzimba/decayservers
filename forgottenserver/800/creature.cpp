@@ -1252,28 +1252,6 @@ void Creature::onGainExperience(double& gainExp, bool fromMonster, bool multipli
 	g_game.addAnimatedText(getPosition(), (uint8_t)color, ss.str());
 }
 
-void Creature::onGainSharedExperience(double& gainExp, bool fromMonster, bool multiplied)
-{
-	if(gainExp <= 0)
-		return;
-
-	if(master)
-	{
-		gainExp = gainExp / 2;
-		master->onGainSharedExperience(gainExp, fromMonster, multiplied);
-	}
-	else if(!multiplied)
-		gainExp *= g_config.getDouble(ConfigManager::RATE_EXPERIENCE);
-
-	int16_t color = g_config.getNumber(ConfigManager::EXPERIENCE_COLOR);
-	if(color < 0)
-		color = random_range(0, 255);
-
-	std::stringstream ss;
-	ss << (uint64_t)gainExp;
-	g_game.addAnimatedText(getPosition(), (uint8_t)color, ss.str());
-}
-
 void Creature::addSummon(Creature* creature)
 {
 	creature->setDropLoot(LOOT_DROP_NONE);

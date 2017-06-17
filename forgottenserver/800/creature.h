@@ -360,7 +360,6 @@ class Creature : public AutoId, virtual public Thing
 		virtual void onAttackedCreatureKilled(Creature* target);
 		virtual bool onKilledCreature(Creature* target, uint32_t& flags);
 		virtual void onGainExperience(double& gainExp, bool fromMonster, bool multiplied);
-		virtual void onGainSharedExperience(double& gainExp, bool fromMonster, bool multiplied);
 		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType) {}
 		virtual void onBlockHit(BlockType_t blockType) {}
 		virtual void onChangeZone(ZoneType_t zone);

@@ -4805,19 +4805,6 @@ bool Game::playerLeaveParty(uint32_t playerId)
 	return player->getParty()->leave(player);
 }
 
-bool Game::playerSharePartyExperience(uint32_t playerId, bool activate, uint8_t unknown)
-{
-	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved())
-		return false;
-
-	if(!player->getParty() || (!player->hasFlag(PlayerFlag_NotGainInFight)
-		&& player->hasCondition(CONDITION_INFIGHT)))
-		return false;
-
-	return player->getParty()->setSharedExperience(player, activate);
-}
-
 bool Game::playerReportBug(uint32_t playerId, std::string comment)
 {
 	Player* player = getPlayerByID(playerId);

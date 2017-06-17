@@ -268,17 +268,6 @@
 	rateStaminaUnderNormal = 0.5
 	staminaThresholdOnlyPremium = true
 
-	-- Party
-	-- NOTE: experienceShareLevelDifference is float number.
-	-- experienceShareLevelDifference is highestLevel * value
-	experienceShareRadiusX = 30
-	experienceShareRadiusY = 30
-	experienceShareRadiusZ = 1
-	experienceShareLevelDifference = 2 / 3
-	extraPartyExperienceLimit = 20
-	extraPartyExperiencePercent = 5
-	experienceShareActivity = 2 * 60 * 1000
-
 	-- Global save
 	-- NOTE: globalSaveHour means like 03:00, not that it will save every 3 hours,
 	-- if you want such a system please check out data/globalevents/globalevents.xml.

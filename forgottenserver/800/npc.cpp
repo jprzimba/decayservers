@@ -235,19 +235,7 @@ bool Npc::loadFromXml(const std::string& filename)
 	if(readXMLString(root, "shield", strValue))
 	{
 		std::string tmpStrValue = asLowerCaseString(strValue);
-		if(tmpStrValue == "whitenoshareoff" || tmpStrValue == "10")
-			setShield(SHIELD_YELLOW_NOSHAREDEXP);
-		else if(tmpStrValue == "blueshareoff" || tmpStrValue == "9")
-			setShield(SHIELD_BLUE_NOSHAREDEXP);
-		else if(tmpStrValue == "yellowshareblink" || tmpStrValue == "8")
-			setShield(SHIELD_YELLOW_NOSHAREDEXP_BLINK);
-		else if(tmpStrValue == "blueshareblink" || tmpStrValue == "7")
-			setShield(SHIELD_BLUE_NOSHAREDEXP_BLINK);
-		else if(tmpStrValue == "yellowshareon" || tmpStrValue == "6")
-			setShield(SHIELD_YELLOW_SHAREDEXP);
-		else if(tmpStrValue == "blueshareon" || tmpStrValue == "5")
-			setShield(SHIELD_BLUE_SHAREDEXP);
-		else if(tmpStrValue == "yellow" || tmpStrValue == "4")
+		if(tmpStrValue == "yellow" || tmpStrValue == "4")
 			setShield(SHIELD_YELLOW);
 		else if(tmpStrValue == "blue" || tmpStrValue == "3")
 			setShield(SHIELD_BLUE);
