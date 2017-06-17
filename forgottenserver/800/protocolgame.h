@@ -120,11 +120,6 @@ class ProtocolGame : public Protocol
 		void parseTextWindow(NetworkMessage& msg);
 		void parseHouseWindow(NetworkMessage& msg);
 
-		void parseLookInShop(NetworkMessage& msg);
-		void parsePlayerPurchase(NetworkMessage& msg);
-		void parsePlayerSale(NetworkMessage& msg);
-		void parseCloseShop(NetworkMessage& msg);
-
 		void parseQuests(NetworkMessage& msg);
 		void parseQuestInfo(NetworkMessage& msg);
 
@@ -154,7 +149,6 @@ class ProtocolGame : public Protocol
 		void parseOpenChannel(NetworkMessage& msg);
 		void parseOpenPriv(NetworkMessage& msg);
 		void parseCloseChannel(NetworkMessage& msg);
-		void parseCloseNpc(NetworkMessage& msg);
 		void parseProcessRuleViolation(NetworkMessage& msg);
 		void parseCloseRuleViolation(NetworkMessage& msg);
 		void parseCancelRuleViolation(NetworkMessage& msg);
@@ -198,9 +192,6 @@ class ProtocolGame : public Protocol
 		void sendCreatureSkull(const Creature* creature);
 		void sendCreatureShield(const Creature* creature);
 
-		void sendShop(const ShopInfoList& shop);
-		void sendCloseShop();
-		void sendGoods(const ShopInfoList& shop);
 		void sendTradeItemRequest(const Player* player, const Item* item, bool ack);
 		void sendCloseTrade();
 
@@ -296,9 +287,6 @@ class ProtocolGame : public Protocol
 
 		//rule violation window
 		void parseViolationWindow(NetworkMessage& msg);
-
-		//shop
-		void AddShopItem(NetworkMessage_ptr msg, const ShopInfo item);
 
 		#define addGameTask(f, ...) addGameTaskInternal(0, boost::bind(f, &g_game, __VA_ARGS__))
 		#define addGameTaskTimed(delay, f, ...) addGameTaskInternal(delay, boost::bind(f, &g_game, __VA_ARGS__))

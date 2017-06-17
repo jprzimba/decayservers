@@ -354,29 +354,6 @@ class Player : public Creature, public Cylinder
 		tradestate_t getTradeState() {return tradeState;}
 		Item* getTradeItem() {return tradeItem;}
 
-		//shop functions
-		void setShopOwner(Npc* owner, int32_t onBuy, int32_t onSell, ShopInfoList offer)
-		{
-			shopOwner = owner;
-			purchaseCallback = onBuy;
-			saleCallback = onSell;
-			shopOffer = offer;
-		}
-
-		Npc* getShopOwner(int32_t& onBuy, int32_t& onSell)
-		{
-			onBuy = purchaseCallback;
-			onSell = saleCallback;
-			return shopOwner;
-		}
-
-		const Npc* getShopOwner(int32_t& onBuy, int32_t& onSell) const
-		{
-			onBuy = purchaseCallback;
-			onSell = saleCallback;
-			return shopOwner;
-		}
-
 		//V.I.P. functions
 		void notifyLogIn(Player* loginPlayer);
 		void notifyLogOut(Player* logoutPlayer);
@@ -395,9 +372,6 @@ class Player : public Creature, public Cylinder
 		virtual void onWalkComplete();
 
 		void stopWalk();
-		void openShopWindow();
-		void closeShopWindow(Npc* npc = NULL, int32_t onBuy = -1, int32_t onSell = -1);
-		bool canShopItem(uint16_t itemId, uint8_t subType, ShopEvent_t event);
 
 		void setChaseMode(chaseMode_t mode);
 		void setFightMode(fightMode_t mode) {fightMode = mode;}
@@ -627,12 +601,6 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendTextWindow(windowTextId, itemId, text);}
 		void sendToChannel(Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId, uint32_t time = 0) const
 			{if(client) client->sendToChannel(creature, type, text, channelId, time);}
-		void sendShop() const
-			{if(client) client->sendShop(shopOffer);}
-		void sendGoods() const
-			{if(client) client->sendGoods(shopOffer);}
-		void sendCloseShop() const
-			{if(client) client->sendCloseShop();}
 		void sendTradeItemRequest(const Player* player, const Item* item, bool ack) const
 			{if(client) client->sendTradeItemRequest(player, item, ack);}
 		void sendTradeClose() const
@@ -711,7 +679,6 @@ class Player : public Creature, public Cylinder
 		}
 
 		void updateInventoryWeight();
-		void updateInventoryGoods(uint32_t itemId);
 		void updateItemsLight(bool internal = false);
 
 		void setNextWalkActionTask(SchedulerTask* task);
@@ -808,8 +775,6 @@ class Player : public Creature, public Cylinder
 		int32_t vocation_id;
 		int32_t groupId;
 		int32_t managerNumber, managerNumber2;
-		int32_t purchaseCallback;
-		int32_t saleCallback;
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
 		int32_t messageBuffer;
@@ -877,11 +842,9 @@ class Player : public Creature, public Cylinder
 		Item* tradeItem;
 		Item* writeItem;
 		House* editHouse;
-		Npc* shopOwner;
 
 		typedef std::set<uint32_t> AttackedSet;
 		AttackedSet attackedSet;
-		ShopInfoList shopOffer;
 		PartyList invitePartyList;
 		OutfitMap outfits;
 		LearnedInstantSpellList learnedInstantSpellList;

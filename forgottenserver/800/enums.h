@@ -310,23 +310,4 @@ struct LightInfo
 		level(_level), color(_color) {}
 };
 
-struct ShopInfo
-{
-	uint32_t itemId;
-	int32_t subType, buyPrice, sellPrice;
-	std::string itemName;
-
-	ShopInfo()
-	{
-		itemId = 0;
-		subType = 1;
-		buyPrice = sellPrice = -1;
-		itemName = "";
-	}
-	ShopInfo(uint32_t _itemId, int32_t _subType = 1, int32_t _buyPrice = -1, int32_t _sellPrice = -1,
-		const std::string& _itemName = ""): itemId(_itemId), subType(_subType), buyPrice(_buyPrice),
-		sellPrice(_sellPrice), itemName(_itemName) {}
-};
-
-typedef std::list<ShopInfo> ShopInfoList;
 #endif

@@ -575,22 +575,6 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseThrow(msg);
 				break;
 
-			case 0x79: // description in shop window
-				parseLookInShop(msg);
-				break;
-
-			case 0x7A: // player bought from shop
-				parsePlayerPurchase(msg);
-				break;
-
-			case 0x7B: // player sold to shop
-				parsePlayerSale(msg);
-				break;
-
-			case 0x7C: // player closed shop window
-				parseCloseShop(msg);
-				break;
-
 			case 0x7D: // Request trade
 				parseRequestTrade(msg);
 				break;
@@ -673,10 +657,6 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 
 			case 0x9D: //player cancels report
 				parseCancelRuleViolation(msg);
-				break;
-
-			case 0x9E: // close NPC
-				parseCloseNpc(msg);
 				break;
 
 			case 0xA0: // set attack and follow mode
@@ -1066,11 +1046,6 @@ void ProtocolGame::parseCancelRuleViolation(NetworkMessage& msg)
 	addGameTask(&Game::playerCancelRuleViolation, player->getID());
 }
 
-void ProtocolGame::parseCloseNpc(NetworkMessage& msg)
-{
-	addGameTask(&Game::playerCloseNpcChannel, player->getID());
-}
-
 void ProtocolGame::parseCancelMove(NetworkMessage& msg)
 {
 	addGameTask(&Game::playerCancelAttackAndFollow, player->getID());
@@ -1246,21 +1221,20 @@ void ProtocolGame::parseLookAt(NetworkMessage& msg)
 
 void ProtocolGame::parseSay(NetworkMessage& msg)
 {
+	SpeakClasses type = (SpeakClasses)msg.GetByte();
 	std::string receiver;
 	uint16_t channelId = 0;
-
-	SpeakClasses type = (SpeakClasses)msg.GetByte();
 	switch(type)
 	{
 		case SPEAK_PRIVATE:
 		case SPEAK_PRIVATE_RED:
-		case SPEAK_RVR_ANSWER:
+		case SPEAK_CHANNEL_RV2:
 			receiver = msg.GetString();
 			break;
 
 		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_RN:
-		case SPEAK_CHANNEL_RA:
+		case SPEAK_CHANNEL_R1:
+		case SPEAK_CHANNEL_R2:
 			channelId = msg.GetU16();
 			break;
 
@@ -1329,36 +1303,6 @@ void ProtocolGame::parseHouseWindow(NetworkMessage &msg)
 	uint32_t id = msg.GetU32();
 	const std::string text = msg.GetString();
 	addGameTask(&Game::playerUpdateHouseWindow, player->getID(), doorId, id, text);
-}
-
-void ProtocolGame::parseLookInShop(NetworkMessage &msg)
-{
-	uint16_t id = msg.GetU16();
-	uint16_t count = msg.GetByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookInShop, player->getID(), id, count);
-}
-
-void ProtocolGame::parsePlayerPurchase(NetworkMessage &msg)
-{
-	uint16_t id = msg.GetU16();
-	uint16_t count = msg.GetByte();
-	uint16_t amount = msg.GetByte();
-	bool ignoreCap = msg.GetByte();
-	bool inBackpacks = msg.GetByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerPurchaseItem, player->getID(), id, count, amount, ignoreCap, inBackpacks);
-}
-
-void ProtocolGame::parsePlayerSale(NetworkMessage &msg)
-{
-	uint16_t id = msg.GetU16();
-	uint16_t count = msg.GetByte();
-	uint16_t amount = msg.GetByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSellItem, player->getID(), id, count, amount);
-}
-
-void ProtocolGame::parseCloseShop(NetworkMessage &msg)
-{
-	addGameTask(&Game::playerCloseShop, player->getID());
 }
 
 void ProtocolGame::parseRequestTrade(NetworkMessage& msg)
@@ -1702,7 +1646,7 @@ void ProtocolGame::sendRuleViolationsChannel(uint16_t channelId)
 		{
 			RuleViolation& rvr = *it->second;
 			if(rvr.isOpen && rvr.reporter)
-				AddCreatureSpeak(msg, rvr.reporter, SPEAK_RVR_CHANNEL, rvr.text, channelId, rvr.time);
+				AddCreatureSpeak(msg, rvr.reporter, SPEAK_CHANNEL_RV1, rvr.text, channelId, rvr.time);
 		}
 	}
 }
@@ -1764,104 +1708,14 @@ void ProtocolGame::sendContainer(uint32_t cid, const Container* container, bool 
 		msg->AddByte(container->capacity());
 
 		msg->AddByte(hasParent ? 0x01 : 0x00);
-		msg->AddByte(std::min(container->size(), (uint32_t)255));
+		if(container->size() > 255)
+			msg->AddByte(255);
+		else
+			msg->AddByte(container->size());
 
 		ItemList::const_iterator cit = container->getItems();
 		for(uint32_t i = 0; cit != container->getEnd() && i < 255; ++cit, ++i)
 			msg->AddItem(*cit);
-	}
-}
-
-void ProtocolGame::sendShop(const ShopInfoList& shop)
-{
-	NetworkMessage_ptr msg = getOutputBuffer();
-	if(msg)
-	{
-		TRACK_MESSAGE(msg);
-		msg->AddByte(0x7A);
-		msg->AddByte(std::min(shop.size(), (size_t)255));
-
-		ShopInfoList::const_iterator it = shop.begin();
-		for(uint32_t i = 0; it != shop.end() && i < 255; ++it, ++i)
-			AddShopItem(msg, (*it));
-	}
-}
-
-void ProtocolGame::sendCloseShop()
-{
-	NetworkMessage_ptr msg = getOutputBuffer();
-	if(msg)
-	{
-		TRACK_MESSAGE(msg);
-		msg->AddByte(0x7C);
-	}
-}
-
-void ProtocolGame::sendGoods(const ShopInfoList& shop)
-{
-	NetworkMessage_ptr msg = getOutputBuffer();
-	if(msg)
-	{
-		TRACK_MESSAGE(msg);
-		msg->AddByte(0x7B);
-		msg->AddU32(g_game.getMoney(player));
-
-		std::map<uint32_t, uint32_t> goodsMap;
-		if(shop.size() >= 5)
-		{
-			for(ShopInfoList::const_iterator sit = shop.begin(); sit != shop.end(); ++sit)
-			{
-				if(sit->sellPrice < 0)
-					continue;
-
-				int8_t subType = -1;
-				if(sit->subType)
-				{
-					const ItemType& it = Item::items[sit->itemId];
-					if(it.hasSubType() && !it.stackable)
-						subType = sit->subType;
-				}
-
-				uint32_t count = player->__getItemTypeCount(sit->itemId, subType);
-				if(count > 0)
-					goodsMap[sit->itemId] = count;
-			}
-		}
-		else
-		{
-			std::map<uint32_t, uint32_t> tmpMap;
-			player->__getAllItemTypeCount(tmpMap);
-			for(ShopInfoList::const_iterator sit = shop.begin(); sit != shop.end(); ++sit)
-			{
-				if(sit->sellPrice < 0)
-					continue;
-
-				int8_t subType = -1;
-				if(sit->subType)
-				{
-					const ItemType& it = Item::items[sit->itemId];
-					if(it.hasSubType() && !it.stackable)
-						subType = sit->subType;
-				}
-
-				if(subType != -1)
-				{
-					uint32_t count = player->__getItemTypeCount(sit->itemId, subType);
-					if(count > 0)
-						goodsMap[sit->itemId] = count;
-				}
-				else
-					goodsMap[sit->itemId] = tmpMap[sit->itemId];
-			}
-		}
-
-		msg->AddByte(std::min(goodsMap.size(), (size_t)255));
-		std::map<uint32_t, uint32_t>::const_iterator it = goodsMap.begin();
-		for(uint32_t i = 0; it != goodsMap.end() && i < 255; ++it, ++i)
-		{
-			msg->AddItemId(it->first);
-			msg->AddByte(std::min(it->second, (uint32_t)255));
-		}
 	}
 }
 
@@ -2662,11 +2516,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 	msg->AddU16(player->getHealth());
 	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
 	msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
-	uint64_t experience = player->getExperience();
-	if(experience > 0x7FFFFFFF) // client debugs after 2,147,483,647 exp
-		msg->AddU32(0x7FFFFFFF);
+	if(player->getExperience() > 2147483647 && player->getOperatingSystem() == CLIENTOS_WINDOWS)
+		msg->AddU32(0x00);
 	else
-		msg->AddU32(experience);
+		msg->AddU32(player->getExperience());
 
 	msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
@@ -2701,6 +2554,43 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 	std::string text, uint16_t channelId, uint32_t time/*= 0*/, Position* pos/* = NULL*/)
 {
 	msg->AddByte(0xAA);
+	msg->AddU32(0x00);
+
+	//Do not add name for anonymous channel talk
+	if(type != SPEAK_CHANNEL_R2)
+		msg->AddString(creature->getName());
+	else
+		msg->AddString("");
+	
+	//Add level only for players
+	if(player->getName() == "Account Manager")
+		msg->AddU16(0x00);
+	else if(const Player* player = creature->getPlayer())
+		msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
+	else
+		msg->AddU16(0x00);
+	msg->AddByte(type);
+	switch(type)
+	{
+		case SPEAK_SAY:
+		case SPEAK_WHISPER:
+		case SPEAK_YELL:
+		case SPEAK_MONSTER_SAY:
+		case SPEAK_MONSTER_YELL:
+			msg->AddPosition(creature->getPosition());
+			break;
+		case SPEAK_CHANNEL_Y:
+		case SPEAK_CHANNEL_R1:
+		case SPEAK_CHANNEL_R2:
+		case SPEAK_CHANNEL_O:
+			msg->AddU16(channelId);
+			break;
+		default:
+			break;
+	}
+	msg->AddString(text);
+
+/*
 	if(creature)
 	{
 		const Player* speaker = creature->getPlayer();
@@ -2764,7 +2654,6 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 
 		case SPEAK_CHANNEL_Y:
 		case SPEAK_CHANNEL_RN:
-		case SPEAK_CHANNEL_RA:
 		case SPEAK_CHANNEL_O:
 		case SPEAK_CHANNEL_W:
 			msg->AddU16(channelId);
@@ -2780,7 +2669,7 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 			break;
 	}
 
-	msg->AddString(text);
+	msg->AddString(text);*/
 }
 
 void ProtocolGame::AddCreatureHealth(NetworkMessage_ptr msg,const Creature* creature)
@@ -3025,21 +2914,4 @@ void ProtocolGame::sendChannelMessage(std::string author, std::string text, Spea
 		msg->AddU16(channel);
 		msg->AddString(text);
 	}
-}
-
-void ProtocolGame::AddShopItem(NetworkMessage_ptr msg, const ShopInfo item)
-{
-	const ItemType& it = Item::items[item.itemId];
-	msg->AddU16(it.clientId);
-	if(it.isSplash() || it.isFluidContainer())
-		msg->AddByte(fluidMap[item.subType % 8]);
-	else if(it.stackable || it.charges)
-		msg->AddByte(item.subType);
-	else
-		msg->AddByte(0x01);
-
-	msg->AddString(item.itemName);
-	msg->AddU32(uint32_t(it.weight * 100));
-	msg->AddU32(item.buyPrice);
-	msg->AddU32(item.sellPrice);
 }

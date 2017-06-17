@@ -74,7 +74,6 @@ Player::Player(const std::string& _name, ProtocolGame* p):
 	lastLogin = lastLogout = lastIP = messageTicks = messageBuffer = nextAction = 0;
 	editListId = maxWriteLen = windowTextId = rankId = 0;
 
-	purchaseCallback = saleCallback = -1;
 	level = shootRange = 1;
 	rates[SKILL__MAGLEVEL] = rates[SKILL__LEVEL] = 1.0f;
 	soulMax = 100;
@@ -85,7 +84,6 @@ Player::Player(const std::string& _name, ProtocolGame* p):
 	writeItem = NULL;
 	group = NULL;
 	editHouse = NULL;
-	shopOwner = NULL;
 	tradeItem = NULL;
 	tradePartner = NULL;
 	walkTask = NULL;
@@ -521,24 +519,6 @@ void Player::updateInventoryWeight()
 	{
 		if(Item* item = getInventoryItem((slots_t)i))
 			inventoryWeight += item->getWeight();
-	}
-}
-
-void Player::updateInventoryGoods(uint32_t itemId)
-{
-	if(Item::items[itemId].worth)
-	{
-		sendGoods();
-		return;
-	}
-
-	for(ShopInfoList::iterator it = shopOffer.begin(); it != shopOffer.end(); ++it)
-	{
-		if(it->itemId != itemId)
-			continue;
-
-		sendGoods();
-		break;
 	}
 }
 
@@ -1417,7 +1397,6 @@ void Player::onCreatureDisappear(const Creature* creature, bool isLogout)
 	if(eventWalk)
 		setFollowCreature(NULL);
 
-	closeShopWindow();
 	if(tradePartner)
 		g_game.internalCloseTrade(this);
 
@@ -1466,46 +1445,6 @@ void Player::onCreatureDisappear(const Creature* creature, bool isLogout)
 #else
 		std::cout << "Player " << getName() << " couldn't be saved." << std::endl;
 #endif
-}
-
-void Player::openShopWindow()
-{
-	sendShop();
-	sendGoods();
-}
-
-void Player::closeShopWindow(Npc* npc/* = NULL*/, int32_t onBuy/* = -1*/, int32_t onSell/* = -1*/)
-{
-	if(npc || (npc = getShopOwner(onBuy, onSell)))
-		npc->onPlayerEndTrade(this, onBuy, onSell);
-
-	if(shopOwner)
-		sendCloseShop();
-
-	shopOwner = NULL;
-	purchaseCallback = saleCallback = -1;
-	shopOffer.clear();
-}
-
-bool Player::canShopItem(uint16_t itemId, uint8_t subType, ShopEvent_t event)
-{
-	for(ShopInfoList::iterator sit = shopOffer.begin(); sit != shopOffer.end(); ++sit)
-	{
-		if(sit->itemId != itemId || ((event != SHOPEVENT_BUY || sit->buyPrice < 0)
-			&& (event != SHOPEVENT_SELL || sit->sellPrice < 0)))
-			continue;
-
-		if(event == SHOPEVENT_SELL)
-			return true;
-
-		const ItemType& it = Item::items[id];
-		if(it.isFluidContainer() || it.isSplash() || it.isRune())
-			return sit->subType == subType;
-
-		return true;
-	}
-
-	return false;
 }
 
 void Player::onWalk(Direction& dir)
@@ -1734,7 +1673,7 @@ bool Player::isMuted(uint16_t channelId, SpeakClasses type, uint32_t& time)
 	}
 
 	time = (uint32_t)muteTicks / 1000;
-	return time > 0 && type != SPEAK_PRIVATE_PN && (type != SPEAK_CHANNEL_Y || (channelId != CHANNEL_GUILD && !g_chat.isPrivateChannel(channelId)));
+	return time > 0 && (type != SPEAK_CHANNEL_Y || (channelId != CHANNEL_GUILD && !g_chat.isPrivateChannel(channelId)));
 }
 
 void Player::addMessageBuffer()
@@ -3081,9 +3020,6 @@ void Player::postAddNotification(Creature* actor, Thing* thing, const Cylinder* 
 	{
 		if(const Container* container = item->getContainer())
 			onSendContainer(container);
-
-		if(shopOwner && requireListUpdate)
-			updateInventoryGoods(item->getID());
 	}
 	else if(const Creature* creature = thing->getCreature())
 	{
@@ -3156,9 +3092,6 @@ void Player::postRemoveNotification(Creature* actor, Thing* thing, const Cylinde
 			else
 				autoCloseContainers(container);
 		}
-
-		if(shopOwner && requireListUpdate)
-			updateInventoryGoods(item->getID());
 	}
 }
 

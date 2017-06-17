@@ -2281,26 +2281,6 @@ bool Game::playerCancelRuleViolation(uint32_t playerId)
 	return cancelRuleViolation(player);
 }
 
-bool Game::playerCloseNpcChannel(uint32_t playerId)
-{
-	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved())
-		return false;
-
-	SpectatorVec list;
-	SpectatorVec::iterator it;
-
-	getSpectators(list, player->getPosition());
-	Npc* npc = NULL;
-	for(it = list.begin(); it != list.end(); ++it)
-	{
-		if((npc = (*it)->getNpc()))
-			npc->onPlayerCloseChannel(player);
-	}
-
-	return true;
-}
-
 bool Game::playerReceivePing(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
@@ -3194,92 +3174,6 @@ bool Game::internalCloseTrade(Player* player)
 	return true;
 }
 
-bool Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
-	bool ignoreCap/* = false*/, bool inBackpacks/* = false*/)
-{
-	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved())
-		return false;
-
-	int32_t onBuy, onSell;
-	Npc* merchant = player->getShopOwner(onBuy, onSell);
-	if(!merchant)
-		return false;
-
-	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-	if(!it.id)
-		return false;
-
-	uint8_t subType = count;
-	if(it.isFluidContainer() && count < uint8_t(sizeof(reverseFluidMap) / sizeof(int8_t)))
-		subType = reverseFluidMap[count];
-
-	if(!player->canShopItem(it.id, subType, SHOPEVENT_BUY))
-		return false;
-
-	merchant->onPlayerTrade(player, SHOPEVENT_BUY, onBuy, it.id, subType, amount, ignoreCap, inBackpacks);
-	return true;
-}
-
-bool Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount)
-{
-	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved())
-		return false;
-
-	int32_t onBuy, onSell;
-	Npc* merchant = player->getShopOwner(onBuy, onSell);
-	if(!merchant)
-		return false;
-
-	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-	if(!it.id)
-		return false;
-
-	uint8_t subType = count;
-	if(it.isFluidContainer() && count < uint8_t(sizeof(reverseFluidMap) / sizeof(int8_t)))
-		subType = reverseFluidMap[count];
-
-	if(!player->canShopItem(it.id, subType, SHOPEVENT_SELL))
-		return false;
-
-	merchant->onPlayerTrade(player, SHOPEVENT_SELL, onSell, it.id, subType, amount);
-	return true;
-}
-
-bool Game::playerCloseShop(uint32_t playerId)
-{
-	Player* player = getPlayerByID(playerId);
-	if(player == NULL || player->isRemoved())
-		return false;
-
-	player->closeShopWindow();
-	return true;
-}
-
-bool Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
-{
-	Player* player = getPlayerByID(playerId);
-	if(player == NULL || player->isRemoved())
-		return false;
-
-	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-	if(it.id == 0)
-		return false;
-
-	int32_t subType = count;
-	if(it.isFluidContainer() && count < uint8_t(sizeof(reverseFluidMap) / sizeof(int8_t)))
-		subType = reverseFluidMap[count];
-
-	std::stringstream ss;
-	ss << "You see " << Item::getDescription(it, 1, NULL, subType);
-	if(player->hasCustomFlag(PlayerCustomFlag_CanSeeItemDetails))
-		ss << std::endl << "ItemID: [" << it.id << "].";
-
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-	return true;
-}
-
 bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, int16_t stackpos)
 {
 	Player* player = getPlayerByID(playerId);
@@ -3615,26 +3509,22 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 			return playerYell(player, text);
 		case SPEAK_PRIVATE:
 		case SPEAK_PRIVATE_RED:
-		case SPEAK_RVR_ANSWER:
 			return playerSpeakTo(player, type, receiver, text);
 		case SPEAK_CHANNEL_O:
 		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_RN:
-		case SPEAK_CHANNEL_RA:
-		case SPEAK_CHANNEL_W:
+		case SPEAK_CHANNEL_R1:
+		case SPEAK_CHANNEL_R2:
 		{
 			if(playerTalkToChannel(player, type, text, channelId))
 				return true;
 
 			return playerSay(playerId, 0, SPEAK_SAY, receiver, text);
 		}
-		case SPEAK_PRIVATE_PN:
-			return playerSpeakToNpc(player, text);
 		case SPEAK_BROADCAST:
 			return playerBroadcastMessage(player, SPEAK_BROADCAST, text);
-		case SPEAK_RVR_CHANNEL:
+		case SPEAK_CHANNEL_RV1:
 			return playerReportRuleViolation(player, text);
-		case SPEAK_RVR_CONTINUE:
+		case SPEAK_CHANNEL_RV2:
 			return playerContinueReport(player, text);
 
 		default:
@@ -3750,41 +3640,11 @@ bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::str
 			break;
 		}
 
-		case SPEAK_CHANNEL_RN:
-		{
-			if(!player->hasFlag(PlayerFlag_CanTalkRedChannel))
-				type = SPEAK_CHANNEL_Y;
-			break;
-		}
-
-		case SPEAK_CHANNEL_RA:
-		{
-			if(!player->hasFlag(PlayerFlag_CanTalkRedChannelAnonymous))
-				type = SPEAK_CHANNEL_Y;
-			break;
-		}
-
 		default:
 			break;
 	}
 
 	return g_chat.talkToChannel(player, type, text, channelId);
-}
-
-bool Game::playerSpeakToNpc(Player* player, const std::string& text)
-{
-	SpectatorVec list;
-	SpectatorVec::iterator it;
-	getSpectators(list, player->getPosition());
-
-	//send to npcs only
-	Npc* tmpNpc = NULL;
-	for(it = list.begin(); it != list.end(); ++it)
-	{
-		if((tmpNpc = (*it)->getNpc()))
-			(*it)->onCreatureSay(player, SPEAK_PRIVATE_PN, text);
-	}
-	return true;
 }
 
 bool Game::playerReportRuleViolation(Player* player, const std::string& text)
@@ -3805,7 +3665,7 @@ bool Game::playerReportRuleViolation(Player* player, const std::string& text)
 		return false;
 
 	for(UsersMap::const_iterator it = channel->getUsers().begin(); it != channel->getUsers().end(); ++it)
-		it->second->sendToChannel(player, SPEAK_RVR_CHANNEL, text, CHANNEL_RVR, rvr->time);
+		it->second->sendToChannel(player, SPEAK_CHANNEL_RV1, text, CHANNEL_RVR, rvr->time);
 
 	return true;
 }
@@ -3821,7 +3681,7 @@ bool Game::playerContinueReport(Player* player, const std::string& text)
 	if(!toPlayer)
 		return false;
 
-	toPlayer->sendCreatureSay(player, SPEAK_RVR_CONTINUE, text);
+	toPlayer->sendCreatureSay(player, SPEAK_CHANNEL_RV3, text);
 	player->sendTextMessage(MSG_STATUS_SMALL, "Message sent to Gamemaster.");
 	return true;
 }
