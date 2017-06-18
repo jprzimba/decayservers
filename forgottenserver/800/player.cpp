@@ -26,9 +26,6 @@
 #include "beds.h"
 
 #include "combat.h"
-#if defined(WINDOWS) && !defined(__CONSOLE__)
-#include "gui.h"
-#endif
 
 #include "movement.h"
 #include "weapons.h"
@@ -824,25 +821,6 @@ bool Player::canSeeCreature(const Creature* creature) const
 	return !creature->isInvisible() || canSeeInvisibility();
 }
 
-bool Player::canWalkthrough(const Creature* creature) const
-{
-	if(!creature)
-		return true;
-
-	if(creature == this)
-		return false;
-
-	const Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	if(g_game.getWorldType() == WORLD_TYPE_NO_PVP && player->getTile()->ground
-		&& player->getTile()->ground->getID() != ITEM_GLOWING_SWITCH)
-		return true;
-
-	return player->isGhost() && getGhostAccess() < player->getGhostAccess();
-}
-
 Depot* Player::getDepot(uint32_t depotId, bool autoCreateDepot)
 {
 	DepotMap::iterator it = depots.find(depotId);
@@ -1331,9 +1309,6 @@ void Player::onCreatureAppear(const Creature* creature)
 	if(!isGhost())
 		IOLoginData::getInstance()->updateOnlineStatus(guid, true);
 
-	#if defined(WINDOWS) && !defined(__CONSOLE__)
-	GUI::getInstance()->m_pBox.addPlayer(this);
-	#endif
 	if(g_config.getBool(ConfigManager::DISPLAY_LOGGING))
 		std::cout << name << " has logged in." << std::endl;
 }
@@ -1422,9 +1397,6 @@ void Player::onCreatureDisappear(const Creature* creature, bool isLogout)
 	if(!isGhost())
 		IOLoginData::getInstance()->updateOnlineStatus(guid, false);
 
-	#if defined(WINDOWS) && !defined(__CONSOLE__)
-	GUI::getInstance()->m_pBox.removePlayer(this);
-	#endif
 	if(g_config.getBool(ConfigManager::DISPLAY_LOGGING))
 		std::cout << getName() << " has logged out." << std::endl;
 

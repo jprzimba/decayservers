@@ -5903,9 +5903,7 @@ void Game::shutdown()
 	if(g_server)
 		g_server->stop();
 
-#if defined(WINDOWS) && !defined(__CONSOLE__)
-	exit(1);
-#endif
+	exit(1);//tryller
 }
 
 void Game::cleanup()

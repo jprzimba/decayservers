@@ -19,10 +19,8 @@
 #define __TEXTLOGGER__
 #include "otsystem.h"
 
-#if defined(WINDOWS) && !defined(__CONSOLE__)
 #include <ostream>
 #include <fstream>
-#endif
 
 enum LogFile_t
 {
@@ -67,23 +65,4 @@ class Logger
 
 #define LOG_MESSAGE(type, message, channel) \
 	Logger::getInstance()->log(__OTSERV_FUNCTION__, type, message, channel);
-
-#if defined(WINDOWS) && !defined(__CONSOLE__)
-class GUILogger : public std::streambuf
-{
-	public:
-		GUILogger();
-		virtual ~GUILogger();
-
-		std::streambuf* out;
-		std::streambuf* err;
-		std::streambuf* log;
-
-	protected:
-		int32_t overflow(int32_t c);
-
-		bool m_displayDate;
-		std::string m_cache;
-};
-#endif
 #endif

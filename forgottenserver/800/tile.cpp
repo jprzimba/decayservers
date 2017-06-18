@@ -534,8 +534,6 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 					for(uint32_t i = 0; i < creatures->size(); ++i)
 					{
 						tmp = creatures->at(i);
-						if(creature->canWalkthrough(tmp))
-							continue;
 
 						if(!tmp->getMonster() || !tmp->isPushable() ||
 							(tmp->getMonster()->isSummon() &&
@@ -548,7 +546,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			{
 				for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 				{
-					if(!creature->canWalkthrough(*cit))
+					if(!creature->isGhost())//tryller
 						return RET_NOTENOUGHROOM;
 				}
 			}
@@ -590,7 +588,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			{
 				for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 				{
-					if(!creature->canWalkthrough(*cit))
+					if(!creature->isGhost())//tryller
 						return RET_NOTENOUGHROOM; //RET_NOTPOSSIBLE
 				}
 			}
@@ -614,7 +612,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 		{
 			for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 			{
-				if(!creature->canWalkthrough(*cit))
+				if(!creature->isGhost())//tryller
 					return RET_NOTENOUGHROOM;
 			}
 		}

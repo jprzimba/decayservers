@@ -45,10 +45,6 @@
 #include "configmanager.h"
 #include "game.h"
 
-#if defined(WINDOWS) && !defined(__CONSOLE__)
-#include "gui.h"
-#endif
-
 extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
@@ -97,12 +93,8 @@ bool ProtocolGame::login(const std::string& name, uint32_t id, const std::string
 	OperatingSystem_t operatingSystem, uint16_t version, bool gamemaster)
 {
 	//dispatcher thread
-	PlayerVector players = g_game.getPlayersByName(name);
-	Player* _player = NULL;
-	if(!players.empty())
-		_player = players[random_range(0, (players.size() - 1))];
-
-	if(!_player || name == "Account Manager" || g_config.getNumber(ConfigManager::ALLOW_CLONES) > (int32_t)players.size())
+	Player* _player = g_game.getPlayerByName(name);
+	if(!_player || g_config.getBool(ConfigManager::ALLOW_CLONES) || name == "Account Manager")
 	{
 		player = new Player(name, this);
 		player->addRef();
@@ -386,11 +378,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 {
-	if(
-#if defined(WINDOWS) && !defined(__CONSOLE__)
-		!GUI::getInstance()->m_connections ||
-#endif
-		g_game.getGameState() == GAME_STATE_SHUTDOWN)
+	if(g_game.getGameState() == GAME_STATE_SHUTDOWN)
 	{
 		getConnection()->closeConnection();
 		return false;
