@@ -100,7 +100,7 @@
 	sqlHost = "127.0.0.1"
 	sqlPort = 3306
 	sqlUser = "otserv"
-	sqlPass = "125800"
+	sqlPass = ""
 	sqlDatabase = "tfs"
 	sqlFile = "forgottenserver.s3db"
 	sqlKeepAlive = 0

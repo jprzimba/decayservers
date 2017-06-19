@@ -896,8 +896,6 @@ bool TalkAction::thingProporties(Creature* creature, const std::string& cmd, con
 			{
 				if(action == "fyi")
 					_player->sendFYIBox(parseParams(it, tokens.end()).c_str());
-				else if(action == "tutorial")
-					_player->sendTutorial(atoi(parseParams(it, tokens.end()).c_str()));
 				else if(action == "guildlevel")
 					_player->setGuildLevel((GuildLevel_t)atoi(parseParams(it, tokens.end()).c_str()));
 				else if(action == "guildrank")

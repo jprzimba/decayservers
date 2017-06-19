@@ -392,7 +392,11 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	uint32_t key[4] = {msg.GetU32(), msg.GetU32(), msg.GetU32(), msg.GetU32()};
+	uint32_t key[4];
+	key[0] = msg.GetU32();
+	key[1] = msg.GetU32();
+	key[2] = msg.GetU32();
+	key[3] = msg.GetU32();
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
@@ -1504,17 +1508,6 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	}
 }
 
-void ProtocolGame::sendTutorial(uint8_t tutorialId)
-{
-	NetworkMessage_ptr msg = getOutputBuffer();
-	if(msg)
-	{
-		TRACK_MESSAGE(msg);
-		msg->AddByte(0xDC);
-		msg->AddByte(tutorialId);
-	}
-}
-
 void ProtocolGame::sendAddMarker(const Position& pos, MapMarks_t markType, const std::string& desc)
 {
 	NetworkMessage_ptr msg = getOutputBuffer();
@@ -1688,7 +1681,6 @@ void ProtocolGame::sendContainer(uint32_t cid, const Container* container, bool 
 		msg->AddItemId(container);
 		msg->AddString(container->getName());
 		msg->AddByte(container->capacity());
-
 		msg->AddByte(hasParent ? 0x01 : 0x00);
 		if(container->size() > 255)
 			msg->AddByte(255);
@@ -2005,16 +1997,15 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 	msg->AddByte(0x0A);
 	msg->AddU32(player->getID());
-	msg->AddU16(0x32);
-
+	msg->AddByte(0x32);//tryller AddU16
 	msg->AddByte(player->hasFlag(PlayerFlag_CanReportBugs));
-	if(Group* group = player->getGroup())
+    if(Group* group = player->getGroup())
 	{
 		int32_t reasons = group->getViolationReasons();
 		if(reasons > 1)
 		{
 			msg->AddByte(0x0B);
-			for(int32_t i = 0; i < 20; ++i)
+			for(int32_t i = 0; i < 32; ++i)
 			{
 				if(i < 4)
 					msg->AddByte(group->getNameViolationFlags());
@@ -2288,7 +2279,7 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, House* _house,
 	{
 		TRACK_MESSAGE(msg);
 		msg->AddByte(0x97);
-		msg->AddByte(0x00);
+		msg->AddByte(0);
 		msg->AddU32(windowTextId);
 		msg->AddString(text);
 	}
@@ -2483,7 +2474,7 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level);
 	msg->AddByte(lightInfo.color);
 
-	msg->AddU16(creature->getStepSpeed());
+	msg->AddU16(creature->getSpeed());
 	msg->AddByte(player->getSkullClient(creature));
 	msg->AddByte(player->getPartyShield(creature));
 }
@@ -2491,9 +2482,10 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 {
 	msg->AddByte(0xA0);
+
 	msg->AddU16(player->getHealth());
 	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
-	msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
+	msg->AddU16((int32_t)player->getFreeCapacity());// tryller msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
 	if(player->getExperience() > 2147483647 && player->getOperatingSystem() == CLIENTOS_WINDOWS)
 		msg->AddU32(0x00);
 	else
@@ -2506,7 +2498,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVEL));
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 	msg->AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
-	msg->AddU16(player->getStaminaMinutes());
+	msg->AddU16(player->getStaminaMinutes());//
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage_ptr msg)
@@ -2657,7 +2649,7 @@ void ProtocolGame::AddCreatureHealth(NetworkMessage_ptr msg,const Creature* crea
 	if(!creature->getHideHealth())
 		msg->AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max(creature->getMaxHealth(), (int32_t)1)));
 	else
-		msg->AddByte(0x00);
+		msg->AddByte(0);
 }
 
 void ProtocolGame::AddCreatureOutfit(NetworkMessage_ptr msg, const Creature* creature, const Outfit_t& outfit, bool outfitWindow/* = false*/)
@@ -2680,7 +2672,7 @@ void ProtocolGame::AddCreatureOutfit(NetworkMessage_ptr msg, const Creature* cre
 			msg->AddU16(outfit.lookTypeEx);
 	}
 	else
-		msg->AddU32(0x00);
+		msg->AddU32(0);
 }
 
 void ProtocolGame::AddWorldLight(NetworkMessage_ptr msg, const LightInfo& lightInfo)
@@ -2708,7 +2700,7 @@ void ProtocolGame::AddTileItem(NetworkMessage_ptr msg, const Position& pos, uint
 
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-	//msg->AddByte(stackpos);
+	msg->AddByte(stackpos);
 	msg->AddItem(item);
 }
 
@@ -2719,7 +2711,7 @@ void ProtocolGame::AddTileCreature(NetworkMessage_ptr msg, const Position& pos, 
 
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-//	msg->AddByte(stackpos);
+	msg->AddByte(stackpos);
 
 	bool known;
 	uint32_t removedKnown;

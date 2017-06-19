@@ -591,7 +591,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerBalance(lua_State* L);
 		static int32_t luaDoPlayerSetBalance(lua_State* L);
 		static int32_t luaDoPlayerPopupFYI(lua_State* L);
-		static int32_t luaDoPlayerSendTutorial(lua_State* L);
 		static int32_t luaDoPlayerSendMailByName(lua_State* L);
 		static int32_t luaDoPlayerAddMapMark(lua_State* L);
 		static int32_t luaGetPlayerPremiumDays(lua_State* L);

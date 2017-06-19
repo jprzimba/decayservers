@@ -2058,9 +2058,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerPopupFYI(cid, message)
 	lua_register(m_luaState, "doPlayerPopupFYI", LuaScriptInterface::luaDoPlayerPopupFYI);
 
-	//doPlayerSendTutorial(cid, id)
-	lua_register(m_luaState, "doPlayerSendTutorial", LuaScriptInterface::luaDoPlayerSendTutorial);
-
 	//doPlayerSendMailByName(name, item[, town[, actor]])
 	lua_register(m_luaState, "doPlayerSendMailByName", LuaScriptInterface::luaDoPlayerSendMailByName);
 
@@ -7542,26 +7539,6 @@ int32_t LuaScriptInterface::luaDoPlayerPopupFYI(lua_State* L)
 		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerSendTutorial(lua_State* L)
-{
-	//doPlayerSendTutorial(cid, id)
-	uint8_t id = (uint8_t)popNumber(L);
-
-	ScriptEnviroment* env = getEnv();
-
-	Player* player = env->getPlayerByUID(popNumber(L));
-	if(!player)
-	{
-		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	player->sendTutorial(id);
-	lua_pushboolean(L, true);
 	return 1;
 }
 
