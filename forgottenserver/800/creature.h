@@ -248,7 +248,7 @@ class Creature : public AutoId, virtual public Thing
 		const void setCurrentOutfit(Outfit_t outfit) {currentOutfit = outfit;}
 		const Outfit_t getDefaultOutfit() const {return defaultOutfit;}
 
-		bool isInvisible() const {return hasCondition(CONDITION_INVISIBLE, -1, false);}
+		bool isInvisible() const {return hasCondition(CONDITION_INVISIBLE, -1);}
 		virtual bool isGhost() const {return false;}
 		virtual bool isWalkable() const {return false;}
 
@@ -303,9 +303,9 @@ class Creature : public AutoId, virtual public Thing
 		void removeCondition(Condition* condition);
 		void removeCondition(const Creature* attacker, ConditionType_t type);
 		void removeConditions(ConditionEnd_t reason, bool onlyPersistent = true);
-		Condition* getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId = 0) const;
+		Condition* getCondition(ConditionType_t type, ConditionId_t id) const;
 		void executeConditions(uint32_t interval);
-		bool hasCondition(ConditionType_t type, int32_t subId = 0, bool checkTime = true) const;
+		bool hasCondition(ConditionType_t type, bool checkTime = true) const;
 		virtual bool isImmune(ConditionType_t type) const;
 		virtual bool isImmune(CombatType_t type) const;
 		virtual bool isSuppress(ConditionType_t type) const;

@@ -1135,7 +1135,7 @@ void Creature::onAddCondition(ConditionType_t type, bool hadCondition)
 
 void Creature::onEndCondition(ConditionType_t type)
 {
-	if(type == CONDITION_INVISIBLE && !hasCondition(CONDITION_INVISIBLE, -1, false))
+	if(type == CONDITION_INVISIBLE && !hasCondition(CONDITION_INVISIBLE, -1))
 		g_game.internalCreatureChangeVisible(this, VISIBLE_APPEAR);
 }
 
@@ -1292,8 +1292,8 @@ bool Creature::addCondition(Condition* condition)
 	if(!condition)
 		return false;
 
-	bool hadCondition = hasCondition(condition->getType(), -1, false);
-	if(Condition* previous = getCondition(condition->getType(), condition->getId(), condition->getSubId()))
+	bool hadCondition = hasCondition(condition->getType(), -1);
+	if(Condition* previous = getCondition(condition->getType(), condition->getId()))
 	{
 		previous->addCondition(this, condition);
 		delete condition;
@@ -1313,7 +1313,7 @@ bool Creature::addCondition(Condition* condition)
 
 bool Creature::addCombatCondition(Condition* condition)
 {
-	bool hadCondition = hasCondition(condition->getType(), -1, false);
+	bool hadCondition = hasCondition(condition->getType(), -1);
 	//Caution: condition variable could be deleted after the call to addCondition
 	ConditionType_t type = condition->getType();
 	if(!addCondition(condition))
@@ -1404,11 +1404,11 @@ void Creature::removeConditions(ConditionEnd_t reason, bool onlyPersistent/* = t
 	}
 }
 
-Condition* Creature::getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId/* = 0*/) const
+Condition* Creature::getCondition(ConditionType_t type, ConditionId_t id) const
 {
 	for(ConditionList::const_iterator it = conditions.begin(); it != conditions.end(); ++it)
 	{
-		if((*it)->getType() == type && (*it)->getId() == id && (*it)->getSubId() == subId)
+		if((*it)->getType() == type && (*it)->getId() == id)
 			return *it;
 	}
 
@@ -1434,14 +1434,14 @@ void Creature::executeConditions(uint32_t interval)
 	}
 }
 
-bool Creature::hasCondition(ConditionType_t type, int32_t subId/* = 0*/, bool checkTime/* = true*/) const
+bool Creature::hasCondition(ConditionType_t type, bool checkTime/* = true*/) const
 {
 	if(isSuppress(type))
 		return false;
 
 	for(ConditionList::const_iterator it = conditions.begin(); it != conditions.end(); ++it)
 	{
-		if((*it)->getType() != type || (subId != -1 && (*it)->getSubId() != (uint32_t)subId))
+		if((*it)->getType() != type)
 			continue;
 
 		if(!checkTime || g_config.getBool(ConfigManager::OLD_CONDITION_ACCURACY)

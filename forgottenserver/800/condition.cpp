@@ -25,8 +25,8 @@
 
 extern Game g_game;
 
-Condition::Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-id(_id), subId(_subId), ticks(_ticks), endTime(0), conditionType(_type), buff(_buff)
+Condition::Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+id(_id), ticks(_ticks), endTime(0), conditionType(_type)
 {
 	//
 }
@@ -37,14 +37,6 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 	{
 		case CONDITIONPARAM_TICKS:
 			ticks = value;
-			return true;
-
-		case CONDITIONPARAM_BUFF:
-			buff = (value != 0);
-			return true;
-
-		case CONDITIONPARAM_SUBID:
-			subId = value;
 			return true;
 
 		default:
@@ -100,26 +92,6 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 			return true;
 		}
 
-		case CONDITIONATTR_BUFF:
-		{
-			int32_t value = 0;
-			if(!propStream.GET_VALUE(value))
-				return false;
-
-			buff = value != 0;
-			return true;
-		}
-
-		case CONDITIONATTR_SUBID:
-		{
-			int32_t value = 0;
-			if(!propStream.GET_VALUE(value))
-				return false;
-
-			subId = value;
-			return true;
-		}
-
 		case CONDITIONATTR_END:
 			return true;
 
@@ -140,12 +112,6 @@ bool Condition::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TICKS);
 	propWriteStream.ADD_VALUE((int32_t)ticks);
-
-	propWriteStream.ADD_UCHAR(CONDITIONATTR_BUFF);
-	propWriteStream.ADD_VALUE((int32_t)buff ? 1 : 0);
-
-	propWriteStream.ADD_UCHAR(CONDITIONATTR_SUBID);
-	propWriteStream.ADD_VALUE((int32_t)subId);
 	return true;
 }
 
@@ -179,41 +145,38 @@ bool Condition::executeCondition(Creature* creature, int32_t interval)
 	return (endTime >= OTSYS_TIME());
 }
 
-Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t param/* = 0*/, bool _buff/* = false*/, uint32_t _subId/* = 0*/)
+Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t param/* = 0*/)
 {
 	switch((int32_t)_type)
 	{
 		case CONDITION_FIRE:
 		case CONDITION_ENERGY:
 		case CONDITION_POISON:
-		case CONDITION_FREEZING:
-		case CONDITION_DAZZLED:
-		case CONDITION_CURSED:
 		case CONDITION_DROWN:
 		case CONDITION_PHYSICAL:
-			return new ConditionDamage(_id, _type, _buff, _subId);
+			return new ConditionDamage(_id, _type);
 
 		case CONDITION_HASTE:
 		case CONDITION_PARALYZE:
-			return new ConditionSpeed(_id, _type, _ticks, _buff, _subId, param);
+			return new ConditionSpeed(_id, _type, _ticks, param);
 
 		case CONDITION_OUTFIT:
-			return new ConditionOutfit(_id, _type, _ticks, _buff, _subId);
+			return new ConditionOutfit(_id, _type, _ticks);
 
 		case CONDITION_LIGHT:
-			return new ConditionLight(_id, _type, _ticks, _buff, _subId, param & 0xFF, (param & 0xFF00) >> 8);
+			return new ConditionLight(_id, _type, _ticks, param & 0xFF, (param & 0xFF00) >> 8);
 
 		case CONDITION_REGENERATION:
-			return new ConditionRegeneration(_id, _type, _ticks, _buff, _subId);
+			return new ConditionRegeneration(_id, _type, _ticks);
 
 		case CONDITION_SOUL:
-			return new ConditionSoul(_id, _type, _ticks, _buff, _subId);
+			return new ConditionSoul(_id, _type, _ticks);
 
 		case CONDITION_MANASHIELD:
-			return new ConditionManaShield(_id, _type, _ticks, _buff, _subId);
+			return new ConditionManaShield(_id, _type, _ticks);
 
 		case CONDITION_ATTRIBUTES:
-			return new ConditionAttributes(_id, _type, _ticks, _buff, _subId);
+			return new ConditionAttributes(_id, _type, _ticks);
 
 		case CONDITION_INVISIBLE:
 		case CONDITION_HUNTING:
@@ -223,7 +186,7 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		case CONDITION_DRUNK:
 		case CONDITION_PACIFIED:
 		case CONDITION_GAMEMASTER:
-			return new ConditionGeneric(_id, _type, _ticks, _buff, _subId);
+			return new ConditionGeneric(_id, _type, _ticks);
 
 		default:
 			break;
@@ -256,21 +219,7 @@ Condition* Condition::createCondition(PropStream& propStream)
 	if(!propStream.GET_ULONG(_ticks))
 		return NULL;
 
-	if(!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_BUFF)
-		return NULL;
-
-	uint32_t _buff = 0;
-	if(!propStream.GET_ULONG(_buff))
-		return NULL;
-
-	if(!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_SUBID)
-		return NULL;
-
-	uint32_t _subId = 0;
-	if(!propStream.GET_ULONG(_subId))
-		return NULL;
-
-	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0, _buff != 0, _subId);
+	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0);
 }
 
 bool Condition::updateCondition(const Condition* addCondition)
@@ -281,14 +230,11 @@ bool Condition::updateCondition(const Condition* addCondition)
 
 Icons_t Condition::getIcons() const
 {
-	if(buff)
-		return ICON_BUFF;
-
 	return ICON_NONE;
 }
 
-ConditionGeneric::ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-Condition(_id, _type, _ticks, _buff, _subId)
+ConditionGeneric::ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+Condition(_id, _type, _ticks)
 {
 	//
 }
@@ -320,8 +266,8 @@ Icons_t ConditionGeneric::getIcons() const
 	return ICON_NONE;
 }
 
-ConditionManaShield::ConditionManaShield(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-ConditionGeneric(_id, _type, _ticks, _buff, _subId)
+ConditionManaShield::ConditionManaShield(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+ConditionGeneric(_id, _type, _ticks)
 {
 	//
 }
@@ -335,8 +281,8 @@ Icons_t ConditionManaShield::getIcons() const
 	return ICON_MANASHIELD;
 }
 
-ConditionAttributes::ConditionAttributes(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-ConditionGeneric(_id, _type, _ticks, _buff, _subId)
+ConditionAttributes::ConditionAttributes(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+ConditionGeneric(_id, _type, _ticks)
 {
 	currentSkill = currentStat = 0;
 	memset(skills, 0, sizeof(skills));
@@ -630,8 +576,8 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 	return ret;
 }
 
-ConditionRegeneration::ConditionRegeneration(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-ConditionGeneric(_id, _type, _ticks, _buff, _subId)
+ConditionRegeneration::ConditionRegeneration(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+ConditionGeneric(_id, _type, _ticks)
 {
 	internalHealthTicks = internalManaTicks = healthGain = manaGain = 0;
 	healthTicks = manaTicks = 1000;
@@ -772,8 +718,8 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 	return ret;
 }
 
-ConditionSoul::ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-ConditionGeneric(_id, _type, _ticks, _buff, _subId)
+ConditionSoul::ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+ConditionGeneric(_id, _type, _ticks)
 {
 	internalSoulTicks = soulTicks = soulGain = 0;
 }
@@ -870,8 +816,8 @@ bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 	return ret;
 }
 
-ConditionDamage::ConditionDamage(ConditionId_t _id, ConditionType_t _type, bool _buff, uint32_t _subId):
-Condition(_id, _type, 0, _buff, _subId)
+ConditionDamage::ConditionDamage(ConditionId_t _id, ConditionType_t _type):
+Condition(_id, _type, 0)
 {
 	tickInterval = 2000;
 	delayed = forceUpdate = false;
@@ -1234,15 +1180,6 @@ Icons_t ConditionDamage::getIcons() const
 		case CONDITION_POISON:
 			return ICON_POISON;
 
-		case CONDITION_FREEZING:
-			return ICON_FREEZING;
-
-		case CONDITION_DAZZLED:
-			return ICON_DAZZLED;
-
-		case CONDITION_CURSED:
-			return ICON_CURSED;
-
 		case CONDITION_DROWN:
 			return ICON_DROWNING;
 
@@ -1274,8 +1211,8 @@ void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::lis
 	}
 }
 
-ConditionSpeed::ConditionSpeed(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, int32_t changeSpeed):
-ConditionOutfit(_id, _type, _ticks, _buff, _subId)
+ConditionSpeed::ConditionSpeed(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t changeSpeed):
+ConditionOutfit(_id, _type, _ticks)
 {
 	speedDelta = changeSpeed;
 	mina = minb = maxa = maxb = 0.0f;
@@ -1471,8 +1408,8 @@ Icons_t ConditionSpeed::getIcons() const
 	return ICON_NONE;
 }
 
-ConditionOutfit::ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId):
-Condition(_id, _type, _ticks, _buff, _subId)
+ConditionOutfit::ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32_t _ticks):
+Condition(_id, _type, _ticks)
 {
 	//
 }
@@ -1547,8 +1484,8 @@ void ConditionOutfit::addCondition(Creature* creature, const Condition* addCondi
 	changeOutfit(creature);
 }
 
-ConditionLight::ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, int32_t lightLevel, int32_t lightColor):
-Condition(_id, _type, _ticks, _buff, _subId)
+ConditionLight::ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t lightLevel, int32_t lightColor):
+Condition(_id, _type, _ticks)
 {
 	lightInfo.level = lightLevel;
 	lightInfo.color = lightColor;

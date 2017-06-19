@@ -1733,7 +1733,7 @@ void LuaScriptInterface::registerFunctions()
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
-	//doRemoveCondition(cid, type[, subId])
+	//doRemoveCondition(cid, type)
 	lua_register(m_luaState, "doRemoveCondition", LuaScriptInterface::luaDoRemoveCondition);
 
 	//doRemoveConditions(cid[, onlyPersistent])
@@ -1790,7 +1790,7 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
-	//getCreatureCondition(cid, condition[, subId])
+	//getCreatureCondition(cid, condition)
 	lua_register(m_luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
 
 	//doCreatureSetDropLoot(cid, doDrop)
@@ -1911,7 +1911,7 @@ void LuaScriptInterface::registerFunctions()
 	//createCombatArea({area}[, {extArea}])
 	lua_register(m_luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
-	//createConditionObject(type[, ticks[, buff[, subId]]])
+	//createConditionObject(type[, ticks])
 	lua_register(m_luaState, "createConditionObject", LuaScriptInterface::luaCreateConditionObject);
 
 	//setCombatArea(combat, area)
@@ -5385,15 +5385,8 @@ int32_t LuaScriptInterface::luaCreateCombatArea(lua_State* L)
 
 int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 {
-	//createConditionObject(type[, ticks[, buff[, subId]]])
-	uint32_t params = lua_gettop(L), subId = 0;
-	if(params > 3)
-		subId = popNumber(L);
-
-	bool buff = false;
-	if(params > 2)
-		buff = popNumber(L);
-
+	//createConditionObject(type[, ticks])
+	uint32_t params = lua_gettop(L);
 	int32_t ticks = 0;
 	if(params > 1)
 		ticks = popNumber(L);
@@ -5406,7 +5399,7 @@ int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 		return 1;
 	}
 
-	if(Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, (ConditionType_t)popNumber(L), ticks, 0, buff, subId))
+	if(Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, (ConditionType_t)popNumber(L), ticks, 0))
 		lua_pushnumber(L, env->addConditionObject(condition));
 	else
 	{
@@ -6582,11 +6575,7 @@ int32_t LuaScriptInterface::luaDoAddCondition(lua_State* L)
 
 int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 {
-	//doRemoveCondition(cid, type[, subId])
-	uint32_t subId = 0;
-	if(lua_gettop(L) > 2)
-		subId = popNumber(L);
-
+	//doRemoveCondition(cid, type)
 	ConditionType_t conditionType = (ConditionType_t)popNumber(L);
 
 	ScriptEnviroment* env = getEnv();
@@ -6598,9 +6587,9 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 		return 1;
 	}
 
-	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT, subId);
+	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT);
 	if(!condition)
-		condition = creature->getCondition(conditionType, CONDITIONID_DEFAULT, subId);
+		condition = creature->getCondition(conditionType, CONDITIONID_DEFAULT);
 
 	if(condition)
 		creature->removeCondition(condition);
@@ -8043,15 +8032,12 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 
 int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 {
-	//getCreatureCondition(cid, condition[, subId])
-	uint32_t subId = 0, condition = 0;
-	if(lua_gettop(L) > 2)
-		subId = popNumber(L);
-
+	//getCreatureCondition(cid, condition)
+	uint32_t condition = 0;
 	condition = popNumber(L);
 	ScriptEnviroment* env = getEnv();
 	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
-		lua_pushboolean(L, creature->hasCondition((ConditionType_t)condition, subId));
+		lua_pushboolean(L, creature->hasCondition((ConditionType_t)condition));
 	else
 	{
 		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));

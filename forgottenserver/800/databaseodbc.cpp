@@ -303,8 +303,8 @@ std::string ODBCResult::getDataString(const std::string& s)
 
 		if(RETURN_SUCCESS(ret))
 		{
-			std::string buff = std::string(value);
-			return buff;
+			std::string ret = std::string(value);
+			return ret;
 		}
 		else
 			std::cout << "Error during getDataString(" << s << ")." << std::endl;

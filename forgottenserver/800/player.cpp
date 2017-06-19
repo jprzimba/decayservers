@@ -497,12 +497,6 @@ void Player::sendIcons() const
 			icons |= (*it)->getIcons();
 	}
 
-	if(getZone() == ZONE_PROTECTION)
-		icons |= ICON_PROTECTIONZONE;
-
-	if(pzLocked)
-		icons |= ICON_PZ;
-
 	client->sendIcons(icons);
 }
 
@@ -1640,7 +1634,7 @@ bool Player::isMuted(uint16_t channelId, SpeakClasses type, uint32_t& time)
 	int32_t muteTicks = 0;
 	for(ConditionList::iterator it = conditions.begin(); it != conditions.end(); ++it)
 	{
-		if((*it)->getType() == CONDITION_MUTED && (*it)->getSubId() == 0 && (*it)->getTicks() > muteTicks)
+		if((*it)->getType() == CONDITION_MUTED && (*it)->getTicks() > muteTicks)
 			muteTicks = (*it)->getTicks();
 	}
 
@@ -2222,7 +2216,7 @@ Item* Player::createCorpse(DeathList deathList)
 
 void Player::addExhaust(uint32_t ticks, Exhaust_t type)
 {
-	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST, ticks, 0, false, type))
+	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST, ticks, type))
 		addCondition(condition);
 }
 
@@ -3327,15 +3321,6 @@ void Player::onAddCombatCondition(ConditionType_t type, bool hadCondition)
 			break;
 		case CONDITION_ENERGY:
 			tmp = "electrified";
-			break;
-		case CONDITION_FREEZING:
-			tmp = "freezing";
-			break;
-		case CONDITION_DAZZLED:
-			tmp = "dazzled";
-			break;
-		case CONDITION_CURSED:
-			tmp = "cursed";
 			break;
 		case CONDITION_DROWN:
 			tmp = "drowning";
@@ -4787,5 +4772,5 @@ bool Player::transferMoneyTo(const std::string& name, uint64_t amount)
 void Player::sendCritical() const
 {
 	if(g_config.getBool(ConfigManager::DISPLAY_CRITICAL_HIT))
-		g_game.addAnimatedText(getPosition(), TEXTCOLOR_DARKRED, "CRITICAL!");
+		g_game.addAnimatedText(getPosition(), TEXTCOLOR_RED, "CRITICAL!");
 }

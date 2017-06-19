@@ -1180,7 +1180,7 @@ bool TalkAction::ghost(Creature* creature, const std::string& cmd, const std::st
 	Player* tmpPlayer = NULL;
 
 	Condition* condition = NULL;
-	if((condition = player->getCondition(CONDITION_GAMEMASTER, CONDITIONID_DEFAULT, GAMEMASTER_INVISIBLE)))
+	if((condition = player->getCondition(CONDITION_GAMEMASTER, CONDITIONID_DEFAULT)))//tryller GAMEMASTER_INVISIBLE
 	{
 		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
@@ -1199,7 +1199,7 @@ bool TalkAction::ghost(Creature* creature, const std::string& cmd, const std::st
 		player->removeCondition(condition);
 		g_game.internalCreatureChangeVisible(creature, VISIBLE_GHOST_APPEAR);
 	}
-	else if((condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_GAMEMASTER, -1, 0, false, GAMEMASTER_INVISIBLE)))
+	else if((condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_GAMEMASTER, -1, GAMEMASTER_INVISIBLE)))
 	{
 		player->addCondition(condition);
 		g_game.internalCreatureChangeVisible(creature, VISIBLE_GHOST_DISAPPEAR);

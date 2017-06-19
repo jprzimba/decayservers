@@ -681,8 +681,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 						it.corpseType = RACE_UNDEAD;
 					else if(tmpStrValue == "fire")
 						it.corpseType = RACE_FIRE;
-					else if(tmpStrValue == "energy")
-						it.corpseType = RACE_ENERGY;
 					else
 						std::cout << "[Warning - Items::loadFromXml] Unknown corpseType " << strValue << std::endl;
 				}
@@ -1102,7 +1100,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.absorb[COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.absorb[COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.absorb[COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.absorb[COMBAT_ICEDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "absorbpercentmagic")
@@ -1112,9 +1109,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.absorb[COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.absorb[COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.absorb[COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.absorb[COMBAT_ICEDAMAGE] += intValue;
-					it.abilities.absorb[COMBAT_HOLYDAMAGE] += intValue;
-					it.abilities.absorb[COMBAT_DEATHDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "absorbpercentenergy")
@@ -1131,21 +1125,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			{
 				if(readXMLInteger(itemAttributesNode, "value", intValue))
 					it.abilities.absorb[COMBAT_EARTHDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "absorbpercentice")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.absorb[COMBAT_ICEDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "absorbpercentholy")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.absorb[COMBAT_HOLYDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "absorbpercentdeath")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.absorb[COMBAT_DEATHDAMAGE] += intValue;
 			}
 			else if(tmpStrValue == "absorbpercentlifedrain")
 			{
@@ -1192,7 +1171,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_ICEDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "reflectpercentmagic")
@@ -1202,9 +1180,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_ICEDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_HOLYDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_DEATHDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "reflectpercentenergy")
@@ -1221,21 +1196,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			{
 				if(readXMLInteger(itemAttributesNode, "value", intValue))
 					it.abilities.reflect[REFLECT_PERCENT][COMBAT_EARTHDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectpercentice")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_ICEDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectpercentholy")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_HOLYDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectpercentdeath")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_PERCENT][COMBAT_DEATHDAMAGE] += intValue;
 			}
 			else if(tmpStrValue == "reflectpercentlifedrain")
 			{
@@ -1282,7 +1242,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_ICEDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "reflectchancemagic")
@@ -1292,9 +1251,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_ENERGYDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_FIREDAMAGE] += intValue;
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_EARTHDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_ICEDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_HOLYDAMAGE] += intValue;
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_DEATHDAMAGE] += intValue;
 				}
 			}
 			else if(tmpStrValue == "reflectchanceenergy")
@@ -1311,21 +1267,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			{
 				if(readXMLInteger(itemAttributesNode, "value", intValue))
 					it.abilities.reflect[REFLECT_CHANCE][COMBAT_EARTHDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectchanceice")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_ICEDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectchanceholy")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_HOLYDAMAGE] += intValue;
-			}
-			else if(tmpStrValue == "reflectchancedeath")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-					it.abilities.reflect[REFLECT_CHANCE][COMBAT_DEATHDAMAGE] += intValue;
 			}
 			else if(tmpStrValue == "reflectchancelifedrain")
 			{
@@ -1371,21 +1312,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			{
 				if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
 					it.abilities.conditionSuppressions |= CONDITION_POISON;
-			}
-			else if(tmpStrValue == "suppressfreeze" || tmpStrValue == "suppressice")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-					it.abilities.conditionSuppressions |= CONDITION_FREEZING;
-			}
-			else if(tmpStrValue == "suppressdazzle" || tmpStrValue == "suppressholy")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-					it.abilities.conditionSuppressions |= CONDITION_DAZZLED;
-			}
-			else if(tmpStrValue == "suppresscurse" || tmpStrValue == "suppressdeath")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue) && intValue != 0)
-					it.abilities.conditionSuppressions |= CONDITION_CURSED;
 			}
 			else if(tmpStrValue == "suppressdrown")
 			{
@@ -1479,42 +1405,27 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					tmpStrValue = asLowerCaseString(strValue);
 					if(tmpStrValue == "fire")
 					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FIRE, false, 0);
+						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FIRE);
 						combatType = COMBAT_FIREDAMAGE;
 					}
 					else if(tmpStrValue == "energy")
 					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_ENERGY, false, 0);
+						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_ENERGY);
 						combatType = COMBAT_ENERGYDAMAGE;
 					}
 					else if(tmpStrValue == "earth" || tmpStrValue == "poison")
 					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_POISON, false, 0);
+						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_POISON);
 						combatType = COMBAT_EARTHDAMAGE;
-					}
-					else if(tmpStrValue == "ice" || tmpStrValue == "freezing")
-					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FREEZING, false, 0);
-						combatType = COMBAT_ICEDAMAGE;
-					}
-					else if(tmpStrValue == "holy" || tmpStrValue == "dazzled")
-					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_DAZZLED, false, 0);
-						combatType = COMBAT_HOLYDAMAGE;
-					}
-					else if(tmpStrValue == "death" || tmpStrValue == "cursed")
-					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_CURSED, false, 0);
-						combatType = COMBAT_DEATHDAMAGE;
 					}
 					else if(tmpStrValue == "drown")
 					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_DROWN, false, 0);
+						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_DROWN);
 						combatType = COMBAT_DROWNDAMAGE;
 					}
 					else if(tmpStrValue == "physical")
 					{
-						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_PHYSICAL, false, 0);
+						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_PHYSICAL);
 						combatType = COMBAT_PHYSICALDAMAGE;
 					}
 					else
@@ -1610,30 +1521,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				{
 					it.abilities.elementDamage = intValue;
 					it.abilities.elementType = COMBAT_EARTHDAMAGE;
-				}
-			}
-			else if(tmpStrValue == "elementice")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-				{
-					it.abilities.elementDamage = intValue;
-					it.abilities.elementType = COMBAT_ICEDAMAGE;
-				}
-			}
-			else if(tmpStrValue == "elementholy")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-				{
-					it.abilities.elementDamage = intValue;
-					it.abilities.elementType = COMBAT_HOLYDAMAGE;
-				}
-			}
-			else if(tmpStrValue == "elementdeath")
-			{
-				if(readXMLInteger(itemAttributesNode, "value", intValue))
-				{
-					it.abilities.elementDamage = intValue;
-					it.abilities.elementType = COMBAT_DEATHDAMAGE;
 				}
 			}
 			else if(tmpStrValue == "elementlifedrain")

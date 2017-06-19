@@ -3573,7 +3573,7 @@ bool Game::playerYell(Player* player, const std::string& text)
 
 	if(!player->hasFlag(PlayerFlag_CannotBeMuted))
 	{
-		if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, 30000, 0, false, 1))
+		if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, 30000, 1))
 			player->addCondition(condition);
 	}
 
@@ -4008,10 +4008,7 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 		case COMBAT_ENERGYDAMAGE:
 		case COMBAT_FIREDAMAGE:
 		case COMBAT_PHYSICALDAMAGE:
-		case COMBAT_ICEDAMAGE:
-		case COMBAT_DEATHDAMAGE:
 		case COMBAT_EARTHDAMAGE:
-		case COMBAT_HOLYDAMAGE:
 		{
 			effect = MAGIC_EFFECT_BLOCKHIT;
 			break;
@@ -4127,7 +4124,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 						switch(target->getRace())
 						{
 							case RACE_VENOM:
-								textColor = TEXTCOLOR_LIGHTGREEN;
+								textColor = TEXTCOLOR_GREEN;
 								magicEffect = MAGIC_EFFECT_POISON;
 								splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_GREEN);
 								break;
@@ -4148,11 +4145,6 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 								magicEffect = MAGIC_EFFECT_DRAW_BLOOD;
 								break;
 
-							case RACE_ENERGY:
-								textColor = TEXTCOLOR_PURPLE;
-								magicEffect = MAGIC_EFFECT_PURPLEENERGY;
-								break;
-
 							default:
 								break;
 						}
@@ -4167,14 +4159,14 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 
 					case COMBAT_ENERGYDAMAGE:
 					{
-						textColor = TEXTCOLOR_PURPLE;
+						textColor = TEXTCOLOR_LIGHTBLUE;
 						magicEffect = MAGIC_EFFECT_ENERGY_DAMAGE;
 						break;
 					}
 
 					case COMBAT_EARTHDAMAGE:
 					{
-						textColor = TEXTCOLOR_LIGHTGREEN;
+						textColor = TEXTCOLOR_GREEN;
 						magicEffect = MAGIC_EFFECT_POISON_RINGS;
 						break;
 					}
@@ -4190,27 +4182,6 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 					{
 						textColor = TEXTCOLOR_ORANGE;
 						magicEffect = MAGIC_EFFECT_HITBY_FIRE;
-						break;
-					}
-
-					case COMBAT_ICEDAMAGE:
-					{
-						textColor = TEXTCOLOR_TEAL;
-						magicEffect = MAGIC_EFFECT_ICEATTACK;
-						break;
-					}
-
-					case COMBAT_HOLYDAMAGE:
-					{
-						textColor = TEXTCOLOR_YELLOW;
-						magicEffect = MAGIC_EFFECT_HOLYDAMAGE;
-						break;
-					}
-
-					case COMBAT_DEATHDAMAGE:
-					{
-						textColor = TEXTCOLOR_DARKRED;
-						magicEffect = MAGIC_EFFECT_SMALLCLOUDS;
 						break;
 					}
 
@@ -4270,7 +4241,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			sprintf(buffer, "+%d", manaChange);
 
 			const SpectatorVec& list = getSpectators(targetPos);
-			addAnimatedText(list, targetPos, TEXTCOLOR_DARKPURPLE, buffer);
+			addAnimatedText(list, targetPos, TEXTCOLOR_LIGHTBLUE, buffer);
 		}
 	}
 	else

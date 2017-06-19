@@ -946,22 +946,7 @@ ShootTypeNames shootTypeNames[] =
 	{"whirlwindsword",	SHOOT_EFFECT_WHIRLWINDSWORD},
 	{"whirlwindaxe",	SHOOT_EFFECT_WHIRLWINDAXE},
 	{"whirlwindclub",	SHOOT_EFFECT_WHIRLWINDCLUB},
-	{"etherealspear",	SHOOT_EFFECT_ETHEREALSPEAR},
-	{"ice",			SHOOT_EFFECT_ICE},
-	{"earth",		SHOOT_EFFECT_EARTH},
-	{"holy",		SHOOT_EFFECT_HOLY},
-	{"suddendeath",		SHOOT_EFFECT_SUDDENDEATH},
-	{"flasharrow",		SHOOT_EFFECT_FLASHARROW},
-	{"flammingarrow",	SHOOT_EFFECT_FLAMMINGARROW},
-	{"flamingarrow",	SHOOT_EFFECT_FLAMMINGARROW},
-	{"shiverarrow",		SHOOT_EFFECT_SHIVERARROW},
-	{"energyball",		SHOOT_EFFECT_ENERGYBALL},
-	{"smallice",		SHOOT_EFFECT_SMALLICE},
-	{"smallholy",		SHOOT_EFFECT_SMALLHOLY},
-	{"smallearth",		SHOOT_EFFECT_SMALLEARTH},
-	{"eartharrow",		SHOOT_EFFECT_EARTHARROW},
-	{"explosion",		SHOOT_EFFECT_EXPLOSION},
-	{"cake",		SHOOT_EFFECT_CAKE}
+	{"etherealspear",	SHOOT_EFFECT_ETHEREALSPEAR}
 };
 
 CombatTypeNames combatTypeNames[] =
@@ -976,10 +961,7 @@ CombatTypeNames combatTypeNames[] =
 	{"manadrain",		COMBAT_MANADRAIN},
 	{"mana drain",		COMBAT_MANADRAIN},
 	{"healing",		COMBAT_HEALING},
-	{"drown",		COMBAT_DROWNDAMAGE},
-	{"ice",			COMBAT_ICEDAMAGE},
-	{"holy",		COMBAT_HOLYDAMAGE},
-	{"death",		COMBAT_DEATHDAMAGE}
+	{"drown",		COMBAT_DROWNDAMAGE}
 };
 
 AmmoTypeNames ammoTypeNames[] =
@@ -1161,12 +1143,6 @@ std::string getCombatName(CombatType_t combatType)
 			return "healing";
 		case COMBAT_DROWNDAMAGE:
 			return "drown";
-		case COMBAT_ICEDAMAGE:
-			return "ice";
-		case COMBAT_HOLYDAMAGE:
-			return "holy";
-		case COMBAT_DEATHDAMAGE:
-			return "death";
 		default:
 			break;
 	}

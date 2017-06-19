@@ -312,7 +312,7 @@ function isPlayerGhost(cid)
 		return false
 	end
 
-	return getCreatureCondition(cid, CONDITION_GAMEMASTER, GAMEMASTER_INVISIBLE) or getPlayerFlagValue(cid, PLAYERFLAG_CANNOTBESEEN)
+	return getCreatureCondition(cid, CONDITION_GAMEMASTER) or getPlayerFlagValue(cid, PLAYERFLAG_CANNOTBESEEN)
 end
 
 function isMonster(cid)

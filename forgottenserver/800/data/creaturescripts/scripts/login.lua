@@ -29,9 +29,7 @@ function onLogin(cid)
 		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_RED, "Hello, type 'account' to create an account or type 'recover' to recover an account.")
 	end
 
-	if(not isPlayerGhost(cid)) then
-		doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
-	end
+	doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
 
 	registerCreatureEvent(cid, "Mail")
 	registerCreatureEvent(cid, "GuildMotd")
