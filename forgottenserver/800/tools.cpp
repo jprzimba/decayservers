@@ -867,6 +867,7 @@ MagicEffectNames magicEffectNames[] =
 	{"greennote",		MAGIC_EFFECT_SOUND_GREEN},
 	{"rednote",		MAGIC_EFFECT_SOUND_RED},
 	{"poison",		MAGIC_EFFECT_POISON_AREA},
+	{"earth",		MAGIC_EFFECT_POISON_AREA},
 	{"yellownote",		MAGIC_EFFECT_SOUND_YELLOW},
 	{"purplenote",		MAGIC_EFFECT_SOUND_PURPLE},
 	{"bluenote",		MAGIC_EFFECT_SOUND_BLUE},

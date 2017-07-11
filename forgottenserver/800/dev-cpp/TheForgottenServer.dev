@@ -1,7 +1,7 @@
 [Project]
 FileName=TheForgottenServer.dev
 Name=TheForgottenServer
-UnitCount=160
+UnitCount=156
 Type=1
 Ver=1
 ObjFiles=
@@ -1460,31 +1460,31 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit153]
-FileName=..\databaseodbc.cpp
-CompileCpp=0
+FileName=..\itemattributes.cpp
+CompileCpp=1
 Folder=TheForgottenServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=0
 
 [Unit155]
-FileName=..\databasepgsql.cpp
-CompileCpp=0
+FileName=..\group.cpp
+CompileCpp=1
 Folder=TheForgottenServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
 [Unit156]
-FileName=..\databasepgsql.h
-CompileCpp=0
+FileName=..\group.h
+CompileCpp=1
 Folder=TheForgottenServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
@@ -1708,14 +1708,14 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit154]
-FileName=..\databaseodbc.h
-CompileCpp=0
+FileName=..\itemattributes.h
+CompileCpp=1
 Folder=TheForgottenServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=0
 
 [Unit157]
 FileName=..\itemattributes.cpp

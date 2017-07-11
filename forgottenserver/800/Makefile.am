@@ -2,7 +2,7 @@ noinst_PROGRAMS = theforgottenserver
 
 CXXFLAGS = -g -O1
 AM_CXXFLAGS = $(XML_CPPFLAGS) $(OTSERV_FLAGS) $(LUA_CFLAGS) $(DEBUG_FLAGS)\
-$(MYSQL_FLAGS) $(SQLITE_FLAGS) $(ODBC_FLAGS) $(PGSQL_FLAGS)\
+$(MYSQL_FLAGS) $(SQLITE_FLAGS)\
 $(PROFILER_FLAGS) $(OPTIONAL_FLAGS) -D_THREAD_SAFE -D_REENTRANT -Wall
 
 theforgottenserver_LDADD = $(LUA_LIBS)
@@ -12,12 +12,6 @@ MAYBE_MYSQL = databasemysql.cpp databasemysql.h
 endif
 if USE_SQLITE
 MAYBE_SQLITE = databasesqlite.cpp databasesqlite.h
-endif
-if USE_PGSQL
-MAYBE_PGSQL = databasepgsql.cpp databasepgsql.h
-endif
-if USE_ODBC
-MAYBE_ODBC = databaseodbc.cpp databaseodbc.h
 endif
 if REMOTE_CONTROL
 MAYBE_REMOTE = admin.cpp admin.h
@@ -30,7 +24,7 @@ theforgottenserver_SOURCES = account.h actions.cpp actions.h $(MAYBE_REMOTE) \
 	connection.h const.h container.cpp container.h creature.cpp \
 	creature.h creatureevent.cpp creatureevent.h cylinder.cpp cylinder.h \
 	database.cpp database.h databasemanager.cpp databasemanager.h \
-	$(MAYBE_MYSQL) $(MAYBE_SQLITE) $(MAYBE_PGSQL) $(MAYBE_ODBC) \
+	$(MAYBE_MYSQL) $(MAYBE_SQLITE) \
 	depot.cpp depot.h exception.cpp exception.h fileloader.cpp \
 	fileloader.h game.cpp game.h globalevent.cpp \
 	globalevent.h group.cpp group.h house.cpp house.h \
