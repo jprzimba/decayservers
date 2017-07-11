@@ -2014,7 +2014,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 				else
 					msg->AddByte(0x00);
 			}
-		}
+		}else
+		     msg->AddByte(0x00);
 	}
 
 	AddMapDescription(msg, pos);
