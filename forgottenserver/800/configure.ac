@@ -1,5 +1,5 @@
 AC_PREREQ([2.50])
-AC_INIT([crystalserver], [1.0.0])
+AC_INIT([theforgottenserver], [0.3])
 AM_INIT_AUTOMAKE([1.10 foreign])
 AC_CONFIG_SRCDIR([account.h])
 AM_CONFIG_HEADER([config.h])
@@ -48,10 +48,6 @@ AC_SUBST(DEBUG_FLAGS)
 
 AM_CONDITIONAL(USE_MYSQL, false)
 useMySQL=no
-AM_CONDITIONAL(USE_PGSQL, false)
-usePostgreSQL=no
-AM_CONDITIONAL(USE_ODBC, false)
-useODBC=no
 AM_CONDITIONAL(USE_SQLITE, false)
 useSQLite=no
 
@@ -61,22 +57,6 @@ AC_ARG_ENABLE(mysql, [  --enable-mysql			enable MySQL support], [
 	MYSQL_FLAGS=-D__USE_MYSQL__
 	AC_SUBST(MYSQL_FLAGS)
 	useMySQL=yes
-])
-
-# check if we want postgresql enabled
-AC_ARG_ENABLE(pgsql, [  --enable-pgsql			enable PostgreSQL support], [
-	AM_CONDITIONAL(USE_PGSQL, true)
-	PGSQL_FLAGS=-D__USE_PGSQL__
-	AC_SUBST(PGSQL_FLAGS)
-	usePostgreSQL=yes
-])
-
-# check if we want odbc enabled
-AC_ARG_ENABLE(odbc, [  --enable-odbc			enable ODBC support], [
-	AM_CONDITIONAL(USE_ODBC, true)
-	ODBC_FLAGS=-D__USE_ODBC__
-	AC_SUBST(ODBC_FLAGS)
-	useODBC=yes
 ])
 
 # check if we want sqlite enabled
@@ -117,7 +97,7 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([floor ftime gethostbyname gethostname memset pow sqrt strcasecmp strncasecmp strstr strtol])
 
 # check for libxml2
-AM_PATH_XML2(2.6.5, , AC_MSG_ERROR([you need libxml2 >= 2.6.5 to compile crystalserver!]))
+AM_PATH_XML2(2.6.5, , AC_MSG_ERROR([you need libxml2 >= 2.6.5 to compile theforgottenserver!]))
 LIBS="$LIBS $XML_LIBS"
 
 #check GMP
@@ -186,20 +166,6 @@ if test -n "$MYSQL_FLAGS"; then
 	AC_SUBST(MYSQL_LIBS)
 fi
 
-# check for postgresql if it is enabled
-if test -n "$PGSQL_FLAGS"; then
-	AC_CHECK_HEADERS([postgresql/libpq-fe.h],[PGSQL_LIBS=-lpg],[AC_MSG_ERROR("postgresql headers missing.")])
-	AC_CHECK_LIB(pq, main,[],[AC_MSG_ERROR("Linking against libpq failed.")])
-	AC_SUBST(PGSQL_LIBS)
-fi
-
-# check for odbc if it is enabled
-if test -n "$ODBC_FLAGS"; then
-	AC_CHECK_HEADERS([sql.h sqlext.h sqltypes.h],[ODBC_LIBS=-lodbc],[AC_MSG_ERROR("unixodbc headers missing.")])
-	AC_CHECK_LIB(odbc, main, [], [AC_MSG_ERROR("Linking against odbc failed.")])
-	AC_SUBST(ODBC_LIBS)
-fi
-
 # check for sqlite if it is enabled
 if test -n "$SQLITE_FLAGS"; then
 	AC_CHECK_HEADERS([sqlite3.h],[SQLITE_LIBS=-lsqlite3],[AC_MSG_ERROR("sqlite3 headers missing.")])
@@ -211,7 +177,7 @@ AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 echo
-#echo Crystal Server 1.0.0
+#echo The Forgotten Server 0.3
 echo $PACKAGE $VERSION
 echo
 echo Remote control.............. : $remoteControl
@@ -222,17 +188,11 @@ echo Debug build................. : $debugBuild
 echo
 echo Build with MySQL............ : $useMySQL
 echo Build with SQLite........... : $useSQLite
-echo Build with PostgreSQL....... : $usePostgreSQL
-echo Build with ODBC............. : $useODBC
 echo
 if test "$useMySQL" = "no" ; then
 	if test "$useSQLite" = "no" ; then
-		if test "$usePostgreSQL" = "no" ; then
-			if test "$useODBC" = "no" ; then
-				echo Warning: no database driver was enabled! To enable a database driver, configure with --enable-\<dbdriver\> \(example: --enable-mysql\).
-				echo
-			fi
-		fi
+			echo Warning: no database driver was enabled! To enable a database driver, configure with --enable-\<dbdriver\> \(example: --enable-mysql\).
+		echo
 	fi
 fi
 echo Configure complete, now you may type \'make\'.
