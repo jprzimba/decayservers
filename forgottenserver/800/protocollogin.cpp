@@ -36,10 +36,6 @@ extern Game g_game;
 extern RSA* g_otservRSA;
 extern IpList serverIps;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolLogin::protocolLoginCount = 0;
-#endif
-
 void ProtocolLogin::deleteProtocolTask()
 {
 #ifdef __DEBUG_NET_DETAIL__

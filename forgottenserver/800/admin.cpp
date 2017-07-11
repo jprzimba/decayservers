@@ -37,10 +37,6 @@ extern Game g_game;
 extern ConfigManager g_config;
 Admin* g_admin = NULL;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolAdmin::protocolAdminCount = 0;
-#endif
-
 void ProtocolAdmin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if(!g_admin->enabled())

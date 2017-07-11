@@ -137,9 +137,6 @@ typedef std::list<Party*> PartyList;
 class Player : public Creature, public Cylinder
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		static uint32_t playerCount;
-#endif
 		Player(const std::string& name, ProtocolGame* p);
 		virtual ~Player();
 

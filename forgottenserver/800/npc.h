@@ -351,9 +351,6 @@ struct Voice
 class Npc : public Creature
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		static uint32_t npcCount;
-#endif
 		virtual ~Npc();
 		static Npc* createNpc(const std::string& name);
 

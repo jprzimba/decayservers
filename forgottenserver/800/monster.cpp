@@ -31,9 +31,6 @@ extern ConfigManager g_config;
 extern Monsters g_monsters;
 
 AutoList<Monster>Monster::autoList;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Monster::monsterCount = 0;
-#endif
 
 Monster* Monster::createMonster(MonsterType* mType)
 {
@@ -90,20 +87,13 @@ Monster::Monster(MonsterType* _mType):
 		if(!registerCreatureEvent(*it))
 			std::cout << "[Warning - Monster::Monster] Unknown event name - " << *it << std::endl;
 	}
-
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	monsterCount++;
-#endif
 }
 
 Monster::~Monster()
 {
 	clearTargetList();
 	clearFriendList();
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
 
-	monsterCount--;
-#endif
 	if(raid)
 	{
 		raid->unRef();

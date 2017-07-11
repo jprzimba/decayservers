@@ -33,10 +33,6 @@
 
 extern ConfigManager g_config;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Connection::connectionCount = 0;
-#endif
-
 ConnectionManager::ConnectionManager()
 {
 	maxLoginTries = (uint32_t)g_config.getNumber(ConfigManager::LOGIN_TRIES);

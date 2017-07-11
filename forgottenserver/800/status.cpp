@@ -38,9 +38,6 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolStatus::protocolStatusCount = 0;
-#endif
 IpConnectMap ProtocolStatus::ipConnectMap;
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)

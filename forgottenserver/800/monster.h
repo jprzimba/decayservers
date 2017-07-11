@@ -41,9 +41,6 @@ class Monster : public Creature
 		Monster(MonsterType* _mType);
 
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		static uint32_t monsterCount;
-#endif
 		virtual ~Monster();
 
 		static Monster* createMonster(MonsterType* mType);

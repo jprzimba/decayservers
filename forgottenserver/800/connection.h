@@ -87,9 +87,6 @@ protected:
 class Connection : boost::noncopyable
 {
 public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	static uint32_t connectionCount;
-#endif
 	enum {
 		CLOSE_STATE_NONE = 0,
 		CLOSE_STATE_REQUESTED = 1,
@@ -108,9 +105,6 @@ private:
 		m_writeError = false;
 		m_readError = false;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		connectionCount++;
-#endif
 	}
 	friend class ConnectionManager;
 	
@@ -118,9 +112,6 @@ public:
 	~Connection()
 	{
 		ConnectionManager::getInstance()->releaseConnection(this);
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		connectionCount--;
-#endif
 	}
 
 	boost::asio::ip::tcp::socket& getHandle() { return m_socket; }

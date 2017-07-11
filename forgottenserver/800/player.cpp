@@ -43,9 +43,6 @@ extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
 
 AutoList<Player> Player::autoList;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t Player::playerCount = 0;
-#endif
 MuteCountMap Player::muteCountMap;
 
 Player::Player(const std::string& _name, ProtocolGame* p):
@@ -113,17 +110,10 @@ Player::Player(const std::string& _name, ProtocolGame* p):
 
 	for(int8_t i = 0; i <= 13; i++)
 		talkState[i] = false;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-
-	playerCount++;
-#endif
 }
 
 Player::~Player()
 {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-	playerCount--;
-#endif
 	setWriteItem(NULL);
 	for(int32_t i = 0; i < 11; i++)
 	{

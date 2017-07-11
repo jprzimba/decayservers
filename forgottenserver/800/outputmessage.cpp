@@ -20,10 +20,6 @@
 #include "outputmessage.h"
 #include "protocol.h"
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t OutputMessagePool::outputMessagePoolCount = OUTPUT_POOL_SIZE;
-#endif
-
 OutputMessagePool::OutputMessagePool()
 {
 	for(uint32_t i = 0; i < OUTPUT_POOL_SIZE; ++i)
@@ -175,9 +171,6 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 
 	if(m_outputMessages.empty())
 	{
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-		outputMessagePoolCount++;
-#endif
 		OutputMessage* msg = new OutputMessage();
 		m_outputMessages.push_back(msg);
 #ifdef __TRACK_NETWORK__

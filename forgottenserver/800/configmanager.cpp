@@ -27,7 +27,6 @@ ConfigManager::ConfigManager()
 	m_startup = true;
 
 	m_confString[CONFIG_FILE] = getFilePath(FILE_TYPE_CONFIG, "config.lua");
-	m_confBool[LOGIN_ONLY_LOGINSERVER] = false;
 
 	m_confNumber[LOGIN_PORT] = m_confNumber[ADMIN_PORT] = 0;
 	m_confString[DATA_DIRECTORY] = m_confString[IP] = m_confString[RUNFILE] = m_confString[ERROR_LOG] = m_confString[OUT_LOG] = "";

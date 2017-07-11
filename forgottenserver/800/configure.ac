@@ -1,27 +1,11 @@
 AC_PREREQ([2.50])
-AC_INIT([TheForgottenServer], [0.3.5])
+AC_INIT([crystalserver], [1.0.0])
 AM_INIT_AUTOMAKE([1.10 foreign])
 AC_CONFIG_SRCDIR([account.h])
 AM_CONFIG_HEADER([config.h])
 
 AC_PROG_CXX
 AC_LANG(C++)
-
-# check if we want server diag enabled
-serverDiag=no
-AC_ARG_ENABLE(server-diag, [  --enable-server-diag		enable server diagnostic],
-	[OPTIONAL_FLAGS="$OPTIONAL_FLAGS -D__ENABLE_SERVER_DIAGNOSTIC__"]
-	serverDiag=yes
-)
-
-# check if we want login server mode
-AM_CONDITIONAL(LOGIN_SERVER, false)
-loginServer=no
-AC_ARG_ENABLE(login-server, [  --enable-login-server		enable login server mode],
-	[OPTIONAL_FLAGS="$OPTIONAL_FLAGS -D__LOGIN_SERVER__"]
-	AM_CONDITIONAL(LOGIN_SERVER, true)
-	loginServer=yes
-)
 
 # check if we want remote control feature
 AM_CONDITIONAL(REMOTE_CONTROL, false)
@@ -133,7 +117,7 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([floor ftime gethostbyname gethostname memset pow sqrt strcasecmp strncasecmp strstr strtol])
 
 # check for libxml2
-AM_PATH_XML2(2.6.5, , AC_MSG_ERROR([you need libxml2 >= 2.6.5 to compile theforgottenserver!]))
+AM_PATH_XML2(2.6.5, , AC_MSG_ERROR([you need libxml2 >= 2.6.5 to compile crystalserver!]))
 LIBS="$LIBS $XML_LIBS"
 
 #check GMP
@@ -227,11 +211,9 @@ AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 echo
-#echo The Forgotten Server 0.3.5
+#echo Crystal Server 1.0.0
 echo $PACKAGE $VERSION
 echo
-echo Server diagnostics.......... : $serverDiag
-echo Login server mode........... : $loginServer
 echo Remote control.............. : $remoteControl
 echo Root run permission......... : $rootPermission
 echo Home-directory configuration : $homedirConf

@@ -61,10 +61,6 @@ void ProtocolGame::addGameTaskInternal(uint32_t delay, const FunctionType& func)
 		Dispatcher::getInstance().addTask(createTask(func));
 }
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
-uint32_t ProtocolGame::protocolGameCount = 0;
-#endif
-
 void ProtocolGame::setPlayer(Player* p)
 {
 	player = p;
