@@ -96,7 +96,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	{
 		if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
-			disconnectClient(0x0A, "Invalid account name.");
+			disconnectClient(0x0A, "Invalid account number.");
 			return false;
 		}
 

@@ -740,7 +740,6 @@ class Player : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 	private:
-		bool talkState[13];
 		bool inventoryAbilities[11];
 		bool pzLocked;
 		bool saving;
@@ -751,7 +750,6 @@ class Player : public Creature, public Cylinder
 
 		OperatingSystem_t operatingSystem;
 		AccountManager_t accountManager;
-		PlayerSex_t managerSex;
 		BlockType_t lastAttackBlockType;
 		chaseMode_t chaseMode;
 		fightMode_t fightMode;
@@ -768,7 +766,6 @@ class Player : public Creature, public Cylinder
 		int32_t soulMax;
 		int32_t vocation_id;
 		int32_t groupId;
-		int32_t managerNumber, managerNumber2;
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
 		int32_t messageBuffer;
@@ -816,9 +813,7 @@ class Player : public Creature, public Cylinder
 
 		double inventoryWeight;
 		double capacity;
-		char managerChar[100];
 
-		std::string managerString, managerString2;
 		std::string password;
 		std::string name, nameDescription, specialDescription;
 		std::string guildName, rankName, guildNick;
@@ -842,6 +837,13 @@ class Player : public Creature, public Cylinder
 		PartyList invitePartyList;
 		OutfitMap outfits;
 		LearnedInstantSpellList learnedInstantSpellList;
+		
+		bool talkState[13];
+		int32_t newVocation;
+		PlayerSex_t _newSex;
+		uint32_t realAccount, newAccount;
+		char newAccountNumber[10];
+		std::string newPassword, newCharacterName, removeChar, accountNumberAttempt, recoveryKeyAttempt, namelockedPlayer, recoveryKey;
 
 		friend class Game;
 		friend class LuaScriptInterface;

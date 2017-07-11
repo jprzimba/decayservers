@@ -134,8 +134,8 @@ bool ProtocolGame::login(const std::string& name, uint32_t id, const std::string
 				player->name = "Account Manager";
 				player->accountManager = MANAGER_NAMELOCK;
 
-				player->managerNumber = id;
-				player->managerString2 = name;
+				player->realAccount = id;
+				player->namelockedPlayer = name;
 			}
 			else
 			{
@@ -148,7 +148,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t id, const std::string
 			if(id != 1)
 			{
 				player->accountManager = MANAGER_ACCOUNT;
-				player->managerNumber = id;
+				player->realAccount = id;
 			}
 			else
 				player->accountManager = MANAGER_NEW;
@@ -411,7 +411,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	{
 		if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
-			disconnectClient(0x14, "Invalid account name.");
+			disconnectClient(0x14, "Invalid account number.");
 			return false;
 		}
 

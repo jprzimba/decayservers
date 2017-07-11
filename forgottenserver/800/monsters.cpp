@@ -660,7 +660,7 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 				duration = intValue;
 
 			intValue = 0;
-			ConditionParam_t param = CONDITIONPARAM_BUFF; //to know was it loaded
+			ConditionParam_t param; //to know was it loaded
 			if(readXMLInteger(node, "melee", intValue))
 				param = CONDITIONPARAM_SKILL_MELEE;
 			else if(readXMLInteger(node, "fist", intValue))
@@ -710,25 +710,21 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 			else if(readXMLInteger(node, "magiclevelPercent", intValue) || readXMLInteger(node, "maglevelPercent", intValue))
 				param = CONDITIONPARAM_STAT_MAGICLEVELPERCENT;
 
-			if(param != CONDITIONPARAM_BUFF)
+			if(ConditionAttributes* condition = dynamic_cast<ConditionAttributes*>(Condition::createCondition(
+				CONDITIONID_COMBAT, CONDITION_ATTRIBUTES, duration, false)))
 			{
-				if(ConditionAttributes* condition = dynamic_cast<ConditionAttributes*>(Condition::createCondition(
-					CONDITIONID_COMBAT, CONDITION_ATTRIBUTES, duration, false)))
-				{
-					condition->setParam(param, intValue);
-					combat->setCondition(condition);
-				}
+				condition->setParam(param, intValue);
+				combat->setCondition(condition);
 			}
 		}
 		else if(tmpName == "firefield")
-			combat->setParam(COMBATPARAM_CREATEITEM, 1492);
+			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_FIREFIELD);
 		else if(tmpName == "poisonfield")
-			combat->setParam(COMBATPARAM_CREATEITEM, 1496);
+			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_POISONFIELD);
 		else if(tmpName == "energyfield")
-			combat->setParam(COMBATPARAM_CREATEITEM, 1495);
+			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_ENERGYFIELD);
 		else if(tmpName == "firecondition" || tmpName == "energycondition" || tmpName == "drowncondition" ||
-			tmpName == "poisoncondition" || tmpName == "earthcondition" || tmpName == "freezecondition" ||
-			tmpName == "cursecondition" || tmpName == "dazzlecondition")
+			tmpName == "poisoncondition" || tmpName == "earthcondition")
 		{
 			ConditionType_t conditionType = CONDITION_NONE;
 			uint32_t tickInterval = 2000;

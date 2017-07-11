@@ -178,20 +178,6 @@ bool IOLoginData::accountIdExists(uint32_t accountId)
 	return true;
 }
 
-bool IOLoginData::accountNameExists(const std::string& name)
-{
-	Database* db = Database::getInstance();
-	DBQuery query;
-	query << "SELECT `id` FROM `accounts` WHERE `name` " << db->getStringComparison() << db->escapeString(name) << " LIMIT 1";
-
-	DBResult* result;
-	if(!(result = db->storeQuery(query.str())))
-		return false;
-
-	result->free();
-	return true;
-}
-
 bool IOLoginData::getPassword(uint32_t accno, const std::string& name, std::string& password)
 {
 	Database* db = Database::getInstance();
@@ -266,7 +252,7 @@ bool IOLoginData::setRecoveryKey(uint32_t accountId, std::string newRecoveryKey)
 	return db->executeQuery(query.str());
 }
 
-uint64_t IOLoginData::createAccount(std::string name, std::string password)
+bool IOLoginData::createAccount(uint32_t accountNumber, std::string password)
 {
 	Database* db = Database::getInstance();
 	if(g_config.getNumber(ConfigManager::PASSWORDTYPE) == PASSWORD_TYPE_MD5)
@@ -275,7 +261,7 @@ uint64_t IOLoginData::createAccount(std::string name, std::string password)
 		password = transformToSHA1(password);
 
 	DBQuery query;
-	query << "INSERT INTO `accounts` (`id`, `password`, `premdays`, `lastday`, `key`, `warnings`, `group_id`) VALUES (" << name << ", " << db->escapeString(password) << ", 0, 0, 0, 0, 1)";
+	query << "INSERT INTO `accounts` (`id`, `password`, `premdays`, `lastday`, `key`, `warnings`, `group_id`) VALUES (" << accountNumber << ", " << db->escapeString(password) << ", 0, 0, 0, 0, 1)";
 	return db->executeQuery(query.str());
 }
 
@@ -1393,8 +1379,11 @@ bool IOLoginData::changeName(uint32_t guid, std::string newName, std::string old
 	return true;
 }
 
-bool IOLoginData::createCharacter(uint32_t accountId, std::string characterName, int32_t vocationId, uint16_t sex)
+bool IOLoginData::createCharacter(uint32_t accountNumber, std::string characterName, int32_t vocationId, PlayerSex_t sex)
 {
+	Database* db = Database::getInstance();
+	DBQuery query;
+
 	if(playerExists(characterName))
 		return false;
 
@@ -1402,7 +1391,7 @@ bool IOLoginData::createCharacter(uint32_t accountId, std::string characterName,
 	Vocation* rookVoc = Vocations::getInstance()->getVocation(0);
 
 	uint16_t healthMax = 150, manaMax = 0, capMax = 400, lookType = 136;
-	if(sex % 2)
+	if(sex == PLAYERSEX_MALE)
 		lookType = 128;
 
 	uint32_t level = g_config.getNumber(ConfigManager::START_LEVEL), tmpLevel = std::min((uint32_t)7, (level - 1));
@@ -1424,10 +1413,7 @@ bool IOLoginData::createCharacter(uint32_t accountId, std::string characterName,
 		}
 	}
 
-	Database* db = Database::getInstance();
-	DBQuery query;
-
-	query << "INSERT INTO `players` (`id`, `name`, `world_id`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `skull`, `skulltime`, `save`, `rank_id`, `guildnick`, `lastlogout`, `blessings`, `online`) VALUES (NULL, " << db->escapeString(characterName) << ", " << g_config.getNumber(ConfigManager::WORLD_ID) << ", 1, " << accountId << ", " << level << ", " << vocationId << ", " << healthMax << ", " << healthMax << ", " << exp << ", 68, 76, 78, 39, " << lookType << ", 0, " << g_config.getNumber(ConfigManager::START_MAGICLEVEL) << ", " << manaMax << ", " << manaMax << ", 0, 100, " << g_config.getNumber(ConfigManager::SPAWNTOWN_ID) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_X) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Y) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Z) << ", 0, " << capMax << ", " << sex << ", 0, 0, 0, 0, 1, 0, '', 0, 0, 0)";
+	query << "INSERT INTO `players` (`id`, `name`, `world_id`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `skull`, `skulltime`, `save`, `rank_id`, `guildnick`, `lastlogout`, `blessings`, `online`) VALUES (NULL, " << db->escapeString(characterName) << ", " << g_config.getNumber(ConfigManager::WORLD_ID) << ", 1, " << accountNumber << ", " << level << ", " << vocationId << ", " << healthMax << ", " << healthMax << ", " << exp << ", 68, 76, 78, 39, " << lookType << ", 0, " << g_config.getNumber(ConfigManager::START_MAGICLEVEL) << ", " << manaMax << ", " << manaMax << ", 0, 100, " << g_config.getNumber(ConfigManager::SPAWNTOWN_ID) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_X) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Y) << ", " << g_config.getNumber(ConfigManager::SPAWNPOS_Z) << ", 0, " << capMax << ", " << sex << ", 0, 0, 0, 0, 1, 0, '', 0, 0, 0)";
 	return db->executeQuery(query.str());
 }
 

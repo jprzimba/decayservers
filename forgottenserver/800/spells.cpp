@@ -479,10 +479,9 @@ bool Spell::configureSpell(xmlNodePtr p)
 		name = strValue;
 		const char* reservedList[] =
 		{
-			"melee", "physical", "poison", "earth", "fire", "ice", "freeze", "energy", "drown", "death", "curse", "holy",
+			"melee", "physical", "poison", "earth", "fire", "energy", "drown", 
 			"lifedrain", "manadrain", "healing", "speed", "outfit", "invisible", "drunk", "firefield", "poisonfield",
-			"energyfield", "firecondition", "poisoncondition", "energycondition", "drowncondition", "freezecondition",
-			"cursecondition"
+			"energyfield", "firecondition", "poisoncondition", "energycondition", "drowncondition"
 		};
 
 		for(uint32_t i = 0; i < sizeof(reservedList) / sizeof(const char*); ++i)
