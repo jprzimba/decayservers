@@ -1911,7 +1911,7 @@ void ProtocolGame::sendFYIBox(const std::string& message)
 }
 
 //tile
-void ProtocolGame::sendAddTileItem(const Tile* tile, const Position& pos, uint32_t stackpos, const Item* item)
+void ProtocolGame::sendAddTileItem(const Tile* tile, const Position& pos, const Item* item)
 {
 	if(!canSee(pos))
 		return;
@@ -1920,7 +1920,7 @@ void ProtocolGame::sendAddTileItem(const Tile* tile, const Position& pos, uint32
 	if(msg)
 	{
 		TRACK_MESSAGE(msg);
-		AddTileItem(msg, pos, stackpos, item);
+		AddTileItem(msg, pos, item);
 	}
 }
 
@@ -1993,7 +1993,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 	msg->AddByte(0x0A);
 	msg->AddU32(player->getID());
-	msg->AddByte(0x32);//tryller AddU16
+	msg->AddByte(0x32);
 	msg->AddByte(player->hasFlag(PlayerFlag_CanReportBugs));
     if(Group* group = player->getGroup())
 	{
@@ -2690,14 +2690,10 @@ void ProtocolGame::AddCreatureLight(NetworkMessage_ptr msg, const Creature* crea
 }
 
 //tile
-void ProtocolGame::AddTileItem(NetworkMessage_ptr msg, const Position& pos, uint32_t stackpos, const Item* item)
+void ProtocolGame::AddTileItem(NetworkMessage_ptr msg, const Position& pos, const Item* item)
 {
-	if(stackpos >= 10)
-		return;
-
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-	msg->AddByte(stackpos);
 	msg->AddItem(item);
 }
 
@@ -2708,7 +2704,7 @@ void ProtocolGame::AddTileCreature(NetworkMessage_ptr msg, const Position& pos, 
 
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-	msg->AddByte(stackpos);
+//	msg->AddByte(stackpos); fix me: remove the stack pos code
 
 	bool known;
 	uint32_t removedKnown;
