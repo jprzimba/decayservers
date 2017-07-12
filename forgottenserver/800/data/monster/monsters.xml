@@ -4,69 +4,7 @@
 		We really appreciate if someone could help us
 		with getting real monster attributes, loot etc
 
-		[ MISSING MONSTERS (not all listed there)
-			Ape Bosses
-				Hairman The Huge
-
-			Barbarians Bosses
-				Barbaria
-
-			Bio-Elemental Bosses
-				Diseased Bill
-				Diseased Dan
-				Diseased Fred
-				The Plasmother
-
-			Canine Bosses
-				The Big Bad One
-
-			Crustaceans
-				Blood Crab (Underwater)
-
-			Dragon Bosses
-				Pythius the Rotten
-
-			Dwarves
-				Dwarf Henchman
-				Dwarf Miner
-				Dwarf Dispenser
-
-			Giant Bosses
-				Freegoiz
-				Stonecracker
-				The Old Whopper
-
-			Ghosts
-				Dryad
-				Ghostly Apparition
-				Tormented Ghost
-
-			Orc Bosses
-				Warlord Ruzad
-
-			Quara Bosses
-				Inky
-				Sharptooth
-				Splasher
-
-			Rifts
-				Rift Phantom
-				Rift Lord
-
-			Traps
-				Deathspawn
-				Hell Hole
-				Kitty
-				Lavahole
-				Magic Pillar
-				Mechanical Fighter
-				Pillar
-
-			Undead Humanoids
-				Undead Jester
-		]
-
-		You can send your work here: http://otland.net/project.php?projectid=2
+		You can send your work here: https://github.com/tryller/otserv/issues
 	-->
 	<!-- Amazons -->
 	<monster name="Amazon" file="Amazons/amazon.xml"/>
@@ -144,10 +82,8 @@
 	<monster name="Gazer" file="Beholders/gazer.xml"/>
 
 	<!-- Bio-Elementals -->
-	<monster name="Bog Raider" file="Bio-Elementals/bog raider.xml"/>
 	<monster name="Carniphila" file="Bio-Elementals/carniphila.xml"/>
 	<monster name="Defiler" file="Bio-Elementals/defiler.xml"/>
-	<monster name="Haunted Treeling" file="Bio-Elementals/haunted treeling.xml"/>
 	<monster name="Slime" file="Bio-Elementals/slime.xml"/>
 	<monster name="Slime Summon" file="Bio-Elementals/slime summon.xml"/>
 	<monster name="Son of Verminor" file="Bio-Elementals/son of verminor.xml"/>
@@ -162,15 +98,9 @@
 	<monster name="Seagull" file="Birds/seagull.xml"/>
 	<monster name="Terror Bird" file="Birds/terror bird.xml"/>
 
-	<!-- Blobs -->
-	<monster name="Acid Blob" file="Blobs/acid blob.xml"/>
-	<monster name="Death Blob" file="Blobs/death blob.xml"/>
-	<monster name="Mercury Blob" file="Blobs/mercury blob.xml"/>
-
 	<!-- Bosses -->
 	<monster name="Annihilon" file="Bosses/annihilon.xml"/>
 	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml"/>
-	<monster name="Big Boss Trolliver" file="Bosses/big boss trolliver.xml"/>
 	<monster name="Bones" file="Bosses/bones.xml"/>
 	<monster name="Brutus Bloodbeard" file="Bosses/brutus bloodbeard.xml"/>
 	<monster name="Countess Sorrow" file="Bosses/countess sorrow.xml"/>
@@ -187,11 +117,8 @@
 	<monster name="Golgordan" file="Bosses/golgordan.xml"/>
 	<monster name="Grorlam" file="Bosses/grorlam.xml"/>
 	<monster name="Hellgorak" file="Bosses/hellgorak.xml"/>
-	<monster name="Koshei The Deathless" file="Bosses/koshei the deathless.xml"/>
 	<monster name="Latrivan" file="Bosses/latrivan.xml"/>
 	<monster name="Lethal Lissy" file="Bosses/lethal lissy.xml"/>
-	<monster name="Leviathan" file="Bosses/leviathan.xml"/>
-	<monster name="Lord of the Elements" file="Bosses/lord of the elements.xml"/>
 	<monster name="Mad Technomancer" file="Bosses/mad technomancer.xml"/>
 	<monster name="Madareth" file="Bosses/madareth.xml"/>
 	<monster name="Man In The Cave" file="Bosses/man in the cave.xml"/>
@@ -203,9 +130,7 @@
 	<monster name="Necropharus" file="Bosses/necropharus.xml"/>
 	<monster name="Orshabaal" file="Bosses/orshabaal.xml"/>
 	<monster name="Ron the Ripper" file="Bosses/ron the ripper.xml"/>
-	<monster name="Rotworm Queen" file="Bosses/rotworm queen.xml"/>
 	<monster name="The Abomination" file="Bosses/the abomination.xml"/>
-	<monster name="The Count" file="Bosses/the count.xml"/>
 	<monster name="The Evil Eye" file="Bosses/the evil eye.xml"/>
 	<monster name="The Handmaiden" file="Bosses/the handmaiden.xml"/>
 	<monster name="The Horned Fox" file="Bosses/the horned fox.xml"/>
@@ -224,7 +149,6 @@
 	<monster name="Hellhound" file="Canines/hellhound.xml"/>
 	<monster name="Husky" file="Canines/husky.xml"/>	
 	<monster name="War wolf" file="Canines/war wolf.xml"/>
-	<monster name="Werewolf" file="Canines/werewolf.xml"/>
 	<monster name="Winter wolf" file="Canines/winter wolf.xml"/>
 	<monster name="Wolf" file="Canines/wolf.xml"/>
 
@@ -271,11 +195,8 @@
 
 	<!-- Dragons -->
 	<monster name="Dragon Lord" file="Dragons/dragon lord.xml"/>
-	<monster name="Dragon Lord Hatchling" file="Dragons/dragon lord hatchling.xml"/>
 	<monster name="Dragon" file="Dragons/dragon.xml"/>
-	<monster name="Dragon Hatchling" file="Dragons/dragon hatchling.xml"/>
 	<monster name="Frost Dragon" file="Dragons/frost dragon.xml"/>
-	<monster name="Frost Dragon Hatchling" file="Dragons/frost dragon hatchling.xml"/>
 	<monster name="Wyrm" file="Dragons/wyrm.xml"/>
 
 	<!-- Dwarves -->
@@ -341,8 +262,6 @@
 	<!-- Giants -->
 	<monster name="Behemoth" file="Giants/behemoth.xml"/>
 	<monster name="Cyclops" file="Giants/cyclops.xml"/>
-	<monster name="Cyclops Drone" file="Giants/cyclops drone.xml"/>
-	<monster name="Cyclops Smith" file="Giants/cyclops smith.xml"/>
 	<monster name="Frost Giant" file="Giants/frost giant.xml"/>
 	<monster name="Frost Giantess" file="Giants/frost giantess.xml"/>
 	<monster name="Yeti" file="Giants/yeti.xml"/>
@@ -350,7 +269,6 @@
 	<!-- Goblins -->
 	<monster name="Goblin" file="Goblins/goblin.xml"/>
 	<monster name="Goblin Assassin" file="Goblins/goblin assassin.xml"/>
-	<monster name="Goblin Leader" file="Goblins/goblin leader.xml"/>
 	<monster name="Goblin Scavenger" file="Goblins/goblin scavenger.xml"/>
 	<monster name="Grynch Clan Goblin" file="Goblins/grynch clan goblin.xml"/>
 
@@ -397,7 +315,6 @@
 	<monster name="Rabbit" file="Misc/rabbit.xml"/>
 	<monster name="Silver Rabbit" file="Misc/silver rabbit.xml"/>
 	<monster name="Skunk" file="Misc/skunk.xml"/>
-	<monster name="Squirrel" file="Misc/squirrel.xml"/>
 
 	<!-- Monks -->
 	<monster name="Dark Monk" file="Monks/dark monk.xml"/>
@@ -434,7 +351,6 @@
 	<monster name="Hero" file="Outlaws/hero.xml"/>
 	<monster name="Hunter" file="Outlaws/hunter.xml"/>
 	<monster name="Nomad" file="Outlaws/nomad.xml"/>
-	<monster name="Poacher" file="Outlaws/poacher.xml"/>
 	<monster name="Primitive" file="Outlaws/primitive.xml"/>
 	<monster name="Smuggler" file="Outlaws/smuggler.xml"/>
 	<monster name="Stalker" file="Outlaws/stalker.xml"/>
@@ -518,8 +434,6 @@
 	<monster name="Undead Gladiator" file="Skeletons/undead gladiator.xml"/>
 
 	<!-- Sorcerers -->
-	<monster name="Dark Apprentice" file="Sorcerers/dark apprentice.xml"/>
-	<monster name="Dark Magician" file="Sorcerers/dark magician.xml"/>
 	<monster name="Ice Witch" file="Sorcerers/ice witch.xml"/>
 	<monster name="Infernalist" file="Sorcerers/infernalist.xml"/>
 	<monster name="Mad Scientist" file="Sorcerers/mad scientist.xml"/>
