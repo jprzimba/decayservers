@@ -126,10 +126,10 @@ class ItemType
 		bool isTrashHolder() const {return (type == ITEM_TYPE_TRASHHOLDER);}
 		bool isBed() const {return (type == ITEM_TYPE_BED);}
 
-		bool isRune() const {return clientCharges;}
+		bool isRune() const {return (group == ITEM_GROUP_RUNE);}
 		bool hasSubType() const {return (isFluidContainer() || isSplash() || stackable || charges);}
 
-		bool stopTime, showCount, clientCharges, stackable, showDuration, showCharges, showAttributes,
+		bool stopTime, showCount, stackable, showDuration, showCharges, showAttributes,
 			allowDistRead, canReadText, canWriteText, forceSerialize, isVertical, isHorizontal, isHangable,
 			useable, moveable, pickupable, rotable, replaceable, lookThrough,
 			hasHeight, blockSolid, blockPickupable, blockProjectile, blockPathFind, allowPickupable, alwaysOnTop,
@@ -226,18 +226,12 @@ void Array<A>::addElement(A a, uint32_t pos)
 	m_data[pos] = a;
 }
 
-struct RandomizationBlock
-{
-	int32_t fromRange, toRange, chance;
-};
-
-typedef std::map<int16_t, RandomizationBlock> RandomizationMap;
 typedef std::map<int32_t, int32_t> IntegerMap;
 
 class Items
 {
 	public:
-		Items(): m_randomizationChance(50), items(ITEMS) {}
+		Items(): items(ITEMS) {}
 		virtual ~Items() {clear();}
 
 		bool reload();
@@ -253,10 +247,6 @@ class Items
 		int32_t getItemIdByName(const std::string& name);
 		const ItemType& getItemIdByClientId(int32_t spriteId) const;
 
-		uint16_t getRandomizedItem(uint16_t id);
-		uint8_t getRandomizationChance() const {return m_randomizationChance;}
-		RandomizationBlock getRandomization(int16_t id) {return randomizationMap[id];}
-
 		uint32_t size() {return items.size();}
 		IntegerMap getMoneyMap() {return moneyMap;}
 		const ItemType* getElement(uint32_t id) const {return items.getElement(id);}
@@ -266,13 +256,9 @@ class Items
 		static uint32_t dwBuildNumber;
 
 	private:
-		uint8_t m_randomizationChance;
 		void clear();
 
-		void parseRandomizationBlock(int32_t id, int32_t fromId, int32_t toId, int32_t chance);
-
 		Array<ItemType*> items;
-		RandomizationMap randomizationMap;
 
 		IntegerMap moneyMap;
 		IntegerMap reverseItemMap;

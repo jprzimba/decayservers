@@ -36,7 +36,7 @@ ItemType::ItemType()
 {
 	group = ITEM_GROUP_NONE;
 	type = ITEM_TYPE_NONE;
-	stackable = useable = alwaysOnTop = lookThrough = pickupable = rotable = hasHeight = forceSerialize = false;
+	stackable = useable = alwaysOnTop = pickupable = rotable = hasHeight = forceSerialize = false;
 	blockSolid = blockProjectile = blockPathFind = allowPickupable = false;
 	moveable = true;
 	alwaysOnTopOrder = 0;
@@ -69,7 +69,6 @@ ItemType::ItemType()
 	stopTime = false;
 	corpseType = RACE_NONE;
 	fluidSource = FLUID_NONE;
-	clientCharges = false;
 	allowDistRead = false;
 
 	isVertical = isHorizontal = isHangable = false;
@@ -109,7 +108,6 @@ void Items::clear()
 {
 	//TODO: clear items?
 	moneyMap.clear();
-	randomizationMap.clear();
 	reverseItemMap.clear();
 }
 
@@ -166,21 +164,17 @@ int32_t Items::loadFromOtb(std::string file)
 		}
 	}
 
+	if(Items::dwMajorVersion != 2)
+	{
+		std::cout << "Not supported items.otb version." << std::endl;
+		return ERROR_INVALID_FORMAT;
+	}
+
 	if(Items::dwMajorVersion == 0xFFFFFFFF)
-		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
-	else if(Items::dwMajorVersion < 3)
+		std::cout << "[Warning] Items::loadFromOtb items.otb using generic client version." << std::endl;
+	else if(Items::dwMinorVersion != CLIENT_VERSION_800)
 	{
-		std::cout << "[Error - Items::loadFromOtb] Old version detected, a newer version of items.otb is required." << std::endl;
-		return ERROR_INVALID_FORMAT;
-	}
-	else if(Items::dwMajorVersion > 3)
-	{
-		std::cout << "[Error - Items::loadFromOtb] New version detected, an older version of items.otb is required." << std::endl;
-		return ERROR_INVALID_FORMAT;
-	}
-	else if(Items::dwMinorVersion != CLIENT_VERSION_854)
-	{
-		std::cout << "[Error - Items::loadFromOtb] Another (client) version of items.otb is required." << std::endl;
+		std::cout << "Not supported items.otb client version." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 
@@ -216,7 +210,7 @@ int32_t Items::loadFromOtb(std::string file)
 			case ITEM_GROUP_GROUND:
 			case ITEM_GROUP_SPLASH:
 			case ITEM_GROUP_FLUID:
-			case ITEM_GROUP_CHARGES:
+			case ITEM_GROUP_RUNE:
 			case ITEM_GROUP_DEPRECATED:
 				break;
 			default:
@@ -243,8 +237,6 @@ int32_t Items::loadFromOtb(std::string file)
 		iType->allowDistRead = hasBitSet(FLAG_ALLOWDISTREAD, flags);
 		iType->rotable = hasBitSet(FLAG_ROTABLE, flags);
 		iType->canReadText = hasBitSet(FLAG_READABLE, flags);
-		iType->clientCharges = hasBitSet(FLAG_CLIENTCHARGES, flags);
-		iType->lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
 
 		attribute_t attr;
 		while(props.GET_VALUE(attr))
@@ -355,8 +347,7 @@ int32_t Items::loadFromOtb(std::string file)
 
 bool Items::loadFromXml()
 {
-	xmlDocPtr itemDoc = xmlParseFile(getFilePath(FILE_TYPE_OTHER, "items/items.xml").c_str()),
-		paletteDoc = xmlParseFile(getFilePath(FILE_TYPE_OTHER, "items/randomization.xml").c_str());
+	xmlDocPtr itemDoc = xmlParseFile(getFilePath(FILE_TYPE_OTHER, "items/items.xml").c_str());
 	if(!itemDoc)
 	{
 		std::cout << "[Warning - Items::loadFromXml] Cannot load items file." << std::endl;
@@ -364,29 +355,12 @@ bool Items::loadFromXml()
 		return false;
 	}
 
-	if(!paletteDoc)
-	{
-		std::cout << "[Warning - Items::loadFromXml] Cannot load randomization file." << std::endl;
-		std::cout << getLastXMLError() << std::endl;
-		return false;
-	}
-
-	xmlNodePtr itemRoot = xmlDocGetRootElement(itemDoc), paletteRoot = xmlDocGetRootElement(paletteDoc);
+	xmlNodePtr itemRoot = xmlDocGetRootElement(itemDoc);
 	if(xmlStrcmp(itemRoot->name,(const xmlChar*)"items"))
 	{
 		xmlFreeDoc(itemDoc);
-		xmlFreeDoc(paletteDoc);
 
 		std::cout << "[Warning - Items::loadFromXml] Malformed items file." << std::endl;
-		return false;
-	}
-
-	if(xmlStrcmp(paletteRoot->name,(const xmlChar*)"randomization"))
-	{
-		xmlFreeDoc(itemDoc);
-		xmlFreeDoc(paletteDoc);
-
-		std::cout << "[Warning - Items::loadFromXml] Malformed randomization file." << std::endl;
 		return false;
 	}
 
@@ -435,62 +409,6 @@ bool Items::loadFromXml()
 			std::cout << "[Warning - Items::loadFromXml] Item " << it->id << " is not set as a bed-type." << std::endl;
 	}
 
-	for(xmlNodePtr paletteNode = paletteRoot->children; paletteNode; paletteNode = paletteNode->next)
-	{
-		if(!xmlStrcmp(paletteNode->name, (const xmlChar*)"config"))
-		{
-			if(readXMLInteger(paletteNode, "chance", intValue) || readXMLInteger(paletteNode, "defaultChance", intValue))
-			{
-				if(intValue > 100)
-				{
-					intValue = 100;
-					std::cout << "[Warning - Items::loadFromXml] Randomize chance cannot be higher than 100." << std::endl;
-				}
-
-				m_randomizationChance = intValue;
-			}
-		}
-		else if(!xmlStrcmp(paletteNode->name, (const xmlChar*)"palette"))
-		{
-			if(readXMLString(paletteNode, "randomize", strValue))
-			{
-				std::vector<int32_t> itemList = vectorAtoi(explodeString(strValue, ";"));
-				if(itemList.size() >= 2)
-				{
-					if(itemList[0] < itemList[1])
-					{
-						fromId = itemList[0];
-						toId = itemList[1];
-					}
-					else
-						std::cout << "[Warning - Items::loadFromXml] Randomize min cannot be higher than max." << std::endl;
-				}
-
-				int32_t chance = getRandomizationChance();
-				if(readXMLInteger(paletteNode, "chance", intValue))
-				{
-					if(intValue > 100)
-					{
-						intValue = 100;
-						std::cout << "[Warning: Items::loadRandomization] Randomize chance cannot be higher than 100." << std::endl;
-					}
-
-					chance = intValue;
-				}
-
-				if(readXMLInteger(paletteNode, "itemid", id))
-					parseRandomizationBlock(id, fromId, toId, chance);
-				else if(readXMLInteger(paletteNode, "fromid", id) && readXMLInteger(paletteNode, "toid", endId))
-				{
-					parseRandomizationBlock(id, fromId, toId, chance);
-					while(id < endId)
-						parseRandomizationBlock(++id, fromId, toId, chance);
-				}
-			}
-		}
-	}
-
-	xmlFreeDoc(paletteDoc);
 	return true;
 }
 
@@ -1609,35 +1527,6 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 		if(it.showCount)
 			it.pluralName += "s";
 	}
-}
-
-void Items::parseRandomizationBlock(int32_t id, int32_t fromId, int32_t toId, int32_t chance)
-{
-	RandomizationMap::iterator it = randomizationMap.find(id);
-	if(it != randomizationMap.end())
-	{
-		std::cout << "[Warning - Items::parseRandomizationBlock] Duplicated item with id: " << id << std::endl;
-		return;
-	}
-
-	RandomizationBlock rand;
-	rand.chance = chance;
-	rand.fromRange = fromId;
-	rand.toRange = toId;
-
-	randomizationMap[id] = rand;
-}
-
-uint16_t Items::getRandomizedItem(uint16_t id)
-{
-	if(!g_config.getBool(ConfigManager::RANDOMIZE_TILES))
-		return id;
-
-	RandomizationBlock randomize = getRandomization(id);
-	if(randomize.chance > 0 && random_range(0, 100) <= randomize.chance)
-		id = random_range(randomize.fromRange, randomize.toRange);
-
-	return id;
 }
 
 ItemType& Items::getItemType(int32_t id)

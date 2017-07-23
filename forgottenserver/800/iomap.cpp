@@ -113,28 +113,13 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	uint32_t headerVersion = rootHeader->version;
-	if(headerVersion <= 0)
+	if(headerVersion != 0)
 	{
-		//In otbm version 1 the count variable after splashes/fluidcontainers and stackables
-		//are saved as attributes instead, this solves alot of problems with items
-		//that is changed (stackable/charges/fluidcontainer/splash) during an update.
 		setLastErrorString("This map needs to be upgraded by using the latest map editor version to be able to load correctly.");
-		return false;
-	}
-
-	if(headerVersion > 2)
-	{
-		setLastErrorString("Unknown OTBM version detected.");
 		return false;
 	}
 
 	uint32_t headerMajorItems = rootHeader->majorVersionItems;
-	if(headerMajorItems < 3)
-	{
-		setLastErrorString("This map needs to be upgraded by using the latest map editor version to be able to load correctly.");
-		return false;
-	}
-
 	if(headerMajorItems > (uint32_t)Items::dwMajorVersion)
 	{
 		setLastErrorString("The map was saved with a different items.otb version, an upgraded items.otb is required.");
@@ -142,7 +127,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	uint32_t headerMinorItems = rootHeader->minorVersionItems;
-	if(headerMinorItems < CLIENT_VERSION_810)
+	if(headerMinorItems < CLIENT_VERSION_800)
 	{
 		setLastErrorString("This map needs an updated items.otb.");
 		return false;
@@ -420,7 +405,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 							{
 								if(house && item->isMoveable())
 								{
-									std::cout << "[Warning - IOMap::loadMap] Movable item in house: ";
+									std::cout << "[Warning - IOMap::loadMap] Moveable item in house: ";
 									std::cout << house->getId() << ", item type: " << item->getID();
 									std::cout << ", pos " << px << "/" << py << "/" << pz << std::endl;
 

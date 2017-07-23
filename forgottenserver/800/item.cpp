@@ -92,11 +92,26 @@ Item* Item::CreateItem(const uint16_t type, uint16_t amount/* = 1*/)
 
 Item* Item::CreateItem(PropStream& propStream)
 {
+	uint16_t _id;
+	if(!propStream.GET_USHORT(_id))
+		return NULL;
+
+	const ItemType& iType = Item::items[_id];
+	unsigned char _count = 0;
+
+	if(iType.stackable || iType.isSplash() || iType.isFluidContainer()){
+		if(!propStream.GET_UCHAR(_count)){
+			return NULL;
+		}
+	}
+
+	return Item::CreateItem(_id, _count);
+/*
 	uint16_t type;
 	if(!propStream.GET_USHORT(type))
 		return NULL;
-
 	return Item::CreateItem(items.getRandomizedItem(type), 0);
+*/
 }
 
 bool Item::loadItem(xmlNodePtr node, Container* parent)
