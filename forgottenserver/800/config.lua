@@ -200,7 +200,7 @@
 	-- monsterLootMessage 0 to disable, 1 - only party, 2 - only player, 3 - party or player (like Tibia's)
 	checkCorpseOwner = true
 	monsterLootMessage = 3
-	monsterLootMessageType = 25
+	monsterLootMessageType = 22
 
 	-- Ghost mode
 	ghostModeInvisibleEffect = false
