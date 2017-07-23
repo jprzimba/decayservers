@@ -2613,68 +2613,126 @@ ReturnValue Player::__queryRemove(const Thing* thing, uint32_t count, uint32_t f
 Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
 	uint32_t& flags)
 {
-	if(index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER)
+	if(!index /*drop to capacity window*/ || index == INDEX_WHEREEVER)
 	{
 		*destItem = NULL;
 		const Item* item = thing->getItem();
 		if(!item)
 			return this;
 
-		//find a appropiate slot
+		std::list<std::pair<Container*, int32_t> > containers;
+		std::list<std::pair<Cylinder*, int32_t> > freeSlots;
+
+		bool autoStack = !((flags & FLAG_IGNOREAUTOSTACK) == FLAG_IGNOREAUTOSTACK);
 		for(int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i)
 		{
-			if(!inventory[i] && __queryAdd(i, item, item->getItemCount(), 0) == RET_NOERROR)
+			if(Item* invItem = inventory[i])
 			{
-				index = i;
-				return this;
-			}
-		}
-
-		//try containers
-		std::list<std::pair<Container*, int32_t> > deepList;
-		for(int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i)
-		{
-			if(inventory[i] == tradeItem)
-				continue;
-
-			if(Container* container = dynamic_cast<Container*>(inventory[i]))
-			{
-				if(container->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR)
-				{
-					index = INDEX_WHEREEVER;
-					*destItem = NULL;
-					return container;
-				}
-
-				deepList.push_back(std::make_pair(container, 0));
-			}
-		}
-
-		//check deeper in the containers
-		int32_t deepness = g_config.getNumber(ConfigManager::PLAYER_DEEPNESS);
-		for(std::list<std::pair<Container*, int32_t> >::iterator dit = deepList.begin(); dit != deepList.end(); ++dit)
-		{
-			Container* c = (*dit).first;
-			if(!c || c->empty())
-				continue;
-
-			int32_t level = (*dit).second;
-			for(ItemList::const_iterator it = c->getItems(); it != c->getEnd(); ++it)
-			{
-				if((*it) == tradeItem)
+				if(invItem == item || invItem == tradeItem)
 					continue;
 
-				if(Container* subContainer = dynamic_cast<Container*>(*it))
+				if(autoStack && item->isStackable() && __queryAdd(i, item, item->getItemCount(), 0)
+					== RET_NOERROR && invItem->getID() == item->getID() && invItem->getItemCount() < 100)
 				{
-					if(subContainer->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR)
+					*destItem = invItem;
+					index = i;
+					return this;
+				}
+
+				if(Container* container = invItem->getContainer())
+				{
+					if(!autoStack && container->__queryAdd(INDEX_WHEREEVER,
+						item, item->getItemCount(), flags) == RET_NOERROR)
 					{
 						index = INDEX_WHEREEVER;
-						*destItem = NULL;
-						return subContainer;
+						return container;
 					}
 
-					if(deepness < 0 || level < deepness)
-						deepList.push_back(std::make_pair(subContainer, (level + 1)));
+					containers.push_back(std::make_pair(container, 0));
+				}
+			}
+			else if(!autoStack)
+			{
+				if(__queryAdd(i, item, item->getItemCount(), 0) == RET_NOERROR)
+				{
+					index = i;
+					return this;
+				}
+			}
+			else
+				freeSlots.push_back(std::make_pair(this, i));
+		}
+
+		int32_t deepness = g_config.getNumber(ConfigManager::PLAYER_DEEPNESS);
+		while(!containers.empty())
+		{
+			Container* tmpContainer = containers.front().first;
+			int32_t level = containers.front().second;
+
+			containers.pop_front();
+			if(!tmpContainer)
+				continue;
+
+			for(uint32_t n = 0; n < tmpContainer->capacity(); ++n)
+			{
+				if(Item* tmpItem = tmpContainer->getItem(n))
+				{
+					if(tmpItem == item || tmpItem == tradeItem)
+						continue;
+
+					if(tmpContainer->__queryAdd(n, item, item->getItemCount(), 0) == RET_NOERROR && tmpItem->getID() == item->getID() && tmpItem->getItemCount() < 100)
+					{
+						index = n;
+						*destItem = tmpItem;
+						return tmpContainer;
+					}
+
+					if(Container* container = tmpItem->getContainer())
+					{
+						if(!autoStack && container->__queryAdd(INDEX_WHEREEVER,
+							item, item->getItemCount(), flags) == RET_NOERROR)
+						{
+							index = INDEX_WHEREEVER;
+							return container;
+						}
+
+						if(deepness < 0 || level < deepness)
+							containers.push_back(std::make_pair(container, level + 1));
+					}
+				}
+				else
+				{
+					if(!autoStack)
+					{
+						if(tmpContainer->__queryAdd(n, item, item->getItemCount(), 0) == RET_NOERROR)
+						{
+							index = n;
+							return tmpContainer;
+						}
+					}
+					else
+						freeSlots.push_back(std::make_pair(tmpContainer, n));
+
+					break; // one slot to check is definitely enough.
+				}
+			}
+		}
+
+		if(autoStack)
+		{
+			while(!freeSlots.empty())
+			{
+				Cylinder* tmpCylinder = freeSlots.front().first;
+				int32_t i = freeSlots.front().second;
+
+				freeSlots.pop_front();
+				if(!tmpCylinder)
+					continue;
+
+				if(tmpCylinder->__queryAdd(i, item, item->getItemCount(), flags) == RET_NOERROR)
+				{
+					index = i;
+					return tmpCylinder;
 				}
 			}
 		}
