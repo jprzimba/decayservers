@@ -5396,7 +5396,9 @@ int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 		return 1;
 	}
 
-	if(Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, (ConditionType_t)popNumber(L), ticks, 0))
+	ConditionType_t type = (ConditionType_t)popNumber(L);
+	Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, type, ticks, 0);
+	if(condition)
 		lua_pushnumber(L, env->addConditionObject(condition));
 	else
 	{
