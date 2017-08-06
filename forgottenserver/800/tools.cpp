@@ -899,6 +899,7 @@ ShootTypeNames shootTypeNames[] =
 	{"throwingknife",	SHOOT_EFFECT_THROWINGKNIFE},
 	{"smallstone",		SHOOT_EFFECT_SMALLSTONE},
 	{"death",		SHOOT_EFFECT_DEATH},
+	{"suddendeath",		SHOOT_EFFECT_DEATH},
 	{"largerock",		SHOOT_EFFECT_LARGEROCK},
 	{"snowball",		SHOOT_EFFECT_SNOWBALL},
 	{"powerbolt",		SHOOT_EFFECT_POWERBOLT},
