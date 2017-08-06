@@ -2075,42 +2075,42 @@
 		<attribute key="slotType" value="ring" />
 	</item>
 	<item id="2180" article="an" name="orb of nature" />
-	<item id="2181" article="a" name="terra rod">
-		<attribute key="description" value="Small stones are flying from its tip." />
+	<item id="2181" article="a" name="quagmire rod">
+		<attribute key="description" value="It emits clouds of poisonous swamp gas."/>
 		<attribute key="weight" value="2500" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallearth" />
+		<attribute key="shootType" value="poison" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2182" article="a" name="snakebite rod">
 		<attribute key="description" value="It seems to twitch and quiver as if trying to escape your grip." />
 		<attribute key="weight" value="4300" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallearth" />
+		<attribute key="shootType" value="poison" />
 		<attribute key="range" value="3" />
 	</item>
-	<item id="2183" article="a" name="hailstorm rod">
-		<attribute key="description" value="It grants you the power of striking your foes with furious hailstorms." />
+	<item id="2183" article="a" name="tempest rod">
+		<attribute key="description" value="It grants you the power of striking your foes with furious thunderstorms."/>
 		<attribute key="weight" value="2700" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallice" />
+		<attribute key="shootType" value="energy" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2184" article="a" name="crystal wand">
 		<attribute key="weight" value="2800" />
 	</item>
-	<item id="2185" article="a" name="necrotic rod">
-		<attribute key="description" value="It was brought up from hell to deliver death." />
+	<item id="2185" article="a" name="volcanic rod">
+		<attribute key="description" value="It erupts powerful bursts of magma upon everything in your path."/>
 		<attribute key="weight" value="2300" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="death" />
+		<attribute key="shootType" value="fire" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2186" article="a" name="moonlight rod">
-		<attribute key="description" value="Icecold rays of moonlight shimmer on its tip." />
+		<attribute key="description" value="Shimmering rays of moonlight radiate from its tip"/>
 		<attribute key="weight" value="2100" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallice" />
+		<attribute key="shootType" value="energy" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2187" article="a" name="wand of inferno">
@@ -2120,11 +2120,11 @@
 		<attribute key="shootType" value="fire" />
 		<attribute key="range" value="3" />
 	</item>
-	<item id="2188" article="a" name="wand of decay">
-		<attribute key="description" value="It is half-rotten itself and reeks terribly." />
+	<item id="2188" article="a" name="wand of plague">
+		<attribute key="description" value="Infectious goo covers its tip"/>
 		<attribute key="weight" value="2300" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="death" />
+		<attribute key="shootType" value="poison" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2189" article="a" name="wand of cosmic energy">
@@ -2173,7 +2173,6 @@
 		<attribute key="charges" value="5" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="absorbPercentPhysical" value="80" />
-		<attribute key="absorbPercentDeath" value="80" />
 		<attribute key="showattributes" value="1" />
 	</item>
 	<item id="2198" article="an" name="elven amulet">
@@ -3013,7 +3012,6 @@
 		<attribute key="attack" value="60" />
 		<attribute key="defense" value="1" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="elementIce" value="18" />
 		<attribute key="charges" value="1" />
 	</item>
 	<item id="2397" article="a" name="longsword">
@@ -12348,7 +12346,6 @@
 	<item id="7459" name="earmuffs">
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="head" />
-		<attribute key="absorbPercentIce" value="2" />
 	</item>
 	<item id="7460" article="a" name="norse shield">
 		<attribute key="weight" value="4100" />
@@ -12359,7 +12356,6 @@
 		<attribute key="weight" value="5100" />
 		<attribute key="armor" value="6" />
 		<attribute key="slotType" value="head" />
-		<attribute key="absorbPercentIce" value="2" />
 	</item>
 	<item id="7462" article="a" name="ragnir helmet">
 		<attribute key="weight" value="3100" />
