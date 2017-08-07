@@ -1975,7 +1975,7 @@ void ProtocolGame::sendUpdateTile(const Tile* tile, const Position& pos)
 	}
 }
 
-void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
+void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos)
 {
 	if(!canSee(creature))
 		return;
@@ -1987,7 +1987,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	TRACK_MESSAGE(msg);
 	if(creature != player)
 	{
-		AddTileCreature(msg, pos, stackpos, creature);
+		AddTileCreature(msg, pos, creature);
 		return;
 	}
 
@@ -2127,7 +2127,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 			else
 			{
 				RemoveTileItem(msg, oldPos, oldStackpos);
-				AddTileCreature(msg, newPos, newStackpos, creature);
+				AddTileCreature(msg, newPos, creature);
 			}
 		}
 	}
@@ -2149,7 +2149,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 		if(msg)
 		{
 			TRACK_MESSAGE(msg);
-			AddTileCreature(msg, newPos, newStackpos, creature);
+			AddTileCreature(msg, newPos, creature);
 		}
 	}
 }
@@ -2697,14 +2697,10 @@ void ProtocolGame::AddTileItem(NetworkMessage_ptr msg, const Position& pos, cons
 	msg->AddItem(item);
 }
 
-void ProtocolGame::AddTileCreature(NetworkMessage_ptr msg, const Position& pos, uint32_t stackpos, const Creature* creature)
+void ProtocolGame::AddTileCreature(NetworkMessage_ptr msg, const Position& pos, const Creature* creature)
 {
-	if(stackpos >= 10)
-		return;
-
 	msg->AddByte(0x6A);
 	msg->AddPosition(pos);
-//	msg->AddByte(stackpos); fix me: remove the stack pos code
 
 	bool known;
 	uint32_t removedKnown;
