@@ -2285,17 +2285,44 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "selfFocus", NpcScriptInterface::luaActionFocus);
 	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
 
+	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScriptInterface::luaActionFocus);
+
 	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
 	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
 	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
 	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
+	lua_register(m_luaState, "selfGetPosition", NpcScriptInterface::luaSelfGetPos);
 
 	lua_register(m_luaState, "getNpcId", NpcScriptInterface::luaGetNpcId);
 	lua_register(m_luaState, "getNpcDistanceTo", NpcScriptInterface::luaGetNpcDistanceTo);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
+	lua_register(m_luaState, "getSelfPosition", NpcScriptInterface::luaSelfGetPos);
+	lua_register(m_luaState, "getNpcCid", NpcScriptInterface::luaGetNpcId);
 
 	lua_register(m_luaState, "getNpcState", NpcScriptInterface::luaGetNpcState);
 	lua_register(m_luaState, "setNpcState", NpcScriptInterface::luaSetNpcState);
+}
+
+int32_t NpcScriptInterface::luaSelfGetPos(lua_State *L)
+{
+	//selfGetPosition()
+	ScriptEnviroment* env = getEnv();
+	Npc* npc = env->getNpc();
+	if(npc)
+	{
+		Position pos = npc->getPosition();
+		lua_pushnumber(L, pos.x);
+		lua_pushnumber(L, pos.y);
+		lua_pushnumber(L, pos.z);
+	}
+	else
+	{
+		lua_pushnil(L);
+		lua_pushnil(L);
+		lua_pushnil(L);
+	}
+	
+	return 3;
 }
 
 int32_t NpcScriptInterface::luaActionFocus(lua_State* L)

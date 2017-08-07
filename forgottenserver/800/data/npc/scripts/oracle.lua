@@ -8,8 +8,8 @@ function onCreatureSay(cid, type, msg) 			npcHandler:onCreatureSay(cid, type, ms
 function onThink() 					npcHandler:onThink()					end
 
 function oracle(cid, message, keywords, parameters, node)
-	if(not npcHandler:isFocused(cid)) then
-		return false
+	if(npcHandler.focus ~= cid) then
+		return FALSE
 	end
 
 	local cityNode = node:getParent():getParent()
@@ -21,7 +21,7 @@ function oracle(cid, message, keywords, parameters, node)
 
 	if(destination ~= nil and vocation ~= nil and town ~= nil) then
 		if(getPlayerLevel(cid) < parameters.level) then
-			npcHandler:say('You must first reach level ' .. parameters.level .. '!', cid)
+			npcHandler:say('You must first reach level ' .. parameters.level .. '!')
 			npcHandler:resetNpc()
 		else
 			if(getPlayerVocation(cid) > 0) then
@@ -57,8 +57,8 @@ npcHandler:setMessage(MESSAGE_GREET, 'Hello |PLAYERNAME|. Are you prepared to fa
 local yesNode = KeywordNode:new({'yes'}, oracle, {level = 8})
 local noNode = KeywordNode:new({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, moveup = 1, text = 'Then what vocation do you want to become?'})
 
-local node1 = keywordHandler:addKeyword({'yes'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'What city do you wish to live in? {Rhyves}, {Varak} or {Jorvik}?'})
-	local node2 = node1:addChildKeyword({'varak'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, town = 1, destination = {x=242, y=429, z=12}, text = 'Varak, eh? So what vocation do you wish to become? {Sorcerer}, {druid}, {paladin} or {knight}?'})
+local node1 = keywordHandler:addKeyword({'yes'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'What city do you wish to live in? Rhyves, Varak or Jorvik?'})
+	local node2 = node1:addChildKeyword({'varak'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, town = 1, destination = {x=242, y=429, z=12}, text = 'Varak, eh? So what vocation do you wish to become? sorcerer, druid, paladin or knight?'})
 		local node3 = node2:addChildKeyword({'sorcerer'}, StdModule.say, {npcHandler = npcHandler, vocation = 1, onlyFocus = true, text = 'So, you wish to be a powerful magician? Are you sure about that? This decision is irreversible!'})
 			node3:addChildKeywordNode(yesNode)
 			node3:addChildKeywordNode(noNode)
