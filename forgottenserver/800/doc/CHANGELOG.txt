@@ -1126,4 +1126,21 @@
 
 			and much more ... (IT IS really stable & bug free!)
 	]
+
+	[ 0.3.6 for client 8.0
+		Support for 8.0 items (Tryller, SVN)
+		All 8.0 monsters (Tryller, The Forgotten Server)
+		Fixed alot of debugs while moving 0.3 to 8.0 protocol (Tryller, frcento)
+		Stamina system working in 8.0 protocol (Elf, Tryller)
+		All npcs working for 8.0 protocol without npc window from 8.2 (Tryller)
+		Original Th Forgotten Server 8.0 map (The Forgotten Server)
+		Add alot of effects compats (Tryller)
+		Weapons, wands and rods woking with 8.0 protocol with level requiriment (SVN, Tryller)
+		Randomize grounds coded in source like in TFS 0.2 series (Tryller, Talaturen)
+		Account manager working with acount number instead of account name (Tryller)
+		Only console version of executable (Tryller)
+		Remove gameservers support "I've alot of reasons for" (Tryller) 		
+
+			and much more ... (IT IS really stable & bug free!)
+	]
 ]

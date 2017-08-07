@@ -26,7 +26,7 @@
 	project by contributing something: Cayan, TheMask, slawkens
 		Rafael Hamdan, Fare-Fray, Kiwi Dan, Gentleman Riko,
 		Piotrek1447, Hermes, Gesior.pl, levandi, Bennet,
-		Casa, Winghawk, Nexoz, Godely, buzzbuzz2, koob.
+		Casa, Winghawk, Nexoz, Godely, buzzbuzz2, koob, tryller.
 ]
 
 [ LICENSE
@@ -58,20 +58,20 @@
 		KaczooH
 ]
 
-[ FORUM
-	Mainly english, with native chatboards for some other languages:
-		http://otland.net/
+[ GITHUB
+	Mainly english:
+		https://github.com/tryller/otserv/
 ]
 
 [ SUPPORT
 	Having trouble with any of the instructions, or is there
 	anything you just want to ask?
 	Create a new thread and ask here:
-		http://otland.net/forumdisplay.php?f=55
+		https://github.com/tryller/otserv/issues
 ]
 
 [ BUGS / PATCHES / FEATURE REQUESTS
-	http://otland.net/project.php?projectid=2
+	https://github.com/tryller/otserv/issues
 ]
 
 [ COMPILING
@@ -87,12 +87,12 @@
 				apt-get install libboost1.38-dev libboost-system1.38-dev libboost-filesystem1.38-dev libboost-date-time1.38-dev libboost-regex1.38-dev libboost-thread1.38-dev libgmp3-dev liblua5.1-0 liblua5.1-0-dev liblua50 liblua50-dev liblualib50 liblualib50-dev lua50 lua5.1 libsqlite0-dev libsqlite3-dev sqlite3 libmysql++-dev libmysqlclient15-dev mysql-client-5.0 mysql-server-5.0 mysql-common libxml2-dev libxml++2.6-dev cpp gcc g++ make automake autoconf pkg-config subversion liblua5.1-sql-mysql-dev liblua5.1-sql-sqlite3-dev zlib1g-dev zlib1g
 
 		Download sources
-			Launch a terminal, and paste in this command:
-				svn co http://svn.otland.net/public/forgottenserver/tags/0.3.6pl1
+			Goto https://github.com/tryller/otserv and click "Clone or Download":
+				click download ZIP.
 
 		Compiling
 			Launch a terminal, and type this:
-				cd 0.3.6pl1 && ./autogen.sh && ./configure --enable-sqlite --enable-server-diag && make
+				cd forgottenserver/800 && ./autogen.sh && ./configure --enable-sqlite --enable-server-diag && make
 
 		Linker error
 			If you receive a linker error saying something with 'libboost', try pasting the following commands to terminal and then move back to compiling again:
@@ -122,7 +122,7 @@
 			"Execute -> Rebuild All", if there is any error, then report it here:
 				http://otland.net/showthread.php?t=379
 
-			After it get compiled, copy Crying Damson.exe from C:\path\to\sources\dev-cpp to directory above (C:\path\to\sources)
+			After it get compiled, copy theforgottenserver.exe from C:\path\to\sources\dev-cpp to directory above (C:\path\to\sources)
 ]
 
 [ CONFIGURING
