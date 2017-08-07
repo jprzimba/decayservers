@@ -19,11 +19,8 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="185" attack="175"/>
-		<attack name="death" interval="1000" chance="11" length="8" spread="0" min="0" max="-600">
+		<attack name="physical" interval="1000" chance="11" length="8" spread="0" min="0" max="-600">
 			<attribute key="areaEffect" value="mortarea"/>
-		</attack>
-		<attack name="death" interval="2000" chance="15" target="0" radius="4" min="-200" max="-700">
-			<attribute key="areaEffect" value="icearea"/>
 		</attack>
 		<attack name="physical" interval="3000" chance="18" radius="5" target="1" min="-50" max="-255">
 			<attribute key="areaEffect" value="groundshaker"/>

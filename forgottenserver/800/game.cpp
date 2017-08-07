@@ -5879,7 +5879,7 @@ void Game::shutdown()
 	if(g_server)
 		g_server->stop();
 
-	exit(1);//tryller
+	exit(1);
 }
 
 void Game::cleanup()

@@ -29,6 +29,5 @@
 #define STATUS_SERVER_CODENAME "Crying Damson"
 #define STATUS_SERVER_PROTOCOL "8.0"
 
-#define VERSION_CHECK "http://forgottenserver.otland.net/version.xml"
 #define VERSION_DATABASE 23
 #endif

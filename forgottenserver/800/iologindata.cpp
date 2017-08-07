@@ -437,7 +437,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 
 	player->currentOutfit = player->defaultOutfit;
 
-	//TRYLLER: NOT TESTED
 	Skulls_t skull = SKULL_RED;
 	skull = (Skulls_t)result->getDataInt("skull");
 	player->setSkullEnd((time_t)result->getDataInt("skulltime"), true, skull);

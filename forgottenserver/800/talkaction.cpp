@@ -1114,7 +1114,7 @@ bool TalkAction::ghost(Creature* creature, const std::string& cmd, const std::st
 	Player* tmpPlayer = NULL;
 
 	Condition* condition = NULL;
-	if((condition = player->getCondition(CONDITION_GAMEMASTER, CONDITIONID_DEFAULT)))//tryller GAMEMASTER_INVISIBLE
+	if((condition = player->getCondition(CONDITION_GAMEMASTER, CONDITIONID_DEFAULT)))//GAMEMASTER_INVISIBLE
 	{
 		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);

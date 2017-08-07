@@ -394,63 +394,6 @@ void mainLoader(int argc, char *argv[])
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_PLAIN);
 		std::cout << ">> Using PLAIN-TEXT passwords" << std::endl;
 	}
-/*
-	std::cout << ">> Checking software version... ";
-	if(xmlDocPtr doc = xmlParseFile(VERSION_CHECK))
-	{
-		xmlNodePtr p, root = xmlDocGetRootElement(doc);
-		if(!xmlStrcmp(root->name, (const xmlChar*)"versions"))
-		{
-			p = root->children->next;
-			if(!xmlStrcmp(p->name, (const xmlChar*)"entry"))
-			{
-				std::string version;
-				int32_t patch, build, timestamp;
-
-				bool tmp = false;
-				if(readXMLString(p, "version", version) && version != STATUS_SERVER_VERSION)
-					tmp = true;
-
-				if(readXMLInteger(p, "patch", patch) && patch > VERSION_PATCH)
-					tmp = true;
-
-				if(readXMLInteger(p, "build", build) && build > VERSION_BUILD)
-					tmp = true;
-
-				if(readXMLInteger(p, "timestamp", timestamp) && timestamp > VERSION_TIMESTAMP)
-					tmp = true;
-
-				if(tmp)
-				{
-					std::cout << "outdated, please consider updating!" << std::endl;
-					std::cout << "> Current version information - version: " << STATUS_SERVER_VERSION << ", patch: " << VERSION_PATCH;
-					std::cout << ", build: " << VERSION_BUILD << ", timestamp: " << VERSION_TIMESTAMP << "." << std::endl;
-					std::cout << "> Latest version information - version: " << version << ", patch: " << patch;
-					std::cout << ", build: " << build << ", timestamp: " << timestamp << "." << std::endl;
-					if(g_config.getBool(ConfigManager::CONFIM_OUTDATED_VERSION) && version.find("_SVN") == std::string::npos)
-					{
-						std::cout << "Continue? (y/N)" << std::endl;
-	
-						char buffer = getchar();
-						if(buffer == 10 || (buffer != 121 && buffer != 89))
-						#endif
-							startupErrorMessage("Aborted.");
-					}
-				}
-				else
-					std::cout << "up to date!" << std::endl;
-			}
-			else
-				std::cout << "failed checking - malformed entry." << std::endl;
-		}
-		else
-			std::cout << "failed checking - malformed file." << std::endl;
-
-		xmlFreeDoc(doc);
-	}
-	else
-		std::cout << "failed - could not parse remote file (are you connected to the internet?)" << std::endl;
-*/
 
 	std::cout << ">> Loading RSA key" << std::endl;
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");

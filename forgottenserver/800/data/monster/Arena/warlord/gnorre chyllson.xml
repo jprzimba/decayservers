@@ -23,17 +23,14 @@
 		<attack name="melee" interval="3000" chance="50" target="0" min="-500" max="-800">
 			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
-		<attack name="ice" interval="1000" chance="15" range="7" min="-170" max="-200">
+		<attack name="physical" interval="1000" chance="15" range="7" min="-170" max="-200">
 			<attribute key="shootEffect" value="snowball"/>
 		</attack>
 	</attacks>
 	<defenses armor="51" defense="52"/>
 	<elements>
 		<element firePercent="100"/>
-		<element icePercent="100"/>
 		<element earthPercent="100"/>
-		<element holyPercent="23"/>
-		<element deathPercent="-11"/>
 		<element physicalPercent="-17"/>
 	</elements>
 	<immunities>

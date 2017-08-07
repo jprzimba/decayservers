@@ -2482,7 +2482,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 
 	msg->AddU16(player->getHealth());
 	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
-	msg->AddU16((int32_t)player->getFreeCapacity());// tryller msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
+	msg->AddU16((int32_t)player->getFreeCapacity());
 	if(player->getExperience() > 2147483647 && player->getOperatingSystem() == CLIENTOS_WINDOWS)
 		msg->AddU32(0x00);
 	else
