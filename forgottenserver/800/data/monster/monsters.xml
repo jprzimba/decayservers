@@ -114,9 +114,7 @@
 	<monster name="Foreman Kneebiter" file="Bosses/foreman kneebiter.xml"/>
 	<monster name="General Murius" file="Bosses/general murius.xml"/>
 	<monster name="Ghazbaran" file="Bosses/ghazbaran.xml"/>
-	<monster name="Golgordan" file="Bosses/golgordan.xml"/>
 	<monster name="Grorlam" file="Bosses/grorlam.xml"/>
-	<monster name="Hellgorak" file="Bosses/hellgorak.xml"/>
 	<monster name="Latrivan" file="Bosses/latrivan.xml"/>
 	<monster name="Lethal Lissy" file="Bosses/lethal lissy.xml"/>
 	<monster name="Mad Technomancer" file="Bosses/mad technomancer.xml"/>
@@ -140,9 +138,7 @@
 	<monster name="Tibia Bug" file="Bosses/tibia bug.xml"/>
 	<monster name="Tiquandas Revenge" file="Bosses/tiquandas revenge.xml"/>
 	<monster name="Undead Minion" file="Bosses/undead minion.xml"/>
-	<monster name="Ushuriel" file="Bosses/ushuriel.xml"/>
 	<monster name="Xenia" file="Bosses/xenia.xml"/>
-	<monster name="Zugurosh" file="Bosses/zugurosh.xml"/>
 
 	<!-- Canines -->
 	<monster name="Dog" file="Canines/dog.xml"/>
@@ -182,10 +178,8 @@
 	<monster name="Hellspawn" file="Demons/hellspawn.xml"/>
 	<monster name="Juggernaut" file="Demons/juggernaut.xml"/>
 	<monster name="Nightmare" file="Demons/nightmare.xml"/>
-	<monster name="Nightmare Scion" file="Demons/nightmare scion.xml"/>
 	<monster name="Nightstalker" file="Demons/nightstalker.xml"/>
 	<monster name="Plaguesmith" file="Demons/plaguesmith.xml"/>
-	<monster name="Ungreez" file="Demons/ungreez.xml"/>
 
 	<!-- Djinns -->
 	<monster name="Blue Djinn" file="Djinns/blue djinn.xml"/>
