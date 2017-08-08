@@ -62,17 +62,7 @@ local FOODS =
 	[7374] = {7, "Yum."},
 	[7375] = {7, "Yum."},
 	[7376] = {7, "Yum."},
-	[7377] = {7, "Yum."},
-	[7909] = {4, "Crunch."},
-	[8838] = {7, "Gulp."},
-	[8839] = {5, "Yum."},
-	[8840] = {2, "Yum."},
-	[8841] = {3, "Urgh."},
-	[8842] = {3, "Munch."},
-	[8843] = {3, "Crunch."},
-	[8844] = {3, "Gulp."},
-	[8845] = {2, "Munch."},
-	[8847] = {11, "Yum."}
+	[7377] = {7, "Yum."}
 }
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
