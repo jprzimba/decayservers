@@ -1405,7 +1405,9 @@ void ProtocolGame::parseViolationWindow(NetworkMessage& msg)
 	std::string comment = msg.GetString();
 	std::string statement = msg.GetString();
 	uint32_t statementId = (uint32_t)msg.GetU16();
-	bool ipBanishment = msg.GetByte();
+
+	bool ipBanishment = (msg.GetByte() == 0x01);
+
 	addGameTask(&Game::playerViolationWindow, player->getID(), target, reason, action, comment, statement, statementId, ipBanishment);
 }
 
@@ -1994,14 +1996,27 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg->AddByte(0x0A);
 	msg->AddU32(player->getID());
 	msg->AddByte(0x32);
-	msg->AddByte(player->hasFlag(PlayerFlag_CanReportBugs));
+	msg->AddByte(0x00);
+
+	if(player->hasFlag(PlayerFlag_CanReportBugs))
+	    msg->AddByte(0x01);
+	else
+		msg->AddByte(0x00);
+
+	if(player->getAccess() > 1)
+	{
+		msg->AddByte(0x0B);
+		for (uint8_t i = 0; i < 32; i++)
+			msg->AddByte(0xFF);
+	}
+/*
     if(Group* group = player->getGroup())
 	{
 		int32_t reasons = group->getViolationReasons();
 		if(reasons > 1)
 		{
 			msg->AddByte(0x0B);
-			for(int32_t i = 0; i < 32; ++i)
+			for(int32_t i = 1; i <= 32; i++)
 			{
 				if(i < 4)
 					msg->AddByte(group->getNameViolationFlags());
@@ -2010,10 +2025,11 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 				else
 					msg->AddByte(0x00);
 			}
-		}else
+		}
+		else
 		     msg->AddByte(0x00);
 	}
-
+*/
 	AddMapDescription(msg, pos);
 	for(int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i)
 		AddInventoryItem(msg, (slots_t)i, player->getInventoryItem((slots_t)i));
@@ -2556,87 +2572,6 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 			break;
 	}
 	msg->AddString(text);
-
-/*
-	if(creature)
-	{
-		const Player* speaker = creature->getPlayer();
-		if(speaker)
-		{
-			msg->AddU32(++g_chat.statement);
-			g_chat.statementMap[g_chat.statement] = text;
-		}
-		else
-			msg->AddU32(0x00);
-
-		if(creature->getSpeakType() != SPEAK_CLASS_NONE)
-			type = creature->getSpeakType();
-
-		switch(type)
-		{
-			case SPEAK_CHANNEL_RA:
-				msg->AddString("");
-				break;
-			case SPEAK_RVR_ANSWER:
-				msg->AddString("Gamemaster");
-				break;
-			default:
-				msg->AddString(!creature->getHideName() ? creature->getName() : "");
-				break;
-		}
-
-		if(speaker && type != SPEAK_RVR_ANSWER && !speaker->isAccountManager()
-			&& !speaker->hasCustomFlag(PlayerCustomFlag_HideLevel))
-			msg->AddU16(speaker->getPlayerInfo(PLAYERINFO_LEVEL));
-		else
-			msg->AddU16(0x00);
-
-	}
-	else
-	{
-		msg->AddU32(0x00);
-		msg->AddString("");
-		msg->AddU16(0x00);
-	}
-
-	msg->AddByte(type);
-	switch(type)
-	{
-		case SPEAK_SAY:
-		case SPEAK_WHISPER:
-		case SPEAK_YELL:
-		case SPEAK_MONSTER_SAY:
-		case SPEAK_MONSTER_YELL:
-		case SPEAK_PRIVATE_NP:
-		{
-			if(pos)
-				msg->AddPosition(*pos);
-			else if(creature)
-				msg->AddPosition(creature->getPosition());
-			else
-				msg->AddPosition(Position(0,0,7));
-
-			break;
-		}
-
-		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_RN:
-		case SPEAK_CHANNEL_O:
-		case SPEAK_CHANNEL_W:
-			msg->AddU16(channelId);
-			break;
-
-		case SPEAK_RVR_CHANNEL:
-		{
-			msg->AddU32(uint32_t(OTSYS_TIME() / 1000 & 0xFFFFFFFF) - time);
-			break;
-		}
-
-		default:
-			break;
-	}
-
-	msg->AddString(text);*/
 }
 
 void ProtocolGame::AddCreatureHealth(NetworkMessage_ptr msg,const Creature* creature)

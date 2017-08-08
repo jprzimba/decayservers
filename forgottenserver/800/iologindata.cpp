@@ -1613,3 +1613,4 @@ bool IOLoginData::resetGuildInformation(uint32_t guid)
 	query << "UPDATE `players` SET `rank_id` = 0, `guildnick` = '' WHERE `id` = " << guid << " AND `deleted` = 0" << db->getUpdateLimiter();
 	return db->executeQuery(query.str());
 }
+

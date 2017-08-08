@@ -1185,53 +1185,40 @@ std::string getReason(int32_t reasonId)
 {
 	switch(reasonId)
 	{
-		case 0:
-			return "Offensive Name";
-		case 1:
-			return "Invalid Name Format";
-		case 2:
-			return "Unsuitable Name";
-		case 3:
-			return "Name Inciting Rule Violation";
-		case 4:
-			return "Offensive Statement";
-		case 5:
-			return "Spamming";
-		case 6:
-			return "Illegal Advertising";
-		case 7:
-			return "Off-Topic Public Statement";
-		case 8:
-			return "Non-English Public Statement";
-		case 9:
-			return "Inciting Rule Violation";
-		case 10:
-			return "Bug Abuse";
-		case 11:
-			return "Game Weakness Abuse";
-		case 12:
-			return "Using Unofficial Software to Play";
-		case 13:
-			return "Hacking";
-		case 14:
-			return "Multi-Clienting";
-		case 15:
-			return "Account Trading or Sharing";
-		case 16:
-			return "Threatening Gamemaster";
-		case 17:
-			return "Pretending to Have Influence on Rule Enforcement";
-		case 18:
-			return "False Report to Gamemaster";
-		case 19:
-			return "Destructive Behaviour";
-		case 20:
-			return "Excessive Unjustified Player Killing";
-		default:
-			break;
+		case 0: return "Offensive name"; break;
+		case 1: return "Name containing part of sentece"; break;
+		case 2: return "Name with nonsensical letter combo"; break;
+		case 3: return "Invalid name format"; break;
+		case 4: return "Name not describing person"; break;
+		case 5: return "Name of celebrity"; break;
+		case 6: return "Name referring to country"; break;
+		case 7: return "Name to fake player identity"; break;
+		case 8: return "Name to fake official position"; break;
+		case 9: return "Offensive statement"; break;
+		case 10: return "Spamming"; break;
+		case 11: return "Advertisement not related to game"; break;
+		case 12: return "Real money advertisement"; break;
+		case 13: return "Non-English public statement"; break;
+		case 14: return "Off-topic public statement"; break;
+		case 15: return "Inciting rule violation"; break;
+		case 16: return "Bug abuse"; break;
+		case 17: return "Game weakness abuse"; break;
+		case 18: return "Macro use"; break;
+		case 19: return "Using unofficial software to play"; break;
+		case 20: return "Hacking"; break;
+		case 21: return "Multi-clienting"; break;
+		case 22: return "Account trading"; break;
+		case 23: return "Account sharing"; break;
+		case 24: return "Threatening gamemaster"; break;
+		case 25: return "Pretending to have official position"; break;
+		case 26: return "Pretending to have influence on gamemaster"; break;
+		case 27: return "False report to gamemaster"; break;
+		case 28: return "Excessive unjustified player killing"; break;
+		case 29: return "Destructive behaviour"; break;
+		case 30: return "Spoiling auction"; break;
+		case 31: return "Invalid payment"; break;
+		default: return "Unknown reason"; break;
 	}
-
-	return "Unknown Reason";
 }
 
 std::string getAction(ViolationAction_t actionId, bool ipBanishment)
