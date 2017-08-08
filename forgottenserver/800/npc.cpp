@@ -2297,7 +2297,6 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "getNpcDistanceTo", NpcScriptInterface::luaGetNpcDistanceTo);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
 	lua_register(m_luaState, "getSelfPosition", NpcScriptInterface::luaSelfGetPos);
-	lua_register(m_luaState, "getNpcCid", NpcScriptInterface::luaGetNpcId);
 
 	lua_register(m_luaState, "getNpcState", NpcScriptInterface::luaGetNpcState);
 	lua_register(m_luaState, "setNpcState", NpcScriptInterface::luaSetNpcState);

@@ -131,7 +131,7 @@ typedef std::list<Party*> PartyList;
 
 #define SPEED_MAX 1500
 #define SPEED_MIN 10
-#define STAMINA_MAX (42 * 60 * 60 * 1000)
+#define STAMINA_MAX (56 * 60 * 60 * 1000)
 #define STAMINA_MULTIPLIER (60 * 1000)
 
 class Player : public Creature, public Cylinder
