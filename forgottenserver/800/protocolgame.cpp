@@ -2469,7 +2469,7 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 	LightInfo lightInfo;
 	creature->getCreatureLight(lightInfo);
 	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level);
-	msg->AddByte(lightInfo.color);
+	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color);
 
 	msg->AddU16(creature->getSpeed());
 	msg->AddByte(player->getSkullClient(creature));
@@ -2676,7 +2676,7 @@ void ProtocolGame::AddWorldLight(NetworkMessage_ptr msg, const LightInfo& lightI
 {
 	msg->AddByte(0x82);
 	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte(lightInfo.color);
+	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color));
 }
 
 void ProtocolGame::AddCreatureLight(NetworkMessage_ptr msg, const Creature* creature)
@@ -2686,7 +2686,7 @@ void ProtocolGame::AddCreatureLight(NetworkMessage_ptr msg, const Creature* crea
 	msg->AddByte(0x8D);
 	msg->AddU32(creature->getID());
 	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte(lightInfo.color);
+	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color));
 }
 
 //tile
