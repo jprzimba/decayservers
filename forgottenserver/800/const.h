@@ -109,17 +109,17 @@ enum SpeakClasses
 	SPEAK_WHISPER		= 0x02,
 	SPEAK_YELL		= 0x03,
 	SPEAK_PRIVATE		= 0x04,
-	SPEAK_CHANNEL_Y		= 0x05,
-	SPEAK_CHANNEL_RV1	= 0x06,
-	SPEAK_CHANNEL_RV2	= 0x07,
-	SPEAK_CHANNEL_RV3	= 0x08,
+	SPEAK_CHANNEL_Y		= 0x05, //yellow
+	SPEAK_RVR_CHANNEL   = 0x06,
+    SPEAK_RVR_ANSWER    = 0x07,
+    SPEAK_RVR_CONTINUE  = 0x08,
 	SPEAK_BROADCAST		= 0x09,
 	SPEAK_CHANNEL_R1	= 0x0A, //red - #c text
 	SPEAK_PRIVATE_RED	= 0x0B,	//@name@text
-	SPEAK_CHANNEL_O		= 0x0C,
-	SPEAK_UNKNOWN_1		= 0x0D,
-	SPEAK_CHANNEL_R2	= 0x0E,	//red anonymous - #d text
-	SPEAK_UNKNOWN_2		= 0x0F,
+	SPEAK_CHANNEL_O		= 0x0C, //orange
+    //SPEAK_            = 0x0D,
+    SPEAK_CHANNEL_R2    = 0x0E,	//red anonymous - #d text
+    //SPEAK_            = 0x0F,
 	SPEAK_MONSTER_SAY	= 0x10,
 	SPEAK_MONSTER_YELL	= 0x11,
 	SPEAK_CLASS_LAST 	= SPEAK_MONSTER_YELL
@@ -127,8 +127,10 @@ enum SpeakClasses
 
 enum MessageClasses
 {
-	MSG_CLASS_FIRST			= 0x11,
-	MSG_STATUS_CONSOLE_ORANGE	= MSG_CLASS_FIRST, /*Orange message in the console*/
+	MSG_CLASS_FIRST			= 0x01,
+	MSG_STATUS_CONSOLE_YELLOW       = MSG_CLASS_FIRST, //Yellow message in the console
+    MSG_STATUS_CONSOLE_TEAL        = 0x04, //Light blue message in the console
+	MSG_STATUS_CONSOLE_ORANGE	= 0x11, /*Orange message in the console*/
 	MSG_STATUS_WARNING		= 0x12, /*Red message in game window and in the console*/
 	MSG_EVENT_ADVANCE		= 0x13, /*White message in game window and in the console*/
 	MSG_EVENT_DEFAULT		= 0x14, /*White message at the bottom of the game window and in the console*/

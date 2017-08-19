@@ -1210,7 +1210,7 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	{
 		case SPEAK_PRIVATE:
 		case SPEAK_PRIVATE_RED:
-		case SPEAK_CHANNEL_RV2:
+		case SPEAK_RVR_ANSWER:
 			receiver = msg.GetString();
 			break;
 
@@ -1619,7 +1619,7 @@ void ProtocolGame::sendRuleViolationsChannel(uint16_t channelId)
 		{
 			RuleViolation& rvr = *it->second;
 			if(rvr.isOpen && rvr.reporter)
-				AddCreatureSpeak(msg, rvr.reporter, SPEAK_CHANNEL_RV1, rvr.text, channelId, rvr.time);
+				AddCreatureSpeak(msg, rvr.reporter, SPEAK_RVR_CHANNEL, rvr.text, channelId, rvr.time);
 		}
 	}
 }
@@ -2541,7 +2541,12 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 
 	//Do not add name for anonymous channel talk
 	if(type != SPEAK_CHANNEL_R2)
-		msg->AddString(creature->getName());
+	{
+        if(type != SPEAK_RVR_ANSWER)
+            msg->AddString(creature->getName());
+        else
+		    msg->AddString("Gamemaster");
+	}
 	else
 		msg->AddString("");
 	
@@ -2552,6 +2557,7 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 		msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
 	else
 		msg->AddU16(0x00);
+
 	msg->AddByte(type);
 	switch(type)
 	{
@@ -2568,6 +2574,12 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 		case SPEAK_CHANNEL_O:
 			msg->AddU16(channelId);
 			break;
+		case SPEAK_RVR_CHANNEL:
+		{
+		 	uint32_t t = (OTSYS_TIME() / 1000) & 0xFFFFFFFF;
+			 msg->AddU32(t - time);
+		}
+		break;
 		default:
 			break;
 	}

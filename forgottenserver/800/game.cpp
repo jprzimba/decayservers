@@ -3514,6 +3514,7 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 			return playerYell(player, text);
 		case SPEAK_PRIVATE:
 		case SPEAK_PRIVATE_RED:
+		case SPEAK_RVR_ANSWER:
 			return playerSpeakTo(player, type, receiver, text);
 		case SPEAK_CHANNEL_O:
 		case SPEAK_CHANNEL_Y:
@@ -3527,9 +3528,9 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 		}
 		case SPEAK_BROADCAST:
 			return playerBroadcastMessage(player, SPEAK_BROADCAST, text);
-		case SPEAK_CHANNEL_RV1:
+		case SPEAK_RVR_CHANNEL:
 			return playerReportRuleViolation(player, text);
-		case SPEAK_CHANNEL_RV2:
+		case SPEAK_RVR_CONTINUE:
 			return playerContinueReport(player, text);
 
 		default:
@@ -3670,7 +3671,7 @@ bool Game::playerReportRuleViolation(Player* player, const std::string& text)
 		return false;
 
 	for(UsersMap::const_iterator it = channel->getUsers().begin(); it != channel->getUsers().end(); ++it)
-		it->second->sendToChannel(player, SPEAK_CHANNEL_RV1, text, CHANNEL_RVR, rvr->time);
+		it->second->sendToChannel(player, SPEAK_RVR_CHANNEL, text, CHANNEL_RVR, rvr->time);
 
 	return true;
 }
@@ -3686,7 +3687,7 @@ bool Game::playerContinueReport(Player* player, const std::string& text)
 	if(!toPlayer)
 		return false;
 
-	toPlayer->sendCreatureSay(player, SPEAK_CHANNEL_RV3, text);
+	toPlayer->sendCreatureSay(player, SPEAK_RVR_CONTINUE, text);
 	player->sendTextMessage(MSG_STATUS_SMALL, "Message sent to Gamemaster.");
 	return true;
 }
