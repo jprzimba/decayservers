@@ -71,6 +71,7 @@
 	addManaSpentInPvPZone = true
 	squareColor = 0
 	allowFightback = true
+	fistBaseAttack = 7
 
 	-- Connection config
 	worldId = 0

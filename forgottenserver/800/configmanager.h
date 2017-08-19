@@ -148,6 +148,7 @@ class ConfigManager
 			NAME_REPORT_TYPE,
 			HOUSE_CLEAN_OLD,
 			STAMINA_DESTROY_LOOT,
+			FIST_BASE_ATTACK,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 
