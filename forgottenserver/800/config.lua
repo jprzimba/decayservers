@@ -242,7 +242,8 @@
 	rateSkill = 3.0
 	rateMagic = 3.0
 	rateLoot = 2.0
-	rateSpawn = 1
+	rateSpawnMin = 1
+	rateSpawnMax = 1
 
 	-- Monster rates
 	rateMonsterHealth = 1.0
@@ -288,6 +289,7 @@
 	-- Spawns
 	deSpawnRange = 2
 	deSpawnRadius = 50
+	allowBlockSpawn = true
 
 	-- Summons
 	maxPlayerSummons = 2

@@ -312,21 +312,17 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 			return false;
 		}
 	}
-	else
+	else if(!g_game.placeCreature(monster, pos, false, true))
 	{
-		if(!g_game.placeCreature(monster, pos, false, true))
-		{
-			delete monster;
-			return false;
-		}
+		delete monster;
+		return false;
 	}
 
 	monster->setSpawn(this);
-	monster->addRef();
-
 	monster->setMasterPosition(pos, radius);
 	monster->setDirection(dir);
 
+	monster->addRef();
 	spawnedMap.insert(SpawnedPair(spawnId, monster));
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
 	return true;
@@ -348,25 +344,16 @@ void Spawn::checkSpawn()
 #endif
 	checkSpawnEvent = 0;
 
-	Monster* monster;
-	uint32_t spawnId;
-
 	for(SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end();)
 	{
-		spawnId = it->first;
-		monster = it->second;
-
-		if(monster->isRemoved())
+		if(it->second->isRemoved())
 		{
-			if(spawnId != 0)
-				spawnMap[spawnId].lastSpawn = OTSYS_TIME();
+			if(it->first)
+				spawnMap[it->first].lastSpawn = OTSYS_TIME();
 
-			monster->unRef();
-			spawnedMap.erase(it++);
-		}
-		else if(!isInSpawnZone(monster->getPosition()) && spawnId != 0)
-		{
-			spawnedMap.insert(SpawnedPair(0, monster));
+			if(it->second)
+				it->second->unRef();
+
 			spawnedMap.erase(it++);
 		}
 		else
@@ -376,25 +363,24 @@ void Spawn::checkSpawn()
 	uint32_t spawnCount = 0;
 	for(SpawnMap::iterator it = spawnMap.begin(); it != spawnMap.end(); ++it)
 	{
-		spawnId = it->first;
 		spawnBlock_t& sb = it->second;
+		if(spawnedMap.count(it->first))
+			continue;
 
-		if(spawnedMap.count(spawnId) == 0)
+		if(OTSYS_TIME() < sb.lastSpawn + sb.interval)
+			continue;
+
+		if(g_config.getBool(ConfigManager::ALLOW_BLOCK_SPAWN) && findPlayer(sb.pos))
 		{
-			if(OTSYS_TIME() >= sb.lastSpawn + sb.interval)
-			{
-				if(findPlayer(sb.pos))
-				{
-					sb.lastSpawn = OTSYS_TIME();
-					continue;
-				}
-
-				spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
-				++spawnCount;
-				if(spawnCount >= (uint32_t)g_config.getNumber(ConfigManager::RATE_SPAWN))
-					break;
-			}
+			sb.lastSpawn = OTSYS_TIME();
+			continue;
 		}
+
+		spawnMonster(it->first, sb.mType, sb.pos, sb.direction);
+		uint32_t minSpawnCount = g_config.getNumber(ConfigManager::RATE_SPAWN_MIN),
+			maxSpawnCount = g_config.getNumber(ConfigManager::RATE_SPAWN_MAX);
+		if(++spawnCount >= (uint32_t)random_range(minSpawnCount, maxSpawnCount))
+			break;
 	}
 
 	if(spawnedMap.size() < spawnMap.size())

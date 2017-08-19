@@ -127,7 +127,8 @@ bool ConfigManager::load()
 	m_confNumber[PZ_LOCKED] = getGlobalNumber("pzLocked", 60 * 1000);
 	m_confNumber[HUNTING_DURATION] = getGlobalNumber("huntingDuration", 60 * 1000);
 	m_confNumber[ALLOW_CLONES] = getGlobalNumber("allowClones", 0);
-	m_confNumber[RATE_SPAWN] = getGlobalNumber("rateSpawn", 1);
+	m_confNumber[RATE_SPAWN_MIN] = getGlobalNumber("rateSpawnMin", 1);
+	m_confNumber[RATE_SPAWN_MAX] = getGlobalNumber("rateSpawnMax", 1);
 	m_confNumber[SPAWNPOS_X] = getGlobalNumber("newPlayerSpawnPosX", 100);
 	m_confNumber[SPAWNPOS_Y] = getGlobalNumber("newPlayerSpawnPosY", 100);
 	m_confNumber[SPAWNPOS_Z] = getGlobalNumber("newPlayerSpawnPosZ", 7);
@@ -281,6 +282,7 @@ bool ConfigManager::load()
 	m_confBool[ADDONS_PREMIUM] = getGlobalBool("addonsOnlyPremium", true);
 	m_confBool[SKIP_ITEMS_VERSION] = getGlobalBool("skipItemsVersionCheck", true);
 	m_confBool[UNIFIED_SPELLS] = getGlobalBool("unifiedSpells", true);
+	m_confBool[ALLOW_BLOCK_SPAWN] = getGlobalBool("allowBlockSpawn", true);
 
 	m_loaded = true;
 	return true;
