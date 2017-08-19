@@ -166,15 +166,15 @@ int32_t Items::loadFromOtb(std::string file)
 
 	if(Items::dwMajorVersion != 2)
 	{
-		std::cout << "Not supported items.otb version." << std::endl;
+		std::clog << "Not supported items.otb version." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 
 	if(Items::dwMajorVersion == 0xFFFFFFFF)
-		std::cout << "[Warning] Items::loadFromOtb items.otb using generic client version." << std::endl;
+		std::clog << "[Warning] Items::loadFromOtb items.otb using generic client version." << std::endl;
 	else if(Items::dwMinorVersion != CLIENT_VERSION_800)
 	{
-		std::cout << "Not supported items.otb client version." << std::endl;
+		std::clog << "Not supported items.otb client version." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 
@@ -350,8 +350,8 @@ bool Items::loadFromXml()
 	xmlDocPtr itemDoc = xmlParseFile(getFilePath(FILE_TYPE_OTHER, "items/items.xml").c_str());
 	if(!itemDoc)
 	{
-		std::cout << "[Warning - Items::loadFromXml] Cannot load items file." << std::endl;
-		std::cout << getLastXMLError() << std::endl;
+		std::clog << "[Warning - Items::loadFromXml] Cannot load items file." << std::endl;
+		std::clog << getLastXMLError() << std::endl;
 		return false;
 	}
 
@@ -360,7 +360,7 @@ bool Items::loadFromXml()
 	{
 		xmlFreeDoc(itemDoc);
 
-		std::cout << "[Warning - Items::loadFromXml] Malformed items file." << std::endl;
+		std::clog << "[Warning - Items::loadFromXml] Malformed items file." << std::endl;
 		return false;
 	}
 
@@ -391,10 +391,10 @@ bool Items::loadFromXml()
 				}
 			}
 			else
-				std::cout << "[Warning - Items::loadFromXml] Malformed entry (from: \"" << strValue << "\", to: \"" << endValue << "\")" << std::endl;
+				std::clog << "[Warning - Items::loadFromXml] Malformed entry (from: \"" << strValue << "\", to: \"" << endValue << "\")" << std::endl;
 		}
 		else
-			std::cout << "[Warning - Items::loadFromXml] No itemid found" << std::endl;
+			std::clog << "[Warning - Items::loadFromXml] No itemid found" << std::endl;
 	}
 
 	xmlFreeDoc(itemDoc);
@@ -406,7 +406,7 @@ bool Items::loadFromXml()
 
 		//check bed items
 		if((it->transformToFree || it->transformUseTo[PLAYERSEX_FEMALE] || it->transformUseTo[PLAYERSEX_MALE]) && it->type != ITEM_TYPE_BED)
-			std::cout << "[Warning - Items::loadFromXml] Item " << it->id << " is not set as a bed-type." << std::endl;
+			std::clog << "[Warning - Items::loadFromXml] Item " << it->id << " is not set as a bed-type." << std::endl;
 	}
 
 	return true;
@@ -428,7 +428,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 
 	ItemType& it = Item::items.getItemType(id);
 	if(!it.name.empty() && (!readXMLString(itemNode, "override", strValue) || !booleanString(strValue)))
-		std::cout << "[Warning - Items::loadFromXml] Duplicate registered item with id " << id << std::endl;
+		std::clog << "[Warning - Items::loadFromXml] Duplicate registered item with id " << id << std::endl;
 
 	if(readXMLString(itemNode, "name", strValue))
 		it.name = strValue;
@@ -472,7 +472,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					else if(tmpStrValue == "bed")
 						it.type = ITEM_TYPE_BED;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown type " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown type " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "name")
@@ -600,7 +600,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					else if(tmpStrValue == "fire")
 						it.corpseType = RACE_FIRE;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown corpseType " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown corpseType " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "containersize")
@@ -617,7 +617,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					if(fluid != FLUID_NONE)
 						it.fluidSource = fluid;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown fluidSource " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown fluidSource " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "writeable" || tmpStrValue == "writable")
@@ -648,7 +648,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				if(readXMLInteger(itemAttributesNode, "value", intValue))
 				{
 					if(moneyMap.find(intValue) != moneyMap.end() && (!readXMLString(itemNode, "override", strValue) || !booleanString(strValue)))
-						std::cout << "[Warning - Items::loadFromXml] Duplicated money item " << id << " with worth " << intValue << "!" << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Duplicated money item " << id << " with worth " << intValue << "!" << std::endl;
 					else
 					{
 						moneyMap[intValue] = id;
@@ -688,7 +688,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					else if(tmpStrValue == "fist")
 						it.weaponType = WEAPON_FIST;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown weaponType " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown weaponType " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "slottype")
@@ -741,7 +741,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					else if(tmpStrValue == "hand")
 						it.wieldPosition = SLOT_HAND;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown slotType " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown slotType " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "ammotype")
@@ -750,7 +750,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				{
 					it.ammoType = getAmmoType(strValue);
 					if(it.ammoType == AMMO_NONE)
-						std::cout << "[Warning - Items::loadFromXml] Unknown ammoType " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown ammoType " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "shoottype")
@@ -761,7 +761,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					if(shoot != SHOOT_EFFECT_UNKNOWN)
 						it.shootType = shoot;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown shootType " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown shootType " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "effect")
@@ -772,7 +772,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					if(effect != MAGIC_EFFECT_UNKNOWN)
 						it.magicEffect = effect;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown effect " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown effect " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "range")
@@ -838,7 +838,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					if(ammo != AMMOACTION_NONE)
 						it.ammoAction = ammo;
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown ammoAction " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown ammoAction " << strValue << std::endl;
 				}
 			}
 			else if(tmpStrValue == "hitchance")
@@ -1347,7 +1347,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 						combatType = COMBAT_PHYSICALDAMAGE;
 					}
 					else
-						std::cout << "[Warning - Items::loadFromXml] Unknown field value " << strValue << std::endl;
+						std::clog << "[Warning - Items::loadFromXml] Unknown field value " << strValue << std::endl;
 
 					if(combatType != COMBAT_NONE)
 					{
@@ -1515,7 +1515,7 @@ void Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					it.transformToFree = intValue;
 			}
 			else
-				std::cout << "[Warning - Items::loadFromXml] Unknown key value " << strValue << std::endl;
+				std::clog << "[Warning - Items::loadFromXml] Unknown key value " << strValue << std::endl;
 		}
 
 		itemAttributesNode = itemAttributesNode->next;
@@ -1536,7 +1536,7 @@ ItemType& Items::getItemType(int32_t id)
 		return *iType;
 
 	#ifdef __DEBUG__
-	std::cout << "[Warning - Items::getItemType] Unknown itemtype with id " << id << ", using defaults." << std::endl;
+	std::clog << "[Warning - Items::getItemType] Unknown itemtype with id " << id << ", using defaults." << std::endl;
 	#endif
 	static ItemType dummyItemType; // use this for invalid ids
 	return dummyItemType;

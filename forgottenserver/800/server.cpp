@@ -43,7 +43,7 @@ void Server::accept()
 	if(!m_acceptor)
 	{
 		#ifdef __DEBUG_NET__
-		std::cout << "Error: [Server::accept] NULL m_acceptor." << std::endl;
+		std::clog << "Error: [Server::accept] NULL m_acceptor." << std::endl;
 		#endif
 		return;
 	}
@@ -84,7 +84,7 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 	{
 		connection->acceptConnection();
 		#ifdef __DEBUG_NET_DETAIL__
-		std::cout << "accept - OK" << std::endl;
+		std::clog << "accept - OK" << std::endl;
 		#endif
 		accept();
 	}
@@ -101,15 +101,15 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 				openListenSocket();
 			#ifndef __IGNORE_LISTEN_ERROR__
 			else
-				std::cout << "Error: [Server::onAccept] More than 100 listen errors." << std::endl;
+				std::clog << "Error: [Server::onAccept] More than 100 listen errors." << std::endl;
 			#else
-			std::cout << "Warning: [Server::onAccept] More than 100 listen errors." << std::endl;
+			std::clog << "Warning: [Server::onAccept] More than 100 listen errors." << std::endl;
 			#endif
 		}
 		else
 		{
 			#ifdef __DEBUG_NET__
-			std::cout << "Error: [Server::onAccept] Operation aborted." << std::endl;
+			std::clog << "Error: [Server::onAccept] Operation aborted." << std::endl;
 			#endif
 		}
 	}

@@ -39,7 +39,7 @@ extern IpList serverIps;
 void ProtocolLogin::deleteProtocolTask()
 {
 #ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Deleting ProtocolLogin" << std::endl;
+	std::clog << "Deleting ProtocolLogin" << std::endl;
 #endif
 	Protocol::deleteProtocolTask();
 }
@@ -168,10 +168,10 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 		char buffer[500 + ban.comment.length()];
 		sprintf(buffer, "Your account has been %s at:\n%s by: %s,\nfor the following reason:\n%s.\nThe action taken was:\n%s.\nThe comment given was:\n%s.\nYour %s%s.",
-			(deletion ? "deleted" : "banished"), formatDateShort(ban.added).c_str(), name_.c_str(),
+			(deletion ? "deleted" : "banished"), formatDateEx(ban.added).c_str(), name_.c_str(),
 			getReason(ban.reason).c_str(), getAction(ban.action, false).c_str(), ban.comment.c_str(),
 			(deletion ? "account won't be undeleted" : "banishment will be lifted at:\n"),
-			(deletion ? "." : formatDateShort(ban.expires, true).c_str()));
+			(deletion ? "." : formatDateEx(ban.expires).c_str()));
 
 		disconnectClient(0x0A, buffer);
 		return false;

@@ -80,7 +80,7 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 		{
 			uint32_t n = 1;
 			for(std::list<std::string>::const_reverse_iterator it = lastUses.rbegin(); it != lastUses.rend(); ++it, ++n)
-				std::cout << "\t" << n << ".\t" << (*it) << std::endl;
+				std::clog << "\t" << n << ".\t" << (*it) << std::endl;
 		}
 #endif
 

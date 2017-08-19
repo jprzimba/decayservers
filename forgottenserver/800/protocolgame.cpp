@@ -118,10 +118,10 @@ bool ProtocolGame::login(const std::string& name, uint32_t id, const std::string
 
 			char buffer[500 + ban.comment.length()];
 			sprintf(buffer, "Your character has been %s at:\n%s by: %s,\nfor the following reason:\n%s.\nThe action taken was:\n%s.\nThe comment given was:\n%s.\nYour %s%s.",
-				(deletion ? "deleted" : "banished"), formatDateShort(ban.added).c_str(), name_.c_str(),
+				(deletion ? "deleted" : "banished"), formatDateEx(ban.added).c_str(), name_.c_str(),
 				getReason(ban.reason).c_str(), getAction(ban.action, false).c_str(), ban.comment.c_str(),
 				(deletion ? "character won't be undeleted" : "banishment will be lifted at:\n"),
-				(deletion ? "." : formatDateShort(ban.expires, true).c_str()));
+				(deletion ? "." : formatDateEx(ban.expires).c_str()));
 
 			disconnectClient(0x14, buffer);
 			return false;
@@ -466,10 +466,10 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 		char buffer[500 + ban.comment.length()];
 		sprintf(buffer, "Your account has been %s at:\n%s by: %s,\nfor the following reason:\n%s.\nThe action taken was:\n%s.\nThe comment given was:\n%s.\nYour %s%s.",
-			(deletion ? "deleted" : "banished"), formatDateShort(ban.added).c_str(), name_.c_str(),
+			(deletion ? "deleted" : "banished"), formatDateEx(ban.added).c_str(), name_.c_str(),
 			getReason(ban.reason).c_str(), getAction(ban.action, false).c_str(), ban.comment.c_str(),
 			(deletion ? "account won't be undeleted" : "banishment will be lifted at:\n"),
-			(deletion ? "." : formatDateShort(ban.expires, true).c_str()));
+			(deletion ? "." : formatDateEx(ban.expires).c_str()));
 
 		disconnectClient(0x14, buffer);
 		return false;
@@ -952,7 +952,7 @@ bool ProtocolGame::canSee(uint16_t x, uint16_t y, uint16_t z) const
 {
 #ifdef __DEBUG__
 	if(z < 0 || z >= MAP_MAX_LAYERS)
-		std::cout << "[Warning - ProtocolGame::canSee] Z-value is out of range!" << std::endl;
+		std::clog << "[Warning - ProtocolGame::canSee] Z-value is out of range!" << std::endl;
 #endif
 
 	const Position& myPos = player->getPosition();
@@ -1348,7 +1348,7 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 		<< std::endl << std::endl;
 
 	m_debugAssertSent = true;
-	Logger::getInstance()->iFile(LOGFILE_CLIENT_ASSERTION, s.str(), false);
+	Logger::getInstance()->iFile(LOGFILE_ASSERTIONS, s.str(), false);
 }
 
 void ProtocolGame::parseBugReport(NetworkMessage& msg)
@@ -1899,7 +1899,7 @@ void ProtocolGame::sendFYIBox(const std::string& message)
 {
 	if(message.empty() || message.length() > 1018) //Prevent client debug when message is empty or length is > 1018 (not confirmed)
 	{
-		std::cout << "[Warning - ProtocolGame::sendFYIBox] Trying to send an empty or too huge message." << std::endl;
+		std::clog << "[Warning - ProtocolGame::sendFYIBox] Trying to send an empty or too huge message." << std::endl;
 		return;
 	}
 

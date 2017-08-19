@@ -608,15 +608,15 @@ bool Admin::loadFromXml()
 	xmlDocPtr doc = xmlParseFile(getFilePath(FILE_TYPE_XML, "admin.xml").c_str());
 	if(!doc)
 	{
-		std::cout << "[Warning - Admin::loadFromXml] Cannot load admin file." << std::endl;
-		std::cout << getLastXMLError() << std::endl;
+		std::clog << "[Warning - Admin::loadFromXml] Cannot load admin file." << std::endl;
+		std::clog << getLastXMLError() << std::endl;
 		return false;
 	}
 
 	xmlNodePtr p, q, root = xmlDocGetRootElement(doc);
 	if(xmlStrcmp(root->name,(const xmlChar*)"otadmin"))
 	{
-		std::cout << "[Error - Admin::loadFromXml] Malformed admin file" << std::endl;
+		std::clog << "[Error - Admin::loadFromXml] Malformed admin file" << std::endl;
 		xmlFreeDoc(doc);
 		return false;
 	}
@@ -640,7 +640,7 @@ bool Admin::loadFromXml()
 			if(readXMLString(p, "loginpassword", strValue))
 				m_password = strValue;
 			else if(m_requireLogin)
-				std::cout << "[Warning - Admin::loadFromXml]: Login required, but no password specified - using default." << std::endl;
+				std::clog << "[Warning - Admin::loadFromXml]: Login required, but no password specified - using default." << std::endl;
 		}
 		else if(xmlStrEqual(p->name, (const xmlChar*)"encryption"))
 		{
@@ -663,14 +663,14 @@ bool Admin::loadFromXml()
 								{
 									delete m_key_RSA1024XTEA;
 									m_key_RSA1024XTEA = NULL;
-									std::cout << "[Error - Admin::loadFromXml]: Could not load RSA key from file " << getFilePath(FILE_TYPE_XML, strValue) << std::endl;
+									std::clog << "[Error - Admin::loadFromXml]: Could not load RSA key from file " << getFilePath(FILE_TYPE_XML, strValue) << std::endl;
 								}
 							}
 							else
-								std::cout << "[Error - Admin::loadFromXml]: Missing file for RSA1024XTEA key." << std::endl;
+								std::clog << "[Error - Admin::loadFromXml]: Missing file for RSA1024XTEA key." << std::endl;
 						}
 						else
-							std::cout << "[Warning - Admin::loadFromXml]: " << strValue << " is not a valid key type." << std::endl;
+							std::clog << "[Warning - Admin::loadFromXml]: " << strValue << " is not a valid key type." << std::endl;
 					}
 				}
 

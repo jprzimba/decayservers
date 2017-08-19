@@ -19,15 +19,13 @@
 #define __TEXTLOGGER__
 #include "otsystem.h"
 
-#include <ostream>
-#include <fstream>
-
 enum LogFile_t
 {
 	LOGFILE_FIRST = 0,
 	LOGFILE_ADMIN = LOGFILE_FIRST,
-	LOGFILE_CLIENT_ASSERTION = 1,
-	LOGFILE_LAST = LOGFILE_CLIENT_ASSERTION
+	LOGFILE_OUTPUT = 1,
+	LOGFILE_ASSERTIONS = 2,
+	LOGFILE_LAST = LOGFILE_ASSERTIONS
 };
 
 enum LogType_t
@@ -51,18 +49,40 @@ class Logger
 		void open();
 		void close();
 
+		bool isLoaded() const {return m_loaded;}
+
 		void iFile(LogFile_t file, std::string output, bool newLine);
 		void eFile(std::string file, std::string output, bool newLine);
 
 		void log(const char* func, LogType_t type, std::string message, std::string channel = "", bool newLine = true);
 
 	private:
-		Logger() {}
+		Logger() {m_loaded = false;}
 		void internal(FILE* file, std::string output, bool newLine);
 
 		FILE* m_files[LOGFILE_LAST + 1];
+		bool m_loaded;
 };
 
 #define LOG_MESSAGE(type, message, channel) \
-	Logger::getInstance()->log(__OTSERV_FUNCTION__, type, message, channel);
+	Logger::getInstance()->log(__PRETTY_FUNCTION__, type, message, channel);
+
+class OutputHandler : public std::streambuf
+{
+	public:
+		virtual ~OutputHandler();
+		static OutputHandler* getInstance()
+		{
+			static OutputHandler instance;
+			return &instance;
+		}
+
+	protected:
+		OutputHandler();
+		std::streambuf::int_type overflow(std::streambuf::int_type c = traits_type::eof());
+
+		std::streambuf* log;
+		std::streambuf* err;
+		std::string m_cache;
+};
 #endif

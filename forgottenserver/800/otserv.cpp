@@ -67,7 +67,7 @@
 
 void boost::throw_exception(std::exception const & e)
 {
-	std::cout << "Boost exception: " << e.what() << std::endl;
+	std::clog << "Boost exception: " << e.what() << std::endl;
 }
 #endif
 
@@ -154,7 +154,7 @@ void allocationHandler()
 void startupErrorMessage(const std::string& error)
 {
 	if(error.length() > 0)
-		std::cout << std::endl << "> ERROR: " << error << std::endl;
+		std::clog << std::endl << ">> ERROR: " << error << std::endl;
 
 	system("pause");
 	getchar();
@@ -195,18 +195,19 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, signalHandler); //shutdown
 	#endif
 
+	OutputHandler::getInstance();
 	Dispatcher::getInstance().addTask(createTask(boost::bind(mainLoader, argc, argv)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 
-	std::string outPath = g_config.getString(ConfigManager::OUT_LOG), errPath = g_config.getString(ConfigManager::ERROR_LOG);
+	std::string outPath = g_config.getString(ConfigManager::OUTPUT_LOG), errPath = g_config.getString(ConfigManager::ERROR_LOG);
 	if(outPath.length() < 3)
 		outPath = "";
 	else if(outPath[0] != '/' && outPath[1] != ':')
 	{
 		outPath = getFilePath(FILE_TYPE_LOG, outPath);
-		std::cout << "> Logging output to file: " << outPath << std::endl;
+		std::clog << ">> Logging output to file: " << outPath << std::endl;
 	}
 
 	if(errPath.length() < 3)
@@ -214,7 +215,7 @@ int main(int argc, char *argv[])
 	else if(errPath[0] != '/' && errPath[1] != ':')
 	{
 		errPath = getFilePath(FILE_TYPE_LOG, errPath);
-		std::cout << "> Logging errors to file: " << errPath << std::endl;
+		std::clog << ">> Logging errors to file: " << errPath << std::endl;
 	}
 
 	if(outPath != "")
@@ -225,7 +226,7 @@ int main(int argc, char *argv[])
 		if(!outFile->is_open())
 			startupErrorMessage("Could not open output log file for writing!");
 
-		std::cout.rdbuf(outFile->rdbuf());
+		std::clog.rdbuf(outFile->rdbuf());
 	}
 
 	if(errPath != "")
@@ -240,7 +241,7 @@ int main(int argc, char *argv[])
 	}
 
 	Server server(INADDR_ANY, g_config.getNumber(ConfigManager::LOGIN_PORT));
-	std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
+	std::clog << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 	g_server = &server;
 	server.run();
 
@@ -263,8 +264,8 @@ void mainLoader(int argc, char *argv[])
 	#if !defined(WINDOWS) && !defined(__ROOT_PERMISSION__)
 	if(!getuid() || !geteuid())
 	{
-		std::cout << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user! It is recommended to execute as a normal user." << std::endl;
-		std::cout << "Continue? (y/N)" << std::endl;
+		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user! It is recommended to execute as a normal user." << std::endl;
+		std::clog << "Continue? (y/N)" << std::endl;
 
 		char buffer = getchar();
 		if(buffer == 10 || (buffer != 121 && buffer != 89))
@@ -272,11 +273,11 @@ void mainLoader(int argc, char *argv[])
 	}
 	#endif
 
-	std::cout << STATUS_SERVER_NAME << ", version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")" << std::endl;
-	std::cout << "Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << "." << std::endl;
-	std::cout << "A server developed by " << DEVELOPERS << "." << std::endl;
-	std::cout << "Modified by " << MODIFIED_BY << "." << std::endl;
-	std::cout << "Visit our forum for updates, support and resources: http://otland.net." << std::endl << std::endl;
+	std::clog << ">> " << STATUS_SERVER_NAME << ", version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")" << std::endl;
+	std::clog << ">> Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << "." << std::endl;
+	std::clog << ">> A server developed by " << DEVELOPERS << "." << std::endl;
+	std::clog << ">> Modified by " << MODIFIED_BY << "." << std::endl;
+	std::clog << ">> Visit our forum for updates, support and resources: http://otland.net." << std::endl << std::endl;
 
 	std::stringstream ss;
 	#ifdef __DEBUG__
@@ -322,11 +323,11 @@ void mainLoader(int argc, char *argv[])
 	std::string debug = ss.str();
 	if(!debug.empty())
 	{
-		std::cout << ">> Debugging:";
-		std::cout << debug << "." << std::endl;
+		std::clog << ">> Debugging:";
+		std::clog << debug << "." << std::endl;
 	}
 
-	std::cout << ">> Loading config (" << g_config.getString(ConfigManager::CONFIG_FILE) << ")" << std::endl;
+	std::clog << ">> Loading config (" << g_config.getString(ConfigManager::CONFIG_FILE) << ")" << std::endl;
 	if(!g_config.load())
 		startupErrorMessage("Unable to load " + g_config.getString(ConfigManager::CONFIG_FILE) + "!");
 
@@ -382,31 +383,31 @@ void mainLoader(int argc, char *argv[])
 	if(passwordType == "md5")
 	{
 		g_config.setNumber(ConfigManager::PASSWORDTYPE, PASSWORD_TYPE_MD5);
-		std::cout << ">> Using MD5 passwords" << std::endl;
+		std::clog << ">> Using MD5 passwords" << std::endl;
 	}
 	else if(passwordType == "sha1")
 	{
 		g_config.setNumber(ConfigManager::PASSWORDTYPE, PASSWORD_TYPE_SHA1);
-		std::cout << ">> Using SHA1 passwords" << std::endl;
+		std::clog << ">> Using SHA1 passwords" << std::endl;
 	}
 	else
 	{
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_PLAIN);
-		std::cout << ">> Using PLAIN-TEXT passwords" << std::endl;
+		std::clog << ">> Using PLAIN-TEXT passwords" << std::endl;
 	}
 
-	std::cout << ">> Loading RSA key" << std::endl;
+	std::clog << ">> Loading RSA key" << std::endl;
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
 	const char* q("7630979195970404721891201847792002125535401292779123937207447574596692788513647179235335529307251350570728407373705564708871762033017096809910315212884101");
 	const char* d("46730330223584118622160180015036832148732986808519344675210555262940258739805766860224610646919605860206328024326703361630109888417839241959507572247284807035235569619173792292786907845791904955103601652822519121908367187885509270025388641700821735345222087940578381210879116823013776808975766851829020659073");
 	g_otservRSA = new RSA();
 	g_otservRSA->setKey(p, q, d);
 
-	std::cout << ">> Starting SQL connection" << std::endl;
+	std::clog << ">> Starting SQL connection" << std::endl;
 	Database* db = Database::getInstance();
 	if(db && db->isConnected())
 	{
-		std::cout << ">> Running Database Manager" << std::endl;
+		std::clog << ">> Running Database Manager" << std::endl;
 		if(!DatabaseManager::getInstance()->isDatabaseSetup())
 			startupErrorMessage("The database you specified in config.lua is empty, please import schemas/<dbengine>.sql to the database (if you are using MySQL, please read doc/MYSQL_HELP for more information).");
 		else
@@ -418,7 +419,7 @@ void mainLoader(int argc, char *argv[])
 				if(version == 0)
 					break;
 
-				std::cout << "> Database has been updated to version: " << version << "." << std::endl;
+				std::clog << ">> Database has been updated to version: " << version << "." << std::endl;
 			}
 			while(version < VERSION_DATABASE);
 		}
@@ -426,56 +427,56 @@ void mainLoader(int argc, char *argv[])
 		DatabaseManager::getInstance()->checkTriggers();
 		DatabaseManager::getInstance()->checkEncryption();
 		if(g_config.getBool(ConfigManager::OPTIMIZE_DB_AT_STARTUP) && !DatabaseManager::getInstance()->optimizeTables())
-			std::cout << "> No tables were optimized." << std::endl;
+			std::clog << ">> No tables were optimized." << std::endl;
 	}
 	else
 		startupErrorMessage("Couldn't estabilish connection to SQL database!");
 
-	std::cout << ">> Loading items" << std::endl;
+	std::clog << ">> Loading items" << std::endl;
 	if(Item::items.loadFromOtb(getFilePath(FILE_TYPE_OTHER, "items/items.otb")))
 		startupErrorMessage("Unable to load items (OTB)!");
 
 	if(!Item::items.loadFromXml())
         startupErrorMessage("Unable to load items (XML)!");
 
-	std::cout << ">> Loading groups" << std::endl;
+	std::clog << ">> Loading groups" << std::endl;
 	if(!Groups::getInstance()->loadFromXml())
 		startupErrorMessage("Unable to load groups!");
 
-	std::cout << ">> Loading vocations" << std::endl;
+	std::clog << ">> Loading vocations" << std::endl;
 	if(!Vocations::getInstance()->loadFromXml())
 		startupErrorMessage("Unable to load vocations!");
 
-	std::cout << ">> Loading script systems" << std::endl;
+	std::clog << ">> Loading script systems" << std::endl;
 	if(!ScriptingManager::getInstance()->load())
 		startupErrorMessage("");
 
-	std::cout << ">> Loading chat channels" << std::endl;
+	std::clog << ">> Loading chat channels" << std::endl;
 	if(!g_chat.loadFromXml())
 		startupErrorMessage("Unable to load chat channels!");
 
-	std::cout << ">> Loading outfits" << std::endl;
+	std::clog << ">> Loading outfits" << std::endl;
 	if(!Outfits::getInstance()->loadFromXml())
 		startupErrorMessage("Unable to load outfits!");
 
-	std::cout << ">> Loading experience stages" << std::endl;
+	std::clog << ">> Loading experience stages" << std::endl;
 	if(!g_game.loadExperienceStages())
 		startupErrorMessage("Unable to load experience stages!");
 
-	std::cout << ">> Loading monsters" << std::endl;
+	std::clog << ">> Loading monsters" << std::endl;
 	if(!g_monsters.loadFromXml())
     	startupErrorMessage("Unable to load monsters!");
 
-	std::cout << ">> Loading mods..." << std::endl;
+	std::clog << ">> Loading mods..." << std::endl;
 	if(!ScriptingManager::getInstance()->loadMods())
 		startupErrorMessage("Unable to load mods!");
 
-	std::cout << ">> Loading map and spawns..." << std::endl;
+	std::clog << ">> Loading map and spawns..." << std::endl;
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
 		startupErrorMessage("");
 
 	#ifdef __REMOTE_CONTROL__
-	std::cout << ">> Loading administration protocol" << std::endl;
+	std::clog << ">> Loading administration protocol" << std::endl;
 	g_admin = new Admin();
 	if(!g_admin->loadFromXml())
 		startupErrorMessage("Unable to load administration protocol!");
@@ -483,30 +484,30 @@ void mainLoader(int argc, char *argv[])
 	services->add<ProtocolAdmin>(g_config.getNumber(ConfigManager::ADMIN_PORT));
 	#endif
 
-	std::cout << ">> Checking world type... ";
+	std::clog << ">> Checking world type... ";
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if(worldType == "pvp" || worldType == "2" || worldType == "normal")
 	{
 		g_game.setWorldType(WORLD_TYPE_PVP);
-		std::cout << "PvP" << std::endl;
+		std::clog << "PvP" << std::endl;
 	}
 	else if(worldType == "no-pvp" || worldType == "nopvp" || worldType == "non-pvp" || worldType == "nonpvp" || worldType == "1" || worldType == "safe")
 	{
 		g_game.setWorldType(WORLD_TYPE_NO_PVP);
-		std::cout << "NoN-PvP" << std::endl;
+		std::clog << "NoN-PvP" << std::endl;
 	}
 	else if(worldType == "pvp-enforced" || worldType == "pvpenforced" || worldType == "pvp-enfo" || worldType == "pvpenfo" || worldType == "pvpe" || worldType == "enforced" || worldType == "enfo" || worldType == "3" || worldType == "war")
 	{
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
-		std::cout << "PvP-Enforced" << std::endl;
+		std::clog << "PvP-Enforced" << std::endl;
 	}
 	else
 	{
-		std::cout << std::endl;
+		std::clog << std::endl;
 		startupErrorMessage("Unknown world type: " + g_config.getString(ConfigManager::WORLD_TYPE));
 	}
 
-	std::cout << ">> Initializing game state modules and registering services..." << std::endl;
+	std::clog << ">> Initializing game state modules and registering services..." << std::endl;
 	g_game.setGameState(GAME_STATE_INIT);
 
 	std::pair<uint32_t, uint32_t> IpNetMask;
@@ -542,7 +543,7 @@ void mainLoader(int argc, char *argv[])
 			resolvedIp = *(uint32_t*)he->h_addr;
 		else
 		{
-			std::cout << "ERROR: Cannot resolve " << ip << "!" << std::endl;
+			std::clog << "ERROR: Cannot resolve " << ip << "!" << std::endl;
 			#ifdef WIN32
 			getchar();
 			#endif
@@ -556,7 +557,7 @@ void mainLoader(int argc, char *argv[])
 
 	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
 	if(getuid() == 0 || geteuid() == 0)
-		std::cout << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
 	#endif
 	g_game.setGameState(GAME_STATE_NORMAL);
 

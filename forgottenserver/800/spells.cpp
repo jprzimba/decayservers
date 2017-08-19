@@ -144,7 +144,7 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p, bool override)
 			return true;
 		}
 
-		std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
+		std::clog << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 		return false;
 	}
 
@@ -164,7 +164,7 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p, bool override)
 			return true;
 		}
 
-		std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
+		std::clog << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 		return false;
 	}
 
@@ -445,7 +445,7 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 	else
 	{
-		std::cout << "[Error - CombatSpell::executeCastSpell] Call stack overflow." << std::endl;
+		std::clog << "[Error - CombatSpell::executeCastSpell] Call stack overflow." << std::endl;
 		return false;
 	}
 }
@@ -503,14 +503,14 @@ bool Spell::configureSpell(xmlNodePtr p)
 		{
 			if(!strcasecmp(reservedList[i], name.c_str()))
 			{
-				std::cout << "Error: [Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
+				std::clog << "Error: [Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 				return false;
 			}
 		}
 	}
 	else
 	{
-		std::cout << "Error: [Spell::configureSpell] Spell without name." << std::endl;
+		std::clog << "Error: [Spell::configureSpell] Spell without name." << std::endl;
 		return false;
 	}
 
@@ -566,7 +566,7 @@ bool Spell::configureSpell(xmlNodePtr p)
 		else if(tmpStrValue == "creature")
 			blockingCreature = true;
 		else
-			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" <<strValue << "\" does not exist." << std::endl;
+			std::clog << "[Warning - Spell::configureSpell] Blocktype \"" <<strValue << "\" does not exist." << std::endl;
 	}
 
 	if(readXMLString(p, "aggressive", strValue))
@@ -577,7 +577,7 @@ bool Spell::configureSpell(xmlNodePtr p)
 	while(vocationNode)
 	{
 		if(!parseVocationNode(vocationNode, vocSpellMap, vocStringVec, error))
-			std::cout << "[Warning - Spell::configureSpell] " << error << std::endl;
+			std::clog << "[Warning - Spell::configureSpell] " << error << std::endl;
 
 		vocationNode = vocationNode->next;
 	}
@@ -1040,7 +1040,7 @@ bool InstantSpell::loadFunction(const std::string& functionName)
 	}
 	else
 	{
-		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -1268,7 +1268,7 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 	else
 	{
-		std::cout << "[Error - InstantSpell::executeCastSpell] Call stack overflow." << std::endl;
+		std::clog << "[Error - InstantSpell::executeCastSpell] Call stack overflow." << std::endl;
 		return false;
 	}
 }
@@ -1495,7 +1495,7 @@ bool ConjureSpell::loadFunction(const std::string& functionName)
 		function = ConjureFood;
 	else
 	{
-		std::cout << "[Warning - ConjureSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - ConjureSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -1677,7 +1677,7 @@ bool RuneSpell::configureEvent(xmlNodePtr p)
 		runeId = intValue;
 	else
 	{
-		std::cout << "Error: [RuneSpell::configureSpell] Rune spell without id." << std::endl;
+		std::clog << "Error: [RuneSpell::configureSpell] Rune spell without id." << std::endl;
 		return false;
 	}
 
@@ -1705,7 +1705,7 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 		function = Convince;
 	else
 	{
-		std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		std::clog << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
 	}
 
@@ -1938,7 +1938,7 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 	else
 	{
-		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow." << std::endl;
+		std::clog << "[Error - RuneSpell::executeCastSpell] Call stack overflow." << std::endl;
 		return false;
 	}
 }

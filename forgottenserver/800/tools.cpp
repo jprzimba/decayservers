@@ -599,50 +599,69 @@ std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end)
 
 std::string formatDate(time_t _time/* = 0*/)
 {
-	char buffer[21];
 	if(!_time)
 		_time = time(NULL);
 
 	const tm* tms = localtime(&_time);
+	std::stringstream s;
 	if(tms)
-		sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900, tms->tm_hour, tms->tm_min, tms->tm_sec);
+		s << tms->tm_mday << "/" << (tms->tm_mon + 1) << "/" << (tms->tm_year + 1900) << " " << tms->tm_hour << ":" << tms->tm_min << ":" << tms->tm_sec;
+	else
+		s << "UNIX Time: " << (int32_t)_time;
+
+	return s.str();
+}
+
+std::string formatDateEx(time_t _time/* = 0*/, std::string format/* = "%d %b %Y, %H:%M:%S"*/)
+{
+	if(!_time)
+		_time = time(NULL);
+
+	const tm* tms = localtime(&_time);
+	char buffer[100];
+	if(tms)
+		strftime(buffer, 25, format.c_str(), tms);
 	else
 		sprintf(buffer, "UNIX Time: %d", (int32_t)_time);
 
 	return buffer;
 }
 
-std::string formatDateShort(time_t _time, bool detailed/* = false*/)
+std::string formatTime(time_t _time/* = 0*/, bool ms/* = false*/)
 {
-	char buffer[21];
 	if(!_time)
 		_time = time(NULL);
+	else if(ms)
+		ms = false;
 
 	const tm* tms = localtime(&_time);
+	std::stringstream s;
 	if(tms)
 	{
-		std::string format = "%d %b %Y";
-		if(detailed)
-			format += " %H:%M:%S";
+		s << tms->tm_hour << ":" << tms->tm_min << ":";
+		if(tms->tm_sec < 10)
+			s << "0";
 
-		strftime(buffer, 25, format.c_str(), tms);
+		s << tms->tm_sec;
+		if(ms)
+		{
+			timeb t;
+			ftime(&t);
+
+			s << "."; // make it format zzz
+			if(t.millitm < 10)
+				s << "0";
+
+			if(t.millitm < 100)
+				s << "0";
+
+			s << t.millitm;
+		}
 	}
 	else
-		sprintf(buffer, "UNIX Time: %d", (int32_t)_time);
+		s << "UNIX Time: " << (int32_t)_time;
 
-	return buffer;
-}
-
-std::string formatTime(int32_t hours, int32_t minutes)
-{
-	std::stringstream time;
-	if(hours)
-		time << hours << " " << (hours > 1 ? "hours" : "hour") << (minutes ? " and " : "");
-
-	if(minutes)
-		time << minutes << " " << (minutes > 1 ? "minutes" : "minute");
-
-	return time.str();
+	return s.str();
 }
 
 std::string convertIPAddress(uint32_t ip)
@@ -1458,7 +1477,7 @@ std::string getFilePath(FileType_t filetype, std::string filename)
 			break;
 		}
 		default:
-			std::cout << "ERROR: Wrong file type!" << std::endl;
+			std::clog << "ERROR: Wrong file type!" << std::endl;
 			break;
 	}
 	return path;

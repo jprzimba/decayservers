@@ -16,16 +16,34 @@
 ////////////////////////////////////////////////////////////////////////
 #include "otpch.h"
 #include "textlogger.h"
+
+
+#include "configmanager.h"
+#include "game.h"
 #include "tools.h"
+
+extern ConfigManager g_config;
+extern Game g_game;
 
 void Logger::open()
 {
+	std::string path = g_config.getString(ConfigManager::OUTPUT_LOG);
+	if(path.length() < 3)
+		path = "";
+	else if(path[0] != '/' && path[1] != ':')
+		path = getFilePath(FILE_TYPE_LOG, path);
+
 	m_files[LOGFILE_ADMIN] = fopen(getFilePath(FILE_TYPE_LOG, "admin.log").c_str(), "a");
-	m_files[LOGFILE_CLIENT_ASSERTION] = fopen(getFilePath(FILE_TYPE_LOG, "client_assertions.log").c_str(), "a");
+	if(!path.empty())
+		m_files[LOGFILE_OUTPUT] = fopen(path.c_str(), (g_config.getBool(ConfigManager::TRUNCATE_LOGS) ? "w" : "a"));
+
+	m_files[LOGFILE_ASSERTIONS] = fopen(getFilePath(FILE_TYPE_LOG, "client_assertions.log").c_str(), "a");
+	m_loaded = true;
 }
 
 void Logger::close()
 {
+	m_loaded = false;
 	for(uint8_t i = 0; i <= LOGFILE_LAST; i++)
 	{
 		if(m_files[i])
@@ -35,7 +53,7 @@ void Logger::close()
 
 void Logger::iFile(LogFile_t file, std::string output, bool newLine)
 {
-	if(!m_files[file])
+	if(!m_loaded || !m_files[file])
 		return;
 
 	internal(m_files[file], output, newLine);
@@ -65,6 +83,9 @@ void Logger::internal(FILE* file, std::string output, bool newLine)
 
 void Logger::log(const char* func, LogType_t type, std::string message, std::string channel/* = ""*/, bool newLine/* = true*/)
 {
+	if(!m_loaded)
+		return;
+
 	std::stringstream ss;
 	ss << "[" << formatDate() << "]" << " (";
 	switch(type)
@@ -90,10 +111,45 @@ void Logger::log(const char* func, LogType_t type, std::string message, std::str
 	}
 
 	ss << " - " << func << ") ";
-
 	if(!channel.empty())
 		ss << channel << ": ";
 
 	ss << message;
 	iFile(LOGFILE_ADMIN, ss.str(), newLine);
+}
+
+OutputHandler::OutputHandler()
+{
+	log = std::clog.rdbuf(this);
+	err = std::cerr.rdbuf(this);
+}
+
+OutputHandler::~OutputHandler()
+{
+	std::clog.rdbuf(log);
+	std::cerr.rdbuf(err);
+}
+
+std::streambuf::int_type OutputHandler::overflow(std::streambuf::int_type c/* = traits_type::eof()*/)
+{
+	m_cache += c;
+	if(c != '\n' && c != '\r')
+		return c;
+
+	if(m_cache.size() > 1)
+		std::cout << "[" << formatTime(0, true) << "] ";
+
+	std::cout.write(m_cache.c_str(), m_cache.size());
+	if(Logger::getInstance()->isLoaded())
+	{
+		std::stringstream s;
+		if(m_cache.size() > 1)
+			s << "[" << formatDate() << "] ";
+
+		s.write(m_cache.c_str(), m_cache.size());
+		Logger::getInstance()->iFile(LOGFILE_OUTPUT, s.str(), false);
+	}
+
+	m_cache.clear();
+	return c;
 }

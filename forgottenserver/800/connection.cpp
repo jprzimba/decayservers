@@ -43,7 +43,7 @@ ConnectionManager::ConnectionManager()
 Connection* ConnectionManager::createConnection(boost::asio::io_service& io_service)
 {
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Create new Connection" << std::endl;
+	std::clog << "Create new Connection" << std::endl;
 	#endif
 
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
@@ -55,29 +55,28 @@ Connection* ConnectionManager::createConnection(boost::asio::io_service& io_serv
 void ConnectionManager::releaseConnection(Connection* connection)
 {
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Releasing connection" << std::endl;
+	std::clog << "Releasing connection" << std::endl;
 	#endif
 
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
 	std::list<Connection*>::iterator it =
 		std::find(m_connections.begin(), m_connections.end(), connection);
 
-	if(it != m_connections.end()){
+	if(it != m_connections.end())
 		m_connections.erase(it);
-	}
-	else{
-		std::cout << "Error: [ConnectionManager::releaseConnection] Connection not found" << std::endl;
-	}
+	else
+		std::clog << "Error: [ConnectionManager::releaseConnection] Connection not found" << std::endl;
 }
 
 void ConnectionManager::closeAll()
 {
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Closing all connections" << std::endl;
+	std::clog << "Closing all connections" << std::endl;
 	#endif
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
 	std::list<Connection*>::iterator it = m_connections.begin();
-	while(it != m_connections.end()){
+	while(it != m_connections.end())
+	{
 		boost::system::error_code error;
 		(*it)->m_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
 		(*it)->m_socket.close(error);
@@ -141,7 +140,7 @@ void Connection::closeConnection()
 {
 	//any thread
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closeConnection" << std::endl;
+	std::clog << "Connection::closeConnection" << std::endl;
 	#endif
 
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
@@ -158,12 +157,13 @@ void Connection::closeConnectionTask()
 {
 	//dispatcher thread
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closeConnectionTask" << std::endl;
+	std::clog << "Connection::closeConnectionTask" << std::endl;
 	#endif
 
 	m_connectionLock.lock();
-	if(m_closeState != CLOSE_STATE_REQUESTED){
-		std::cout << "Error: [Connection::closeConnectionTask] m_closeState = " << m_closeState << std::endl;
+	if(m_closeState != CLOSE_STATE_REQUESTED)
+	{
+		std::clog << "Error: [Connection::closeConnectionTask] m_closeState = " << m_closeState << std::endl;
 		m_connectionLock.unlock();
 		return;
 	}
@@ -178,44 +178,46 @@ void Connection::closeConnectionTask()
 		m_protocol = NULL;
 	}
 
-	if(!closingConnection()){
+	if(!closingConnection())
 		m_connectionLock.unlock();
-	}
 }
 
 bool Connection::closingConnection()
 {
 	//any thread
 	#ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::closingConnection" << std::endl;
+	std::clog << "Connection::closingConnection" << std::endl;
 	#endif
 
-	if(m_pendingWrite == 0 || m_writeError == true){
-		if(!m_socketClosed){
+	if(m_pendingWrite == 0 || m_writeError == true)
+	{
+		if(!m_socketClosed)
+		{
 			#ifdef __DEBUG_NET_DETAIL__
-			std::cout << "Closing socket" << std::endl;
+			std::clog << "Closing socket" << std::endl;
 			#endif
 
 			boost::system::error_code error;
 			m_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			if(error){
-				if(error == boost::asio::error::not_connected){
+			if(error)
+			{
+				if(error == boost::asio::error::not_connected)
+				{
 					//Transport endpoint is not connected.
 				}
-				else{
+				else
 					PRINT_ASIO_ERROR("Shutdown");
-				}
 			}
 			m_socket.close(error);
 			m_socketClosed = true;
-			if(error){
+			if(error)
 				PRINT_ASIO_ERROR("Close");
-			}
 		}
 
-		if(m_pendingRead == 0){
+		if(m_pendingRead == 0)
+		{
 			#ifdef __DEBUG_NET_DETAIL__
-			std::cout << "Deleting Connection" << std::endl;
+			std::clog << "Deleting Connection" << std::endl;
 			#endif
 
 			m_connectionLock.unlock();
@@ -245,7 +247,6 @@ void Connection::deleteConnectionTask()
 {
 	//dispather thread
 	assert(m_refCount == 0);
-
 	delete this;
 }
 
@@ -347,20 +348,24 @@ void Connection::handleReadError(const boost::system::error_code& error)
 	#ifdef __DEBUG_NET_DETAIL__
 	PRINT_ASIO_ERROR("Reading - detail");
 	#endif
-	if(error == boost::asio::error::operation_aborted){
+	if(error == boost::asio::error::operation_aborted)
+	{
 		//Operation aborted because connection will be closed
 		//Do NOT call closeConnection() from here
 	}
-	else if(error == boost::asio::error::eof){
+	else if(error == boost::asio::error::eof)
+	{
 		//No more to read
 		closeConnection();
 	}
 	else if(error == boost::asio::error::connection_reset ||
-			error == boost::asio::error::connection_aborted){
+			error == boost::asio::error::connection_aborted)
+	{
 		//Connection closed remotely
 		closeConnection();
 	}
-	else{
+	else
+	{
 		PRINT_ASIO_ERROR("Reading");
 		closeConnection();
 	}
@@ -369,27 +374,25 @@ void Connection::handleReadError(const boost::system::error_code& error)
 
 bool Connection::send(OutputMessage_ptr msg)
 {
-  #ifdef __DEBUG_NET_DETAIL__
-	std::cout << "Connection::send init" << std::endl;
-  #endif
-
 	m_connectionLock.lock();
-	if(m_closeState == CLOSE_STATE_CLOSING || m_writeError){
+	if(m_closeState == CLOSE_STATE_CLOSING || m_writeError)
+	{
 		m_connectionLock.unlock();
 		return false;
 	}
 
 	msg->getProtocol()->onSendMessage(msg);
-
-	if(m_pendingWrite == 0){
+	if(m_pendingWrite == 0)
+	{
       #ifdef __DEBUG_NET_DETAIL__
-		std::cout << "Connection::send " << msg->getMessageLength() << std::endl;
+		std::clog << "Connection::send " << msg->getMessageLength() << std::endl;
 	  #endif
 		internalSend(msg);
 	}
-	else{
+	else
+	{
 	  #ifdef __DEBUG_NET__
-		std::cout << "Connection::send Adding to queue " << msg->getMessageLength() << std::endl;
+		std::clog << "Connection::send Adding to queue " << msg->getMessageLength() << std::endl;
 	  #endif
 		m_outputQueue.push_back(msg);
 	}
@@ -410,10 +413,10 @@ uint32_t Connection::getIP() const
 	//Ip is expressed in network byte order
 	boost::system::error_code error;
 	const boost::asio::ip::tcp::endpoint endpoint = m_socket.remote_endpoint(error);
-	if(!error){
+	if(!error)
 		return htonl(endpoint.address().to_v4().to_ulong());
-	}
-	else{
+	else
+	{
 		PRINT_ASIO_ERROR("Getting remote ip");
 		return 0;
 	}
@@ -422,41 +425,46 @@ uint32_t Connection::getIP() const
 void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error)
 {
   #ifdef __DEBUG_NET_DETAIL__
-	std::cout << "onWriteOperation" << std::endl;
+	std::clog << "onWriteOperation" << std::endl;
   #endif
 
 	msg.reset();
 
 	m_connectionLock.lock();
 
-	if(!error){
-		if(m_pendingWrite > 0){
-			if(!m_outputQueue.empty()){
+	if(!error)
+	{
+		if(m_pendingWrite > 0)
+		{
+			if(!m_outputQueue.empty())
+			{
 				OutputMessage_ptr msg = m_outputQueue.front();
 				m_outputQueue.pop_front();
 				internalSend(msg);
 			  #ifdef __DEBUG_NET_DETAIL__
-				std::cout << "Connection::onWriteOperation send " << msg->getMessageLength() << std::endl;
+				std::clog << "Connection::onWriteOperation send " << msg->getMessageLength() << std::endl;
 			  #endif
 			}
 			
 			m_pendingWrite--;
 		}
-		else{
-			std::cout << "Error: [Connection::onWriteOperation] Getting unexpected notification!" << std::endl;
+		else
+		{
+			std::clog << "Error: [Connection::onWriteOperation] Getting unexpected notification!" << std::endl;
 			// Error. Pending operations counter is 0, but we are getting a
 			// notification!!
 		}
 	}
-	else{
+	else
+	{
         m_pendingWrite--;
 		handleWriteError(error);
 	}
 
-	if(m_closeState == CLOSE_STATE_CLOSING){
-		if(!closingConnection()){
+	if(m_closeState == CLOSE_STATE_CLOSING)
+	{
+		if(!closingConnection())
 			m_connectionLock.lock();
-		}
 		return;
 	}
 
@@ -468,11 +476,13 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 	#ifdef __DEBUG_NET_DETAIL__
 	PRINT_ASIO_ERROR("Writing - detail");
 	#endif
-	if(error == boost::asio::error::operation_aborted){
+	if(error == boost::asio::error::operation_aborted)
+	{
 		//Operation aborted because connection will be closed
 		//Do NOT call closeConnection() from here
 	}
-	else if(error == boost::asio::error::eof){
+	else if(error == boost::asio::error::eof)
+	{
 		//No more to read
 		closeConnection();
 	}
