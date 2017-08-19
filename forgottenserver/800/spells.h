@@ -118,8 +118,8 @@ class Spell : public BaseSpell
 		bool configureSpell(xmlNodePtr xmlspell);
 		const std::string& getName() const {return name;}
 
-		void postCastSpell(Player* player, bool isFinished = true, bool payCost = true) const;
-		void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
+		void postSpell(Player* player, bool isFinished = true, bool payCost = true) const;
+		void postSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
 
 		int32_t getManaCost(const Player* player) const;
 		int32_t getSoulCost() const {return soul;}
@@ -236,7 +236,7 @@ class ConjureSpell : public InstantSpell
 		virtual std::string getScriptEventParams() const {return "cid, var";}
 
 		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount,
-			bool transform = false, uint32_t reagentId = 0, slots_t slot = SLOT_WHEREEVER, bool test = false);
+			bool transform = false, uint32_t reagentId = 0);
 
 		static ConjureSpellFunction ConjureItem;
 		static ConjureSpellFunction ConjureFood;

@@ -445,7 +445,7 @@ class Player : public Creature, public Cylinder
 
 		virtual void getCreatureLight(LightInfo& light) const;
 		Skulls_t getSkull() const;
-		Skulls_t getSkullClient(const Creature* creature) const;
+		Skulls_t getSkullType(const Creature* creature) const;
 
 		bool hasAttacked(const Player* attacked) const;
 		void addAttacked(const Player* attacked);

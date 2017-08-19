@@ -1487,7 +1487,7 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 		TRACK_MESSAGE(msg);
 		msg->AddByte(0x90);
 		msg->AddU32(creature->getID());
-		msg->AddByte(player->getSkullClient(creature));
+		msg->AddByte(player->getSkullType(creature));
 	}
 }
 
@@ -2488,7 +2488,7 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color);
 
 	msg->AddU16(creature->getSpeed());
-	msg->AddByte(player->getSkullClient(creature));
+	msg->AddByte(player->getSkullType(creature));
 	msg->AddByte(player->getPartyShield(creature));
 }
 

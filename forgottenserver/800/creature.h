@@ -407,7 +407,7 @@ class Creature : public AutoId, virtual public Thing
 
 		virtual void setSkull(Skulls_t newSkull) {skull = newSkull;}
 		virtual Skulls_t getSkull() const {return skull;}
-		virtual Skulls_t getSkullClient(const Creature* creature) const {return creature->getSkull();}
+		virtual Skulls_t getSkullType(const Creature* creature) const {return creature->getSkull();}
 
 		virtual void setShield(PartyShields_t newPartyShield) {partyShield = newPartyShield;}
 		virtual PartyShields_t getShield() const {return partyShield;}

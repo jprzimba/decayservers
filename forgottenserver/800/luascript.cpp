@@ -7692,7 +7692,7 @@ int32_t LuaScriptInterface::luaGetCreatureSkullType(lua_State* L)
 		if(!tid)
 			lua_pushnumber(L, creature->getSkull());
 		else if(Creature* target = env->getCreatureByUID(tid))
-			lua_pushnumber(L, creature->getSkullClient(target));
+			lua_pushnumber(L, creature->getSkullType(target));
 		else
 		{
 			errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));

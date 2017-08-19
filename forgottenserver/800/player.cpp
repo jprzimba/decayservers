@@ -3815,7 +3815,7 @@ Skulls_t Player::getSkull() const
 	return skull;
 }
 
-Skulls_t Player::getSkullClient(const Creature* creature) const
+Skulls_t Player::getSkullType(const Creature* creature) const
 {
 	if(const Player* player = creature->getPlayer())
 	{
@@ -3829,7 +3829,7 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 			return SKULL_GREEN;
 	}
 
-	return Creature::getSkullClient(creature);
+	return Creature::getSkullType(creature);
 }
 
 bool Player::hasAttacked(const Player* attacked) const
