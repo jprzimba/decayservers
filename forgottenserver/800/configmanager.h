@@ -149,6 +149,8 @@ class ConfigManager
 			HOUSE_CLEAN_OLD,
 			STAMINA_DESTROY_LOOT,
 			FIST_BASE_ATTACK,
+			VIPLIST_DEFAULT_LIMIT,
+			VIPLIST_DEFAULT_PREMIUM_LIMIT,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 
