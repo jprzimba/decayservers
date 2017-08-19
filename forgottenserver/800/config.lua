@@ -190,6 +190,7 @@
 	promptExceptionTracerErrorBox = true
 	maximumDoorLevel = 500
 	maxMessageBuffer = 4
+	tradeLimit = 100
 
 	-- VIP list
 	separateVipListPerCharacter = false

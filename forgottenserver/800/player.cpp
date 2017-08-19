@@ -1098,8 +1098,18 @@ void Player::sendCancelMessage(ReturnValue message) const
 			break;
 
 		case RET_NOTPOSSIBLE:
-		default:
 			sendCancel("Sorry, not possible.");
+			break;
+
+		case RET_YOUCANONLYTRADEUPTOX:
+		{
+			std::stringstream s;
+			s << "You can only trade up to " << g_config.getNumber(ConfigManager::TRADE_LIMIT) << " items at a time.";
+			sendCancel(s.str());
+		}
+			break;
+
+		default:
 			break;
 	}
 }

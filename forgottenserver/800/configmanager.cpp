@@ -213,6 +213,7 @@ bool ConfigManager::load()
 	m_confDouble[RATE_MONSTER_DEFENSE] = getGlobalDouble("rateMonsterDefense", 1);
 	m_confNumber[VIPLIST_DEFAULT_LIMIT] = getGlobalNumber("vipListDefaultLimit", 20);
 	m_confNumber[VIPLIST_DEFAULT_PREMIUM_LIMIT] = getGlobalNumber("vipListDefaultPremiumLimit", 100);
+	m_confNumber[TRADE_LIMIT] = getGlobalNumber("tradeLimit", 100);
 
 
 	m_confBool[ACCOUNT_MANAGER] = getGlobalBool("accountManager", true);

@@ -151,6 +151,7 @@ class ConfigManager
 			FIST_BASE_ATTACK,
 			VIPLIST_DEFAULT_LIMIT,
 			VIPLIST_DEFAULT_PREMIUM_LIMIT,
+			TRADE_LIMIT,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 
