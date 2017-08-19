@@ -912,7 +912,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 			player->addExhaust(exhaustion, isAggressive ? EXHAUST_COMBAT : EXHAUST_HEALING);
 
 		if(isAggressive && !player->hasFlag(PlayerFlag_NotGainInFight))
-			player->addInFightTicks();
+			player->addInFightTicks(false);
 	}
 
 	if(payCost)

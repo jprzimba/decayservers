@@ -147,7 +147,7 @@
 	-- NOTE: storeTrash costs more memory, but will perform alot faster cleaning.
 	mapName = "forgotten"
 	mapAuthor = "Komic"
-	randomizeTiles = true
+	randomizeTiles = false
 	storeTrash = true
 	cleanProtectedZones = true
 	mailboxDisabledTowns = "-1"
@@ -259,11 +259,13 @@
 	-- 60000 / 3 = 20000 milliseconds, what gives 20 stamina seconds for 1 minute being logged off.
 	-- rateStaminaThresholdGain is divider for the premium stamina.
 	-- staminaRatingLimit* is in minutes.
+	-- don't change notting here if you don't know
 	rateStaminaLoss = 1
 	rateStaminaGain = 3
 	rateStaminaThresholdGain = 12
-	staminaRatingLimitTop = 41 * 60
+	staminaRatingLimitTop = 55 * 60
 	staminaRatingLimitBottom = 14 * 60
+	staminaLootLimit = 14 * 60
 	rateStaminaAboveNormal = 1.5
 	rateStaminaUnderNormal = 0.5
 	staminaThresholdOnlyPremium = true

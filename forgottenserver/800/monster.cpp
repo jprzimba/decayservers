@@ -1157,25 +1157,32 @@ Item* Monster::createCorpse(DeathList deathList)
 		corpse->setUniqueId(mType->corpseUnique);
 
 	if(mType->corpseAction)
-		corpse->setActionId(mType->corpseAction);
+		corpse->setActionId(mType->corpseAction, false);
 
-	DeathEntry ownerEntry = deathList[0];
-	if(ownerEntry.isNameKill())
+	if(deathList[0].isNameKill())
 		return corpse;
 
-	Creature* owner = ownerEntry.getKillerCreature();
+	Creature* _owner = deathList[0].getKillerCreature();
+	if(deathList.size() > 1 && deathList[1].getDamage() > deathList[0].getDamage())
+		_owner = deathList[1].getKillerCreature();
+
+	if(!_owner)
+		return corpse;
+
+	Player* owner = NULL;
+	if(_owner->getPlayer())
+		owner = _owner->getPlayer();
+	else if(_owner->isPlayerSummon())
+		owner = _owner->getPlayerMaster();
+
 	if(!owner)
 		return corpse;
 
-	uint32_t ownerId = 0;
-	if(owner->getPlayer())
-		ownerId = owner->getID();
-	else if(owner->getMaster() && owner->getPlayerMaster())
-		ownerId = owner->getMaster()->getID();
+	uint64_t stamina = g_config.getNumber(ConfigManager::STAMINA_DESTROY_LOOT);
+	if(stamina && owner->getStamina() <= (stamina * STAMINA_MULTIPLIER))
+		lootDrop = LOOT_DROP_NONE;
 
-	if(ownerId)
-		corpse->setCorpseOwner(ownerId);
-
+	corpse->setCorpseOwner(owner->getGUID());
 	return corpse;
 }
 

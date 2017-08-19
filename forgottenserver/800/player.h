@@ -417,7 +417,7 @@ class Player : public Creature, public Cylinder
 		virtual float getDefenseFactor() const;
 
 		void addExhaust(uint32_t ticks, Exhaust_t type);
-		void addInFightTicks(bool pzLock = false);
+		void addInFightTicks(bool pzLock, int32_t ticks = 0);
 		void addDefaultRegeneration(uint32_t addTicks);
 
 		virtual double getGainedExperience(Creature* attacker) const;
@@ -434,7 +434,7 @@ class Player : public Creature, public Cylinder
 		virtual void onAttackedCreatureDrain(Creature* target, int32_t points);
 		virtual void onSummonAttackedCreatureDrain(Creature* summon, Creature* target, int32_t points);
 		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
-		virtual bool onKilledCreature(Creature* target, uint32_t& flags);
+		virtual bool onKilledCreature(Creature* target, DeathEntry& entry);
 		virtual void onGainExperience(double& gainExp, bool fromMonster, bool multiplied);
 		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType);
 		virtual void onBlockHit(BlockType_t blockType);

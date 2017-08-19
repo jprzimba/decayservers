@@ -147,6 +147,7 @@ class ConfigManager
 			LOOT_MESSAGE_TYPE,
 			NAME_REPORT_TYPE,
 			HOUSE_CLEAN_OLD,
+			STAMINA_DESTROY_LOOT,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 

@@ -2213,16 +2213,21 @@ void Player::addExhaust(uint32_t ticks, Exhaust_t type)
 		addCondition(condition);
 }
 
-void Player::addInFightTicks(bool pzLock/* = false*/)
+void Player::addInFightTicks(bool pzLock, int32_t ticks/* = 0*/)
 {
 	if(hasFlag(PlayerFlag_NotGainInFight))
 		return;
+
+	if(!ticks)
+		ticks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	else
+		ticks = std::max(-1, ticks);
 
 	if(pzLock)
 		pzLocked = true;
 
 	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT,
-		CONDITION_INFIGHT, g_config.getNumber(ConfigManager::PZ_LOCKED)))
+		CONDITION_INFIGHT, ticks))
 		addCondition(condition);
 }
 
@@ -3465,7 +3470,7 @@ void Player::onAttackedCreature(Creature* target)
 	if(hasFlag(PlayerFlag_NotGainInFight))
 		return;
 
-	addInFightTicks();
+	addInFightTicks(false);
 	Player* targetPlayer = target->getPlayer();
 	if(!targetPlayer)
 		return;
@@ -3511,7 +3516,7 @@ void Player::onSummonAttackedCreature(Creature* summon, Creature* target)
 void Player::onAttacked()
 {
 	Creature::onAttacked();
-	addInFightTicks();
+	addInFightTicks(false);
 }
 
 bool Player::checkLoginDelay(uint32_t playerId) const
@@ -3571,9 +3576,9 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 	}
 }
 
-bool Player::onKilledCreature(Creature* target, uint32_t& flags)
+bool Player::onKilledCreature(Creature* target, DeathEntry& entry)
 {
-	if(!Creature::onKilledCreature(target, flags))
+	if(!Creature::onKilledCreature(target, entry))
 		return false;
 
 	if(hasFlag(PlayerFlag_NotGenerateLoot))
@@ -3585,23 +3590,21 @@ bool Player::onKilledCreature(Creature* target, uint32_t& flags)
 		g_config.getNumber(ConfigManager::HUNTING_DURATION))))
 		addCondition(condition);
 
-	if(hasFlag(PlayerFlag_NotGainInFight) || !hasBitSet((uint32_t)KILLFLAG_JUSTIFY, flags) || getZone() != target->getZone())
+	if(hasFlag(PlayerFlag_NotGainInFight) || getZone() != target->getZone())
 		return true;
 
 	Player* targetPlayer = target->getPlayer();
-	if(!targetPlayer || Combat::isInPvpZone(this, targetPlayer) || !hasCondition(CONDITION_INFIGHT) || isPartner(targetPlayer))
+	if(!targetPlayer || Combat::isInPvpZone(this, targetPlayer) || isPartner(targetPlayer))
+		return true;
+
+	if(!entry.isJustify() || !hasCondition(CONDITION_INFIGHT))
 		return true;
 
 	if(!targetPlayer->hasAttacked(this) && target->getSkull() == SKULL_NONE && targetPlayer != this
-		&& ((g_config.getBool(ConfigManager::USE_FRAG_HANDLER) && addUnjustifiedKill(
-		targetPlayer)) || hasBitSet((uint32_t)KILLFLAG_LASTHIT, flags)))
-		flags |= (uint32_t)KILLFLAG_UNJUSTIFIED;
+		&& (addUnjustifiedKill(targetPlayer) || entry.isLast()))
+		entry.setUnjustified();
 
-	pzLocked = true;
-	if((condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT,
-		g_config.getNumber(ConfigManager::WHITE_SKULL_TIME))))
-		addCondition(condition);
-
+	addInFightTicks(true, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME));
 	return true;
 }
 
@@ -3873,8 +3876,10 @@ void Player::setSkullEnd(time_t _time, bool login, Skulls_t _skull)
 
 bool Player::addUnjustifiedKill(const Player* attacked)
 {
-	if(g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED || attacked == this || hasFlag(
-		PlayerFlag_NotGainInFight) || hasCustomFlag(PlayerCustomFlag_NotGainSkull))
+	if(!g_config.getBool(ConfigManager::USE_FRAG_HANDLER) || hasFlag(
+		PlayerFlag_NotGainInFight) || g_game.getWorldType() != WORLD_TYPE_PVP
+		|| hasCustomFlag(PlayerCustomFlag_NotGainUnjustified) || hasCustomFlag(
+		PlayerCustomFlag_NotGainSkull) || attacked == this)
 		return false;
 
 	if(client)
