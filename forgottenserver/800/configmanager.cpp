@@ -267,7 +267,6 @@ bool ConfigManager::load()
 	m_confBool[SHOW_HEALING_DAMAGE_MONSTER] = getGlobalBool("showHealingDamageForMonsters", false);
 	m_confBool[CHECK_CORPSE_OWNER] = getGlobalBool("checkCorpseOwner ", true);
 	m_confBool[BUFFER_SPELL_FAILURE] = getGlobalBool("bufferMutedOnSpellFailure", false);
-	m_confBool[CONFIM_OUTDATED_VERSION] = getGlobalBool("confirmOutdatedVersion", true);
 	m_confBool[PREMIUM_SKIP_WAIT] = getGlobalBool("premiumPlayerSkipWaitList", false);
 	m_confBool[DEATH_LIST] = getGlobalBool("deathListEnabled", true);
 	m_confBool[GHOST_SPELL_EFFECTS] = getGlobalBool("ghostModeSpellEffects", true);
@@ -277,6 +276,7 @@ bool ConfigManager::load()
 	m_confBool[ALLOW_FIGHTBACK] = getGlobalBool("allowFightback", true);
 	m_confBool[VIPLIST_PER_PLAYER] = getGlobalBool("separateViplistPerCharacter", false);
 	m_confBool[ADDONS_PREMIUM] = getGlobalBool("addonsOnlyPremium", true);
+	m_confBool[SKIP_ITEMS_VERSION] = getGlobalBool("skipItemsVersionCheck", true);
 
 	m_loaded = true;
 	return true;

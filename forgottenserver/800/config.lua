@@ -164,7 +164,7 @@
 	-- Startup
 	optimizeDatabaseAtStartup = true
 	removePremiumOnInit = true
-	confirmOutdatedVersion = false
+	skipItemsVersionCheck = false
 
 	-- Spells
 	formulaLevel = 5.0
