@@ -249,6 +249,7 @@ class ConfigManager
 			USE_FRAG_HANDLER,
 			ADDONS_PREMIUM,
 			SKIP_ITEMS_VERSION,
+			UNIFIED_SPELLS,
 			LAST_BOOL_CONFIG /* this must be the last one */
 		};
 

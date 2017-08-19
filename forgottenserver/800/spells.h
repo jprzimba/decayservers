@@ -180,7 +180,7 @@ class InstantSpell : public TalkAction, public Spell
 		virtual bool configureEvent(xmlNodePtr p);
 		virtual bool loadFunction(const std::string& functionName);
 
-		virtual bool playerCastInstant(Player* player, const std::string& param);
+		virtual bool castInstant(Player* player, const std::string& param);
 
 		virtual bool castSpell(Creature* creature);
 		virtual bool castSpell(Creature* creature, Creature* target);
@@ -222,7 +222,7 @@ class ConjureSpell : public InstantSpell
 		virtual bool configureEvent(xmlNodePtr p);
 		virtual bool loadFunction(const std::string& functionName);
 
-		virtual bool playerCastInstant(Player* player, const std::string& param);
+		virtual bool castInstant(Player* player, const std::string& param);
 
 		virtual bool castSpell(Creature* creature) {return false;}
 		virtual bool castSpell(Creature* creature, Creature* target) {return false;}

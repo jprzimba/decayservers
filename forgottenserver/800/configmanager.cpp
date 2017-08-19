@@ -279,6 +279,7 @@ bool ConfigManager::load()
 	m_confBool[VIPLIST_PER_PLAYER] = getGlobalBool("separateViplistPerCharacter", false);
 	m_confBool[ADDONS_PREMIUM] = getGlobalBool("addonsOnlyPremium", true);
 	m_confBool[SKIP_ITEMS_VERSION] = getGlobalBool("skipItemsVersionCheck", true);
+	m_confBool[UNIFIED_SPELLS] = getGlobalBool("unifiedSpells", true);
 
 	m_loaded = true;
 	return true;

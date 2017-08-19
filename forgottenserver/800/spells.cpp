@@ -69,7 +69,8 @@ ReturnValue Spells::onPlayerSay(Player* player, const std::string& words)
 		trimString(reParam);
 	}
 
-	if(!instantSpell->playerCastInstant(player, reParam))
+	Position pos = player->getPosition();
+	if(!instantSpell->castInstant(player, reParam))
 		return RET_NEEDEXCHANGE;
 
 	SpeakClasses type = SPEAK_SAY;
@@ -77,8 +78,17 @@ ReturnValue Spells::onPlayerSay(Player* player, const std::string& words)
 		type = SPEAK_MONSTER_SAY;
 
 	if(!g_config.getBool(ConfigManager::SPELL_NAME_INSTEAD_WORDS))
+	{
+		if(g_config.getBool(ConfigManager::UNIFIED_SPELLS))
+		{
+			reWords = instantSpell->getWords();
+			if(instantSpell->getHasParam())
+				reWords += " \"" + param + "\"";
+		}
+
 		return g_game.internalCreatureSay(player, type, reWords, player->isGhost()) ?
 			RET_NOERROR : RET_NOTPOSSIBLE;
+	}
 
 	std::string ret = instantSpell->getName();
 	if(param.length())
@@ -94,8 +104,8 @@ ReturnValue Spells::onPlayerSay(Player* player, const std::string& words)
 		ret += ": " + param.substr(tmp, rtmp);
 	}
 
-	return g_game.internalCreatureSay(player, type, ret, player->isGhost()) ?
-		RET_NOERROR : RET_NOTPOSSIBLE;
+	return g_game.internalCreatureSay(player, type, ret, player->isGhost(),
+		NULL, &pos) ? RET_NOERROR : RET_NOTPOSSIBLE;
 }
 
 void Spells::clear()
@@ -1048,7 +1058,7 @@ bool InstantSpell::loadFunction(const std::string& functionName)
 	return true;
 }
 
-bool InstantSpell::playerCastInstant(Player* player, const std::string& param)
+bool InstantSpell::castInstant(Player* player, const std::string& param)
 {
 	LuaVariant var;
 	if(selfTarget)
@@ -1637,7 +1647,7 @@ bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, co
 	return false;
 }
 
-bool ConjureSpell::playerCastInstant(Player* player, const std::string& param)
+bool ConjureSpell::castInstant(Player* player, const std::string& param)
 {
 	if(!playerSpellCheck(player))
 		return false;
