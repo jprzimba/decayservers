@@ -153,6 +153,9 @@ class ConfigManager
 			VIPLIST_DEFAULT_LIMIT,
 			VIPLIST_DEFAULT_PREMIUM_LIMIT,
 			TRADE_LIMIT,
+			MAIL_ATTEMPTS_FADE,
+			MAIL_ATTEMPTS,
+			MAIL_BLOCK,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 
@@ -253,6 +256,7 @@ class ConfigManager
 			SKIP_ITEMS_VERSION,
 			UNIFIED_SPELLS,
 			ALLOW_BLOCK_SPAWN,
+			HOUSE_PROTECTION,
 			LAST_BOOL_CONFIG /* this must be the last one */
 		};
 

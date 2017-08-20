@@ -29,14 +29,43 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-ReturnValue Mailbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-	uint32_t flags) const
+ReturnValue Mailbox::canSend(const Item* item, Creature* actor) const
+{
+	if(item->getID() != ITEM_PARCEL && item->getID() != ITEM_LETTER)
+		return RET_NOTPOSSIBLE;
+
+	if(actor)
+	{
+		if(Player* player = actor->getPlayer())
+		{
+			if(player->hasCondition(CONDITION_MUTED, 2))
+				return RET_YOUAREEXHAUSTED;
+
+			if(player->getMailAttempts() >= g_config.getNumber(ConfigManager::MAIL_ATTEMPTS))
+			{
+				if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT,
+					CONDITION_MUTED, g_config.getNumber(ConfigManager::MAIL_BLOCK), 0))
+				{
+					player->addCondition(condition);
+					player->setLastMail(1); // auto erase
+				}
+
+				return RET_YOUAREEXHAUSTED;
+			}
+
+			player->setLastMail(OTSYS_TIME());
+			player->addMailAttempt();
+		}
+	}
+
+	return RET_NOERROR;
+}
+
+ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t,
+	uint32_t, Creature* actor/* = NULL*/) const
 {
 	if(const Item* item = thing->getItem())
-	{
-		if(canSend(item))
-			return RET_NOERROR;
-	}
+		return canSend(item, actor);
 
 	return RET_NOTPOSSIBLE;
 }
@@ -54,7 +83,7 @@ void Mailbox::__addThing(Creature* actor, int32_t index, Thing* thing)
 	if(!item)
 		return;
 
-	if(canSend(item))
+	if(canSend(item, actor) == RET_NOERROR)
 		sendItem(actor, item);
 }
 

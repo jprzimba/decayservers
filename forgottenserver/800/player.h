@@ -628,6 +628,10 @@ class Player : public Creature, public Cylinder
 		virtual void onThink(uint32_t interval);
 		uint32_t getAttackSpeed();
 
+		void setLastMail(uint64_t v) {lastMail = v;}
+		uint16_t getMailAttempts() const {return mailAttempts;}
+		void addMailAttempt() {++mailAttempts;}
+
 		virtual void postAddNotification(Creature* actor, Thing* thing, const Cylinder* oldParent,
 			int32_t index, cylinderlink_t link = LINK_OWNER);
 		virtual void postRemoveNotification(Creature* actor, Thing* thing, const Cylinder* newParent,
@@ -686,10 +690,10 @@ class Player : public Creature, public Cylinder
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-			uint32_t flags) const;
+			uint32_t flags, Creature* actor = NULL) const;
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
 			uint32_t flags) const;
-		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;
+		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags, Creature* actor = NULL) const;
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
 			uint32_t& flags);
 
@@ -759,6 +763,7 @@ class Player : public Creature, public Cylinder
 		int16_t blessings;
 		uint16_t maxWriteLen;
 		uint16_t sex;
+		uint16_t mailAttempts;
 
 		int32_t premiumDays;
 		int32_t soul;
@@ -809,6 +814,7 @@ class Player : public Creature, public Cylinder
 		uint64_t experience;
 		uint64_t manaSpent;
 		uint64_t lastAttack;
+		uint64_t lastMail;
 
 		double inventoryWeight;
 		double capacity;

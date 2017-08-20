@@ -63,7 +63,7 @@ void HouseTile::updateHouse(Item* item)
 		house->addBed(bed);
 }
 
-ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags) const
+ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	if(const Creature* creature = thing->getCreature())
 	{
@@ -80,9 +80,32 @@ ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 		const uint32_t itemLimit = g_config.getNumber(ConfigManager::ITEMLIMIT_HOUSETILE);
 		if(itemLimit && getThingCount() > itemLimit)
 			return RET_TILEISFULL;
+
+		if(actor && g_config.getBool(ConfigManager::HOUSE_PROTECTION))
+		{
+			if(const Player* player = actor->getPlayer())
+			{
+				if(!house->isInvited(player) && !player->hasCustomFlag(PlayerCustomFlag_CanThrowAnywhere))
+					return RET_PLAYERISNOTINVITED;
+			}
+		}
 	}
 
 	return Tile::__queryAdd(index, thing, count, flags);
+}
+
+ReturnValue HouseTile::__queryRemove(const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = NULL*/) const
+{
+	if(thing->getItem() && actor && g_config.getBool(ConfigManager::HOUSE_PROTECTION))
+	{
+		if(const Player* player = actor->getPlayer())
+		{
+			if(!house->isInvited(player) && !player->hasCustomFlag(PlayerCustomFlag_CanThrowAnywhere))
+				return RET_PLAYERISNOTINVITED;
+		}
+	}
+
+	return Tile::__queryRemove(thing, count, flags, actor);
 }
 
 Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item** destItem, uint32_t& flags)

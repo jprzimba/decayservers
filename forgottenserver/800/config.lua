@@ -138,6 +138,7 @@
 	houseRentPeriod = "never"
 	houseCleanOld = 0
 	guildHalls = false
+	houseProtection = true
 
 	-- Item usage
 	timeBetweenActions = 200
@@ -151,7 +152,12 @@
 	randomizeTiles = false
 	storeTrash = true
 	cleanProtectedZones = true
-	mailboxDisabledTowns = "-1"
+
+	-- Mailbox
+	mailboxDisabledTowns = ""
+	mailMaxAttempts = 20
+	mailBlockPeriod = 60 * 60 * 1000
+	mailAttemptsFadeTime = 10 * 60 * 1000
 
 	-- Process
 	-- NOTE: defaultPriority works only on Windows and niceLevel on *nix
