@@ -30,6 +30,7 @@ ConfigManager::ConfigManager()
 
 	m_confNumber[LOGIN_PORT] = m_confNumber[ADMIN_PORT] = 0;
 	m_confString[DATA_DIRECTORY] = m_confString[IP] = m_confString[RUNFILE] = m_confString[ERROR_LOG] = m_confString[OUTPUT_LOG] = "";
+	m_confBool[DAEMONIZE] = false;
 }
 
 bool ConfigManager::load()
@@ -256,7 +257,6 @@ bool ConfigManager::load()
 	m_confBool[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool("spellNameInsteadOfWords", false);
 	m_confBool[EMOTE_SPELLS] = getGlobalBool("emoteSpells", false);
 	m_confBool[SAVE_GLOBAL_STORAGE] = getGlobalBool("saveGlobalStorage", true);
-	m_confBool[FORCE_CLOSE_SLOW_CONNECTION] = getGlobalBool("forceSlowConnectionsToDisconnect", false);
 	m_confBool[BLESSING_ONLY_PREMIUM] = getGlobalBool("blessingOnlyPremium", true);
 	m_confBool[BED_REQUIRE_PREMIUM] = getGlobalBool("bedsRequirePremium", true);
 	m_confBool[ALLOW_CHANGECOLORS] = getGlobalBool("allowChangeColors", true);
@@ -287,6 +287,10 @@ bool ConfigManager::load()
 	m_confBool[UNIFIED_SPELLS] = getGlobalBool("unifiedSpells", true);
 	m_confBool[ALLOW_BLOCK_SPAWN] = getGlobalBool("allowBlockSpawn", true);
 	m_confBool[HOUSE_PROTECTION] = getGlobalBool("houseProtection", true);
+	m_confBool[USE_RUNE_REQUIREMENTS] = getGlobalBool("useRunesRequirements", true);
+	m_confBool[HOUSE_SKIP_INIT_RENT] = getGlobalBool("houseSkipInitialRent", true);
+	m_confBool[DAEMONIZE] = getGlobalBool("daemonize", false);
+	m_confBool[USE_CAPACITY] = getGlobalBool("useCapacity", true);
 
 	m_loaded = true;
 	return true;

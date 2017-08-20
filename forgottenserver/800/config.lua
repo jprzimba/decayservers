@@ -90,7 +90,6 @@
 	loginMessage = "Welcome to the Forgotten Server!"
 	statusTimeout = 5 * 60 * 1000
 	replaceKickOnLogin = true
-	forceSlowConnectionsToDisconnect = false
 	loginOnlyWithLoginServer = false
 	premiumPlayerSkipWaitList = false
 
@@ -135,6 +134,7 @@
 	houseRentAsPrice = false
 	housePriceAsRent = false
 	housePriceEachSquare = 1000
+	houseSkipInitialRent = true
 	houseRentPeriod = "never"
 	houseCleanOld = 0
 	guildHalls = false
@@ -160,9 +160,11 @@
 	mailAttemptsFadeTime = 10 * 60 * 1000
 
 	-- Process
+	-- NOTE: daemonize works only on *nix, same as niceLevel, while
 	-- NOTE: defaultPriority works only on Windows and niceLevel on *nix
 	-- coresUsed are seperated by comma cores ids used by server process,
 	-- default is -1, so it stays untouched (automaticaly assigned by OS).
+	daemonize = false
 	defaultPriority = "high"
 	niceLevel = 5
 	coresUsed = "-1"
@@ -173,6 +175,7 @@
 	skipItemsVersionCheck = false
 
 	-- Spells
+	useRunesRequirements = true
 	formulaLevel = 5.0
 	formulaMagic = 1.0
 	bufferMutedOnSpellFailure = false
@@ -197,6 +200,7 @@
 	maximumDoorLevel = 500
 	maxMessageBuffer = 4
 	tradeLimit = 100
+	useCapacity = true
 
 	-- VIP list
 	separateVipListPerCharacter = false

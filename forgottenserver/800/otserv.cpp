@@ -277,7 +277,7 @@ void mainLoader(int argc, char *argv[])
 	std::clog << ">> Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << "." << std::endl;
 	std::clog << ">> A server developed by " << DEVELOPERS << "." << std::endl;
 	std::clog << ">> Modified by " << MODIFIED_BY << "." << std::endl;
-	std::clog << ">> Visit our forum for updates, support and resources: http://otland.net." << std::endl << std::endl;
+	std::clog << ">> Visit our GitHub for updates and support: https://github.com/tryller/otserv." << std::endl << std::endl;
 
 	std::stringstream ss;
 	#ifdef __DEBUG__
@@ -322,14 +322,26 @@ void mainLoader(int argc, char *argv[])
 
 	std::string debug = ss.str();
 	if(!debug.empty())
-	{
-		std::clog << ">> Debugging:";
-		std::clog << debug << "." << std::endl;
-	}
+		std::clog << ">> Debugging:" << debug << "." << std::endl;
 
 	std::clog << ">> Loading config (" << g_config.getString(ConfigManager::CONFIG_FILE) << ")" << std::endl;
 	if(!g_config.load())
 		startupErrorMessage("Unable to load " + g_config.getString(ConfigManager::CONFIG_FILE) + "!");
+
+#ifndef WINDOWS
+	if(g_config.getBool(ConfigManager::DAEMONIZE))
+	{
+		std::clog << "> Daemonization... ";
+		if(fork())
+		{
+			std::clog << "succeed, bye!" << std::endl;
+			exit(0);
+		}
+		else
+			std::clog << "failed, continuing." << std::endl;
+	}
+
+#endif
 
 	Logger::getInstance()->open();
 	IntegerVec cores = vectorAtoi(explodeString(g_config.getString(ConfigManager::CORES_USED), ","));
