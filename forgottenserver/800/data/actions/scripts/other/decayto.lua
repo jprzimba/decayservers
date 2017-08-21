@@ -10,12 +10,7 @@ local ITEM_IDS = {
 	[2052] = 2053,
 	[2053] = 2051,
 	[2054] = 2055,
-	[2054] = 2055,
-	-- crystal pedestals
-	[9976] = 9977,
-	[9977] = 9978,
-	[9978] = 9979,
-	[9979] = 9976
+	[2054] = 2055
 }
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)

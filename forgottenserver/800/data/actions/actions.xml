@@ -4,6 +4,9 @@
 	<action actionid="2000" event="script" value="quests/system.lua"/>
 	<action actionid="2001" event="script" value="quests/system.lua"/>
 	<action uniqueid="30015" event="script" value="quests/annihilator.lua"/>
+	<action itemid="1740" event="script" value="quests/quests.lua"/>
+	<action fromid="1747" toid="1749" event="script" value="quests/quests.lua"/>
+
 
 	<!-- Tools -->
 	<action itemid="2420" event="script" value="tools/machete.lua"/>
