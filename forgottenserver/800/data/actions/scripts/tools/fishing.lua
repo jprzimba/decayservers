@@ -8,7 +8,7 @@ local config = {
 		-- [corpse] = {items}
 		[2025] = {
 			-- {itemid, countmax, chance}
-			-- TODO: Water elemental and Massive Water Elemental loot...
+			-- TODO: Water elemental loot...
 		}
 	},
 	checkCorpseOwner = getConfigValue("checkCorpseOwner"),
@@ -17,7 +17,7 @@ local config = {
 	summons = {
 		-- {skill, name, chance, bossName, bossChance}
 	},
-	rateSpawn = getConfigValue("rateSpawn"),
+	rateSpawn = getConfigValue("rateSpawnMin"),
 
 	baitFailRemoveChance = 10,
 	allowFromPz = false,
