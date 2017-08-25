@@ -175,6 +175,7 @@
 	skipItemsVersionCheck = false
 
 	-- Spells
+	oldSpellsFormula = true
 	useRunesRequirements = true
 	formulaLevel = 5.0
 	formulaMagic = 1.0
