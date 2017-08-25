@@ -1,10 +1,12 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_BLOCKARMOR, true)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_DRAWBLOOD)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ETHEREALSPEAR)
-
-function onGetFormulaValues(cid, level, skill, attack, factor)
-	return -(((skill + 25) / 3) + (level / 5)), -((skill + 25) + (level / 5))
+function onGetFormulaValues(cid, level, maglevel)
+	min = -(level * 22) / 5
+	max = -(level * 38.5) / 5
+	
+	return min, max
 end
 
 setCombatCallback(combat, CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")
