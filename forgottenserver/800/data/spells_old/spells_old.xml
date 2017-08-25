@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spells>
+<spells_old>
 	<!-- Attack Runes -->
 	<rune name="Poison Field" id="2285" allowfaruse="1" charges="3" lvl="14" maglv="0" exhaustion="2000" blocktype="solid" event="script" value="attack/poison field.lua"/>
 	<rune name="Poison Bomb" id="2286" allowfaruse="1" charges="2" lvl="25" maglv="4" exhaustion="2000" blocktype="solid" event="script" value="attack/poison bomb.lua"/>
@@ -258,17 +258,6 @@
 		<vocation id="7"/>
 		<vocation id="8"/>
 	</instant>
-	<instant name="Charge" words="utani tempo hur" lvl="25" mana="100" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/charge.lua">
-		<vocation id="4"/>
-		<vocation id="8"/>
-	</instant>
-	<instant name="Swift Foot" words="utamo tempo san" lvl="55" mana="400" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/swift foot.lua">
-		<vocation id="3"/>
-		<vocation id="7"/>
-	</instant>
-	<instant name="Challenge" words="exeta res" lvl="20" mana="30" prem="1" aggressive="0" exhaustion="1000" needlearn="0" event="script" value="support/challenge.lua">
-		<vocation id="8"/>
-	</instant>
 	<instant name="Strong Haste" words="utani gran hur" lvl="20" mana="100" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/strong haste.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
@@ -298,18 +287,6 @@
 		<vocation id="5"/>
 		<vocation id="6"/>
 		<vocation id="7"/>
-	</instant>
-	<instant name="Sharpshooter" words="utito tempo san" lvl="60" mana="450" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/sharpshooter.lua">
-		<vocation id="3"/>
-		<vocation id="7"/>
-	</instant>
-	<instant name="Protector" words="utamo tempo" lvl="55" mana="200" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/protector.lua">
-		<vocation id="4"/>
-		<vocation id="8"/>
-	</instant>
-	<instant name="Blood Rage" words="utito tempo" lvl="60" mana="290" prem="1" aggressive="0" selftarget="1" exhaustion="1000" needlearn="0" event="script" value="support/blood rage.lua">
-		<vocation id="4"/>
-		<vocation id="8"/>
 	</instant>
 
 	<!-- Party Spells -->
@@ -545,4 +522,4 @@
 		<vocation id="3"/>
 		<vocation id="7"/>
 	</conjure>
-</spells>
+</spells_old>

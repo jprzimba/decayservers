@@ -260,6 +260,7 @@ class ConfigManager
 			HOUSE_SKIP_INIT_RENT,
 			DAEMONIZE,
 			USE_CAPACITY,
+			OLD_SPELLS,
 			LAST_BOOL_CONFIG /* this must be the last one */
 		};
 

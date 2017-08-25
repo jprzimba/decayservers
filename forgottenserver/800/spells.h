@@ -26,6 +26,9 @@
 #include "baseevents.h"
 #include "actions.h"
 #include "talkaction.h"
+#include "configmanager.h"
+
+extern ConfigManager g_config;
 
 class InstantSpell;
 class ConjureSpell;
@@ -52,7 +55,7 @@ class Spells : public BaseEvents
 
 		uint32_t getInstantSpellCount(const Player* player);
 		ReturnValue onPlayerSay(Player* player, const std::string& words);
-		virtual std::string getScriptBaseName() const {return "spells";}
+		virtual std::string getScriptBaseName() const {return g_config.getBool(ConfigManager::OLD_SPELLS) ? "spells_old" : "spells";}
 		static Position getCasterPosition(Creature* creature, Direction dir);
 
 	protected:

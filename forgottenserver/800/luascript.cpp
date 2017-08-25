@@ -9677,9 +9677,9 @@ int32_t LuaScriptInterface::luaGetConfigValue(lua_State* L)
 int32_t LuaScriptInterface::luaGetModList(lua_State* L)
 {
 	//getModList()
-	ModMap::iterator it = ScriptingManager::getInstance()->getFirstMod();
+	ModMap::iterator it = ScriptManager::getInstance()->getFirstMod();
 	lua_newtable(L);
-	for(uint32_t i = 1; it != ScriptingManager::getInstance()->getLastMod(); ++it, ++i)
+	for(uint32_t i = 1; it != ScriptManager::getInstance()->getLastMod(); ++it, ++i)
 	{
 		createTable(L, i);
 		setField(L, "name", it->first);
@@ -9701,8 +9701,8 @@ int32_t LuaScriptInterface::luaL_loadmodlib(lua_State* L)
 {
 	//loadmodlib(lib)
 	std::string name = asLowerCaseString(popString(L));
-	for(LibMap::iterator it = ScriptingManager::getInstance()->getFirstLib();
-		it != ScriptingManager::getInstance()->getLastLib(); ++it)
+	for(LibMap::iterator it = ScriptManager::getInstance()->getFirstLib();
+		it != ScriptManager::getInstance()->getLastLib(); ++it)
 	{
 		if(asLowerCaseString(it->first) != name)
 			continue;
@@ -9719,8 +9719,8 @@ int32_t LuaScriptInterface::luaL_domodlib(lua_State* L)
 {
 	//domodlib(lib)
 	std::string name = asLowerCaseString(popString(L));
-	for(LibMap::iterator it = ScriptingManager::getInstance()->getFirstLib();
-		it != ScriptingManager::getInstance()->getLastLib(); ++it)
+	for(LibMap::iterator it = ScriptManager::getInstance()->getFirstLib();
+		it != ScriptManager::getInstance()->getLastLib(); ++it)
 	{
 		if(asLowerCaseString(it->first) != name)
 			continue;

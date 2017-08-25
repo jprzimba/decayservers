@@ -291,6 +291,7 @@ bool ConfigManager::load()
 	m_confBool[HOUSE_SKIP_INIT_RENT] = getGlobalBool("houseSkipInitialRent", true);
 	m_confBool[DAEMONIZE] = getGlobalBool("daemonize", false);
 	m_confBool[USE_CAPACITY] = getGlobalBool("useCapacity", true);
+	m_confBool[OLD_SPELLS] = getGlobalBool("oldSpellsFormula", true);
 
 	m_loaded = true;
 	return true;

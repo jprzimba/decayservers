@@ -460,7 +460,7 @@ void mainLoader(int argc, char *argv[])
 		startupErrorMessage("Unable to load vocations!");
 
 	std::clog << ">> Loading script systems" << std::endl;
-	if(!ScriptingManager::getInstance()->load())
+	if(!ScriptManager::getInstance()->loadSystem())
 		startupErrorMessage("");
 
 	std::clog << ">> Loading chat channels" << std::endl;
@@ -480,7 +480,7 @@ void mainLoader(int argc, char *argv[])
     	startupErrorMessage("Unable to load monsters!");
 
 	std::clog << ">> Loading mods..." << std::endl;
-	if(!ScriptingManager::getInstance()->loadMods())
+	if(!ScriptManager::getInstance()->loadMods())
 		startupErrorMessage("Unable to load mods!");
 
 	std::clog << ">> Loading map and spawns..." << std::endl;
