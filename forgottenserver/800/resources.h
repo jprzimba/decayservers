@@ -22,12 +22,10 @@
 #define CLIENT_VERSION_MAX 800
 #define CLIENT_VERSION_STRING "Only clients with protocol 8.0 allowed!"
 
-#define STATUS_SERVER_NAME "The Forgotten Server"
-#define DEVELOPERS "Elf, slawkens, Talaturen, KaczooH, Lithium, Kiper, Kornholijo"
-#define MODIFIED_BY "Tryller"
-#define STATUS_SERVER_VERSION "0.3"
-#define STATUS_SERVER_CODENAME "Crying Damson"
-#define STATUS_SERVER_PROTOCOL "8.0"
+#define SOFTWARE_NAME "The Forgotten Server"
+#define SOFTWARE_DEVELOPERS "Elf, slawkens, Talaturen, KaczooH, Lithium, Kiper, Kornholijo, Tryller, frcento"
+#define SOFTWARE_VERSION "0.3 / 0.4"
+#define SOFTWARE_PROTOCOL "8.0"
 
 #define VERSION_DATABASE 23
 #endif

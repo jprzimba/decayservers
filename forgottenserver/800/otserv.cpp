@@ -269,7 +269,7 @@ void mainLoader(int argc, char *argv[])
 	//dispatcher thread
 	srand((uint32_t)OTSYS_TIME());
 	#if defined(WINDOWS)
-	SetConsoleTitle(STATUS_SERVER_NAME);
+	SetConsoleTitle(SOFTWARE_NAME);
 	#endif
 
 	g_game.setGameState(GAME_STATE_STARTUP);
@@ -284,56 +284,10 @@ void mainLoader(int argc, char *argv[])
 	}
 	#endif
 
-	std::clog << ">> " << STATUS_SERVER_NAME << ", version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")" << std::endl;
+	std::clog << ">> " << SOFTWARE_NAME << ", version " << SOFTWARE_VERSION << "." << std::endl;
 	std::clog << ">> Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << "." << std::endl;
-	std::clog << ">> A server developed by " << DEVELOPERS << "." << std::endl;
-	std::clog << ">> Modified by " << MODIFIED_BY << "." << std::endl;
-	std::clog << ">> Visit our GitHub for updates and support: https://github.com/tryller/otserv." << std::endl << std::endl;
-
-	std::stringstream ss;
-	#ifdef __DEBUG__
-	ss << " GLOBAL";
-	#endif
-	#ifdef __DEBUG_MOVESYS__
-	ss << " MOVESYS";
-	#endif
-	#ifdef __DEBUG_CHAT__
-	ss << " CHAT";
-	#endif
-	#ifdef __DEBUG_EXCEPTION_REPORT__
-	ss << " EXCEPTION-REPORT";
-	#endif
-	#ifdef __DEBUG_HOUSES__
-	ss << " HOUSES";
-	#endif
-	#ifdef __DEBUG_LUASCRIPTS__
-	ss << " LUA-SCRIPTS";
-	#endif
-	#ifdef __DEBUG_MAILBOX__
-	ss << " MAILBOX";
-	#endif
-	#ifdef __DEBUG_NET__
-	ss << " NET";
-	#endif
-	#ifdef __DEBUG_NET_DETAIL__
-	ss << " NET-DETAIL";
-	#endif
-	#ifdef __DEBUG_RAID__
-	ss << " RAIDS";
-	#endif
-	#ifdef __DEBUG_SCHEDULER__
-	ss << " SCHEDULER";
-	#endif
-	#ifdef __DEBUG_SPAWN__
-	ss << " SPAWNS";
-	#endif
-	#ifdef __SQL_QUERY_DEBUG__
-	ss << " SQL-QUERIES";
-	#endif
-
-	std::string debug = ss.str();
-	if(!debug.empty())
-		std::clog << ">> Debugging:" << debug << "." << std::endl;
+	std::clog << ">> A server developed by " << SOFTWARE_DEVELOPERS << "." << std::endl;
+	std::clog << ">> Visit our GitHub for updates and support: github.com/tryller/otserv." << std::endl << std::endl;
 
 	std::clog << ">> Loading config (" << g_config.getString(ConfigManager::CONFIG_FILE) << ")" << std::endl;
 	if(!g_config.load())
@@ -582,7 +536,7 @@ void mainLoader(int argc, char *argv[])
 
 	#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
 	if(getuid() == 0 || geteuid() == 0)
-		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+		std::clog << ">> WARNING: " << SOFTWARE_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
 	#endif
 	g_game.setGameState(GAME_STATE_NORMAL);
 

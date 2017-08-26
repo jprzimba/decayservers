@@ -209,6 +209,7 @@ class House
 		void setAccessList(uint32_t listId, const std::string& textlist, bool teleport = true);
 		bool getAccessList(uint32_t listId, std::string& list) const;
 
+		bool isBidded() const;
 		bool isInvited(const Player* player);
 		AccessHouseLevel_t getHouseAccessLevel(const Player* player);
 

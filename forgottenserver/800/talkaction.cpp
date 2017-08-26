@@ -380,6 +380,13 @@ bool TalkAction::houseBuy(Creature* creature, const std::string& cmd, const std:
 		return false;
 	}
 
+	if(house->isBidded())
+	{
+		player->sendCancel("You cannot buy house which is currently bidded on an auction.");
+		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+		return false;
+	}
+
 	if(!house->isGuild())
 	{
 		if(Houses::getInstance()->getHouseByPlayerId(player->getGUID()))
@@ -511,6 +518,14 @@ bool TalkAction::houseSell(Creature* creature, const std::string& cmd, const std
 	if(house->isGuild() && player->getGuildLevel() != GUILDLEVEL_LEADER)
 	{
 		player->sendCancel("You have to be at least a guild leader to sell this hall.");
+		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+		return false;
+	}
+
+	Tile* tile = g_game.getTile(player->getPosition());
+	if(!tile || !tile->getHouseTile() || tile->getHouseTile()->getHouse() != house)
+	{
+		player->sendCancel("You have to be inside a house that you would like to sell.");
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
 		return false;
 	}
@@ -762,8 +777,8 @@ bool TalkAction::guildCreate(Creature* creature, const std::string& cmd, const s
 		return true;
 	}
 
-	const uint32_t minLength = g_config.getNumber(ConfigManager::MIN_GUILDNAME);
-	const uint32_t maxLength = g_config.getNumber(ConfigManager::MAX_GUILDNAME);
+	uint32_t minLength = g_config.getNumber(ConfigManager::MIN_GUILDNAME),
+		maxLength = g_config.getNumber(ConfigManager::MAX_GUILDNAME);
 	if(param_.length() < minLength)
 	{
 		player->sendCancel("That guild name is too short, please select a longer name.");
@@ -786,27 +801,27 @@ bool TalkAction::guildCreate(Creature* creature, const std::string& cmd, const s
 	const uint32_t levelToFormGuild = g_config.getNumber(ConfigManager::LEVEL_TO_FORM_GUILD);
 	if(player->getLevel() < levelToFormGuild)
 	{
-		char buffer[70 + levelToFormGuild];
-		sprintf(buffer, "You have to be at least Level %d to form a guild.", levelToFormGuild);
-		player->sendCancel(buffer);
+		std::stringstream stream;
+		stream << "You have to be at least Level " << levelToFormGuild << " to form a guild.";
+		player->sendCancel(stream.str().c_str());
 		return true;
 	}
 
 	const int32_t premiumDays = g_config.getNumber(ConfigManager::GUILD_PREMIUM_DAYS);
-	if(player->getPremiumDays() < premiumDays)
+	if(player->getPremiumDays() < premiumDays && !g_config.getBool(ConfigManager::FREE_PREMIUM))
 	{
-		char buffer[70 + premiumDays];
-		sprintf(buffer, "You need to have at least %d premium days to form a guild.", premiumDays);
-		player->sendCancel(buffer);
+		std::stringstream stream;
+		stream << "You need to have at least " << premiumDays << " premium days to form a guild.";
+		player->sendCancel(stream.str().c_str());
 		return true;
 	}
 
 	player->setGuildName(param_);
 	IOGuild::getInstance()->createGuild(player);
 
-	char buffer[50 + maxLength];
-	sprintf(buffer, "You have formed guild \"%s\"!", param_.c_str());
-	player->sendTextMessage(MSG_INFO_DESCR, buffer);
+	std::stringstream stream;
+	stream << "You have formed guild \"" << param.c_str() << "\"!";
+	player->sendTextMessage(MSG_INFO_DESCR, stream.str().c_str());
 	return true;
 }
 

@@ -264,6 +264,7 @@ class Player : public Creature, public Cylinder
 
 		bool isPremium() const;
 		int32_t getPremiumDays() const {return premiumDays;}
+		void addPremiumDays(int32_t days);
 
 		uint32_t getLevel() const {return level;}
 		uint64_t getExperience() const {return experience;}

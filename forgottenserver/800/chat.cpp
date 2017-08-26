@@ -317,6 +317,12 @@ bool Chat::parseChannelNode(xmlNodePtr p)
 			break;
 		}
 
+		case CHANNEL_LOOT:
+		{
+			lootName = name;
+			break;
+		}
+
 		case CHANNEL_PRIVATE:
 		{
 			if(ChatChannel* newChannel = new PrivateChatChannel(CHANNEL_PRIVATE, name, flags))
@@ -366,7 +372,7 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 		case CHANNEL_LOOT:
 		{
 			ChatChannel* newChannel = NULL;
-			if(newChannel = new ChatChannel(channelId, "Loot", ChatChannel::staticFlags))
+			if(newChannel = new ChatChannel(channelId, lootName, ChatChannel::staticFlags))
 				m_lootChannels[player->getGUID()] = newChannel;
 
 			return newChannel;
@@ -1104,10 +1110,7 @@ ChannelList Chat::getChannelList(Player* player)
 		player, CHANNEL_GUILD)) || (channel = createChannel(player, CHANNEL_GUILD))))
 		list.push_back(channel);
 
-	channel = getChannel(player, CHANNEL_LOOT);
-	if(channel)
-		list.push_back(channel);
-	else if((channel = createChannel(player, CHANNEL_LOOT)))
+	if((channel = getChannel(player, CHANNEL_LOOT)) || (channel = createChannel(player, CHANNEL_LOOT)))
 		list.push_back(channel);
 
 	for(NormalChannelMap::iterator it = m_normalChannels.begin(); it != m_normalChannels.end(); ++it)

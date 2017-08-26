@@ -1184,7 +1184,7 @@ bool IOLoginData::isPremium(uint32_t guid)
 	const uint32_t account = result->getDataInt("account_id");
 
 	result->free();
-	if(group && group->hasCustomFlag(PlayerFlag_IsAlwaysPremium))
+	if(group && group->hasFlag(PlayerFlag_IsAlwaysPremium))
 		return true;
 
 	query.str("");
