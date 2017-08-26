@@ -69,14 +69,14 @@ modsLoaded(false)
 
 bool ScriptManager::loadSystem()
 {
-	std::clog << ">>> Loading weapons... ";
+	std::clog << ">> Loading weapons... ";
 	if(!g_weapons->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Preparing weapons... ";
+	std::clog << "(done)." << std::endl << ">> Preparing weapons... ";
 	if(!g_weapons->loadDefaults())
 	{
 		std::clog << "failed!" << std::endl;
@@ -84,44 +84,44 @@ bool ScriptManager::loadSystem()
 	}
 
 	if (g_config.getBool(ConfigManager::CLASSIC_SPELLS))
-		std::clog << "(done)." << std::endl << ">>> Loading classic spells... ";
+		std::clog << "(done)." << std::endl << ">> Loading classic spells... ";
 	else
-		std::clog << "(done)." << std::endl << ">>> Loading spells... ";
+		std::clog << "(done)." << std::endl << ">> Loading spells... ";
 	if(!g_spells->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Loading actions... ";
+	std::clog << "(done)." << std::endl << ">> Loading actions... ";
 	if(!g_actions->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Loading talkactions... ";
+	std::clog << "(done)." << std::endl << ">> Loading talkactions... ";
 	if(!g_talkActions->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Loading movements... ";
+	std::clog << "(done)." << std::endl << ">> Loading movements... ";
 	if(!g_moveEvents->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Loading creaturescripts... ";
+	std::clog << "(done)." << std::endl << ">> Loading creaturescripts... ";
 	if(!g_creatureEvents->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
 		return false;
 	}
 
-	std::clog << "(done)." << std::endl << ">>> Loading globalscripts... ";
+	std::clog << "(done)." << std::endl << ">> Loading globalscripts... ";
 	if(!g_globalEvents->loadFromXml())
 	{
 		std::clog << "failed!" << std::endl;
