@@ -18,8 +18,8 @@
 	<channel id="7" name="Trade-Rookgaard" level="2" muted="120" conditionId="3" conditionMessage="You may only place one offer in two minutes.">
 		<vocation id="0"/>
 	</channel>
-	<channel id="8" name="RL-Chat" level="2"/>
-	<channel id="9" name="Help" logged="yes"/>
+	<channel id="8" name="Help" logged="yes"/>
+	<channel id="9" name="RL-Chat" level="2"/>
 	<!-- <channel id="10" name="My Custom Channel"/> -->
 	<channel id="65535" name="Private Chat Channel"/>
 </channels>

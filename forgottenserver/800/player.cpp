@@ -2199,7 +2199,7 @@ Item* Player::createCorpse(DeathList deathList)
 	else
 		ss << deathList[0].getKillerName();
 
-	if(deathList.size() > 1)
+	if(deathList.size() > 1 && g_config.getBool(ConfigManager::MULTIPLE_NAME))
 	{
 		if(deathList[0].getKillerType() != deathList[1].getKillerType())
 		{
@@ -3597,9 +3597,9 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 	}
 }
 
-bool Player::onKilledCreature(Creature* target, DeathEntry& entry)
+bool Player::onKilledCreature(Creature* target, uint32_t& flags)
 {
-	if(!Creature::onKilledCreature(target, entry))
+	if(!Creature::onKilledCreature(target, flags))
 		return false;
 
 	if(hasFlag(PlayerFlag_NotGenerateLoot))
@@ -3611,19 +3611,17 @@ bool Player::onKilledCreature(Creature* target, DeathEntry& entry)
 		g_config.getNumber(ConfigManager::HUNTING_DURATION))))
 		addCondition(condition);
 
-	if(hasFlag(PlayerFlag_NotGainInFight) || getZone() != target->getZone())
+	if(hasFlag(PlayerFlag_NotGainInFight) || !hasBitSet((uint32_t)KILLFLAG_JUSTIFY, flags) || getZone() != target->getZone())
 		return true;
 
 	Player* targetPlayer = target->getPlayer();
 	if(!targetPlayer || Combat::isInPvpZone(this, targetPlayer) || isPartner(targetPlayer))
 		return true;
 
-	if(!entry.isJustify() || !hasCondition(CONDITION_INFIGHT))
-		return true;
-
 	if(!targetPlayer->hasAttacked(this) && target->getSkull() == SKULL_NONE && targetPlayer != this
-		&& (addUnjustifiedKill(targetPlayer) || entry.isLast()))
-		entry.setUnjustified();
+		&& ((g_config.getBool(ConfigManager::USE_FRAG_HANDLER) && addUnjustifiedKill(
+		targetPlayer)) || hasBitSet((uint32_t)KILLFLAG_LASTHIT, flags)))
+		flags |= (uint32_t)KILLFLAG_UNJUSTIFIED;
 
 	addInFightTicks(true, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME));
 	return true;

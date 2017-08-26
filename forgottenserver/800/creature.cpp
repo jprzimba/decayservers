@@ -679,8 +679,10 @@ bool Creature::onDeath()
 		if(it->isNameKill())
 			continue;
 
-		if(it == deathList.begin())
-			it->setLast();
+		bool lastHit = it == deathList.begin();
+		uint32_t flags = KILLFLAG_NONE;
+		if(lastHit)
+			flags |= (uint32_t)KILLFLAG_LASTHIT;
 
 		if(i < size)
 		{
@@ -694,15 +696,18 @@ bool Creature::onDeath()
 		{
 			if(std::find(justifyVec.begin(), justifyVec.end(), tmp) == justifyVec.end())
 			{
-				it->setJustify();
+				flags |= (uint32_t)KILLFLAG_JUSTIFY;
 				justifyVec.push_back(tmp);
 			}
 
 			tmp = NULL;
 		}
 
-		if(!it->getKillerCreature()->onKilledCreature(this, (*it)) && it->isLast())
+		if(!it->getKillerCreature()->onKilledCreature(this, flags) && lastHit)
 			return false;
+
+		if(hasBitSet((uint32_t)KILLFLAG_UNJUSTIFIED, flags))
+			it->setUnjustified(true);
 	}
 
 	for(CountMap::iterator it = damageMap.begin(); it != damageMap.end(); ++it)
@@ -1201,14 +1206,14 @@ void Creature::onAttackedCreatureKilled(Creature* target)
 	onGainExperience(gainExp, !target->getPlayer(), false);
 }
 
-bool Creature::onKilledCreature(Creature* target, DeathEntry& entry)
+bool Creature::onKilledCreature(Creature* target, uint32_t& flags)
 {
-	bool ret = true;
+	bool ret = true; 
 	if(master)
-		ret = master->onKilledCreature(target, entry);
+		ret = master->onKilledCreature(target, flags);
 
 	CreatureEventList killEvents = getCreatureEvents(CREATURE_EVENT_KILL);
-	if(!entry.isLast())
+	if(!hasBitSet((uint32_t)KILLFLAG_LASTHIT, flags))
 	{
 		for(CreatureEventList::iterator it = killEvents.begin(); it != killEvents.end(); ++it)
 			(*it)->executeKill(this, target, false);

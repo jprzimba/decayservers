@@ -90,6 +90,20 @@ extern Admin* g_admin;
 #endif
 
 #ifndef WINDOWS
+int32_t OTSYS_getch()
+{
+	struct termios oldt;
+	tcgetattr(STDIN_FILENO, &oldt);
+
+	struct termios newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+	int32_t ch = getchar();
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	return ch;
+}
+
 void signalHandler(int32_t sig)
 {
 	uint32_t tmp = 0;
@@ -141,24 +155,28 @@ void runfileHandler(void)
 	std::ofstream runfile(g_config.getString(ConfigManager::RUNFILE).c_str(), std::ios::trunc | std::ios::out);
 	runfile.close();
 }
+#else
+int32_t OTSYS_getch()
+{
+	return (int32_t)getchar();
+}
 #endif
 
 void allocationHandler()
 {
 	puts("Allocation failed, server out of memory!\nDecrease size of your map or compile in a 64-bit mode.");
-	char buffer[1024];
-	fgets(buffer, 1024, stdin);
-	exit(-1);
+	OTSYS_getch();
+	std::exit(-1);
 }
 
-void startupErrorMessage(const std::string& error)
+void startupErrorMessage(std::string error = "")
 {
+	// we will get a crash here as the threads aren't going down smoothly
 	if(error.length() > 0)
 		std::clog << std::endl << ">> ERROR: " << error << std::endl;
 
-	system("pause");
-	getchar();
-	exit(-1);
+	OTSYS_getch();
+	std::exit(-1);
 }
 
 void mainLoader(int argc, char *argv[]);
@@ -264,11 +282,10 @@ void mainLoader(int argc, char *argv[])
 	#if !defined(WINDOWS) && !defined(__ROOT_PERMISSION__)
 	if(!getuid() || !geteuid())
 	{
-		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user! It is recommended to execute as a normal user." << std::endl;
-		std::clog << "Continue? (y/N)" << std::endl;
-
-		char buffer = getchar();
-		if(buffer == 10 || (buffer != 121 && buffer != 89))
+		std::clog << ">> WARNING: " << SOFTWARE_NAME << " has been executed as super user! It is "
+			<< "recommended to run as a normal user." << std::endl << "Continue? (y/N)" << std::endl;
+		char buffer = OTSYS_getch();
+		if(buffer != 121 && buffer != 89)
 			startupErrorMessage("Aborted.");
 	}
 	#endif
@@ -444,12 +461,18 @@ void mainLoader(int argc, char *argv[])
 	else
 		startupErrorMessage("Couldn't estabilish connection to SQL database!");
 
-	std::clog << ">> Loading items" << std::endl;
+	std::clog << ">> Loading items (OTB)" << std::endl;
 	if(Item::items.loadFromOtb(getFilePath(FILE_TYPE_OTHER, "items/items.otb")))
 		startupErrorMessage("Unable to load items (OTB)!");
 
+	std::clog << ">> Loading items (XML)" << std::endl;
 	if(!Item::items.loadFromXml())
-        startupErrorMessage("Unable to load items (XML)!");
+	{
+		std::clog << "Unable to load items (XML)! Continue? (y/N)" << std::endl;
+		char buffer = OTSYS_getch();
+		if(buffer != 121 && buffer != 89)
+			startupErrorMessage("Unable to load items (XML)!");
+	}
 
 	std::clog << ">> Loading groups" << std::endl;
 	if(!Groups::getInstance()->loadFromXml())
@@ -461,7 +484,7 @@ void mainLoader(int argc, char *argv[])
 
 	std::clog << ">> Loading script systems" << std::endl;
 	if(!ScriptManager::getInstance()->loadSystem())
-		startupErrorMessage("");
+		startupErrorMessage();
 
 	std::clog << ">> Loading chat channels" << std::endl;
 	if(!g_chat.loadFromXml())
@@ -477,7 +500,12 @@ void mainLoader(int argc, char *argv[])
 
 	std::clog << ">> Loading monsters" << std::endl;
 	if(!g_monsters.loadFromXml())
-    	startupErrorMessage("Unable to load monsters!");
+	{
+		std::clog << "Unable to load monsters! Continue? (y/N)" << std::endl;
+		char buffer = OTSYS_getch();
+		if(buffer != 121 && buffer != 89)
+			startupErrorMessage("Unable to load monsters!");
+	}
 
 	std::clog << ">> Loading mods..." << std::endl;
 	if(!ScriptManager::getInstance()->loadMods())
@@ -485,15 +513,13 @@ void mainLoader(int argc, char *argv[])
 
 	std::clog << ">> Loading map and spawns..." << std::endl;
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
-		startupErrorMessage("");
+		startupErrorMessage();
 
 	#ifdef __REMOTE_CONTROL__
 	std::clog << ">> Loading administration protocol" << std::endl;
 	g_admin = new Admin();
 	if(!g_admin->loadFromXml())
 		startupErrorMessage("Unable to load administration protocol!");
-
-	services->add<ProtocolAdmin>(g_config.getNumber(ConfigManager::ADMIN_PORT));
 	#endif
 
 	std::clog << ">> Checking world type... ";

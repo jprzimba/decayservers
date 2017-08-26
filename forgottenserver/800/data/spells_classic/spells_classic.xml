@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spells_old>
+<spells_classic>
 	<!-- Attack Runes -->
 	<rune name="Poison Field" id="2285" allowfaruse="1" charges="3" lvl="14" maglv="0" exhaustion="2000" blocktype="solid" event="script" value="attack/poison field.lua"/>
 	<rune name="Poison Bomb" id="2286" allowfaruse="1" charges="2" lvl="25" maglv="4" exhaustion="2000" blocktype="solid" event="script" value="attack/poison bomb.lua"/>
@@ -20,7 +20,7 @@
 	<rune name="Stone Shower" id="2288" allowfaruse="1" charges="4" lvl="28" maglv="4" exhaustion="2000" event="script" value="attack/stone shower.lua"/>
 	<rune name="Thunderstorm" id="2315" allowfaruse="1" charges="4" lvl="28" maglv="4" exhaustion="2000" event="script" value="attack/thunderstorm.lua"/>
 	<rune name="Stalagmite" id="2292" allowfaruse="1" charges="10" lvl="24" maglv="3" exhaustion="2000" needtarget="1" event="script" value="attack/stalagmite.lua"/>
-	
+
 	<!-- Healing Runes -->
 	<rune name="Antidote Rune" id="2266" allowfaruse="1" charges="1" lvl="15" maglv="0" exhaustion="1000" aggressive="0" needtarget="1" blocktype="solid" event="script" value="healing/antidote rune.lua"/>
 	<rune name="Intense Healing Rune" id="2265" allowfaruse="1" charges="1" lvl="15" maglv="1" exhaustion="1000" aggressive="0" needtarget="1" blocktype="solid" event="script" value="healing/intense healing rune.lua"/>
@@ -85,7 +85,7 @@
 		<vocation id="4"/>
 		<vocation id="8"/>
 	</instant>
-	<instant name="Energy Wave" words="exevo vis hur" lvl="38" mana="170" direction="1" exhaustion="2000" needlearn="0" event="script" value="attack/energy wave.lua">
+	<instant name="Energy Wave" words="exevo mort hur" lvl="38" mana="170" direction="1" exhaustion="2000" needlearn="0" event="script" value="attack/energy wave.lua">
 		<vocation id="1"/>
 		<vocation id="5"/>
 	</instant>
@@ -489,4 +489,4 @@
 		<vocation id="3"/>
 		<vocation id="7"/>
 	</conjure>
-</spells_old>
+</spells_classic>

@@ -83,8 +83,8 @@ bool ScriptManager::loadSystem()
 		return false;
 	}
 
-	if (g_config.getBool(ConfigManager::OLD_SPELLS))
-		std::clog << "(done)." << std::endl << ">>> Loading old spells... ";
+	if (g_config.getBool(ConfigManager::CLASSIC_SPELLS))
+		std::clog << "(done)." << std::endl << ">>> Loading classic spells... ";
 	else
 		std::clog << "(done)." << std::endl << ">>> Loading spells... ";
 	if(!g_spells->loadFromXml())

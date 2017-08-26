@@ -113,6 +113,7 @@
 	deathListRequiredTime = 1 * 60 * 1000
 	deathAssistCount = 19
 	maxDeathRecords = 5
+	multipleNames = false
 
 	-- Guilds
 	ingameGuildManagement = true
@@ -175,7 +176,7 @@
 	skipItemsVersionCheck = false
 
 	-- Spells
-	oldSpellsFormula = true
+	classicSpells = true
 	useRunesRequirements = true
 	formulaLevel = 5.0
 	formulaMagic = 1.0
