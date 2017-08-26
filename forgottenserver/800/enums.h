@@ -54,7 +54,8 @@ enum Channels_t
 	CHANNEL_GUILD = 0x00,
 	CHANNEL_PARTY = 0x01,
 	CHANNEL_RVR = 0x03,
-	CHANNEL_HELP = 0x09,
+	CHANNEL_HELP = 0x08,
+	CHANNEL_LOOT = 0x10,
 	CHANNEL_DEFAULT = 0xFFFE, //internal usage only, there is no such channel
 	CHANNEL_PRIVATE = 0xFFFF
 };

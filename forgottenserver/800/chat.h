@@ -159,6 +159,9 @@ class Chat
 		typedef std::map<uint32_t, ChatChannel*> GuildChannelMap;
 		GuildChannelMap m_guildChannels;
 
+		typedef std::map<uint32_t, ChatChannel*> LootChannelMap;
+		LootChannelMap m_lootChannels;
+
 		ChatChannel* dummyPrivate;
 		std::string partyName;
 };

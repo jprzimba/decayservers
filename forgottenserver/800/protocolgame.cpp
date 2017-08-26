@@ -1009,6 +1009,10 @@ void ProtocolGame::parseCloseChannel(NetworkMessage& msg)
 {
 	uint16_t channelId = msg.GetU16();
 	addGameTask(&Game::playerCloseChannel, player->getID(), channelId);
+
+	//Send loot channel, players cannot close
+	if(channelId == CHANNEL_LOOT)
+		sendChannel(CHANNEL_LOOT, "Loot");
 }
 
 void ProtocolGame::parseOpenPriv(NetworkMessage& msg)
@@ -2054,6 +2058,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			sendVIP((*it), vipName, (tmpPlayer && player->canSeeCreature(tmpPlayer)));
 		}
 	}
+
+	//Send loot channel
+	sendChannel(CHANNEL_LOOT, "Loot");
 }
 
 void ProtocolGame::sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos)

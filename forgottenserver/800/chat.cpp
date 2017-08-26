@@ -184,6 +184,10 @@ void Chat::clear()
 		delete it->second;
 
 	m_partyChannels.clear();
+	for(LootChannelMap::iterator it = m_lootChannels.begin(); it != m_lootChannels.end(); ++it)
+		delete it->second;
+
+	m_lootChannels.clear();
 	for(PrivateChannelMap::iterator it = m_privateChannels.begin(); it != m_privateChannels.end(); ++it)
 		delete it->second;
 
@@ -359,6 +363,15 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 			return newChannel;
 		}
 
+		case CHANNEL_LOOT:
+		{
+			ChatChannel* newChannel = NULL;
+			if(newChannel = new ChatChannel(channelId, "Loot", ChatChannel::staticFlags))
+				m_lootChannels[player->getGUID()] = newChannel;
+
+			return newChannel;
+		}
+
 		case CHANNEL_PRIVATE:
 		{
 			//only 1 private channel for each premium player
@@ -419,6 +432,17 @@ bool Chat::deleteChannel(Player* player, uint16_t channelId)
 			return true;
 		}
 
+		case CHANNEL_LOOT:
+		{
+			LootChannelMap::iterator it = m_lootChannels.find(player->getGUID());
+			if(it == m_lootChannels.end())
+				return false;
+
+			delete it->second;
+			m_lootChannels.erase(it);
+			return true;
+		}
+
 		default:
 		{
 			PrivateChannelMap::iterator it = m_privateChannels.find(channelId);
@@ -468,6 +492,9 @@ void Chat::removeUserFromAllChannels(Player* player)
 	for(PartyChannelMap::iterator it = m_partyChannels.begin(); it != m_partyChannels.end(); ++it)
 		it->second->removeUser(player);
 
+	for(LootChannelMap::iterator it = m_lootChannels.begin(); it != m_lootChannels.end(); ++it)
+		it->second->removeUser(player);
+
 	for(GuildChannelMap::iterator it = m_guildChannels.begin(); it != m_guildChannels.end(); ++it)
 		it->second->removeUser(player);
 
@@ -487,6 +514,12 @@ bool Chat::talkToChannel(Player* player, SpeakClasses type, const std::string& t
 	ChatChannel* channel = getChannel(player, channelId);
 	if(!channel)
 		return false;
+
+	if(channelId == CHANNEL_LOOT)
+	{
+		player->sendCancel("You may not speak in this channel.");
+		return true;
+	}
 
 	if(!player->hasFlag(PlayerFlag_CannotBeMuted))
 	{
@@ -1071,6 +1104,12 @@ ChannelList Chat::getChannelList(Player* player)
 		player, CHANNEL_GUILD)) || (channel = createChannel(player, CHANNEL_GUILD))))
 		list.push_back(channel);
 
+	channel = getChannel(player, CHANNEL_LOOT);
+	if(channel)
+		list.push_back(channel);
+	else if((channel = createChannel(player, CHANNEL_LOOT)))
+		list.push_back(channel);
+
 	for(NormalChannelMap::iterator it = m_normalChannels.begin(); it != m_normalChannels.end(); ++it)
 	{
 		if((channel = getChannel(player, it->first)))
@@ -1122,6 +1161,15 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 			if(it != m_partyChannels.end())
 				return it->second;
 		}
+
+		return NULL;
+	}
+
+	if(channelId == CHANNEL_LOOT)
+	{
+		LootChannelMap::iterator it = m_lootChannels.find(player->getGUID());
+ 		if(it != m_lootChannels.end())
+			return it->second;
 
 		return NULL;
 	}
