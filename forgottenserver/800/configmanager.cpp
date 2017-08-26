@@ -28,7 +28,7 @@ ConfigManager::ConfigManager()
 
 	m_confString[CONFIG_FILE] = getFilePath(FILE_TYPE_CONFIG, "config.lua");
 
-	m_confNumber[LOGIN_PORT] = m_confNumber[ADMIN_PORT] = 0;
+	m_confNumber[LOGIN_PORT] = 0;
 	m_confString[DATA_DIRECTORY] = m_confString[IP] = m_confString[RUNFILE] = m_confString[ERROR_LOG] = m_confString[OUTPUT_LOG] = "";
 	m_confBool[DAEMONIZE] = false;
 }
@@ -83,9 +83,6 @@ bool ConfigManager::load()
 
 		if(m_confNumber[LOGIN_PORT] == 0)
 			m_confNumber[LOGIN_PORT] = getGlobalNumber("loginPort", 7171);
-
-		if(m_confNumber[ADMIN_PORT] == 0)
-			m_confNumber[ADMIN_PORT] = getGlobalNumber("adminPort", 7171);
 
 		m_confNumber[SQL_PORT] = getGlobalNumber("sqlPort", 3306);
 		m_confNumber[SQL_KEEPALIVE] = getGlobalNumber("sqlKeepAlive", 0);
@@ -234,7 +231,6 @@ bool ConfigManager::load()
 	m_confBool[SHUTDOWN_AT_GLOBALSAVE] = getGlobalBool("shutdownAtGlobalSave", false);
 	m_confBool[CLEAN_MAP_AT_GLOBALSAVE] = getGlobalBool("cleanMapAtGlobalSave", true);
 	m_confBool[FREE_PREMIUM] = getGlobalBool("freePremium", false);
-	m_confBool[ADMIN_LOGS_ENABLED] = getGlobalBool("adminLogsEnabled", false);
 	m_confBool[BROADCAST_BANISHMENTS] = getGlobalBool("broadcastBanishments", true);
 	m_confBool[GENERATE_ACCOUNT_NUMBER] = getGlobalBool("generateAccountNumber", true);
 	m_confBool[INGAME_GUILD_MANAGEMENT] = getGlobalBool("ingameGuildManagement", true);

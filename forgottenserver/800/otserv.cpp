@@ -37,9 +37,6 @@
 #include "protocollogin.h"
 #include "protocolgame.h"
 #include "status.h"
-#ifdef __REMOTE_CONTROL__
-#include "admin.h"
-#endif
 
 #include "configmanager.h"
 #include "scriptmanager.h"
@@ -85,9 +82,6 @@ boost::mutex g_loaderLock;
 boost::condition_variable g_loaderSignal;
 
 boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
-#ifdef __REMOTE_CONTROL__
-extern Admin* g_admin;
-#endif
 
 #ifndef WINDOWS
 int32_t OTSYS_getch()
@@ -514,13 +508,6 @@ void mainLoader(int argc, char *argv[])
 	std::clog << ">> Loading map and spawns..." << std::endl;
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
 		startupErrorMessage();
-
-	#ifdef __REMOTE_CONTROL__
-	std::clog << ">> Loading administration protocol" << std::endl;
-	g_admin = new Admin();
-	if(!g_admin->loadFromXml())
-		startupErrorMessage("Unable to load administration protocol!");
-	#endif
 
 	std::clog << ">> Checking world type... ";
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));

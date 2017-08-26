@@ -1,7 +1,7 @@
 [Project]
 FileName=TheForgottenServer.dev
 Name=TheForgottenServer
-UnitCount=156
+UnitCount=154
 Type=1
 Ver=1
 ObjFiles=
@@ -1439,28 +1439,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit151]
-FileName=..\admin.cpp
-CompileCpp=1
-Folder=TheForgottenServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit152]
-FileName=..\admin.h
-CompileCpp=1
-Folder=TheForgottenServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit153]
-FileName=..\itemattributes.cpp
+FileName=..\itemattributes.h
 CompileCpp=1
 Folder=TheForgottenServer
 Compile=1
@@ -1468,6 +1448,16 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=0
+
+[Unit153]
+FileName=..\group.cpp
+CompileCpp=1
+Folder=TheForgottenServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
 
 [Unit155]
 FileName=..\group.cpp
@@ -1708,14 +1698,14 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit154]
-FileName=..\itemattributes.h
+FileName=..\group.h
 CompileCpp=1
 Folder=TheForgottenServer
 Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=0
+BuildCmd=
 
 [Unit157]
 FileName=..\itemattributes.cpp
@@ -1756,4 +1746,14 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+
+[Unit151]
+FileName=..\itemattributes.cpp
+CompileCpp=1
+Folder=TheForgottenServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=0
 

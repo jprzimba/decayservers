@@ -77,7 +77,6 @@
 	worldId = 0
 	ip = "127.0.0.1"
 	loginPort = 7171
-	adminPort = 7171
 	loginTries = 10
 	retryTimeout = 5 * 1000
 	loginTimeout = 60 * 1000
@@ -318,7 +317,6 @@
 	-- Logs
 	-- NOTE: This kind of logging does not work in GUI version.
 	-- For such, please compile the software with __GUI_LOGS__ flag.
-	adminLogsEnabled = false
 	displayPlayersLogging = true
 	prefixChannelLogs = ""
 	runFile = ""

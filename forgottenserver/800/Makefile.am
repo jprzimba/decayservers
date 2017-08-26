@@ -13,11 +13,8 @@ endif
 if USE_SQLITE
 MAYBE_SQLITE = databasesqlite.cpp databasesqlite.h
 endif
-if REMOTE_CONTROL
-MAYBE_REMOTE = admin.cpp admin.h
-endif
 
-theforgottenserver_SOURCES = account.h actions.cpp actions.h $(MAYBE_REMOTE) \
+theforgottenserver_SOURCES = account.h actions.cpp actions.h \
 	allocator.cpp allocator.h baseevents.cpp baseevents.h beds.cpp \
 	beds.h chat.cpp chat.h combat.cpp combat.h condition.cpp condition.h \
 	config.h configmanager.cpp configmanager.h connection.cpp \
