@@ -89,7 +89,6 @@
 	loginMessage = "Welcome to the Forgotten Server!"
 	statusTimeout = 5 * 60 * 1000
 	replaceKickOnLogin = true
-	loginOnlyWithLoginServer = false
 	premiumPlayerSkipWaitList = false
 
 	-- Database
@@ -149,7 +148,7 @@
 	-- NOTE: storeTrash costs more memory, but will perform alot faster cleaning.
 	mapName = "forgotten"
 	mapAuthor = "Komic"
-	randomizeTiles = false
+	randomizeTiles = true
 	storeTrash = true
 	cleanProtectedZones = true
 
@@ -161,17 +160,17 @@
 
 	-- Process
 	-- NOTE: daemonize works only on *nix, same as niceLevel, while
-	-- NOTE: defaultPriority works only on Windows and niceLevel on *nix
+	-- defaultPriority works only on Windows.
 	-- coresUsed are seperated by comma cores ids used by server process,
 	-- default is -1, so it stays untouched (automaticaly assigned by OS).
 	daemonize = false
-	defaultPriority = "high"
+	defaultPriority = "normal"
 	niceLevel = 5
 	coresUsed = "-1"
 
 	-- Startup
-	optimizeDatabaseAtStartup = true
-	removePremiumOnInit = true
+	startupDatabaseOptimization = true
+	updatePremiumStateAtStartup = true
 	skipItemsVersionCheck = false
 
 	-- Spells
@@ -195,6 +194,7 @@
 	-- NOTE: promptExceptionTracerErrorBox works only with precompiled support feature,
 	-- called "exception tracer" (__EXCEPTION_TRACER__ flag).
 	dataDirectory = "data/"
+	logsDirectory = "data/logs/"
 	bankSystem = true
 	displaySkillLevelOnAdvance = false
 	promptExceptionTracerErrorBox = true
@@ -239,6 +239,7 @@
 	-- Blessings
 	-- NOTE: blessingReduction* regards items/containers loss.
 	-- eachBlessReduction is how much each bless reduces the experience/magic/skills loss.
+	blessings = true
 	blessingOnlyPremium = true
 	blessingReductionBase = 30
 	blessingReductionDecreament = 5

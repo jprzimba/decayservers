@@ -29,7 +29,7 @@ ConfigManager::ConfigManager()
 	m_confString[CONFIG_FILE] = getFilePath(FILE_TYPE_CONFIG, "config.lua");
 
 	m_confNumber[LOGIN_PORT] = 0;
-	m_confString[DATA_DIRECTORY] = m_confString[IP] = m_confString[RUNFILE] = m_confString[ERROR_LOG] = m_confString[OUTPUT_LOG] = "";
+	m_confString[DATA_DIRECTORY] = m_confString[LOGS_DIRECTORY] = m_confString[IP] = m_confString[RUNFILE] = m_confString[ERROR_LOG] = m_confString[OUTPUT_LOG] = "";
 	m_confBool[DAEMONIZE] = false;
 }
 
@@ -54,6 +54,9 @@ bool ConfigManager::load()
 	{
 		if(m_confString[DATA_DIRECTORY] == "")
 			m_confString[DATA_DIRECTORY] = getGlobalString("dataDirectory", "data/");
+
+		if(m_confString[LOGS_DIRECTORY] == "")
+			m_confString[LOGS_DIRECTORY] = getGlobalString("logsDirectory", "logs/");
 
 		if(m_confString[IP] == "")
 			m_confString[IP] = getGlobalString("ip", "127.0.0.1");
@@ -94,7 +97,7 @@ bool ConfigManager::load()
 
 
 		m_confBool[TRUNCATE_LOGS] = getGlobalBool("truncateLogsOnStartup", true);
-		m_confBool[OPTIMIZE_DB_AT_STARTUP] = getGlobalBool("optimizeDatabaseAtStartup", true);
+		m_confBool[OPTIMIZE_DATABASE] = getGlobalBool("startupDatabaseOptimization", true);
 		m_confBool[GLOBALSAVE_ENABLED] = getGlobalBool("globalSaveEnabled", true);
 		m_confBool[RANDOMIZE_TILES] = getGlobalBool("randomizeTiles", true);
 		m_confBool[STORE_TRASH] = getGlobalBool("storeTrash", true);
@@ -241,7 +244,7 @@ bool ConfigManager::load()
 	m_confBool[HOUSE_PRICEASRENT] = getGlobalBool("housePriceAsRent", false);
 	m_confBool[BANK_SYSTEM] = getGlobalBool("bankSystem", true);
 	m_confBool[PREMIUM_FOR_PROMOTION] = getGlobalBool("premiumForPromotion", true);
-	m_confBool[REMOVE_PREMIUM_ON_INIT] = getGlobalBool("removePremiumOnInit", true);
+	m_confBool[INIT_PREMIUM_UPDATE] = getGlobalBool("updatePremiumStateAtStartup", true);
 	m_confBool[SHOW_HEALING_DAMAGE] = getGlobalBool("showHealingDamage", false);
 	m_confBool[TELEPORT_SUMMONS] = getGlobalBool("teleportAllSummons", false);
 	m_confBool[TELEPORT_PLAYER_SUMMONS] = getGlobalBool("teleportPlayerSummons", false);
@@ -252,6 +255,7 @@ bool ConfigManager::load()
 	m_confBool[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool("spellNameInsteadOfWords", false);
 	m_confBool[EMOTE_SPELLS] = getGlobalBool("emoteSpells", false);
 	m_confBool[SAVE_GLOBAL_STORAGE] = getGlobalBool("saveGlobalStorage", true);
+	m_confBool[BLESSINGS] = getGlobalBool("blessings", true);
 	m_confBool[BLESSING_ONLY_PREMIUM] = getGlobalBool("blessingOnlyPremium", true);
 	m_confBool[BED_REQUIRE_PREMIUM] = getGlobalBool("bedsRequirePremium", true);
 	m_confBool[ALLOW_CHANGECOLORS] = getGlobalBool("allowChangeColors", true);

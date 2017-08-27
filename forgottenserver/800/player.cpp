@@ -3993,7 +3993,8 @@ void Player::setPromotionLevel(uint32_t pLevel)
 
 uint16_t Player::getBlessings() const
 {
-	if(!isPremium() && g_config.getBool(ConfigManager::BLESSING_ONLY_PREMIUM))
+	if(!g_config.getBool(ConfigManager::BLESSINGS) || (!isPremium() &&
+		g_config.getBool(ConfigManager::BLESSING_ONLY_PREMIUM)))
 		return 0;
 
 	uint16_t count = 0;
@@ -4619,7 +4620,7 @@ void Player::leaveGuild()
 	sendClosePrivate(CHANNEL_GUILD);
 	guildLevel = GUILDLEVEL_NONE;
 	guildId = rankId = 0;
-	guildName = rankName = guildNick = "";
+	guildName = rankName = guildNick = std::string();
 }
 
 bool Player::isPremium() const
@@ -4673,11 +4674,11 @@ void Player::setGroupId(int32_t newId)
 
 void Player::setGroup(Group* newGroup)
 {
-	if(newGroup)
-	{
-		group = newGroup;
-		groupId = group->getId();
-	}
+	if(!newGroup)
+		return;
+
+	group = newGroup;
+	groupId = group->getId();
 }
 
 PartyShields_t Player::getPartyShield(const Creature* creature) const

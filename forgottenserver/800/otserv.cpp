@@ -307,8 +307,16 @@ void mainLoader(int argc, char *argv[])
 	}
 
 #endif
+	// silently append trailing slash
+	std::string path = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	g_config.setString(ConfigManager::DATA_DIRECTORY, path.erase(path.find_last_not_of("/") + 1) + "/");
 
+	path = g_config.getString(ConfigManager::LOGS_DIRECTORY);
+	g_config.setString(ConfigManager::LOGS_DIRECTORY, path.erase(path.find_last_not_of("/") + 1) + "/");
+
+	std::clog << ">> Opening logs" << std::endl;
 	Logger::getInstance()->open();
+
 	IntegerVec cores = vectorAtoi(explodeString(g_config.getString(ConfigManager::CORES_USED), ","));
 	if(cores[0] != -1)
 	{
@@ -403,7 +411,7 @@ void mainLoader(int argc, char *argv[])
 
 		DatabaseManager::getInstance()->checkTriggers();
 		DatabaseManager::getInstance()->checkEncryption();
-		if(g_config.getBool(ConfigManager::OPTIMIZE_DB_AT_STARTUP) && !DatabaseManager::getInstance()->optimizeTables())
+		if(g_config.getBool(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::getInstance()->optimizeTables())
 			std::clog << ">> No tables were optimized." << std::endl;
 	}
 	else
