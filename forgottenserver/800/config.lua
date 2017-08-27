@@ -203,16 +203,21 @@
 	tradeLimit = 100
 	useCapacity = true
 
+	-- Depot
+	defaultDepotSizePremium = 2000
+	defaultDepotSize = 1000
+
 	-- VIP list
 	separateVipListPerCharacter = false
 	vipListDefaultLimit = 20
 	vipListDefaultPremiumLimit = 100
 
 	-- Saving-related
-	-- useHouseDataStorage usage may be found at README.
+	-- houseDataStorage, you can use binary and/or relational values.
+	houseDataStorage = "binary"
 	saveGlobalStorage = true
-	useHouseDataStorage = false
 	storePlayerDirection = false
+	savePlayerData = true
 
 	-- Loot
 	-- monsterLootMessage 0 to disable, 1 - only party, 2 - only player, 3 - party or player (like Tibia's)
@@ -228,9 +233,10 @@
 	idleWarningTime = 14 * 60 * 1000
 	idleKickTime = 15 * 60 * 1000
 	expireReportsAfterReads = 1
-	playerQueryDeepness = 2
-	maxItemsPerPZTile = 0
-	maxItemsPerHouseTile = 0
+	playerQueryDeepness = -1
+	tileLimit = 0
+	protectionTileLimit = 0
+	houseTileLimit = 0
 
 	-- Premium-related
 	freePremium = false
@@ -248,6 +254,7 @@
 	-- Rates
 	-- NOTE: experienceStages configuration is located in data/XML/stages.xml.
 	-- rateExperienceFromPlayers 0 to disable.
+	-- For constant spawn count increment, use exact values in rateSpawn* variables.
 	experienceStages = false
 	rateExperience = 5.0
 	rateExperienceFromPlayers = 0
@@ -277,7 +284,9 @@
 	-- multiplied by player attack speed.
 	-- rateStaminaGain is divider of every logged out second, eg:
 	-- 60000 / 3 = 20000 milliseconds, what gives 20 stamina seconds for 1 minute being logged off.
-	-- rateStaminaThresholdGain is divider for the premium stamina.
+	-- rateStaminaThresholdGain is dividing in case the normal gain (that is
+	-- multiplied by rateStaminaGain, btw.) passed above threshold, eg:
+	-- 60 * 1000 / 3 = 20 / 4 = 5 seconds (3 * 4 = 12 minutes for 1 stamina minute).
 	-- staminaRatingLimit* is in minutes.
 	-- don't change notting here if you don't know
 	rateStaminaLoss = 1
@@ -295,8 +304,10 @@
 	-- if you want such a system please check out data/globalevents/globalevents.xml.
 	globalSaveEnabled = false
 	globalSaveHour = 8
+	globalSaveMinute = 0
 	shutdownAtGlobalSave = true
 	cleanMapAtGlobalSave = false
+	closeInstanceOnShutdown = true
 
 	-- Spawns
 	deSpawnRange = 2
@@ -316,11 +327,9 @@
 	displayGamemastersWithOnlineCommand = false
 
 	-- Logs
-	-- NOTE: This kind of logging does not work in GUI version.
-	-- For such, please compile the software with __GUI_LOGS__ flag.
 	displayPlayersLogging = true
 	prefixChannelLogs = ""
 	runFile = ""
-	outLogName = ""
+	outputLog = ""
 	errorLogName = ""
 	truncateLogsOnStartup = false

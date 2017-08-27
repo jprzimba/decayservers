@@ -118,11 +118,11 @@ void signalHandler(int32_t sig)
 
 		case SIGUSR1:
 			Dispatcher::getInstance().addTask(createTask(
-				boost::bind(&Game::setGameState, &g_game, GAME_STATE_CLOSED)));
+				boost::bind(&Game::setGameState, &g_game, GAMESTATE_CLOSED)));
 			break;
 
 		case SIGUSR2:
-			g_game.setGameState(GAME_STATE_NORMAL);
+			g_game.setGameState(GAMESTATE_NORMAL);
 			break;
 
 		case SIGCONT:
@@ -131,7 +131,7 @@ void signalHandler(int32_t sig)
 
 		case SIGQUIT:
 			Dispatcher::getInstance().addTask(createTask(
-				boost::bind(&Game::setGameState, &g_game, GAME_STATE_SHUTDOWN)));
+				boost::bind(&Game::setGameState, &g_game, GAMESTATE_SHUTDOWN)));
 			break;
 
 		case SIGTERM:
@@ -272,7 +272,7 @@ void mainLoader(int argc, char *argv[])
 	SetConsoleTitle(SOFTWARE_NAME);
 	#endif
 
-	g_game.setGameState(GAME_STATE_STARTUP);
+	g_game.setGameState(GAMESTATE_STARTUP);
 	#if !defined(WINDOWS) && !defined(__ROOT_PERMISSION__)
 	if(!getuid() || !geteuid())
 	{
@@ -495,7 +495,7 @@ void mainLoader(int argc, char *argv[])
 	}
 
 	std::clog << ">> Initializing game state modules and registering services..." << std::endl;
-	g_game.setGameState(GAME_STATE_INIT);
+	g_game.setGameState(GAMESTATE_INIT);
 
 	std::pair<uint32_t, uint32_t> IpNetMask;
 
@@ -546,7 +546,7 @@ void mainLoader(int argc, char *argv[])
 	if(getuid() == 0 || geteuid() == 0)
 		std::clog << ">> WARNING: " << SOFTWARE_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
 	#endif
-	g_game.setGameState(GAME_STATE_NORMAL);
+	g_game.setGameState(GAMESTATE_NORMAL);
 
 	g_game.start();
 	g_loaderSignal.notify_all();

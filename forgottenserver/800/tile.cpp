@@ -119,6 +119,21 @@ bool Tile::hasHeight(uint32_t n) const
 	return false;
 }
 
+bool Tile::isFull() const
+{
+	uint32_t limit = 0;
+	if(hasFlag(TILESTATE_PROTECTIONZONE))
+		limit = g_config.getNumber(ConfigManager::PROTECTION_TILE_LIMIT);
+	else
+		limit = g_config.getNumber(ConfigManager::TILE_LIMIT);
+
+	if(!limit)
+		limit = 0xFFFF;
+
+	const TileItemVector* items = getItemList();
+	return items && items->size() >= limit;
+}
+
 uint32_t Tile::getCreatureCount() const
 {
 	if(const CreatureVector* creatures = getCreatures())
@@ -664,11 +679,11 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t,
 			std::clog << "[Notice - Tile::__queryAdd] thing->getParent() == NULL" << std::endl;
 
 #endif
-		if(items && items->size() >= 0xFFFF)
-			return RET_NOTPOSSIBLE;
-
 		if(hasBitSet(FLAG_NOLIMIT, flags))
 			return RET_NOERROR;
+
+		if(isFull())
+			return RET_TILEISFULL;
 
 		bool itemIsHangable = item->isHangable();
 		if(!ground && !itemIsHangable)
@@ -681,13 +696,6 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t,
 				if(!(*cit)->isGhost() && item->isBlocking(*cit))
 					return RET_NOTENOUGHROOM;
 			}
-		}
-
-		if(hasFlag(TILESTATE_PROTECTIONZONE))
-		{
-			const uint32_t itemLimit = g_config.getNumber(ConfigManager::ITEMLIMIT_PROTECTIONZONE);
-			if(itemLimit && getThingCount() > itemLimit)
-				return RET_TILEISFULL;
 		}
 
 		bool hasHangable = false, supportHangable = false;

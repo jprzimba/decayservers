@@ -675,14 +675,6 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 
 	Database* db = Database::getInstance();
 	DBQuery query;
-	query << "SELECT `save` FROM `players` WHERE `id` = " << player->getGUID() << " LIMIT 1";
-
-	DBResult* result;
-	if(!(result = db->storeQuery(query.str())))
-		return false;
-
-	const bool save = result->getDataInt("save");
-	result->free();
 
 	DBTransaction trans(db);
 	if(!trans.begin())
@@ -690,7 +682,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 
 	query.str("");
 	query << "UPDATE `players` SET `lastlogin` = " << player->lastLogin << ", `lastip` = " << player->lastIP;
-	if(!save || !player->isSaving())
+	if(!player->isSaving() || !g_config.getBool(ConfigManager::SAVE_PLAYER_DATA))
 	{
 		query << " WHERE `id` = " << player->getGUID() << db->getUpdateLimiter();
 		if(!db->executeQuery(query.str()))

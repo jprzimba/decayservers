@@ -131,6 +131,9 @@ class TileItemVector
 		Item* getTopTopItem();
 		Item* getTopDownItem();
 
+		void addDownItem() {++downItemCount;}
+		void removeDownItem() {--downItemCount;}
+
 	private:
 		ItemVector items;
 		uint16_t downItemCount;
@@ -172,8 +175,11 @@ class Tile : public Cylinder
 		Item* getItemByTopOrder(uint32_t topOrder);
 
 		uint32_t getThingCount() const {return thingCount;}
+		void updateThingCount(int32_t amount) {thingCount += amount;}
+
 		uint32_t getCreatureCount() const;
 		uint32_t getItemCount() const;
+
 		uint32_t getTopItemCount() const;
 		uint32_t getDownItemCount() const;
 
@@ -231,6 +237,7 @@ class Tile : public Cylinder
 		}
 
 		bool hasHeight(uint32_t n) const;
+		bool isFull() const;
 
 		void moveCreature(Creature* actor, Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
 		int32_t getClientIndexOfThing(const Player* player, const Thing* thing) const;
@@ -277,13 +284,13 @@ class Tile : public Cylinder
 		virtual void __internalAddThing(Thing* thing) {__internalAddThing(0, thing);}
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
+		void onUpdateTile();
+		void updateTileFlags(Item* item, bool removed);
+
 	private:
 		void onAddTileItem(Item* item);
 		void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
 		void onRemoveTileItem(const SpectatorVec& list, std::vector<uint32_t>& oldStackPosVector, Item* item);
-		void onUpdateTile();
-
-		void updateTileFlags(Item* item, bool removed);
 
 	protected:
 		bool isDynamic() const {return (m_flags & TILESTATE_DYNAMIC_TILE);}

@@ -65,7 +65,7 @@ bool ConfigManager::load()
 			m_confString[RUNFILE] = getGlobalString("runFile", "");
 
 		if(m_confString[OUTPUT_LOG] == "")
-			m_confString[OUTPUT_LOG] = getGlobalString("outLogName", "");
+			m_confString[OUTPUT_LOG] = getGlobalString("outputLog", "");
 
 		if(m_confString[ERROR_LOG] == "")
 			m_confString[ERROR_LOG] = getGlobalString("errorLogName", "");
@@ -92,6 +92,7 @@ bool ConfigManager::load()
 		m_confNumber[MYSQL_READ_TIMEOUT] = getGlobalNumber("mysqlReadTimeout", 10);
 		m_confNumber[MYSQL_WRITE_TIMEOUT] = getGlobalNumber("mysqlWriteTimeout", 10);
 		m_confNumber[GLOBALSAVE_H] = getGlobalNumber("globalSaveHour", 8);
+		m_confNumber[GLOBALSAVE_M] = getGlobalNumber("globalSaveMinute", 0);
 		m_confNumber[WORLD_ID] = getGlobalNumber("worldId", 0);
 		m_confNumber[PASSWORDTYPE] = PASSWORD_TYPE_PLAIN;
 
@@ -116,6 +117,7 @@ bool ConfigManager::load()
 	m_confString[PREFIX_CHANNEL_LOGS] = getGlobalString("prefixChannelLogs", "");
 	m_confString[CORES_USED] = getGlobalString("coresUsed", "-1");
 	m_confString[MAILBOX_DISABLED_TOWNS] = getGlobalString("mailboxDisabledTowns", "-1");
+	m_confString[HOUSE_STORAGE] = getGlobalString("houseDataStorage", "binary");
 
 
 	m_confNumber[LOGIN_TRIES] = getGlobalNumber("loginTries", 3);
@@ -184,8 +186,9 @@ bool ConfigManager::load()
 	m_confNumber[BAN_WEEKLY_LIMIT] = getGlobalNumber("weeklyFragsToBanishment", m_confNumber[RED_WEEKLY_LIMIT]);
 	m_confNumber[BAN_MONTHLY_LIMIT] = getGlobalNumber("monthlyFragsToBanishment", m_confNumber[RED_MONTHLY_LIMIT]);
 	m_confNumber[DEATHLIST_REQUIRED_TIME] = getGlobalNumber("deathListRequiredTime", 1 * 60 * 1000);
-	m_confNumber[ITEMLIMIT_PROTECTIONZONE] = getGlobalNumber("maxItemsPerPZTile", 0);
-	m_confNumber[ITEMLIMIT_HOUSETILE] = getGlobalNumber("maxItemsPerHouseTile", 0);
+	m_confNumber[TILE_LIMIT] = getGlobalNumber("tileLimit", 0);
+	m_confNumber[PROTECTION_TILE_LIMIT] = getGlobalNumber("protectionTileLimit", 0);
+	m_confNumber[HOUSE_TILE_LIMIT] = getGlobalNumber("houseTileLimit", 0);
 	m_confNumber[SQUARE_COLOR] = getGlobalNumber("squareColor", 0);
 	m_confNumber[LOOT_MESSAGE] = getGlobalNumber("monsterLootMessage", 3);
 	m_confNumber[LOOT_MESSAGE_TYPE] = getGlobalNumber("monsterLootMessageType", 25);
@@ -198,6 +201,8 @@ bool ConfigManager::load()
 	m_confNumber[MAIL_ATTEMPTS] = getGlobalNumber("mailMaxAttempts", 20);
 	m_confNumber[MAIL_BLOCK] = getGlobalNumber("mailBlockPeriod", 3600000);
 	m_confNumber[MAIL_ATTEMPTS_FADE] = getGlobalNumber("mailAttemptsFadeTime", 600000);
+	m_confNumber[DEFAULT_DEPOT_SIZE_PREMIUM] = getGlobalNumber("defaultDepotSizePremium", 2000);
+	m_confNumber[DEFAULT_DEPOT_SIZE] = getGlobalNumber("defaultDepotSize", 2000);
 
 
 	m_confDouble[RATE_EXPERIENCE] = getGlobalDouble("rateExperience", 1);
@@ -262,7 +267,6 @@ bool ConfigManager::load()
 	m_confBool[STOP_ATTACK_AT_EXIT] = getGlobalBool("stopAttackingAtExit", false);
 	m_confBool[DISABLE_OUTFITS_PRIVILEGED] = getGlobalBool("disableOutfitsForPrivilegedPlayers", false);
 	m_confBool[OLD_CONDITION_ACCURACY] = getGlobalBool("oldConditionAccuracy", false);
-	m_confBool[HOUSE_STORAGE] = getGlobalBool("useHouseDataStorage", false);
 	m_confBool[TRACER_BOX] = getGlobalBool("promptExceptionTracerErrorBox", true);
 	m_confBool[STORE_DIRECTION] = getGlobalBool("storePlayerDirection", false);
 	m_confBool[DISPLAY_LOGGING] = getGlobalBool("displayPlayersLogging", true);
@@ -292,6 +296,8 @@ bool ConfigManager::load()
 	m_confBool[USE_CAPACITY] = getGlobalBool("useCapacity", true);
 	m_confBool[CLASSIC_SPELLS] = getGlobalBool("classicSpells", true);
 	m_confBool[MULTIPLE_NAME] = getGlobalBool("multipleNames", false);
+	m_confBool[SAVE_PLAYER_DATA] = getGlobalBool("savePlayerData", true);
+	m_confBool[CLOSE_INSTANCE_ON_SHUTDOWN] = getGlobalBool("closeInstanceOnShutdown", true);
 
 	m_loaded = true;
 	return true;

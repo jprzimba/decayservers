@@ -1460,6 +1460,8 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 void Player::onAddContainerItem(const Container* container, const Item* item)
 {
 	checkTradeState(item);
+	if(backpack.first && (const_cast<Container*>(container) != backpack.first || backpack.first->full()))
+		backpack.first = NULL;
 }
 
 void Player::onUpdateContainerItem(const Container* container, uint8_t slot,
@@ -1474,6 +1476,7 @@ void Player::onUpdateContainerItem(const Container* container, uint8_t slot,
 
 void Player::onRemoveContainerItem(const Container* container, uint8_t slot, const Item* item)
 {
+ 	backpack.first = NULL;
 	if(tradeState == TRADE_TRANSFER)
 		return;
 
@@ -1520,8 +1523,9 @@ void Player::onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& 
 		checkTradeState(oldItem);
 }
 
-void Player::onRemoveInventoryItem(slots_t slot, Item* item)
+void Player::onRemoveInventoryItem(slots_t, Item* item)
 {
+	backpack.first = NULL;
 	if(tradeState == TRADE_TRANSFER)
 		return;
 
@@ -2646,10 +2650,19 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 		if(!item)
 			return this;
 
+		bool autoStack = (flags & FLAG_IGNOREAUTOSTACK) != FLAG_IGNOREAUTOSTACK;
+		if((!autoStack || !item->isStackable()) && backpack.first &&
+			backpack.first->__queryAdd(backpack.second, item, item->getItemCount(), flags))
+		{
+			index = backpack.second;
+			if(backpack.second != INDEX_WHEREEVER)
+				++backpack.second;
+
+			return backpack.first;
+		}
+
 		std::list<std::pair<Container*, int32_t> > containers;
 		std::list<std::pair<Cylinder*, int32_t> > freeSlots;
-
-		bool autoStack = !((flags & FLAG_IGNOREAUTOSTACK) == FLAG_IGNOREAUTOSTACK);
 		for(int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i)
 		{
 			if(Item* invItem = inventory[i])
@@ -2667,10 +2680,11 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 				if(Container* container = invItem->getContainer())
 				{
-					if(!autoStack && container->__queryAdd(INDEX_WHEREEVER,
-						item, item->getItemCount(), flags) == RET_NOERROR)
+					if(!autoStack && container->__queryAdd(
+						INDEX_WHEREEVER, item, item->getItemCount(), flags) == RET_NOERROR)
 					{
 						index = INDEX_WHEREEVER;
+						backpack = std::make_pair(container, index + 1);
 						return container;
 					}
 
@@ -2706,7 +2720,8 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					if(tmpItem == item || tmpItem == tradeItem)
 						continue;
 
-					if(tmpContainer->__queryAdd(n, item, item->getItemCount(), 0) == RET_NOERROR && tmpItem->getID() == item->getID() && tmpItem->getItemCount() < 100)
+					if(autoStack && item->isStackable() && tmpContainer->__queryAdd(n, item, item->getItemCount(),
+						0) == RET_NOERROR && tmpItem->getID() == item->getID() && tmpItem->getItemCount() < 100)
 					{
 						index = n;
 						*destItem = tmpItem;
@@ -2719,6 +2734,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 							item, item->getItemCount(), flags) == RET_NOERROR)
 						{
 							index = INDEX_WHEREEVER;
+							backpack = std::make_pair(container, index + 1);
 							return container;
 						}
 
@@ -2733,6 +2749,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						if(tmpContainer->__queryAdd(n, item, item->getItemCount(), 0) == RET_NOERROR)
 						{
 							index = n;
+							backpack = std::make_pair(tmpContainer, index + 1);
 							return tmpContainer;
 						}
 					}

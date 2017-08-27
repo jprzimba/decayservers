@@ -77,8 +77,8 @@ ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 	}
 	else if(thing->getItem())
 	{
-		const uint32_t itemLimit = g_config.getNumber(ConfigManager::ITEMLIMIT_HOUSETILE);
-		if(itemLimit && getThingCount() > itemLimit)
+		const uint32_t itemLimit = g_config.getNumber(ConfigManager::HOUSE_TILE_LIMIT);
+		if(itemLimit && getItemCount() > itemLimit)
 			return RET_TILEISFULL;
 
 		if(actor && g_config.getBool(ConfigManager::HOUSE_PROTECTION))

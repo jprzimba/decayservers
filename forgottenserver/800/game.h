@@ -57,15 +57,15 @@ enum WorldType_t
 
 enum GameState_t
 {
-	GAME_STATE_FIRST = 1,
-	GAME_STATE_STARTUP = GAME_STATE_FIRST,
-	GAME_STATE_INIT = 2,
-	GAME_STATE_NORMAL = 3,
-	GAME_STATE_MAINTAIN = 4,
-	GAME_STATE_CLOSED = 5,
-	GAME_STATE_CLOSING = 6,
-	GAME_STATE_SHUTDOWN = 7,
-	GAME_STATE_LAST = GAME_STATE_SHUTDOWN
+	GAMESTATE_FIRST = 1,
+	GAMESTATE_STARTUP = GAMESTATE_FIRST,
+	GAMESTATE_INIT = 2,
+	GAMESTATE_NORMAL = 3,
+	GAMESTATE_MAINTAIN = 4,
+	GAMESTATE_CLOSED = 5,
+	GAMESTATE_CLOSING = 6,
+	GAMESTATE_SHUTDOWN = 7,
+	GAMESTATE_LAST = GAMESTATE_SHUTDOWN
 };
 
 enum LightState_t
@@ -154,7 +154,7 @@ class Game
 		void checkHighscores();
 		bool reloadHighscores();
 
-		void prepareGlobalSave();
+		void prepareGlobalSave(uint8_t minutes);
 		void globalSave();
 
 		/**
@@ -546,7 +546,9 @@ class Game
 		void saveGameState(bool shallow);
 		void loadGameState();
 
-		void cleanMap(uint32_t& count);
+		void cleanMapEx(uint32_t& count);
+		void cleanMap();
+	
 		void refreshMap(RefreshTiles::iterator* it = NULL, uint32_t limit = 0);
 		void proceduralRefresh(RefreshTiles::iterator* it = NULL);
 
@@ -587,9 +589,6 @@ class Game
 		inline StageList::const_iterator getFirstStage() const {return stages.begin();}
 		inline StageList::const_iterator getLastStage() const {return stages.end();}
 		size_t getStagesCount() const {return stages.size();}
-
-		void setGlobalSaveMessage(int16_t key, bool value) {globalSaveMessage[key] = value;}
-		bool getGlobalSaveMessage(int16_t key) const {return globalSaveMessage[key];}
 
 		Map* getMap() {return map;}
 		const Map* getMap() const {return map;}
@@ -645,7 +644,6 @@ class Game
 		int32_t lastMotdId;
 		uint32_t playersRecord;
 		uint32_t checkLightEvent, checkCreatureEvent, checkDecayEvent, saveEvent;
-		bool globalSaveMessage[2];
 
 		RefreshTiles refreshTiles;
 		Trash trash;

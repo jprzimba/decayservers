@@ -43,6 +43,7 @@
 
 #include "baseevents.h"
 #include "monsters.h"
+#include "movement.h"
 #include "raids.h"
 
 #include "configmanager.h"
@@ -55,6 +56,7 @@ extern Game g_game;
 extern Monsters g_monsters;
 extern Chat g_chat;
 extern ConfigManager g_config;
+extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
 extern TalkActions* g_talkActions;
 
@@ -2310,6 +2312,9 @@ void LuaScriptInterface::registerFunctions()
 	//doSaveServer()
 	lua_register(m_luaState, "doSaveServer", LuaScriptInterface::luaDoSaveServer);
 
+	//doSaveHouse({list})
+	lua_register(m_luaState, "doSaveHouse", LuaScriptInterface::luaDoSaveHouse);
+
 	//doCleanHouse(houseId)
 	lua_register(m_luaState, "doCleanHouse", LuaScriptInterface::luaDoCleanHouse);
 
@@ -3726,12 +3731,16 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 
 int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 {
-	//doRelocate(pos, posTo[, creatures = true])
-	//Moves all moveable objects from pos to posTo
+	//doRelocate(pos, posTo[, creatures = true[, unmovable = true]])
+	//Moves all[ movable] objects from pos to posTo
+	//Uses protected methods for optimal speed
+	bool unmovable = true, creatures = true;
+	int32_t params = lua_gettop(L);
+	if(params > 3)
+		unmovable = popBoolean(L);
 
-	bool creatures = true;
-	if(lua_gettop(L) > 2)
-		creatures = popNumber(L);
+	if(params > 2)
+		creatures = popBoolean(L);
 
 	PositionEx toPos;
 	popPosition(L, toPos);
@@ -3739,7 +3748,7 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	PositionEx fromPos;
 	popPosition(L, fromPos);
 
-	Tile* fromTile = g_game.getTile(fromPos.x, fromPos.y, fromPos.z);
+	Tile* fromTile = g_game.getTile(fromPos);
 	if(!fromTile)
 	{
 		errorEx(getError(LUA_ERROR_TILE_NOT_FOUND));
@@ -3747,7 +3756,7 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 		return 1;
 	}
 
-	Tile* toTile = g_game.getTile(toPos.x, toPos.y, toPos.z);
+	Tile* toTile = g_game.getTile(toPos);
 	if(!toTile)
 	{
 		errorEx(getError(LUA_ERROR_TILE_NOT_FOUND));
@@ -3755,26 +3764,73 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 		return 1;
 	}
 
-	if(fromTile != toTile)
+	if(fromTile == toTile)
 	{
-		for(int32_t i = fromTile->getThingCount() - 1; i >= 0; --i)
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	TileItemVector *toItems = toTile->getItemList(),
+		*fromItems = fromTile->getItemList();
+	if(fromItems && toItems)
+	{
+		int32_t itemLimit = g_config.getNumber(toTile->hasFlag(TILESTATE_PROTECTIONZONE)
+			? ConfigManager::PROTECTION_TILE_LIMIT : ConfigManager::TILE_LIMIT), count = 0;
+		for(ItemVector::iterator it = fromItems->getBeginDownItem(); it != fromItems->getEndDownItem(); )
 		{
-			Thing* thing = fromTile->__getThing(i);
-			if(thing)
+			if(itemLimit && (int32_t)toItems->size() > itemLimit)
+				break;
+
+			const ItemType& iType = Item::items[(*it)->getID()];
+			if(!iType.isGroundTile() && !iType.alwaysOnTop && !iType.isMagicField() && (unmovable || iType.moveable))
 			{
-				if(Item* item = thing->getItem())
+				if(Item* item = (*it))
 				{
-					const ItemType& it = Item::items[item->getID()];
-					if(!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField())
-						g_game.internalTeleport(item, toPos, false, FLAG_IGNORENOTMOVEABLE);
+					it = fromItems->erase(it);
+					fromItems->removeDownItem();
+					fromTile->updateTileFlags(item, true);
+
+					g_moveEvents->onItemMove(NULL, item, fromTile, false);
+					g_moveEvents->onRemoveTileItem(fromTile, item);
+
+					item->setParent(toTile);
+					++count;
+
+					toItems->insert(toItems->getBeginDownItem(), item);
+					toItems->addDownItem();
+					toTile->updateTileFlags(item, false);
+
+					g_moveEvents->onAddTileItem(toTile, item);
+					g_moveEvents->onItemMove(NULL, item, toTile, true);
 				}
-				else if(creatures)
-				{
-					Creature* creature = thing->getCreature();
-					if(creature)
-						g_game.internalTeleport(creature, toPos, true);
-				}
+				else
+					++it;
 			}
+			else
+				++it;
+		}
+
+		fromTile->updateThingCount(-count);
+		toTile->updateThingCount(count);
+
+		fromTile->onUpdateTile();
+		toTile->onUpdateTile();
+		if(g_config.getBool(ConfigManager::STORE_TRASH)
+			&& fromTile->hasFlag(TILESTATE_TRASHED))
+		{
+			g_game.addTrash(toPos);
+			toTile->setFlag(TILESTATE_TRASHED);
+		}
+	}
+
+	if(creatures)
+	{
+		CreatureVector* creatureVector = fromTile->getCreatures();
+		Creature* creature = NULL;
+		while(creatureVector && !creatureVector->empty())
+		{
+			if((creature = (*creatureVector->begin())))
+				g_game.internalMoveCreature(NULL, creature, fromTile, toTile, FLAG_NOLIMIT);
 		}
 	}
 
@@ -8804,7 +8860,7 @@ int32_t LuaScriptInterface::luaDoSetGameState(lua_State* L)
 {
 	//doSetGameState(id)
 	uint32_t id = popNumber(L);
-	if(id >= GAME_STATE_FIRST && id <= GAME_STATE_LAST)
+	if(id >= GAMESTATE_FIRST && id <= GAMESTATE_LAST)
 	{
 		Dispatcher::getInstance().addTask(createTask(boost::bind(&Game::setGameState, &g_game, (GameState_t)id)));
 		lua_pushboolean(L, true);
@@ -8892,6 +8948,67 @@ int32_t LuaScriptInterface::luaDoSaveServer(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaDoSaveHouse(lua_State* L)
+{
+	//doSaveHouse({list})
+	IntegerVec list;
+	if(lua_istable(L, -1))
+	{
+		lua_pushnil(L);
+		while(lua_next(L, -2))
+			list.push_back(popNumber(L));
+
+		lua_pop(L, 2);
+	}
+	else
+		list.push_back(popNumber(L));
+
+	House* house;
+	std::vector<House*> houses;
+	for(IntegerVec::const_iterator it = list.begin(); it != list.end(); ++it)
+	{
+		if(!(house = Houses::getInstance()->getHouse(*it)))
+		{
+			std::stringstream s;
+			s << "House not found, ID: " << (*it);
+			errorEx(s.str());
+
+			lua_pushboolean(L, false);
+			return 1;
+		}
+
+		houses.push_back(house);
+	}
+
+	Database* db = Database::getInstance();
+	DBTransaction trans(db);
+	if(!trans.begin())
+	{
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	for(std::vector<House*>::iterator it = houses.begin(); it != houses.end(); ++it)
+	{
+		if(!IOMapSerialize::getInstance()->saveHouse(db, *it))
+		{
+			std::stringstream s;
+			s << "Unable to save house information, ID: " << (*it)->getId();
+			errorEx(s.str());
+		}
+
+		if(!IOMapSerialize::getInstance()->saveHouseItems(db, *it))
+		{
+			std::stringstream s;
+			s << "Unable to save house items, ID: " << (*it)->getId();
+			errorEx(s.str());
+		}
+	}
+
+	lua_pushboolean(L, trans.commit());
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaDoCleanHouse(lua_State* L)
 {
 	//doCleanHouse(houseId)
@@ -8911,7 +9028,7 @@ int32_t LuaScriptInterface::luaDoCleanMap(lua_State* L)
 {
 	//doCleanMap()
 	uint32_t count = 0;
-	g_game.cleanMap(count);
+	g_game.cleanMapEx(count);
 	lua_pushnumber(L, count);
 	return 1;
 }

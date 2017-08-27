@@ -143,7 +143,7 @@ int32_t Groups::getGroupId(const std::string& name)
 {
 	for(GroupsMap::iterator it = groupsMap.begin(); it != groupsMap.end(); ++it)
 	{
-		if(!strcasecmp(it->second->getName().c_str(), name.c_str()))
+		if(boost::algorithm::iequals(it->second->getName(), name))
 			return it->first;
 	}
 
@@ -155,7 +155,8 @@ uint32_t Group::getDepotLimit(bool premium) const
 	if(m_depotLimit > 0)
 		return m_depotLimit;
 
-	return (premium ? 2000 : 1000);
+	return (premium ? g_config.getNumber(ConfigManager::DEFAULT_DEPOT_SIZE_PREMIUM)
+		: g_config.getNumber(ConfigManager::DEFAULT_DEPOT_SIZE));
 }
 
 uint32_t Group::getMaxVips(bool premium) const
@@ -163,5 +164,6 @@ uint32_t Group::getMaxVips(bool premium) const
 	if(m_maxVips > 0)
 		return m_maxVips;
 
-	return (premium ? g_config.getNumber(ConfigManager::VIPLIST_DEFAULT_PREMIUM_LIMIT) : g_config.getNumber(ConfigManager::VIPLIST_DEFAULT_LIMIT));
+	return (premium ? g_config.getNumber(ConfigManager::VIPLIST_DEFAULT_PREMIUM_LIMIT)
+		: g_config.getNumber(ConfigManager::VIPLIST_DEFAULT_LIMIT));
 }
