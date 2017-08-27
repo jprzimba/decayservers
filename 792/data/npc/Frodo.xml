@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Frodo" script="data/npc/scripts/tools.lua" walkinterval="2000" floorchange="0">
+	<health now="150" max="150"/>
+	<look type="134" head="114" body="113" legs="113" feet="113" corpse="2212"/>
+	<parameters>
+		<parameter key="module_shop" value="1"/>
+		<parameter key="shop_buyable" value="aol,2173,10000;backpack,1988,20;pick,2553,10;shovel,2554,20;rope,2120,50"/>
+	</parameters>
+</npc>
