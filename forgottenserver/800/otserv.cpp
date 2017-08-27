@@ -463,6 +463,21 @@ void mainLoader(int argc, char *argv[])
 			startupErrorMessage("Unable to load monsters!");
 	}
 
+	if(fileExists(getFilePath(FILE_TYPE_OTHER, "npc/npcs.xml").c_str()))
+	{
+		std::clog << ">> Loading npcs" << std::endl;
+		if(!g_npcs.loadFromXml())
+		{
+			std::clog << "Unable to load npcs! Continue? (y/N)" << std::endl;
+			char buffer = OTSYS_getch();
+			if(buffer != 121 && buffer != 89)
+				startupErrorMessage("Unable to load npcs!");
+		}
+	}
+
+	std::clog << ">> Loading raids" << std::endl;
+	Raids::getInstance()->loadFromXml();
+
 	std::clog << ">> Loading mods..." << std::endl;
 	if(!ScriptManager::getInstance()->loadMods())
 		startupErrorMessage("Unable to load mods!");

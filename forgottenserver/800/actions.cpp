@@ -756,7 +756,9 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 				env->streamPosition(scriptstream, "toPosition", toPos, toPos.stackpos);
 			}
 
-			scriptstream << m_scriptData;
+			if(m_scriptData)
+				scriptstream << *m_scriptData;
+
 			bool result = true;
 			if(m_interface->loadBuffer(scriptstream.str()))
 			{

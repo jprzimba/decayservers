@@ -1482,3 +1482,39 @@ std::string getFilePath(FileType_t type, std::string name/* = ""*/)
 	}
 	return path;
 }
+
+Skulls_t getSkulls(std::string strValue)
+{
+	std::string tmpStrValue = asLowerCaseString(strValue);
+	if(tmpStrValue == "red" || tmpStrValue == "4")
+		return SKULL_RED;
+
+	if(tmpStrValue == "white" || tmpStrValue == "3")
+		return SKULL_WHITE;
+
+	if(tmpStrValue == "green" || tmpStrValue == "2")
+		return SKULL_GREEN;
+
+	if(tmpStrValue == "yellow" || tmpStrValue == "1")
+		return SKULL_YELLOW;
+
+	return SKULL_NONE;
+}
+
+PartyShields_t getShields(std::string strValue)
+{
+	std::string tmpStrValue = asLowerCaseString(strValue);
+	if(tmpStrValue == "yellow" || tmpStrValue == "4")
+		return SHIELD_YELLOW;
+
+	if(tmpStrValue == "blue" || tmpStrValue == "3")
+		return SHIELD_BLUE;
+
+	if(tmpStrValue == "whiteyellow" || tmpStrValue == "2")
+		return SHIELD_WHITEYELLOW;
+
+	if(tmpStrValue == "whiteblue" || tmpStrValue == "1")
+		return SHIELD_WHITEBLUE;
+
+	return SHIELD_NONE;
+}

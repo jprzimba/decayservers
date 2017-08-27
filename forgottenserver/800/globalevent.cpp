@@ -289,7 +289,9 @@ int32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old, Player* playe
 			scriptstream << "local old = " << old << std::endl;
 			scriptstream << "local cid = " << env->addThing(player) << std::endl;
 
-			scriptstream << m_scriptData;
+			if(m_scriptData)
+				scriptstream << *m_scriptData;
+
 			bool result = true;
 			if(m_interface->loadBuffer(scriptstream.str()))
 			{
@@ -335,8 +337,17 @@ int32_t GlobalEvent::executeEvent()
 		ScriptEnviroment* env = m_interface->getEnv();
 		if(m_scripted == EVENT_SCRIPT_BUFFER)
 		{
+			std::stringstream scriptstream;
+			if(m_eventType == GLOBALEVENT_NONE)
+				scriptstream << "local interval = " << m_interval << std::endl;
+			else if(m_eventType == GLOBALEVENT_TIMER)
+				scriptstream << "local time = " << m_interval << std::endl;
+
+			if(m_scriptData)
+				scriptstream << *m_scriptData;
+
 			bool result = true;
-			if(m_interface->loadBuffer(m_scriptData))
+			if(m_interface->loadBuffer(scriptstream.str()))
 			{
 				lua_State* L = m_interface->getState();
 				result = m_interface->getGlobalBool(L, "_result", true);
@@ -348,9 +359,17 @@ int32_t GlobalEvent::executeEvent()
 		else
 		{
 			env->setScriptId(m_scriptId, m_interface);
+			lua_State* L = m_interface->getState();
 			m_interface->pushFunction(m_scriptId);
 
-			bool result = m_interface->callFunction(0);
+			int32_t params = 0;
+			if(m_eventType == GLOBALEVENT_NONE || m_eventType == GLOBALEVENT_TIMER)
+			{
+				lua_pushnumber(L, m_interval);
+				params = 1;
+			}
+
+			bool result = m_interface->callFunction(params);
 			m_interface->releaseEnv();
 			return result;
 		}

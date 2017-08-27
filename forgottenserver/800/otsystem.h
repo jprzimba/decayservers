@@ -81,6 +81,12 @@ inline int64_t OTSYS_TIME()
 	#define __OTSERV_FUNCTION__ __FUNCDNAME__
 #endif
 
+#if BOOST_VERSION < 104400
+#define BOOST_DIR_ITER_FILENAME(iterator) (iterator)->path().filename()
+#else
+#define BOOST_DIR_ITER_FILENAME(iterator) (iterator)->path().filename().string()
+#endif
+
 #define foreach BOOST_FOREACH
 #define reverse_foreach BOOST_REVERSE_FOREACH
 

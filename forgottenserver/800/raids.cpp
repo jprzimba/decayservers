@@ -236,25 +236,23 @@ bool Raid::loadFromXml(const std::string& _filename)
 	xmlDocPtr doc = xmlParseFile(_filename.c_str());
 	if(!doc)
 	{
-		std::clog << "[Error - Raid::loadFromXml] Could not load raid file (" << _filename << ")." << std::endl;
-		std::clog << getLastXMLError() << std::endl;
+		std::clog << "[Error - Raid::loadFromXml] Could not load raid file " << _filename
+			<< std::endl << std::clog << getLastXMLError() << std::endl;
 		return false;
 	}
 
-	xmlNodePtr root, eventNode;
-	root = xmlDocGetRootElement(doc);
+	xmlNodePtr root = xmlDocGetRootElement(doc);
 	if(xmlStrcmp(root->name,(const xmlChar*)"raid"))
 	{
-		std::clog << "[Error - Raid::loadFromXml] Malformed raid file (" << _filename << ")." << std::endl;
+		std::clog << "[Error - Raid::loadFromXml] Malformed raid file " << _filename << std::endl;
 		xmlFreeDoc(doc);
 		return false;
 	}
 
 	std::string strValue;
-	eventNode = root->children;
-	while(eventNode)
+	for(xmlNodePtr eventNode = root->children; eventNode; eventNode = eventNode->next)
 	{
-		RaidEvent* event;
+		RaidEvent* event = NULL;
 		if(!xmlStrcmp(eventNode->name, (const xmlChar*)"announce"))
 			event = new AnnounceEvent(this, ref);
 		else if(!xmlStrcmp(eventNode->name, (const xmlChar*)"effect"))
@@ -268,10 +266,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		else if(!xmlStrcmp(eventNode->name, (const xmlChar*)"script"))
 			event = new ScriptEvent(this, ref);
 		else
-		{
-			eventNode = eventNode->next;
 			continue;
-		}
 
 		if(!event->configureRaidEvent(eventNode))
 		{
@@ -280,8 +275,6 @@ bool Raid::loadFromXml(const std::string& _filename)
 		}
 		else
 			raidEvents.push_back(event);
-
-		eventNode = eventNode->next;
 	}
 
 	//sort by delay time
@@ -936,25 +929,36 @@ bool ScriptEvent::configureRaidEvent(xmlNodePtr eventNode)
 		return false;
 
 	std::string scriptsName = Raids::getInstance()->getScriptBaseName();
-	if(!m_interface.loadDirectory(getFilePath(FILE_TYPE_OTHER, std::string(scriptsName + "/lib/"))))
-		std::clog << "[Warning - ScriptEvent::configureRaidEvent] Cannot load " << scriptsName << "/lib/" << std::endl;
+	if(!m_interface.getState())
+	{
+		m_interface.initState();
+		std::string path = getFilePath(FILE_TYPE_OTHER, std::string(scriptsName + "/lib/"));
+		if(!m_interface.loadDirectory(path, false, true))
+			std::clog << "[Warning - ScriptEvent::configureRaidEvent] Cannot load " << path << std::endl;
+	}
 
 	std::string strValue;
 	if(readXMLString(eventNode, "file", strValue))
 	{
-		if(!loadScript(getFilePath(FILE_TYPE_OTHER, std::string(scriptsName + "/scripts/" + strValue)), true))
+		std::string path = getFilePath(FILE_TYPE_OTHER, std::string(scriptsName + "/scripts/" + strValue));
+		if(!fileExists(path.c_str()))
 		{
-			std::clog << "[Error - ScriptEvent::configureRaidEvent] Cannot load raid script file (" << strValue << ")." << std::endl;
+			std::clog << "[Error - ScriptEvent::configureRaidEvent] Cannot find script file " << strValue << std::endl;
 			return false;
 		}
-	}
-	else if(!parseXMLContentString(eventNode->children, strValue) && !loadBuffer(strValue))
-	{
-		std::clog << "[Error - ScriptEvent::configureRaidEvent] Cannot load raid script buffer." << std::endl;
+
+		if(checkScript(scriptsName, path, true) && loadScript(path, true))
+			return true;
+
+		std::clog << "[Error - ScriptEvent::configureRaidEvent] Cannot load script file " << path << std::endl;
 		return false;
 	}
+	else if(parseXMLContentString(eventNode->children, strValue) &&
+		checkBuffer(scriptsName, strValue) && loadBuffer(strValue))
+		return true;
 
-	return true;
+	std::clog << "[Error - ScriptEvent::configureRaidEvent] Cannot load script buffer." << std::endl;
+	return false;
 }
 
 bool ScriptEvent::executeEvent() const
@@ -966,7 +970,7 @@ bool ScriptEvent::executeEvent() const
 		if(m_scripted == EVENT_SCRIPT_BUFFER)
 		{
 			bool result = true;
-			if(m_interface.loadBuffer(m_scriptData))
+			if(m_scriptData && m_interface.loadBuffer(*m_scriptData))
 			{
 				lua_State* L = m_interface.getState();
 				result = m_interface.getGlobalBool(L, "_result", true);

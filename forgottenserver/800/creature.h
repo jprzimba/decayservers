@@ -180,11 +180,6 @@ class Creature : public AutoId, virtual public Thing
 		uint32_t getID() const {return id;}
 		void setID()
 		{
-			/*
-			 * 0x10000000 - Player
-			 * 0x40000000 - Monster
-			 * 0x80000000 - NPC
-			 */
 			if(!id)
 				id = autoId | rangeId();
 		}

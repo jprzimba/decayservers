@@ -272,17 +272,14 @@ Thing* ScriptEnviroment::getThingByUID(uint32_t uid)
 	if(tmp && !tmp->isRemoved())
 		return tmp;
 
-	if(uid >= 0x10000000)
-	{
-		tmp = g_game.getCreatureByID(uid);
-		if(tmp && !tmp->isRemoved())
-		{
-			m_localMap[uid] = tmp;
-			return tmp;
-		}
-	}
+	if(uid < PLAYER_ID_RANGE)
+		return NULL;
 
-	return NULL;
+	if(!(tmp = g_game.getCreatureByID(uid)) || tmp->isRemoved())
+		return NULL;
+
+	m_localMap[uid] = tmp;
+	return tmp;
 }
 
 Item* ScriptEnviroment::getItemByUID(uint32_t uid)
@@ -713,13 +710,24 @@ bool LuaInterface::loadFile(const std::string& file, Npc* npc/* = NULL*/)
 	return true;
 }
 
-bool LuaInterface::loadDirectory(const std::string& dir, Npc* npc/* = NULL*/)
+bool LuaInterface::loadDirectory(std::string dir, bool recursively, bool loadSystems, Npc* npc/* = NULL*/)
 {
+	if(dir[dir.size() - 1] != '/')
+		dir += '/';
+
 	StringVec files;
 	for(boost::filesystem::directory_iterator it(dir), end; it != end; ++it)
 	{
-		std::string s = it->leaf();
-		if(!boost::filesystem::is_directory(it->status()) && (s.size() > 4 ? s.substr(s.size() - 4) : "") == ".lua")
+		std::string s = BOOST_DIR_ITER_FILENAME(it);
+		if(!loadSystems && s[0] == '_')
+			continue;
+
+		if(boost::filesystem::is_directory(it->status()))
+		{
+			if(recursively && !loadDirectory(dir + s, recursively, loadSystems, npc))
+				return false;
+		}
+		else if((s.size() > 4 ? s.substr(s.size() - 4) : "") == ".lua")
 			files.push_back(s);
 	}
 
@@ -835,12 +843,12 @@ bool LuaInterface::initState()
 
 	luaL_openlibs(m_luaState);
 	registerFunctions();
-	if(!loadDirectory(getFilePath(FILE_TYPE_OTHER, "lib/"), NULL))
+
+	if(!loadDirectory(getFilePath(FILE_TYPE_OTHER, "lib/"), false, true))
 		std::clog << "[Warning - LuaInterface::initState] Cannot load " << getFilePath(FILE_TYPE_OTHER, "lib/") << std::endl;
 
 	lua_newtable(m_luaState);
 	lua_setfield(m_luaState, LUA_REGISTRYINDEX, "EVENTS");
-
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }
@@ -9841,10 +9849,19 @@ int32_t LuaInterface::luaL_domodlib(lua_State* L)
 
 int32_t LuaInterface::luaL_dodirectory(lua_State* L)
 {
+	//dodirectory(dir[, recursively = false[, loadSystems = true]])
+	bool recursively = false, loadSystems = true;
+	int32_t params = lua_gettop(L);
+	if(params > 2)
+		loadSystems = popBoolean(L);
+
+	if(params > 1)
+		recursively = popBoolean(L);
+
 	std::string dir = popString(L);
-	if(!getEnv()->getInterface()->loadDirectory(dir, NULL))
+	if(!getEnv()->getInterface()->loadDirectory(dir, recursively, loadSystems, NULL))
 	{
-		errorEx("Failed to load directory " + dir + ".");
+		errorEx("Failed to load directory " + dir);
 		lua_pushboolean(L, false);
 	}
 	else
