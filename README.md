@@ -8,8 +8,5 @@ You have a look around in the folders and take a look at the config.lua
 NEVER ever enter your real acc# and/or password when not connecting to the CIP servers.
 Then you are logged in.
 
-# Developers
-Tryller.
-
-# Contributors
-frcento
+# Contributors & Developers
+Elf, slawkens, Talaturen, KaczooH, Lithium, Kiper, Kornholijo, Tryller, frcento
