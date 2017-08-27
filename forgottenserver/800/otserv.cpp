@@ -105,7 +105,7 @@ void signalHandler(int32_t sig)
 	{
 		case SIGHUP:
 			Dispatcher::getInstance().addTask(createTask(
-				boost::bind(&Game::saveGameState, &g_game, false)));
+				boost::bind(&Game::saveGameState, &g_game, (uint8_t)SAVE_PLAYERS | (uint8_t)SAVE_MAP | (uint8_t)SAVE_STATE)));
 			break;
 
 		case SIGTRAP:
@@ -287,7 +287,7 @@ void mainLoader(int argc, char *argv[])
 	std::clog << ">> " << SOFTWARE_NAME << ", version " << SOFTWARE_VERSION << "." << std::endl;
 	std::clog << ">> Compiled with " << BOOST_COMPILER << " at " << __DATE__ << ", " << __TIME__ << "." << std::endl;
 	std::clog << ">> A server developed by " << SOFTWARE_DEVELOPERS << "." << std::endl;
-	std::clog << ">> Visit our GitHub for updates and support: github.com/tryller/otserv." << std::endl << std::endl;
+	std::clog << ">> Visit our GitHub: http://github.com/tryller/otserv." << std::endl << std::endl;
 
 	std::clog << ">> Loading config (" << g_config.getString(ConfigManager::CONFIG_FILE) << ")" << std::endl;
 	if(!g_config.load())

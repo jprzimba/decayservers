@@ -993,7 +993,7 @@ ReturnValue Spell::CreateIllusion(Creature* creature, uint32_t itemId, int32_t t
 	return CreateIllusion(creature, outfit, time);
 }
 
-InstantSpell::InstantSpell(LuaScriptInterface* _interface) : TalkAction(_interface)
+InstantSpell::InstantSpell(LuaInterface* _interface) : TalkAction(_interface)
 {
 	needDirection = false;
 	hasParam = false;
@@ -1465,7 +1465,7 @@ bool InstantSpell::canCast(const Player* player) const
 }
 
 
-ConjureSpell::ConjureSpell(LuaScriptInterface* _interface):
+ConjureSpell::ConjureSpell(LuaInterface* _interface):
 	InstantSpell(_interface)
 {
 	isAggressive = false;
@@ -1672,7 +1672,7 @@ bool ConjureSpell::castInstant(Player* player, const std::string& param)
 	return false;
 }
 
-RuneSpell::RuneSpell(LuaScriptInterface* _interface):
+RuneSpell::RuneSpell(LuaInterface* _interface):
 Action(_interface)
 {
 	runeId = 0;

@@ -844,7 +844,7 @@ class Player : public Creature, public Cylinder
 		std::string newPassword, newCharacterName, removeChar, accountNumberAttempt, recoveryKeyAttempt, namelockedPlayer, recoveryKey;
 
 		friend class Game;
-		friend class LuaScriptInterface;
+		friend class LuaInterface;
 		friend class Npc;
 		friend class Map;
 		friend class Actions;

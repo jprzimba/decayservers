@@ -91,15 +91,11 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr p, bool override)
 
 void GlobalEvents::startup()
 {
-	time_t now = time(NULL);
-	tm* ts = localtime(&now);
-	now = std::max(1, (int32_t)(60 - ts->tm_sec)) * 1000;
-
 	execute(GLOBALEVENT_STARTUP);
-	Scheduler::getInstance().addEvent(createSchedulerTask((int32_t)now,
+	Scheduler::getInstance().addEvent(createSchedulerTask(TIMER_INTERVAL,
 		boost::bind(&GlobalEvents::timer, this)));
-	Scheduler::getInstance().addEvent(createSchedulerTask(GLOBAL_THINK_INTERVAL,
-		boost::bind(&GlobalEvents::think, this, GLOBAL_THINK_INTERVAL)));
+	Scheduler::getInstance().addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+		boost::bind(&GlobalEvents::think, this)));
 }
 
 void GlobalEvents::timer()
@@ -123,22 +119,22 @@ void GlobalEvents::timer()
 		boost::bind(&GlobalEvents::timer, this)));
 }
 
-void GlobalEvents::think(uint32_t interval)
+void GlobalEvents::think()
 {
 	time_t now = time(NULL);
 	for(GlobalEventMap::iterator it = thinkMap.begin(); it != thinkMap.end(); ++it)
 	{
-		if(now <= (it->second->getLastExecution() + it->second->getInterval()))
+		if((it->second->getLastExecution() + it->second->getInterval()) > now)
 			continue;
 
 		it->second->setLastExecution(now);
-		if(!it->second->executeThink(it->second->getInterval(), now, interval))
+		if(!it->second->executeEvent())
 			std::clog << "[Error - GlobalEvents::think] Couldn't execute event: "
 				<< it->second->getName() << std::endl;
 	}
 
-	Scheduler::getInstance().addEvent(createSchedulerTask(interval,
-		boost::bind(&GlobalEvents::think, this, interval)));
+	Scheduler::getInstance().addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+		boost::bind(&GlobalEvents::think, this)));
 }
 
 void GlobalEvents::execute(GlobalEvent_t type)
@@ -182,7 +178,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 	return GlobalEventMap();
 }
 
-GlobalEvent::GlobalEvent(LuaScriptInterface* _interface):
+GlobalEvent::GlobalEvent(LuaInterface* _interface):
 	Event(_interface)
 {
 	m_lastExecution = time(NULL);
@@ -277,60 +273,6 @@ std::string GlobalEvent::getScriptEventParams() const
 
 		default:
 			return "";
-	}
-}
-
-int32_t GlobalEvent::executeThink(uint32_t interval, uint32_t lastExecution, uint32_t thinkInterval)
-{
-	//onThink(interval, lastExecution, thinkInterval)
-	if(m_interface->reserveEnv())
-	{
-		ScriptEnviroment* env = m_interface->getEnv();
-		if(m_scripted == EVENT_SCRIPT_BUFFER)
-		{
-			std::stringstream scriptstream;
-			scriptstream << "local interval = " << interval << std::endl;
-
-			scriptstream << "local lastExecution = " << lastExecution << std::endl;
-			scriptstream << "local thinkInterval = " << thinkInterval << std::endl;
-
-			scriptstream << m_scriptData;
-			bool result = true;
-			if(m_interface->loadBuffer(scriptstream.str()))
-			{
-				lua_State* L = m_interface->getState();
-				result = m_interface->getGlobalBool(L, "_result", true);
-			}
-
-			m_interface->releaseEnv();
-			return result;
-		}
-		else
-		{
-			#ifdef __DEBUG_LUASCRIPTS__
-			char desc[125];
-			sprintf(desc, "%s - %i (%i)", getName().c_str(), interval, lastExecution);
-			env->setEventDesc(desc);
-			#endif
-
-			env->setScriptId(m_scriptId, m_interface);
-			lua_State* L = m_interface->getState();
-
-			m_interface->pushFunction(m_scriptId);
-			lua_pushnumber(L, interval);
-
-			lua_pushnumber(L, lastExecution);
-			lua_pushnumber(L, thinkInterval);
-
-			bool result = m_interface->callFunction(3);
-			m_interface->releaseEnv();
-			return result;
-		}
-	}
-	else
-	{
-		std::clog << "[Error - GlobalEvent::executeThink] Call stack overflow." << std::endl;
-		return 0;
 	}
 }
 

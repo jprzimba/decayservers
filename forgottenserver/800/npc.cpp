@@ -40,7 +40,7 @@ extern Spells* g_spells;
 
 AutoList<Npc> Npc::autoList;
 
-NpcScriptInterface* Npc::m_interface = NULL;
+NpcScript* Npc::m_interface = NULL;
 
 void Npcs::reload()
 {
@@ -92,7 +92,7 @@ bool Npc::load()
 	reset();
 	if(!m_interface)
 	{
-		m_interface = new NpcScriptInterface();
+		m_interface = new NpcScript();
 		m_interface->loadNpcLib(getFilePath(FILE_TYPE_OTHER, "npc/lib/npc.lua"));
 	}
 
@@ -1518,7 +1518,7 @@ void Npc::executeResponse(Player* player, NpcState* npcState, const NpcResponse*
 
 				case ACTION_SCRIPT:
 				{
-					NpcScriptInterface interface;
+					NpcScript interface;
 					if(interface.reserveEnv())
 					{
 						ScriptEnviroment* env = m_interface->getEnv();
@@ -1578,7 +1578,7 @@ void Npc::executeResponse(Player* player, NpcState* npcState, const NpcResponse*
 						{
 							lua_State* L = interface.getState();
 							lua_getglobal(L, "_state");
-							NpcScriptInterface::popState(L, npcState);
+							NpcScript::popState(L, npcState);
 						}
 
 						interface.releaseEnv();
@@ -1642,12 +1642,12 @@ void Npc::executeResponse(Player* player, NpcState* npcState, const NpcResponse*
 						}
 					}
 
-					NpcScriptInterface::pushState(L, npcState);
+					NpcScript::pushState(L, npcState);
 					lua_setglobal(L, "_state");
 					m_interface->callFunction(paramCount);
 					lua_getglobal(L, "_state");
 
-					NpcScriptInterface::popState(L, npcState);
+					NpcScript::popState(L, npcState);
 					if(prevNpc)
 					{
 						env->setRealPos(prevNpc->getPosition());
@@ -2235,43 +2235,43 @@ std::string Npc::formatResponse(Creature* creature, const NpcState* npcState, co
 	return responseString;
 }
 
-NpcScriptInterface* Npc::getInterface()
+NpcScript* Npc::getInterface()
 {
 	return m_interface;
 }
 
-NpcScriptInterface::NpcScriptInterface() :
-	LuaScriptInterface("Npc interface")
+NpcScript::NpcScript() :
+	LuaInterface("Npc interface")
 {
 	m_libLoaded = false;
 	initState();
 }
 
 
-NpcScriptInterface::~NpcScriptInterface()
+NpcScript::~NpcScript()
 {
 	//
 }
 
-bool NpcScriptInterface::initState()
+bool NpcScript::initState()
 {
-	return LuaScriptInterface::initState();
+	return LuaInterface::initState();
 }
 
-bool NpcScriptInterface::closeState()
+bool NpcScript::closeState()
 {
 	m_libLoaded = false;
-	return LuaScriptInterface::closeState();
+	return LuaInterface::closeState();
 }
 
-bool NpcScriptInterface::loadNpcLib(std::string file)
+bool NpcScript::loadNpcLib(std::string file)
 {
 	if(m_libLoaded)
 		return true;
 
 	if(!loadFile(file))
 	{
-		std::clog << "Warning: [NpcScriptInterface::loadNpcLib] Cannot load " << file << std::endl;
+		std::clog << "Warning: [NpcScript::loadNpcLib] Cannot load " << file << std::endl;
 		return false;
 	}
 
@@ -2279,30 +2279,30 @@ bool NpcScriptInterface::loadNpcLib(std::string file)
 	return true;
 }
 
-void NpcScriptInterface::registerFunctions()
+void NpcScript::registerFunctions()
 {
-	LuaScriptInterface::registerFunctions();
-	lua_register(m_luaState, "selfFocus", NpcScriptInterface::luaActionFocus);
-	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
+	LuaInterface::registerFunctions();
+	lua_register(m_luaState, "selfFocus", NpcScript::luaActionFocus);
+	lua_register(m_luaState, "selfSay", NpcScript::luaActionSay);
 
-	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScriptInterface::luaActionFocus);
+	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScript::luaActionFocus);
 
-	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
-	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
-	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
-	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
-	lua_register(m_luaState, "selfGetPosition", NpcScriptInterface::luaSelfGetPos);
+	lua_register(m_luaState, "selfTurn", NpcScript::luaActionTurn);
+	lua_register(m_luaState, "selfMove", NpcScript::luaActionMove);
+	lua_register(m_luaState, "selfMoveTo", NpcScript::luaActionMoveTo);
+	lua_register(m_luaState, "selfFollow", NpcScript::luaActionFollow);
+	lua_register(m_luaState, "selfGetPosition", NpcScript::luaSelfGetPos);
 
-	lua_register(m_luaState, "getNpcId", NpcScriptInterface::luaGetNpcId);
-	lua_register(m_luaState, "getNpcDistanceTo", NpcScriptInterface::luaGetNpcDistanceTo);
-	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
-	lua_register(m_luaState, "getSelfPosition", NpcScriptInterface::luaSelfGetPos);
+	lua_register(m_luaState, "getNpcId", NpcScript::luaGetNpcId);
+	lua_register(m_luaState, "getNpcDistanceTo", NpcScript::luaGetNpcDistanceTo);
+	lua_register(m_luaState, "getNpcParameter", NpcScript::luaGetNpcParameter);
+	lua_register(m_luaState, "getSelfPosition", NpcScript::luaSelfGetPos);
 
-	lua_register(m_luaState, "getNpcState", NpcScriptInterface::luaGetNpcState);
-	lua_register(m_luaState, "setNpcState", NpcScriptInterface::luaSetNpcState);
+	lua_register(m_luaState, "getNpcState", NpcScript::luaGetNpcState);
+	lua_register(m_luaState, "setNpcState", NpcScript::luaSetNpcState);
 }
 
-int32_t NpcScriptInterface::luaSelfGetPos(lua_State *L)
+int32_t NpcScript::luaSelfGetPos(lua_State *L)
 {
 	//selfGetPosition()
 	ScriptEnviroment* env = getEnv();
@@ -2324,7 +2324,7 @@ int32_t NpcScriptInterface::luaSelfGetPos(lua_State *L)
 	return 3;
 }
 
-int32_t NpcScriptInterface::luaActionFocus(lua_State* L)
+int32_t NpcScript::luaActionFocus(lua_State* L)
 {
 	//selfFocus(cid)
 	ScriptEnviroment* env = getEnv();
@@ -2343,7 +2343,7 @@ int32_t NpcScriptInterface::luaActionFocus(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaActionSay(lua_State* L)
+int32_t NpcScript::luaActionSay(lua_State* L)
 {
 	//selfSay(words)
 	ScriptEnviroment* env = getEnv();
@@ -2356,7 +2356,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
+int32_t NpcScript::luaActionTurn(lua_State* L)
 {
 	//selfTurn(direction)
 	ScriptEnviroment* env = getEnv();
@@ -2366,7 +2366,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaActionMove(lua_State* L)
+int32_t NpcScript::luaActionMove(lua_State* L)
 {
 	//selfMove(direction)
 	ScriptEnviroment* env = getEnv();
@@ -2376,7 +2376,7 @@ int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
+int32_t NpcScript::luaActionMoveTo(lua_State* L)
 {
 	//selfMoveTo(x, y, z)
 	Position pos;
@@ -2391,7 +2391,7 @@ int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
+int32_t NpcScript::luaActionFollow(lua_State* L)
 {
 	//selfFollow(cid)
 	uint32_t cid = popNumber(L);
@@ -2415,7 +2415,7 @@ int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaGetNpcId(lua_State* L)
+int32_t NpcScript::luaGetNpcId(lua_State* L)
 {
 	//getNpcId()
 	ScriptEnviroment* env = getEnv();
@@ -2427,7 +2427,7 @@ int32_t NpcScriptInterface::luaGetNpcId(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaGetNpcDistanceTo(lua_State* L)
+int32_t NpcScript::luaGetNpcDistanceTo(lua_State* L)
 {
 	//getNpcDistanceTo(uid)
 	ScriptEnviroment* env = getEnv();
@@ -2452,7 +2452,7 @@ int32_t NpcScriptInterface::luaGetNpcDistanceTo(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaGetNpcParameter(lua_State* L)
+int32_t NpcScript::luaGetNpcParameter(lua_State* L)
 {
 	//getNpcParameter(paramKey)
 	ScriptEnviroment* env = getEnv();
@@ -2470,7 +2470,7 @@ int32_t NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaGetNpcState(lua_State* L)
+int32_t NpcScript::luaGetNpcState(lua_State* L)
 {
 	//getNpcState(cid)
 	ScriptEnviroment* env = getEnv();
@@ -2478,14 +2478,14 @@ int32_t NpcScriptInterface::luaGetNpcState(lua_State* L)
 
 	const Player* player = env->getPlayerByUID(popNumber(L));
 	if(player && npc)
-		NpcScriptInterface::pushState(L, npc->getState(player));
+		NpcScript::pushState(L, npc->getState(player));
 	else
 		lua_pushnil(L);
 
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaSetNpcState(lua_State* L)
+int32_t NpcScript::luaSetNpcState(lua_State* L)
 {
 	//setNpcState(state, cid)
 	ScriptEnviroment* env = getEnv();
@@ -2495,7 +2495,7 @@ int32_t NpcScriptInterface::luaSetNpcState(lua_State* L)
 	if(player && npc)
 	{
 		NpcState* tmp = npc->getState(player);
-		NpcScriptInterface::popState(L, tmp);
+		NpcScript::popState(L, tmp);
 		lua_pushboolean(L, true);
 	}
 	else
@@ -2504,7 +2504,7 @@ int32_t NpcScriptInterface::luaSetNpcState(lua_State* L)
 	return 1;
 }
 
-void NpcScriptInterface::pushState(lua_State* L, NpcState* state)
+void NpcScript::pushState(lua_State* L, NpcState* state)
 {
 	lua_newtable(L);
 	setField(L, "price", state->price);
@@ -2533,7 +2533,7 @@ void NpcScriptInterface::pushState(lua_State* L, NpcState* state)
 	setField(L, "s3", state->scriptVars.s3);
 }
 
-void NpcScriptInterface::popState(lua_State* L, NpcState* &state)
+void NpcScript::popState(lua_State* L, NpcState* &state)
 {
 	state->price = getField(L, "price");
 	state->amount = getField(L, "amount");
@@ -2679,8 +2679,8 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 		m_interface->pushFunction(m_onCreatureMove);
 		lua_pushnumber(L, env->addThing(const_cast<Creature*>(creature)));
 
-		LuaScriptInterface::pushPosition(L, oldPos, 0);
-		LuaScriptInterface::pushPosition(L, newPos, 0);
+		LuaInterface::pushPosition(L, oldPos, 0);
+		LuaInterface::pushPosition(L, newPos, 0);
 
 		m_interface->callFunction(3);
 		m_interface->releaseEnv();

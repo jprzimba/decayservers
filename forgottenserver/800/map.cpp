@@ -104,6 +104,11 @@ bool Map::saveMap()
 	return saved;
 }
 
+bool Map::updateAuctions()
+{
+	return IOMapSerialize::getInstance()->updateAuctions();
+}
+
 Tile* Map::getTile(int32_t x, int32_t y, int32_t z)
 {
 	if(x < 0 || x > 0xFFFF || y < 0 || y > 0xFFFF || z < 0 || z >= MAP_MAX_LAYERS)

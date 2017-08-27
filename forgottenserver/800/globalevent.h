@@ -22,7 +22,7 @@
 #include "const.h"
 #include "scheduler.h"
 
-#define GLOBAL_THINK_INTERVAL 1000
+#define TIMER_INTERVAL 1000
 
 enum GlobalEvent_t
 {
@@ -43,10 +43,10 @@ class GlobalEvents : public BaseEvents
 	public:
 		GlobalEvents();
 		virtual ~GlobalEvents();
-
 		void startup();
+
 		void timer();
-		void think(uint32_t interval);
+		void think();
 		void execute(GlobalEvent_t type);
 
 		GlobalEventMap getEventMap(GlobalEvent_t type);
@@ -59,8 +59,8 @@ class GlobalEvents : public BaseEvents
 		virtual Event* getEvent(const std::string& nodeName);
 		virtual bool registerEvent(Event* event, xmlNodePtr p, bool override);
 
-		virtual LuaScriptInterface& getInterface() {return m_interface;}
-		LuaScriptInterface m_interface;
+		virtual LuaInterface& getInterface() {return m_interface;}
+		LuaInterface m_interface;
 
 		GlobalEventMap thinkMap, serverMap, timerMap;
 };
@@ -68,11 +68,10 @@ class GlobalEvents : public BaseEvents
 class GlobalEvent : public Event
 {
 	public:
-		GlobalEvent(LuaScriptInterface* _interface);
+		GlobalEvent(LuaInterface* _interface);
 		virtual ~GlobalEvent() {}
 
 		virtual bool configureEvent(xmlNodePtr p);
-		int32_t executeThink(uint32_t interval, uint32_t lastExecution, uint32_t thinkInterval);
 		int32_t executeRecord(uint32_t current, uint32_t old, Player* player);
 		int32_t executeEvent();
 

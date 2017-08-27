@@ -120,6 +120,14 @@ struct RuleViolation
 		RuleViolation(const RuleViolation&);
 };
 
+enum SaveFlag_t
+{
+	SAVE_PLAYERS = 1 << 0,
+	SAVE_PLAYERS_SHALLOW = 1 << 1,
+	SAVE_MAP = 1 << 2,
+	SAVE_STATE = 1 << 3
+};
+
 struct RefreshBlock_t
 {
 	TileItemVector list;
@@ -543,7 +551,7 @@ class Game
 		GameState_t getGameState() const {return gameState;}
 		void setGameState(GameState_t newState);
 
-		void saveGameState(bool shallow);
+		void saveGameState(uint8_t flags);
 		void loadGameState();
 
 		void cleanMapEx(uint32_t& count);

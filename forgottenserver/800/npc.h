@@ -39,11 +39,11 @@ class Npcs
 		void reload();
 };
 
-class NpcScriptInterface : public LuaScriptInterface
+class NpcScript : public LuaInterface
 {
 	public:
-		NpcScriptInterface();
-		virtual ~NpcScriptInterface();
+		NpcScript();
+		virtual ~NpcScript();
 
 		bool loadNpcLib(std::string file);
 
@@ -110,7 +110,7 @@ class NpcScript : public NpcEventsHandler
 		virtual void onThink();
 
 	private:
-		NpcScriptInterface* m_interface;
+		NpcScript* m_interface;
 		int32_t m_onCreatureAppear, m_onCreatureDisappear, m_onCreatureMove, m_onCreatureSay, m_onThink;
 };
 
@@ -383,7 +383,7 @@ class Npc : public Creature
 		void doMoveTo(Position pos);
 
 		void setCreatureFocus(Creature* creature);
-		NpcScriptInterface* getInterface();
+		NpcScript* getInterface();
 
 	protected:
 		Npc(const std::string& _name);
@@ -451,9 +451,9 @@ class Npc : public Creature
 		ResponseList responseList;
 
 		NpcEventsHandler* m_npcEventHandler;
-		static NpcScriptInterface* m_interface;
+		static NpcScript* m_interface;
 
 		friend class Npcs;
-		friend class NpcScriptInterface;
+		friend class NpcScript;
 };
 #endif
