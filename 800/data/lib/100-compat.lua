@@ -86,6 +86,8 @@ SKILLS = SKILL_NAMES
 
 CONST_ANI_SUDDENDEATH = CONST_ANI_DEATH
 
+getItemName = getItemNameById
+creatureGetName = getCreatureName
 table.getPos = table.find
 doSetCreatureDropLoot = doCreatureSetDropLoot
 doPlayerSay = doCreatureSay

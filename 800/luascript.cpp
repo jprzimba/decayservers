@@ -2355,6 +2355,9 @@ void LuaInterface::registerFunctions()
 
 	//std table
 	luaL_register(m_luaState, "std", LuaInterface::luaStdTable);
+
+	//getItemStackable(itemid)
+	lua_register(m_luaState, "getItemStackable", LuaInterface::luaGetItemStackable);
 }
 
 const luaL_Reg LuaInterface::luaDatabaseTable[] =
@@ -10075,6 +10078,18 @@ int32_t LuaInterface::luaBitUNot(lua_State* L)
 	uint32_t number = (uint32_t)popNumber(L);
 	lua_pushnumber(L, ~number);
 	return 1;
+}
+
+int32_t LuaInterface::luaGetItemStackable(lua_State* L)
+{
+	//getItemStackable(id)
+	int id = popNumber(L);
+	if(Item::items[id].stackable || Item::items[id].isRune())
+		lua_pushboolean(L, true);
+	else
+		lua_pushboolean(L, false);
+	
+    return 1;
 }
 
 #define MULTI_OPERATOR(type, name, op)\
