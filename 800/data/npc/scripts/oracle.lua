@@ -8,8 +8,8 @@ function onCreatureSay(cid, type, msg) 			npcHandler:onCreatureSay(cid, type, ms
 function onThink() 					npcHandler:onThink()					end
 
 function oracle(cid, message, keywords, parameters, node)
-	if(npcHandler.focus ~= cid) then
-		return FALSE
+	if(cid ~= npcHandler.focus) then
+		return false
 	end
 
 	local cityNode = node:getParent():getParent()

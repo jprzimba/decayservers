@@ -8,7 +8,6 @@ function onCreatureSay(cid, type, msg)	npcHandler:onCreatureSay(cid, type, msg)	
 function onThink()						npcHandler:onThink()						end
 
 function buyAddons(cid, message, keywords, parameters, node)
-	--TODO: buyAddons function in modules.lua
 	if(cid ~= npcHandler.focus) then
 		return false
 	end

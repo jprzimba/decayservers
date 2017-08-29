@@ -1,7 +1,7 @@
 local keywordHandler = KeywordHandler:new()
 local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
-local talkState = {}
+local talkState = 0
 
 function onCreatureAppear(cid)				npcHandler:onCreatureAppear(cid)			end
 function onCreatureDisappear(cid)			npcHandler:onCreatureDisappear(cid)			end
@@ -13,35 +13,33 @@ function creatureSayCallback(cid, type, msg)
 		return false
 	end
 
-	local talkUser = NPCHANDLER_CONVBEHAVIOR == CONVERSATION_DEFAULT and 0 or cid
-
 	if(msgcontains(msg, 'soft') or msgcontains(msg, 'boots')) then
-		selfSay('Do you want to repair your worn soft boots for 10000 gold coins?')
-		talkState[talkUser] = 1
-	elseif(msgcontains(msg, 'yes') and talkState[talkUser] == 1) then
+		npcHandler:say('Do you want to repair your worn soft boots for 10000 gold coins?')
+		talkState = 1
+	elseif(msgcontains(msg, 'yes') and talkState == 1) then
 		if(getPlayerItemCount(cid, 6530) >= 1) then
 			if(doPlayerRemoveMoney(cid, 10000)) then
 				local item = getPlayerItemById(cid, true, 6530)
 				doTransformItem(item.uid, 6132)
-				selfSay('Here you are.')
+				npcHandler:say('Here you are.')
 			else
-				selfSay('Sorry, you don\'t have enough gold.')
+				npcHandler:say('Sorry, you don\'t have enough gold.')
 			end
 		elseif(getPlayerItemCount(cid, 10021) >= 1) then
 			if(doPlayerRemoveMoney(cid, 10000)) then
 				local item = getPlayerItemById(cid, true, 10021)
 				doTransformItem(item.uid, 6132)
-				selfSay('Here you are.')
+				npcHandler:say('Here you are.')
 			else
-				selfSay('Sorry, you don\'t have enough gold.')
+				npcHandler:say('Sorry, you don\'t have enough gold.')
 			end
 		else
-			selfSay('Sorry, you don\'t have the item.')
+			npcHandler:say('Sorry, you don\'t have the item.')
 		end
-		talkState[talkUser] = 0
-	elseif(msgcontains(msg, 'no') and isInArray({1}, talkState[talkUser])) then
-		talkState[talkUser] = 0
-		selfSay('Ok then.')
+		talkState = 0
+	elseif(msgcontains(msg, 'no')) then
+		talkState = 0
+		npcHandler:say('Ok then.')
 	end
 
 	return true

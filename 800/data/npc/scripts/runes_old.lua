@@ -14,32 +14,32 @@ function creatureSayCallback(cid, type, msg)
 	end
 
 	if msgcontains(msg, 'job') then
-		selfSay('I am the head alchemist of this City. I keep the secret recipies of our ancestors. Besides, I am selling mana and life fluids,spellbooks, wands, rods and runes.')
+		npcHandler:say('I am the head alchemist of this City. I keep the secret recipies of our ancestors. Besides, I am selling mana and life fluids,spellbooks, wands, rods and runes.')
 		talkState = 0
 
 
 -- Main Runes ---------------------------------------------------------------------------------
 
 		elseif msgcontains(msg, 'spell rune') then
-			selfSay('I sell missile runes, explosive runes, field runes, wall runes, bomb runes, healing runes, convince creature rune and chameleon rune.')
+			npcHandler:say('I sell missile runes, explosive runes, field runes, wall runes, bomb runes, healing runes, convince creature rune and chameleon rune.')
 
 		elseif msgcontains(msg, 'missile runes') then
-			selfSay('I can offer you light magic missile runes, heavy magic missile runes and sudden death runes.')
+			npcHandler:say('I can offer you light magic missile runes, heavy magic missile runes and sudden death runes.')
 
 		elseif msgcontains(msg, 'explosive runes') then
-			selfSay('I can offer you fireball runes, great fireball runes and explosion runes.')
+			npcHandler:say('I can offer you fireball runes, great fireball runes and explosion runes.')
 
 		elseif msgcontains(msg, 'field runes') then
-			selfSay('I can offer you fire field runes, energy field runes, poison field runes and destroy field runes.')
+			npcHandler:say('I can offer you fire field runes, energy field runes, poison field runes and destroy field runes.')
 
 		elseif msgcontains(msg, 'wall runes') then
-			selfSay('I can offer you fire wall runes, energy wall runes and poison wall runes.')
+			npcHandler:say('I can offer you fire wall runes, energy wall runes and poison wall runes.')
 
 		elseif msgcontains(msg, 'bomb runes') then
-			selfSay('I can offer you firebomb runes.')
+			npcHandler:say('I can offer you firebomb runes.')
 
 		elseif msgcontains(msg, 'healing runes') then
-			selfSay('I can offer you antidote runes, intense healing runes and ultimate healing runes.')
+			npcHandler:say('I can offer you antidote runes, intense healing runes and ultimate healing runes.')
 
 -- Runes ---------------------------------------------------------------------------------
 
@@ -48,9 +48,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*10
 			talkState = 20
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' light magic missile runes for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' light magic missile runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a light magic missile rune for 10 gold?')
+			    npcHandler:say('Do you want to buy a light magic missile rune for 10 gold?')
 			end
 
 		elseif msgcontains(msg, 'heavy magic missile') then
@@ -58,9 +58,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*20
 			talkState = 21
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' heavy magic missile runes for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' heavy magic missile runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a heavy magic missile rune for 20 gold?')
+			    npcHandler:say('Do you want to buy a heavy magic missile rune for 20 gold?')
 			end
 
 		elseif msgcontains(msg, 'sudden death') then
@@ -68,9 +68,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*230
 			talkState = 22
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' sudden death runes for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' sudden death runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a sudden death rune for 230 gold?')
+			    npcHandler:say('Do you want to buy a sudden death rune for 230 gold?')
 			end
 
 		elseif msgcontains(msg, 'great fireball') then
@@ -78,9 +78,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*45
 			talkState = 23
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' great fireball runes for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' great fireball runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a great fireball rune for 45 gold?')
+			    npcHandler:say('Do you want to buy a great fireball rune for 45 gold?')
 			end
 
 		elseif msgcontains(msg, 'explosion') then
@@ -88,9 +88,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*60
 			talkState = 24
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' explosion runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' explosion runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a explosion rune for 60 gold?')
+			    npcHandler:say('Do you want to buy a explosion rune for 60 gold?')
 			end
 
 		elseif msgcontains(msg, 'fire field') then
@@ -98,9 +98,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*20
 			talkState = 25
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' fire field runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' fire field runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a fire field rune for 20 gold?')
+			    npcHandler:say('Do you want to buy a fire field rune for 20 gold?')
 			end
 
 		elseif msgcontains(msg, 'energy field') then
@@ -108,9 +108,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*30
 			talkState = 26
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' energy field runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' energy field runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a energy field rune for 30 gold?')
+			    npcHandler:say('Do you want to buy a energy field rune for 30 gold?')
 			end
 
 		elseif msgcontains(msg, 'poison field') then
@@ -118,9 +118,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*15
 			talkState = 27
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' poison field runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' poison field runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a poison field rune for 15 gold?')
+			    npcHandler:say('Do you want to buy a poison field rune for 15 gold?')
 			end
 
 		elseif msgcontains(msg, 'destroy field') then
@@ -128,9 +128,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*20
 			talkState = 28
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' destroy field runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' destroy field runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a destroy field rune for 20 gold?')
+			    npcHandler:say('Do you want to buy a destroy field rune for 20 gold?')
 			end
 
 		elseif msgcontains(msg, 'fire wall') then
@@ -138,9 +138,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*45
 			talkState = 29
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' fire wall runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' fire wall runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a fire wall rune for 45 gold?')
+			    npcHandler:say('Do you want to buy a fire wall rune for 45 gold?')
 			end
 
 		elseif msgcontains(msg, 'energy wall') then
@@ -148,9 +148,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*60
 			talkState = 30
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' energy wall runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' energy wall runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a energy wall rune for 60 gold?')
+			    npcHandler:say('Do you want to buy a energy wall rune for 60 gold?')
 			end
 
 		elseif msgcontains(msg, 'poison wall') then
@@ -158,9 +158,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*35
 			talkState = 31
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' poison wall runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' poison wall runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a poison wall rune for 35 gold?')
+			    npcHandler:say('Do you want to buy a poison wall rune for 35 gold?')
 			end
 
 		elseif msgcontains(msg, 'antidote') then
@@ -168,9 +168,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*45
 			talkState = 32
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' antidote runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' antidote runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a antidote rune for 45 gold?')
+			    npcHandler:say('Do you want to buy a antidote rune for 45 gold?')
 			end
 
 		elseif msgcontains(msg, 'intense healing') then
@@ -178,9 +178,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*65
 			talkState = 33
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' intense healing runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' intense healing runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a intense healing rune for 65 gold?')
+			    npcHandler:say('Do you want to buy a intense healing rune for 65 gold?')
 			end
 
 		elseif msgcontains(msg, 'ultimate healing') then
@@ -188,9 +188,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*130
 			talkState = 34
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' ultimate healing runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' ultimate healing runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a ultimate healing rune for 130 gold?')
+			    npcHandler:say('Do you want to buy a ultimate healing rune for 130 gold?')
 			end
 
 		elseif msgcontains(msg, 'blank') then
@@ -198,57 +198,57 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*10
 			talkState = 35
 			if count >= 2 then
-			selfSay('Do you want to buy ' .. count .. ' blank runes for ' .. cost .. '.')
+			npcHandler:say('Do you want to buy ' .. count .. ' blank runes for ' .. cost .. '.')
 			else
-			    selfSay('Do you want to buy a blank rune for 10 gold?')
+			    npcHandler:say('Do you want to buy a blank rune for 10 gold?')
 			end
 
 -- Wands and Rods --------------------------------------------------------------------------
 	
 		elseif msgcontains(msg, 'Wand of Vortex') then
 			talkState = 50
-			selfSay('This wand is only for sorcerers of level 7 and above. Would you like to buy a wand of vortex for 500 gold?')
+			npcHandler:say('This wand is only for sorcerers of level 7 and above. Would you like to buy a wand of vortex for 500 gold?')
 
 		elseif msgcontains(msg, 'Wand of Dragonbreath') then
 			talkState = 51
-			selfSay('This wand is only for sorcerers of level 13 and above. Would you like to buy a wand of dragonbreath for 1000 gold?')
+			npcHandler:say('This wand is only for sorcerers of level 13 and above. Would you like to buy a wand of dragonbreath for 1000 gold?')
 
 		elseif msgcontains(msg, 'Wand of Plague') then
 			talkState = 52
-			selfSay('This wand is only for sorcerers of level 19 and above. Would you like to buy a wand of plague for 5000 gold?')
+			npcHandler:say('This wand is only for sorcerers of level 19 and above. Would you like to buy a wand of plague for 5000 gold?')
 
 		elseif msgcontains(msg, 'Wand of Cosmic Energy') then
 			talkState = 53
-			selfSay('This wand is only for sorcerers of level 26 and above. Would you like to buy a wand of cosmic energy for 10000 gold?')
+			npcHandler:say('This wand is only for sorcerers of level 26 and above. Would you like to buy a wand of cosmic energy for 10000 gold?')
 
 		elseif msgcontains(msg, 'Wand of Inferno') then
-			selfSay('Sorry, this wand contains magic far too powerful and we are afraid to store it here. I heard they have a few of these at the Premium academy though.')
+			npcHandler:say('Sorry, this wand contains magic far too powerful and we are afraid to store it here. I heard they have a few of these at the Premium academy though.')
 
 		elseif msgcontains(msg, 'Snakebite Rod') then
 			talkState = 55
-			selfSay('This rod is only for druids of level 7 and above. Would you like to buy a snakebite rod for 500 gold?')
+			npcHandler:say('This rod is only for druids of level 7 and above. Would you like to buy a snakebite rod for 500 gold?')
 
 		elseif msgcontains(msg, 'Moonlight Rod') then
 			talkState = 56
-			selfSay('This rod is only for druids of level 13 and above. Would you like to buy a moonlight rod for 1000 gold?')
+			npcHandler:say('This rod is only for druids of level 13 and above. Would you like to buy a moonlight rod for 1000 gold?')
 
 		elseif msgcontains(msg, 'Volcanic Rod') then
 			talkState = 57
-			selfSay('This rod is only for druids of level 19 and above. Would you like to buy a volcanic rod for 5000 gold?')
+			npcHandler:say('This rod is only for druids of level 19 and above. Would you like to buy a volcanic rod for 5000 gold?')
 
 		elseif msgcontains(msg, 'Quagmire Rod') then
 			talkState = 58
-			selfSay('This rod is only for druids of level 26 and above. Would you like to buy a quagmire rod for 10000 gold?')
+			npcHandler:say('This rod is only for druids of level 26 and above. Would you like to buy a quagmire rod for 10000 gold?')
 
 		elseif msgcontains(msg, 'Tempest Rod') then
-			selfSay('Sorry, this rod contains magic far too powerful and we are afraid to store it here. I heard they have a few of these at the Premium academy though.')
+			npcHandler:say('Sorry, this rod contains magic far too powerful and we are afraid to store it here. I heard they have a few of these at the Premium academy though.')
 	
 		elseif msgcontains(msg, 'wand') or msgcontains(msg, 'wands') then
-			selfSay('Wands can be wielded by sorcerers only and have a certain level requirement. There are five different wands, would you like to hear about them?')
+			npcHandler:say('Wands can be wielded by sorcerers only and have a certain level requirement. There are five different wands, would you like to hear about them?')
 			talkState = 2
 			
 		elseif msgcontains(msg, 'rod') or msgcontains(msg, 'rods') then
-			selfSay('Rods can be wielded by druids only and have a certain level requirement. There are five different rods, would you like to hear about them?')
+			npcHandler:say('Rods can be wielded by druids only and have a certain level requirement. There are five different rods, would you like to hear about them?')
 			talkState = 3
 
 -- Others --------------------------------------------------------------------------------
@@ -258,9 +258,9 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*55
 			talkState = 36
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' mana fluids for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' mana fluids for ' .. cost .. '.')
 			else
-			     selfSay('Do you want to buy mana fluid for 55 gold')
+			     npcHandler:say('Do you want to buy mana fluid for 55 gold')
 			end
 
 		elseif msgcontains(msg, 'life fluid') or msgcontains(msg, 'life fluids') then
@@ -268,27 +268,27 @@ function creatureSayCallback(cid, type, msg)
 			cost = count*60
 			talkState = 37
 			if count >= 2 then
-			    selfSay('Do you want to buy ' .. count .. ' life fluids for ' .. cost .. '.')
+			    npcHandler:say('Do you want to buy ' .. count .. ' life fluids for ' .. cost .. '.')
 			else
-			     selfSay('Do you want to buy life fluid for 60 gold')
+			     npcHandler:say('Do you want to buy life fluid for 60 gold')
 			end
 
 		elseif msgcontains(msg, 'spellbook') then
 		       talkState = 38
-		       selfSay('A spellbook is a nice tool for beginners. Do you want to buy one for 150 gold?')	
+		       npcHandler:say('A spellbook is a nice tool for beginners. Do you want to buy one for 150 gold?')	
 
 -- backpacks of runes ------------------------------------------------------------------
 		elseif msgcontains(msg, 'bpmana') or msgcontains(msg, 'manabp') then
 			cost = 1100
 			talkState = 100
-			selfSay('Do you want to buy bp of mana fluid for ' .. cost  .. ' gold')
+			npcHandler:say('Do you want to buy bp of mana fluid for ' .. cost  .. ' gold')
 
 	elseif talkState > 0 then
 		if msgcontains(msg, 'yes') then
 			if talkState == 2 then
-				selfSay('The names of the wands are \'Wand of Vortex\', \'Wand of Dragonbreath\', \'Wand of Plague\', \'Wand of Cosmic Energy\' and \'Wand ofInferno\'. Which one would you like to buy?')
+				npcHandler:say('The names of the wands are \'Wand of Vortex\', \'Wand of Dragonbreath\', \'Wand of Plague\', \'Wand of Cosmic Energy\' and \'Wand ofInferno\'. Which one would you like to buy?')
 			elseif talkState == 3 then
-				selfSay('The names of the rods are \'Snakebite Rod\', \'Moonlight Rod\', \'Volcanic Rod\', \'Quagmire Rod\', and \'Tempest Rod\'. Which one would you like to buy?')
+				npcHandler:say('The names of the rods are \'Snakebite Rod\', \'Moonlight Rod\', \'Volcanic Rod\', \'Quagmire Rod\', and \'Tempest Rod\'. Which one would you like to buy?')
 			elseif talkState == 20 then
                                 buy(cid,2287,count,10)
 			elseif talkState == 21 then
@@ -349,7 +349,7 @@ function creatureSayCallback(cid, type, msg)
 				buyContainer(cid, 2001, 2006, 7, cost)
 			end
 		elseif msgcontains(msg, 'no') then
-			selfSay('Good bye.')
+			npcHandler:say('Good bye.')
 		end
 		talkState = 0
 	end
