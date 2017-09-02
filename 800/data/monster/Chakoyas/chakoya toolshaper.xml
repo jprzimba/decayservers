@@ -26,11 +26,8 @@
 	</attacks>
 	<defenses armor="30" defense="30"/>
 	<elements>
-		<element icePercent="100"/>
 		<element firePercent="40"/>
-		<element holyPercent="10"/>
 		<element energyPercent="-15"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="2000" chance="5">
 		<voice sentence="Chikuva!!"/>
