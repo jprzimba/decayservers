@@ -30,8 +30,6 @@
 	<defenses armor="18" defense="20"/>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
-		<element icePercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>

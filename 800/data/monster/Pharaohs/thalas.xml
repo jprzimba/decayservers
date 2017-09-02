@@ -62,27 +62,19 @@
 		<item id="2444" chance="450"/><!-- hammer of wrath -->
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
 		<item id="2351" chance="100000"/><!-- cobrafang dagger -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="70" chance="100000"/><!-- gold coin -->
-				<item id="2550" chance="10000"/><!-- scythe -->
-				<item id="2688" countmax="5" chance="4000"/><!-- candy cane -->
-				<item id="2540" chance="900"/><!-- scarab shield -->
-				<item id="2539" chance="200"/><!-- phoenix shield -->
-				<item id="2445" chance="400"/><!-- crystal mace -->
-				<item id="2486" chance="300"/><!-- noble armor -->
-				<item id="2658" chance="100"/><!-- white dress -->
-				<item id="2187" chance="800"/><!-- wand of inferno -->
-				<item id="2147" countmax="2" chance="4000"/><!-- small ruby -->
-				<item id="2678" countmax="4" chance="4000"/><!-- coconut -->
-				<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-				<item id="2690" countmax="4" chance="4000"/><!-- roll -->
-				<item id="2002" chance="2857"><!-- blue backpack -->
-					<inside>
-						<item id="2148" countmax="100" chance="2857"/><!-- gold coin -->
-					</inside>
-				</item>
-			</inside>
-		</item>
+		<item id="2148" countmax="70" chance="100000"/><!-- gold coin -->
+		<item id="2550" chance="10000"/><!-- scythe -->
+		<item id="2688" countmax="5" chance="4000"/><!-- candy cane -->
+		<item id="2540" chance="900"/><!-- scarab shield -->
+		<item id="2539" chance="200"/><!-- phoenix shield -->
+		<item id="2445" chance="400"/><!-- crystal mace -->
+		<item id="2486" chance="300"/><!-- noble armor -->
+		<item id="2658" chance="100"/><!-- white dress -->
+		<item id="2187" chance="800"/><!-- wand of inferno -->
+		<item id="2147" countmax="2" chance="4000"/><!-- small ruby -->
+		<item id="2678" countmax="4" chance="4000"/><!-- coconut -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2690" countmax="4" chance="4000"/><!-- roll -->
+		<item id="2148" countmax="100" chance="2857"/><!-- gold coin -->
 	</loot>
 </monster>

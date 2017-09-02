@@ -25,7 +25,6 @@
 	</attacks>
 	<defenses armor="8" defense="10"/>
 	<elements>
-		<element holyPercent="20"/>
 		<element physicalPercent="-20"/>
 	</elements>
 	<voices interval="5000" chance="10">
@@ -41,19 +40,15 @@
 		<item id="2649" chance="10000"/><!-- leather legs -->
 		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
 		<item id="5875" chance="5000"/><!-- sniper gloves -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2456" chance="6666"/><!-- bow -->
-				<item id="2544" countmax="15" chance="10000"/><!-- arrow -->
-				<item id="2546" countmax="5" chance="10000"/><!-- burst arrow -->
-				<item id="2147" countmax="2" chance="3333"/><!-- small ruby -->
-				<item id="2675" countmax="4" chance="6666"/><!-- orange -->
-				<item id="2690" countmax="4" chance="6666"/><!-- roll -->
-				<item id="2050" chance="20000"/><!-- torch -->
-				<item id="2478" chance="3333"/><!-- brass legs -->
-				<item id="2652" chance="2222"/><!-- green tunic -->
-				<item id="2201" chance="2500"/><!-- dragon necklace -->
-			</inside>
-		</item>
+		<item id="2456" chance="6666"/><!-- bow -->
+		<item id="2544" countmax="15" chance="10000"/><!-- arrow -->
+		<item id="2546" countmax="5" chance="10000"/><!-- burst arrow -->
+		<item id="2147" countmax="2" chance="3333"/><!-- small ruby -->
+		<item id="2675" countmax="4" chance="6666"/><!-- orange -->
+		<item id="2690" countmax="4" chance="6666"/><!-- roll -->
+		<item id="2050" chance="20000"/><!-- torch -->
+		<item id="2478" chance="3333"/><!-- brass legs -->
+		<item id="2652" chance="2222"/><!-- green tunic -->
+		<item id="2201" chance="2500"/><!-- dragon necklace -->
 	</loot>
 </monster>

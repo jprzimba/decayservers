@@ -26,10 +26,7 @@
 	<defenses armor="25" defense="23"/>
 	<elements>
 		<element earthPercent="18"/>
-		<element holyPercent="17"/>
-		<element deathPercent="-7"/>
 		<element firePercent="-9"/>
-		<element icePercent="-11"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -46,16 +43,13 @@
 		<item id="6095" chance="5000"/><!-- pirate shirt -->
 		<item id="5710" chance="2500"/><!-- light shovel -->
 		<item id="5553" chance="2500"/><!-- rum flask -->
-		<item id="5927" chance="100000"><!-- pirate bag -->
-			<inside>
-				<item id="5091" chance="1666"/><!-- treasure map -->
-				<item id="2509" chance="4000"/><!-- steel shield -->
-				<item id="5792" chance="3333"/><!-- dice -->
-				<item id="2376" chance="6666"/><!-- sword -->
-				<item id="6126" countmax="1" chance="5000"/><!-- peg leg -->
-				<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
-				<item id="6097" countmax="1" chance="5000"/><!-- hook -->
-			</inside>
-		</item>
+		<item id="5927" chance="100000"/><!-- pirate bag -->
+		<item id="5091" chance="1666"/><!-- treasure map -->
+		<item id="2509" chance="4000"/><!-- steel shield -->
+		<item id="5792" chance="3333"/><!-- dice -->
+		<item id="2376" chance="6666"/><!-- sword -->
+		<item id="6126" countmax="1" chance="5000"/><!-- peg leg -->
+		<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
+		<item id="6097" countmax="1" chance="5000"/><!-- hook -->
 	</loot>
 </monster>

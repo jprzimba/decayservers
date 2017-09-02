@@ -26,11 +26,8 @@
 	<defenses armor="25" defense="23"/>
 	<elements>
 		<element earthPercent="25"/>
-		<element holyPercent="20"/>
-		<element deathPercent="-7"/>
 		<element firePercent="-10"/>
 		<element energyPercent="-10"/>
-		<element icePercent="-10"/>
 		<element physicalPercent="-11"/>
 	</elements>
 	<immunities>
@@ -49,15 +46,12 @@
 		<item id="2238" chance="10045"/><!-- worn leather boots -->
 		<item id="6095" chance="5000"/><!-- pirate shirt -->
 		<item id="5553" chance="1666"/><!-- rum flask -->
-		<item id="5926" chance="100000"><!-- pirate backpack -->
-			<inside>
-				<item id="5091" chance="1666"/><!-- treasure map -->
-				<item id="5792" chance="3333"/><!-- dice -->
-				<item id="2376" chance="6666"/><!-- sword -->
-				<item id="6126" countmax="1" chance="5000"/><!-- peg leg -->
-				<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
-				<item id="6097" countmax="1" chance="5000"/><!-- hook -->
-			</inside>
-		</item>
+		<item id="5926" chance="100000"/><!-- pirate backpack -->
+		<item id="5091" chance="1666"/><!-- treasure map -->
+		<item id="5792" chance="3333"/><!-- dice -->
+		<item id="2376" chance="6666"/><!-- sword -->
+		<item id="6126" countmax="1" chance="5000"/><!-- peg leg -->
+		<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
+		<item id="6097" countmax="1" chance="5000"/><!-- hook -->
 	</loot>
 </monster>

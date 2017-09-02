@@ -49,14 +49,10 @@
 		<item id="5895" countmax="1" chance="2000"/><!-- fish fin -->
 		<item id="2189" chance="1333"/><!-- wand of cosmic energy -->
 		<item id="2240" chance="10000"/><!-- fishremains -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2143" countmax="2" chance="1333"/><!-- white pearl -->
-				<item id="2144" countmax="2" chance="1429"/><!-- black pearl -->
-				<item id="2214" chance="1538"/><!-- ring of healing -->
-				<item id="2150" countmax="2" chance="1000"/><!-- small amethyst -->
-				<item id="2476" chance="500"/><!-- knight armor -->
-			</inside>
-		</item>
+		<item id="2143" countmax="2" chance="1333"/><!-- white pearl -->
+		<item id="2144" countmax="2" chance="1429"/><!-- black pearl -->
+		<item id="2214" chance="1538"/><!-- ring of healing -->
+		<item id="2150" countmax="2" chance="1000"/><!-- small amethyst -->
+		<item id="2476" chance="500"/><!-- knight armor -->
 	</loot>
 </monster>

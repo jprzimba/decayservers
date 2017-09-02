@@ -29,9 +29,6 @@
 	<defenses armor="25" defense="20"/>
 	<elements>
 		<element earthPercent="32"/>
-		<element holyPercent="30"/>
-		<element deathPercent="-8"/>
-		<element icePercent="-10"/>
 		<element firePercent="-17"/>
 	</elements>
 	<immunities>
@@ -50,14 +47,11 @@
 		<item id="2521" chance="1000"/><!-- dark shield -->
 		<item id="6096" chance="909"/><!-- pirate hat -->
 		<item id="6095" chance="5000"/><!-- pirate shirt -->
-		<item id="5926" chance="100000"><!-- pirate backpack -->
-			<inside>
-				<item id="5091" chance="1666"/><!-- treasure map -->
-				<item id="5462" chance="450"/><!-- pirate boots -->
-				<item id="5792" chance="3333"/><!-- dice -->
-				<item id="2376" chance="6666"/><!-- sword -->
-				<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
-			</inside>
-		</item>
+		<item id="5926" chance="100000"/><!-- pirate backpack -->
+		<item id="5091" chance="1666"/><!-- treasure map -->
+		<item id="5462" chance="450"/><!-- pirate boots -->
+		<item id="5792" chance="3333"/><!-- dice -->
+		<item id="2376" chance="6666"/><!-- sword -->
+		<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
 	</loot>
 </monster>

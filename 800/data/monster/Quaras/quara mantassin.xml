@@ -27,7 +27,6 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element icePercent="100"/>
 		<element earthPercent="-12"/>
 		<element energyPercent="-25"/>
 	</elements>
@@ -43,13 +42,9 @@
 		<item id="5895" countmax="1" chance="2000"/><!-- fish fin -->
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
 		<item id="2377" chance="1818"/><!-- two handed sword -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="5895" countmax="1" chance="3333"/><!-- fish fin -->
-				<item id="2229" countmax="1" chance="4000"/><!-- skull -->
-				<item id="2165" chance="1250"/><!-- stealth ring -->
-				<item id="2656" chance="500"/><!-- blue robe -->
-			</inside>
-		</item>
+		<item id="5895" countmax="1" chance="3333"/><!-- fish fin -->
+		<item id="2229" countmax="1" chance="4000"/><!-- skull -->
+		<item id="2165" chance="1250"/><!-- stealth ring -->
+		<item id="2656" chance="500"/><!-- blue robe -->
 	</loot>
 </monster>

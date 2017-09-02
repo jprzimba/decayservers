@@ -29,12 +29,9 @@
 	<defenses armor="25" defense="30"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element icePercent="100"/>
 		<element firePercent="95"/>
 		<element energyPercent="80"/>
 		<element physicalPercent="22"/>
-		<element deathPercent="20"/>
-		<element holyPercent="-16"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -56,22 +53,18 @@
 		<item id="2490" chance="6666"/><!-- dark helmet -->
 		<item id="2381" chance="9000"/><!-- halberd -->
 		<item id="2389" countmax="1" chance="20000"/><!-- spear -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2477" chance="1000"/><!-- knight legs -->
-				<item id="2691" countmax="2" chance="20000"/><!-- brown bread -->
-				<item id="2478" chance="13000"/><!-- brass legs -->
-				<item id="2475" countmax="1" chance="2000"/><!-- warrior helmet -->
-				<item id="2463" chance="2500"/><!-- plate armor -->
-				<item id="2148" countmax="15" chance="100000"/><!-- gold coin -->
-				<item id="2120" chance="20000"/><!-- rope -->
-				<item id="2387" chance="6666"/><!-- double axe -->
-				<item id="2377" chance="2857"/><!-- two handed sword -->
-				<item id="2430" chance="1333"/><!-- knight axe -->
-				<item id="2414" chance="909"/><!-- dragon lance -->
-				<item id="2195" chance="555"/><!-- boots of haste -->
-				<item id="2133" countmax="1" chance="800"/><!-- ruby necklace -->
-			</inside>
-		</item>
+		<item id="2477" chance="1000"/><!-- knight legs -->
+		<item id="2691" countmax="2" chance="20000"/><!-- brown bread -->
+		<item id="2478" chance="13000"/><!-- brass legs -->
+		<item id="2475" countmax="1" chance="2000"/><!-- warrior helmet -->
+		<item id="2463" chance="2500"/><!-- plate armor -->
+		<item id="2148" countmax="15" chance="100000"/><!-- gold coin -->
+		<item id="2120" chance="20000"/><!-- rope -->
+		<item id="2387" chance="6666"/><!-- double axe -->
+		<item id="2377" chance="2857"/><!-- two handed sword -->
+		<item id="2430" chance="1333"/><!-- knight axe -->
+		<item id="2414" chance="909"/><!-- dragon lance -->
+		<item id="2195" chance="555"/><!-- boots of haste -->
+		<item id="2133" countmax="1" chance="800"/><!-- ruby necklace -->
 	</loot>
 </monster>

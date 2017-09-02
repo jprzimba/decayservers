@@ -48,13 +48,9 @@
 		<item id="5895" countmax="1" chance="2000"/><!-- fish fin -->
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
 		<item id="2475" chance="1333"/><!-- warrior helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2398" chance="5000"/><!-- mace -->
-				<item id="2381" chance="2222"/><!-- halberd -->
-				<item id="2487" chance="500"/><!-- crown armor -->
-				<item id="2147" countmax="3" chance="1538"/><!-- small ruby -->
-			</inside>
-		</item>
+		<item id="2398" chance="5000"/><!-- mace -->
+		<item id="2381" chance="2222"/><!-- halberd -->
+		<item id="2487" chance="500"/><!-- crown armor -->
+		<item id="2147" countmax="3" chance="1538"/><!-- small ruby -->
 	</loot>
 </monster>

@@ -23,7 +23,6 @@
 	<defenses armor="11" defense="15"/>
 	<elements>
 		<element physicalPercent="-12"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Your money or your life!"/>
@@ -36,10 +35,6 @@
 		<item id="2484" chance="20000"/><!-- studded armor -->
 		<item id="2530" chance="6666"/><!-- copper shield -->
 		<item id="2649" chance="10000"/><!-- leather legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2787" countmax="2" chance="20000"/><!-- white mushroom -->
-			</inside>
-		</item>
+		<item id="2787" countmax="2" chance="20000"/><!-- white mushroom -->
 	</loot>
 </monster>

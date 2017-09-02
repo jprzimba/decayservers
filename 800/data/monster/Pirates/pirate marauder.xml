@@ -27,8 +27,6 @@
 	<defenses armor="15" defense="20"/>
 	<elements>
 		<element earthPercent="16"/>
-		<element holyPercent="15"/>
-		<element deathPercent="-7"/>
 		<element firePercent="-8"/>
 		<element energyPercent="-10"/>
 	</elements>
@@ -48,14 +46,11 @@
 		<item id="2464" chance="6666"/><!-- chain armor -->
 		<item id="6098" countmax="1" chance="5000"/><!-- eye patch -->
 		<item id="6095" chance="5000"/><!-- pirate shirt -->
-		<item id="5926" chance="100000"><!-- pirate backpack -->
-			<inside>
-				<item id="5091" chance="1666"/><!-- treasure map -->
-				<item id="5792" chance="3333"/><!-- dice -->
-				<item id="6126" countmax="1" chance="1428"/><!-- peg leg -->
-				<item id="6098" countmax="1" chance="1428"/><!-- eye patch -->
-				<item id="6097" countmax="1" chance="1428"/><!-- hook -->
-			</inside>
-		</item>
+		<item id="5926" chance="100000"/><!-- pirate backpack -->
+		<item id="5091" chance="1666"/><!-- treasure map -->
+		<item id="5792" chance="3333"/><!-- dice -->
+		<item id="6126" countmax="1" chance="1428"/><!-- peg leg -->
+		<item id="6098" countmax="1" chance="1428"/><!-- eye patch -->
+		<item id="6097" countmax="1" chance="1428"/><!-- hook -->
 	</loot>
 </monster>

@@ -29,9 +29,7 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="10"/>
 		<element physicalPercent="-12"/>
-		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -39,13 +37,9 @@
 	<loot>
 		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
 		<item id="2649" chance="6666"/><!-- leather legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2260" chance="4000"/><!-- blank rune -->
-				<item id="2399" countmax="1" chance="20000"/><!-- throwing star -->
-				<item id="2478" chance="3333"/><!-- brass legs -->
-				<item id="2425" chance="2000"/><!-- obsidian lance -->
-			</inside>
-		</item>
+		<item id="2260" chance="4000"/><!-- blank rune -->
+		<item id="2399" countmax="1" chance="20000"/><!-- throwing star -->
+		<item id="2478" chance="3333"/><!-- brass legs -->
+		<item id="2425" chance="2000"/><!-- obsidian lance -->
 	</loot>
 </monster>

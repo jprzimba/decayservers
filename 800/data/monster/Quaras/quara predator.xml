@@ -30,7 +30,6 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element icePercent="100"/>
 		<element earthPercent="-12"/>
 		<element energyPercent="-25"/>
 	</elements>
@@ -47,14 +46,9 @@
 		<item id="5895" countmax="1" chance="2000"/><!-- fish fin -->
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
 		<item id="2387" chance="2000"/><!-- double axe -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2473" chance="3333"/><!-- viking helmet -->
-				<item id="2145" countmax="1" chance="1429"/><!-- small diamond -->
-				<item id="2483" chance="4000"/><!-- scale armor -->
-				<item id="5741" chance="956"/><!-- skull helmet -->
-				<item id="7897" chance="800"/><!-- glacier robe -->
-			</inside>
-		</item>
+		<item id="2473" chance="3333"/><!-- viking helmet -->
+		<item id="2145" countmax="1" chance="1429"/><!-- small diamond -->
+		<item id="2483" chance="4000"/><!-- scale armor -->
+		<item id="5741" chance="956"/><!-- skull helmet -->
 	</loot>
 </monster>
