@@ -33,7 +33,6 @@
 	<defenses armor="30" defense="40"/>
 	<elements>
 		<element energyPercent="55"/>
-		<element deathPercent="-11"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

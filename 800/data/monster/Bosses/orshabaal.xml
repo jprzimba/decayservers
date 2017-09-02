@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orshabaal" nameDescription="Orshabaal" race="fire" experience="9999" speed="380" manacost="0">
-	<health now="22500" max="22500"/>
+<monster name="Orshabaal" nameDescription="Orshabaal" race="fire" experience="10000" speed="380" manacost="0">
+	<health now="25500" max="25500"/>
 	<look type="201" corpse="2916"/>
 	<targetchange interval="2000" chance="10"/>
 	<strategy attack="70" defense="10"/>
@@ -50,9 +50,6 @@
 	<elements>
 		<element firePercent="100"/>
 		<element earthPercent="100"/>
-		<element deathPercent="50"/>
-		<element icePercent="-20"/>
-		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

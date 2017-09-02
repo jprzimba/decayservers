@@ -23,10 +23,6 @@
 		<!--<attack name="Smokewave" interval="1000" chance="35"/> -->
 	</attacks>
 	<defenses armor="25" defense="27"/>
-	<elements>
-		<element icePercent="100"/>
-		<element deathPercent="-9"/>
-	</elements>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>

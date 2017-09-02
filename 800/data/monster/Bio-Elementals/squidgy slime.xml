@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slime" nameDescription="a slime" race="venom" experience="0" speed="120" manacost="0">
+<monster name="Squidgy Slime" nameDescription="a squidgy slime" race="venom" experience="0" speed="120" manacost="0">
 	<health now="150" max="150"/>
 	<look type="19" corpse="1496"/>
 	<targetchange interval="5000" chance="8"/>

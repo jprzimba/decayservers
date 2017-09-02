@@ -33,7 +33,6 @@
 		<element earthPercent="100"/>
 		<element energyPercent="10"/>
 		<element firePercent="-15"/>
-		<element icePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity outfit="1"/>
@@ -45,10 +44,6 @@
 		<item id="2510" chance="17000"/><!-- plate shield -->
 		<item id="2457" chance="7300"/><!-- steel helmet -->
 		<item id="2463" chance="300"/><!-- plate armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2169" chance="2500"/><!-- time ring -->
-			</inside>
-		</item>
+		<item id="2169" chance="2500"/><!-- time ring -->
 	</loot>
 </monster>

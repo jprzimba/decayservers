@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Evil Eye" nameDescription="the Evil Eye" race="blood" experience="500" speed="240" manacost="0">
+<monster name="The Evil Eye" nameDescription="the evil eye" race="blood" experience="750" speed="240" manacost="0">
 	<health now="1200" max="1200"/>
 	<look type="210" corpse="6037"/>
 	<targetchange interval="5000" chance="8"/>
@@ -55,7 +55,6 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -73,12 +72,8 @@
 		<item id="2451" chance="800"/><!-- djinn blade -->
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
 		<item id="5898" countmax="1" chance="5000"/><!-- beholder eye -->
-		<item id="1987" chance="80000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="90" chance="80000"/><!-- gold coin -->
-				<item id="2423" chance="5000"/><!-- clerical mace -->
-				<item id="2391" chance="1333"/><!-- war hammer -->
-			</inside>
-		</item>
+		<item id="2148" countmax="90" chance="80000"/><!-- gold coin -->
+		<item id="2423" chance="5000"/><!-- clerical mace -->
+		<item id="2391" chance="1333"/><!-- war hammer -->
 	</loot>
 </monster>

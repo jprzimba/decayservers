@@ -33,7 +33,6 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
 		<element energyPercent="-13"/>
 	</elements>
 	<immunities>

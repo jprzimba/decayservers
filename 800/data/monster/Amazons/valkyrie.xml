@@ -25,10 +25,7 @@
 	</attacks>
 	<defenses armor="12" defense="14"/>
 	<elements>
-		<element icePercent="10"/>
 		<element firePercent="10"/>
-		<element holyPercent="7"/>
-		<element deathPercent="-7"/>
 		<element physicalPercent="-6"/>
 	</elements>
 	<voices interval="5000" chance="10">
@@ -46,16 +43,12 @@
 		<item id="2389" countmax="3" chance="8333"/><!-- spear -->
 		<item id="3965" chance="1333"/><!-- hunting spear -->
 		<item id="2458" chance="7000"/><!-- chain helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2674" countmax="4" chance="10000"/><!-- red apple -->
-				<item id="2666" countmax="4" chance="20000"/><!-- meat -->
-				<item id="2147" countmax="2" chance="3500"/><!-- small ruby -->
-				<item id="2145" countmax="2" chance="3500"/><!-- small diamond -->
-				<item id="2200" chance="3000"/><!-- protection amulet -->
-				<item id="2463" chance="2333"/><!-- plate armor -->
-				<item id="7618" chance="2400"/><!-- health potion -->
-			</inside>
-		</item>
+		<item id="2674" countmax="4" chance="10000"/><!-- red apple -->
+		<item id="2666" countmax="4" chance="20000"/><!-- meat -->
+		<item id="2147" countmax="2" chance="3500"/><!-- small ruby -->
+		<item id="2145" countmax="2" chance="3500"/><!-- small diamond -->
+		<item id="2200" chance="3000"/><!-- protection amulet -->
+		<item id="2463" chance="2333"/><!-- plate armor -->
+		<item id="7618" chance="2400"/><!-- health potion -->
 	</loot>
 </monster>

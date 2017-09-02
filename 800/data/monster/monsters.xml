@@ -75,10 +75,12 @@
 	<monster name="Panda" file="Bears/panda.xml"/>
 	<monster name="Polar Bear" file="Bears/polar bear.xml"/>
 
-	<!-- Beholders -->
+	<!-- Bonelords -->
 	<monster name="Beholder" file="Beholders/beholder.xml"/>
+	<monster name="Bonelord" file="Beholders/bonelord.xml"/>
 	<monster name="Braindeath" file="Beholders/braindeath.xml"/>
 	<monster name="Elder Beholder" file="Beholders/elder beholder.xml"/>
+	<monster name="Elder Bonelord" file="Beholders/elder bonelord.xml"/>
 	<monster name="Gazer" file="Beholders/gazer.xml"/>
 
 	<!-- Bio-Elementals -->
@@ -86,6 +88,7 @@
 	<monster name="Defiler" file="Bio-Elementals/defiler.xml"/>
 	<monster name="Slime" file="Bio-Elementals/slime.xml"/>
 	<monster name="Slime Summon" file="Bio-Elementals/slime summon.xml"/>
+	<monster name="Squidgy Slime" file="Bio-Elementals/squidgy slime.xml"/>
 	<monster name="Son of Verminor" file="Bio-Elementals/son of verminor.xml"/>
 	<monster name="Spit Nettle" file="Bio-Elementals/spit nettle.xml"/>
 
@@ -99,7 +102,6 @@
 	<monster name="Terror Bird" file="Birds/terror bird.xml"/>
 
 	<!-- Bosses -->
-	<monster name="Annihilon" file="Bosses/annihilon.xml"/>
 	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml"/>
 	<monster name="Bones" file="Bosses/bones.xml"/>
 	<monster name="Brutus Bloodbeard" file="Bosses/brutus bloodbeard.xml"/>
@@ -111,14 +113,10 @@
 	<monster name="Fernfang" file="Bosses/fernfang.xml"/>
 	<monster name="Ferumbras" file="Bosses/ferumbras.xml"/>
 	<monster name="Fluffy" file="Bosses/fluffy.xml"/>
-	<monster name="Foreman Kneebiter" file="Bosses/foreman kneebiter.xml"/>
 	<monster name="General Murius" file="Bosses/general murius.xml"/>
 	<monster name="Ghazbaran" file="Bosses/ghazbaran.xml"/>
 	<monster name="Grorlam" file="Bosses/grorlam.xml"/>
-	<monster name="Latrivan" file="Bosses/latrivan.xml"/>
 	<monster name="Lethal Lissy" file="Bosses/lethal lissy.xml"/>
-	<monster name="Mad Technomancer" file="Bosses/mad technomancer.xml"/>
-	<monster name="Madareth" file="Bosses/madareth.xml"/>
 	<monster name="Man In The Cave" file="Bosses/man in the cave.xml"/>
 	<monster name="Massacre" file="Bosses/massacre.xml"/>
 	<monster name="Minishabaal" file="Bosses/minishabaal.xml"/>
@@ -138,7 +136,6 @@
 	<monster name="Tibia Bug" file="Bosses/tibia bug.xml"/>
 	<monster name="Tiquandas Revenge" file="Bosses/tiquandas revenge.xml"/>
 	<monster name="Undead Minion" file="Bosses/undead minion.xml"/>
-	<monster name="Xenia" file="Bosses/xenia.xml"/>
 
 	<!-- Canines -->
 	<monster name="Dog" file="Canines/dog.xml"/>

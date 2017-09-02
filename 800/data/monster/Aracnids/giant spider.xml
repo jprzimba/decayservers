@@ -31,7 +31,6 @@
 	<elements>
 		<element earthPercent="100"/>
 		<element energyPercent="20"/>
-		<element icePercent="20"/>
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
@@ -52,17 +51,11 @@
 		<item id="2171" chance="400"/><!-- platinum amulet -->
 		<item id="5879" countmax="1" chance="5000"/><!-- giant spider silk -->
 		<item id="2545" countmax="12" chance="13000"/><!-- poison arrow -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
-				<item id="2457" chance="5000"/><!-- steel helmet -->
-				<item id="2476" chance="700"/><!-- knight armor -->
-				<item id="2477" chance="500"/><!-- knight legs -->
-				<item id="2478" chance="10000"/><!-- brass legs -->
-				<item id="2169" chance="800"/><!-- time ring -->
-				<item id="7588" chance="500"/><!-- strong health potion -->
-				<item id="7901" chance="200"/><!-- lightning headband -->
-			</inside>
-		</item>
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2457" chance="5000"/><!-- steel helmet -->
+		<item id="2476" chance="700"/><!-- knight armor -->
+		<item id="2477" chance="500"/><!-- knight legs -->
+		<item id="2478" chance="10000"/><!-- brass legs -->
+		<item id="2169" chance="800"/><!-- time ring -->
 	</loot>
 </monster>

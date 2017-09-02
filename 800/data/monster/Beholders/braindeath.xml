@@ -50,7 +50,6 @@
 		<elements>
 	<element icePercent="13"/>
 		<element physicalPercent="9"/>
-		<element holyPercent="-10"/>
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
@@ -77,16 +76,12 @@
 		<item id="3972" chance="600"/><!-- beholder helmet -->
 		<item id="2451" chance="300"/><!-- djinn blade -->
 		<item id="5898" chance="1700" countmax="1"/><!-- beholder eye -->
-		<item id="1987" chance="80000"><!-- bag -->
-			<inside>
-				<item id="2377" chance="6000"/><!-- two handed sword -->
-				<item id="2175" chance="1000"/><!-- spellbook -->
-				<item id="2394" countmax="1" chance="10000"/><!-- morning star -->
-				<item id="2148" countmax="32" chance="80000"/><!-- gold coin -->
-				<item id="2148" countmax="90" chance="80000"/><!-- gold coin -->
-				<item id="2423" chance="5000"/><!-- clerical mace -->
-				<item id="2391" chance="1333"/><!-- war hammer -->
-			</inside>
-		</item>
+		<item id="2377" chance="6000"/><!-- two handed sword -->
+		<item id="2175" chance="1000"/><!-- spellbook -->
+		<item id="2394" countmax="1" chance="10000"/><!-- morning star -->
+		<item id="2148" countmax="32" chance="80000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="80000"/><!-- gold coin -->
+		<item id="2423" chance="5000"/><!-- clerical mace -->
+		<item id="2391" chance="1333"/><!-- war hammer -->
 	</loot>
 </monster>

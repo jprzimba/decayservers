@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fallen Mooh'tah Master Ghar" nameDescription="fallen mooh'tah master ghar" race="blood" experience="4400" speed="190">
-	<health now="8000" max="8000"/>
+	<health now="7990" max="7990"/>
 	<look type="29" corpse="7349"/>
 	<targetchange interval="2000" chance="5"/>
 	<strategy attack="100" defense="0"/>

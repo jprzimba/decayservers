@@ -39,9 +39,6 @@
 	<elements>
 		<element firePercent="20"/>
 		<element energyPercent="10"/>
-		<element holyPercent="10"/>
-		<element icePercent="-15"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="0"/>
@@ -64,6 +61,5 @@
 		<item id="5883" chance="1000"/><!-- ape fur -->
 		<item id="3966" chance="833"/><!-- banana staff -->
 		<item id="2150" chance="1538"/><!-- small amethyst -->
-		<item id="7620" chance="1340"/><!-- mana potion -->
 	</loot>
 </monster>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Old Widow" nameDescription="the Old Widow" race="blood" experience="2800" speed="240" manacost="0">
-	<health now="3200" max="3200"/>
+<monster name="The Old Widow" nameDescription="the old widow" race="blood" experience="4200" speed="240" manacost="0">
+	<health now="3550" max="3550"/>
 	<look type="208" corpse="5977"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
@@ -60,15 +60,11 @@
 		<item id="2459" chance="20000"/><!-- iron helmet -->
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
 		<item id="5879" countmax="1" chance="5000"/><!-- giant spider silk -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2457" countmax="1" chance="10000"/><!-- steel helmet -->
-				<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
-				<item id="2476" chance="1000"/><!-- knight armor -->
-				<item id="2477" chance="500"/><!-- knight legs -->
-				<item id="2478" chance="10000"/><!-- brass legs -->
-				<item id="2169" chance="800"/><!-- time ring -->
-			</inside>
-		</item>
+		<item id="2457" countmax="1" chance="10000"/><!-- steel helmet -->
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2476" chance="1000"/><!-- knight armor -->
+		<item id="2477" chance="500"/><!-- knight legs -->
+		<item id="2478" chance="10000"/><!-- brass legs -->
+		<item id="2169" chance="800"/><!-- time ring -->
 	</loot>
 </monster>

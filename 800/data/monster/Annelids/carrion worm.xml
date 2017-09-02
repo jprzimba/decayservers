@@ -25,7 +25,6 @@
 		<element earthPercent="5"/>
 		<element energyPercent="5"/>
 		<element firePercent="-5"/>
-		<element icePercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="0"/>
@@ -38,15 +37,11 @@
 		<item id="2148" countmax="49" chance="100000"/><!-- gold coin -->
 		<item id="3976" countmax="5" chance="20000"/><!-- worm -->
 		<item id="2530" chance="2000"/><!-- copper shield -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2398" chance="3333"/><!-- mace -->
-				<item id="2666" countmax="2" chance="20000"/><!-- meat -->
-				<item id="2671" chance="20000"/><!-- ham -->
-				<item id="2376" chance="10000"/><!-- sword -->
-				<item id="2412" chance="8000"/><!-- katana -->
-				<item id="2463" chance="1000"/><!-- plate armor -->
-			</inside>
-		</item>
+		<item id="2398" chance="3333"/><!-- mace -->
+		<item id="2666" countmax="2" chance="20000"/><!-- meat -->
+		<item id="2671" chance="20000"/><!-- ham -->
+		<item id="2376" chance="10000"/><!-- sword -->
+		<item id="2412" chance="8000"/><!-- katana -->
+		<item id="2463" chance="1000"/><!-- plate armor -->
 	</loot>
 </monster>

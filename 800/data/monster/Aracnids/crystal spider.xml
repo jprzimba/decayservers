@@ -35,7 +35,6 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element icePercent="100"/>
 		<element earthPercent="20"/>
 		<element energyPercent="-20"/>
 	</elements>
@@ -56,16 +55,10 @@
 		<item id="2457" chance="3555"/><!-- steel helmet -->
 		<item id="2171" chance="1222"/><!-- platinum amulet -->
 		<item id="7437" chance="777"/><!-- sapphire hammer -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="7449" chance="1555"/><!-- crystal sword -->
-				<item id="2477" chance="1000"/><!-- knight legs -->
-				<item id="7364" countmax="7" chance="1777"/><!-- sniper arrow -->
-				<item id="7290" chance="1333"/><!-- shard -->
-				<item id="7902" chance="1033"/><!-- glacier mask -->
-				<item id="2169" chance="1333"/><!-- time ring -->
-				<item id="7589" chance="1823"/><!-- strong mana potion -->
-			</inside>
-		</item>
+		<item id="7449" chance="1555"/><!-- crystal sword -->
+		<item id="2477" chance="1000"/><!-- knight legs -->
+		<item id="7364" countmax="7" chance="1777"/><!-- sniper arrow -->
+		<item id="7290" chance="1333"/><!-- shard -->
+		<item id="2169" chance="1333"/><!-- time ring -->
 	</loot>
 </monster>

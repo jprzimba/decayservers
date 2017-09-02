@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" min="-0" max="-15"/>
 	</attacks>
 	<elements>
-		<element icePercent="10"/>
 		<element energyPercent="-5"/>
 	</elements>
 	<loot>

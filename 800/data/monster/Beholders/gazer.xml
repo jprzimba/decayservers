@@ -33,7 +33,6 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element icePercent="20"/>
 		<element energyPercent="10"/>
 		<element firePercent="-10"/>
 	</elements>
@@ -53,14 +52,10 @@
 		<item id="2473" chance="6666"/><!-- viking helmet -->
 		<item id="2398" chance="20000"/><!-- mace -->
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2460" chance="6666"/><!-- brass helmet -->
-				<item id="2229" countmax="2" chance="20000"/><!-- skull -->
-				<item id="2403" chance="10000"/><!-- knife -->
-				<item id="2168" chance="2500"/><!-- life ring -->
-				<item id="3972" chance="500"/><!-- beholder helmet -->
-			</inside>
-		</item>
+		<item id="2460" chance="6666"/><!-- brass helmet -->
+		<item id="2229" countmax="2" chance="20000"/><!-- skull -->
+		<item id="2403" chance="10000"/><!-- knife -->
+		<item id="2168" chance="2500"/><!-- life ring -->
+		<item id="3972" chance="500"/><!-- beholder helmet -->
 	</loot>
 </monster>
