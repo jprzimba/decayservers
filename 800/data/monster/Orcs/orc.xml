@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc" nameDescription="a orc" race="blood" experience="25" speed="150" manacost="300">
+<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300">
 	<health now="70" max="70"/>
 	<look type="5" corpse="5966"/>
 	<targetchange interval="2000" chance="0"/>
@@ -23,9 +23,7 @@
 	<defenses armor="4" defense="8"/>
 	<elements>
 		<element energyPercent="20"/>
-		<element holyPercent="10"/>
 		<element earthPercent="-20"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grak brrretz!"/>
@@ -39,11 +37,7 @@
 		<item id="2484" chance="10000"/><!-- studded armor -->
 		<item id="2480" chance="10000"/><!-- legion helmet -->
 		<item id="2385" chance="10000"/><!-- sabre -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2526" chance="10000"/><!-- studded shield -->
-				<item id="2386" chance="10000"/><!-- axe -->
-			</inside>
-		</item>
+		<item id="2526" chance="10000"/><!-- studded shield -->
+		<item id="2386" chance="10000"/><!-- axe -->
 	</loot>
 </monster>

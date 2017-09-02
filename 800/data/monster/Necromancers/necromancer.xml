@@ -35,11 +35,8 @@
 	<elements>
 		<element earthPercent="100"/>
 		<element energyPercent="20"/>
-		<element icePercent="10"/>
-		<element deathPercent="10"/>
 		<element physicalPercent="-15"/>
 		<element firePercent="-5"/>
-		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -60,18 +57,14 @@
 		<item id="2804" countmax="2" chance="20000"/><!-- shadow herb -->
 		<item id="2182" chance="1333"/><!-- snakebite rod -->
 		<item id="2406" chance="15000"/><!-- short sword -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2412" chance="10000"/><!-- katana -->
-				<item id="2483" chance="10000"/><!-- scale armor -->
-				<item id="2796" countmax="1" chance="1500"/><!-- green mushroom -->
-				<item id="2229" countmax="3" chance="20000"/><!-- skull -->
-				<item id="2747" chance="20000"/><!-- grave flower -->
-				<item id="2436" chance="833"/><!-- skull staff -->
-				<item id="2663" chance="909"/><!-- mystic turban -->
-				<item id="2195" chance="666"/><!-- boots of haste -->
-				<item id="2423" chance="5000"/><!-- clerical mace -->
-			</inside>
-		</item>
+		<item id="2412" chance="10000"/><!-- katana -->
+		<item id="2483" chance="10000"/><!-- scale armor -->
+		<item id="2796" countmax="1" chance="1500"/><!-- green mushroom -->
+		<item id="2229" countmax="3" chance="20000"/><!-- skull -->
+		<item id="2747" chance="20000"/><!-- grave flower -->
+		<item id="2436" chance="833"/><!-- skull staff -->
+		<item id="2663" chance="909"/><!-- mystic turban -->
+		<item id="2195" chance="666"/><!-- boots of haste -->
+		<item id="2423" chance="5000"/><!-- clerical mace -->
 	</loot>
 </monster>

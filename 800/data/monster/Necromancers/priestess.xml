@@ -34,9 +34,7 @@
 	<elements>
 		<element firePercent="40"/>
 		<element earthPercent="20"/>
-		<element deathPercent="20"/>
 		<element physicalPercent="-13"/>
-		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -59,21 +57,17 @@
 		<item id="2529" chance="1818"/><!-- black shield -->
 		<item id="2423" chance="1500"/><!-- clerical mace -->
 		<item id="2379" chance="23000"/><!-- dagger -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2125" chance="600"/><!-- crystal necklace -->
-				<item id="2802" countmax="1" chance="14000"/><!-- sling herb -->
-				<item id="2803" countmax="1" chance="6000"/><!-- powder herb -->
-				<item id="2420" chance="10000"/><!-- machete -->
-				<item id="2143" countmax="2" chance="5000"/><!-- white pearl -->
-				<item id="2760" chance="5000"/><!-- goat grass -->
-				<item id="2791" countmax="1" chance="3500"/><!-- wood mushroom -->
-				<item id="2192" chance="2500"/><!-- crystal ball -->
-				<item id="2114" chance="2857"/><!-- piggy bank -->
-				<item id="2134" chance="3333"/><!-- silver brooch -->
-				<item id="2151" countmax="2" chance="4000"/><!-- talon -->
-				<item id="2145" countmax="2" chance="1666"/><!-- small diamond -->
-			</inside>
-		</item>
+		<item id="2125" chance="600"/><!-- crystal necklace -->
+		<item id="2802" countmax="1" chance="14000"/><!-- sling herb -->
+		<item id="2803" countmax="1" chance="6000"/><!-- powder herb -->
+		<item id="2420" chance="10000"/><!-- machete -->
+		<item id="2143" countmax="2" chance="5000"/><!-- white pearl -->
+		<item id="2760" chance="5000"/><!-- goat grass -->
+		<item id="2791" countmax="1" chance="3500"/><!-- wood mushroom -->
+		<item id="2192" chance="2500"/><!-- crystal ball -->
+		<item id="2114" chance="2857"/><!-- piggy bank -->
+		<item id="2134" chance="3333"/><!-- silver brooch -->
+		<item id="2151" countmax="2" chance="4000"/><!-- talon -->
+		<item id="2145" countmax="2" chance="1666"/><!-- small diamond -->
 	</loot>
 </monster>

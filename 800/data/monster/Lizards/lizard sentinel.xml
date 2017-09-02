@@ -27,7 +27,6 @@
 	<elements>
 		<element earthPercent="100"/>
 		<element energyPercent="10"/>
-		<element icePercent="5"/>
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
@@ -48,13 +47,9 @@
 		<item id="3965" chance="250"/><!-- hunting spear -->
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
 		<item id="5876" countmax="1" chance="5000"/><!-- lizard leather -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
-				<item id="2147" countmax="4" chance="4000"/><!-- small ruby -->
-				<item id="2654" chance="20000"/><!-- cape -->
-				<item id="5881" countmax="1" chance="5000"/><!-- lizard scale -->
-			</inside>
-		</item>
+		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
+		<item id="2147" countmax="4" chance="4000"/><!-- small ruby -->
+		<item id="2654" chance="20000"/><!-- cape -->
+		<item id="5881" countmax="1" chance="5000"/><!-- lizard scale -->
 	</loot>
 </monster>

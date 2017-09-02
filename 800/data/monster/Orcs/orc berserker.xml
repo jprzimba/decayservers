@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Berserker" nameDescription="a orc berserker" race="blood" experience="195" speed="250" manacost="590">
+<monster name="Orc Berserker" nameDescription="an orc berserker" race="blood" experience="195" speed="250" manacost="590">
 	<health now="210" max="210"/>
 	<look type="8" corpse="5980"/>
 	<targetchange interval="5000" chance="8"/>
@@ -27,9 +27,7 @@
 	</defenses>
 	<elements>
 		<element energyPercent="20"/>
-		<element holyPercent="10"/>
 		<element earthPercent="-20"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="KRAK ORRRRRRK!" yell="1"/>
@@ -39,13 +37,9 @@
 		<item id="2148" countmax="15" chance="100000"/><!-- gold coin -->
 		<item id="2666" countmax="3" chance="33333"/><!-- meat -->
 		<item id="2381" chance="6666"/><!-- halberd -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2464" chance="10000"/><!-- chain armor -->
-				<item id="2458" chance="10000"/><!-- chain helmet -->
-				<item id="2044" chance="5000"/><!-- lamp -->
-				<item id="2378" chance="5000"/><!-- battle axe -->
-			</inside>
-		</item>
+		<item id="2464" chance="10000"/><!-- chain armor -->
+		<item id="2458" chance="10000"/><!-- chain helmet -->
+		<item id="2044" chance="5000"/><!-- lamp -->
+		<item id="2378" chance="5000"/><!-- battle axe -->
 	</loot>
 </monster>

@@ -37,7 +37,6 @@
 	</defenses>
 	<elements>
 		<element energyPercent="20"/>
-		<element icePercent="10"/>
 	</elements>
 	<immunities>
 		<immunity drunk="1"/>
@@ -53,12 +52,8 @@
 		<item id="2547" countmax="3" chance="1667"/><!-- power bolt -->
 		<item id="2647" chance="2000"/><!-- plate legs -->
 		<item id="7408" chance="2000"/><!-- wydern fang -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2127" chance="1818"/><!-- emerald bangle -->
-				<item id="2187" chance="1111"/><!-- wand of inferno -->
-				<item id="2146" chance="1000" countmax="1"/><!-- small sapphire -->
-			</inside>
-		</item>
+		<item id="2127" chance="1818"/><!-- emerald bangle -->
+		<item id="2187" chance="1111"/><!-- wand of inferno -->
+		<item id="2146" chance="1000" countmax="1"/><!-- small sapphire -->
 	</loot>
 </monster>

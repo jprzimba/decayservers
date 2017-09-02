@@ -23,9 +23,6 @@
 	<defenses armor="15" defense="25"/>
 	<elements>
 		<element firePercent="20"/>
-		<element holyPercent="10"/>
-		<element icePercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Kirll Karrrl!"/>
@@ -38,15 +35,11 @@
 		<item id="2387" chance="5000"/><!-- double axe -->
 		<item id="2649" chance="10000"/><!-- leather legs -->
 		<item id="5878" countmax="1" chance="5000"/><!-- minotaur leather -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2386" chance="6666"/><!-- axe -->
-				<item id="2580" chance="5000"/><!-- fishing rod -->
-				<item id="2648" chance="5000"/><!-- chain legs -->
-				<item id="2458" chance="10000"/><!-- chain helmet -->
-				<item id="2465" chance="2500"/><!-- brass armor -->
-				<item id="2513" chance="10000"/><!-- battle shield -->
-			</inside>
-		</item>
+		<item id="2386" chance="6666"/><!-- axe -->
+		<item id="2580" chance="5000"/><!-- fishing rod -->
+		<item id="2648" chance="5000"/><!-- chain legs -->
+		<item id="2458" chance="10000"/><!-- chain helmet -->
+		<item id="2465" chance="2500"/><!-- brass armor -->
+		<item id="2513" chance="10000"/><!-- battle shield -->
 	</loot>
 </monster>

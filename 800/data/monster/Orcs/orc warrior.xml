@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Warrior" nameDescription="a orc warrior" race="blood" experience="50" speed="190" manacost="360">
+<monster name="Orc Warrior" nameDescription="an orc warrior" race="blood" experience="50" speed="190" manacost="360">
 	<health now="125" max="125"/>
 	<look type="7" corpse="5979"/>
 	<targetchange interval="2000" chance="0"/>
@@ -23,9 +23,7 @@
 	<defenses armor="8" defense="14"/>
 	<elements>
 		<element energyPercent="30"/>
-		<element holyPercent="20"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grow truk grrrr."/>
@@ -38,14 +36,10 @@
 		<item id="2666" countmax="2" chance="40000"/><!-- meat -->
 		<item id="2512" chance="10000"/><!-- wooden shield -->
 		<item id="2530" chance="4000"/><!-- copper shield -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2385" chance="6666"/><!-- sabre -->
-				<item id="2464" chance="5000"/><!-- chain armor -->
-				<item id="2420" chance="5000"/><!-- machete -->
-				<item id="2448" chance="5000"/><!-- studded club -->
-				<item id="2007" chance="20000"/><!-- blue bottle -->
-			</inside>
-		</item>
+		<item id="2385" chance="6666"/><!-- sabre -->
+		<item id="2464" chance="5000"/><!-- chain armor -->
+		<item id="2420" chance="5000"/><!-- machete -->
+		<item id="2448" chance="5000"/><!-- studded club -->
+		<item id="2007" chance="20000"/><!-- blue bottle -->
 	</loot>
 </monster>

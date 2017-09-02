@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Shaman" nameDescription="a orc shaman" race="blood" experience="110" speed="180" manacost="0">
+<monster name="Orc Shaman" nameDescription="an orc shaman" race="blood" experience="110" speed="180" manacost="0">
 	<health now="115" max="115"/>
 	<look type="6" corpse="5978"/>
 	<targetchange interval="5000" chance="8"/>
@@ -35,9 +35,7 @@
 	</defenses>
 	<elements>
 		<element energyPercent="50"/>
-		<element holyPercent="25"/>
 		<element earthPercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -52,14 +50,10 @@
 		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
 		<item id="2401" chance="2222"/><!-- staff -->
 		<item id="2458" chance="2222"/><!-- chain helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2817" chance="5000"/><!-- dead snake -->
-				<item id="2389" countmax="1" chance="4000"/><!-- spear -->
-				<item id="2079" chance="3333"/><!-- horn -->
-				<item id="2190" chance="1538"/><!-- wand of vortex -->
-				<item id="2188" chance="1000"/><!-- wand of decay -->
-			</inside>
-		</item>
+		<item id="2817" chance="5000"/><!-- dead snake -->
+		<item id="2389" countmax="1" chance="4000"/><!-- spear -->
+		<item id="2079" chance="3333"/><!-- horn -->
+		<item id="2190" chance="1538"/><!-- wand of vortex -->
+		<item id="2188" chance="1000"/><!-- wand of decay -->
 	</loot>
 </monster>
