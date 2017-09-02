@@ -22,11 +22,8 @@
 	</attacks>
 	<defenses armor="2" defense="6"/>
 	<elements>
-		<element icePercent="20"/>
 		<element firePercent="10"/>
-		<element holyPercent="10"/>
 		<element energyPercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<loot>
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
