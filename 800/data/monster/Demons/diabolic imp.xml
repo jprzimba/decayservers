@@ -42,9 +42,6 @@
 	<elements>
 		<element firePercent="100"/>
 		<element earthPercent="30"/>
-		<element deathPercent="25"/>
-		<element icePercent="-25"/>
-		<element holyPercent="-12"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -61,17 +58,13 @@
 		<item id="2260" chance="18000"/><!-- blank rune -->
 		<item id="6300" chance="999"/><!-- death ring -->
 		<item id="2465" chance="6577"/><!-- brass armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2548" chance="20000"/><!-- pitch fork -->
-				<item id="2465" chance="6577"/><!-- brass armor -->
-				<item id="2185" chance="833"/><!-- necrotic rod -->
-				<item id="2464" chance="7887"/><!-- chain armor -->
-				<item id="5944" chance="5666"/><!-- soul orb -->
-				<item id="6500" countmax="1" chance="7777"/><!-- demonic essence -->
-				<item id="2150" countmax="1" chance="8888"/><!-- small amethyst -->
-				<item id="2165" chance="4555"/><!-- stealth ring -->
-			</inside>
-		</item>
+		<item id="2548" chance="20000"/><!-- pitch fork -->
+		<item id="2465" chance="6577"/><!-- brass armor -->
+		<item id="2185" chance="833"/><!-- necrotic rod -->
+		<item id="2464" chance="7887"/><!-- chain armor -->
+		<item id="5944" chance="5666"/><!-- soul orb -->
+		<item id="6500" countmax="1" chance="7777"/><!-- demonic essence -->
+		<item id="2150" countmax="1" chance="8888"/><!-- small amethyst -->
+		<item id="2165" chance="4555"/><!-- stealth ring -->
 	</loot>
 </monster>

@@ -40,9 +40,6 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element icePercent="40"/>
-		<element holyPercent="40"/>
-		<element deathPercent="-20"/>
 		<element energyPercent="-20"/>
 		<element earthPercent="-15"/>
 		<element physicalPercent="-10"/>
@@ -63,14 +60,10 @@
 		<item id="2666" countmax="1" chance="25000"/><!-- meat -->
 		<item id="6500" countmax="1" chance="2500"/><!-- demonic essence -->
 		<item id="5944" chance="8888"/><!-- soul orb -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2487" chance="600"/><!-- crown armor -->
-				<item id="2181" chance="1333"/><!-- terra rod -->
-				<item id="2143" countmax="1" chance="12000"/><!-- white pearl -->
-				<item id="2156" chance="1900"/><!-- red gem -->
-				<item id="5911" chance="1800"/><!-- red piece of cloth -->
-			</inside>
-		</item>
+		<item id="2487" chance="600"/><!-- crown armor -->
+		<item id="2181" chance="1333"/><!-- terra rod -->
+		<item id="2143" countmax="1" chance="12000"/><!-- white pearl -->
+		<item id="2156" chance="1900"/><!-- red gem -->
+		<item id="5911" chance="1800"/><!-- red piece of cloth -->
 	</loot>
 </monster>

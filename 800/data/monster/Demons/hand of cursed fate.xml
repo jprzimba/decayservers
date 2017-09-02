@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Hand of Cursed Fate" nameDescription="a hand of cursed fate" race="blood" experience="3850" speed="250" manacost="0">
+<monster name="Hand of Cursed Fate" nameDescription="the hand of cursed fate" race="blood" experience="3850" speed="250" manacost="0">
 	<health now="10500" max="10500"/>
 	<look type="230" corpse="6312"/>
 	<targetchange interval="5000" chance="8"/>
@@ -39,12 +39,9 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
 		<element firePercent="100"/>
 		<element energyPercent="100"/>
 		<element earthPercent="100"/>
-		<element icePercent="-40"/>
-		<element holyPercent="-35"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -55,12 +52,8 @@
 		<item id="2654" chance="35000"/><!-- cape -->
 		<item id="2152" countmax="1" chance="50000"/><!-- platinum coin -->
 		<item id="2187" chance="1111"/><!-- wand of inferno -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="65" chance="100000"/><!-- gold coin -->
-				<item id="6500" countmax="1" chance="2500"/><!-- demonic essence -->
-				<item id="2153" chance="1666"/><!-- violet gem -->
-			</inside>
-		</item>
+		<item id="2148" countmax="65" chance="100000"/><!-- gold coin -->
+		<item id="6500" countmax="1" chance="2500"/><!-- demonic essence -->
+		<item id="2153" chance="1666"/><!-- violet gem -->
 	</loot>
 </monster>

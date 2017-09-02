@@ -40,10 +40,7 @@
 	<elements>
 		<element earthPercent="100"/>
 		<element firePercent="40"/>
-		<element icePercent="30"/>
-		<element deathPercent="20"/>
 		<element energyPercent="-10"/>
-		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -60,16 +57,12 @@
 		<item id="2237" chance="10000"/><!-- dirty cape -->
 		<item id="2416" chance="3333"/><!-- crowbar -->
 		<item id="2444" chance="666"/><!-- hammer of wrath -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2492" chance="2333"/><!-- dragon scale mail -->
-				<item id="2645" chance="788"/><!-- steel boots -->
-				<item id="2417" chance="6667"/><!-- battle hammer -->
-				<item id="2509" chance="10000"/><!-- steel shield -->
-				<item id="5944" countmax="1" chance="1538"/><!-- soul orb -->
-				<item id="2079" chance="2000"/><!-- horn -->
-				<item id="2209" chance="2222"/><!-- club ring -->
-			</inside>
-		</item>
+		<item id="2492" chance="2333"/><!-- dragon scale mail -->
+		<item id="2645" chance="788"/><!-- steel boots -->
+		<item id="2417" chance="6667"/><!-- battle hammer -->
+		<item id="2509" chance="10000"/><!-- steel shield -->
+		<item id="5944" countmax="1" chance="1538"/><!-- soul orb -->
+		<item id="2079" chance="2000"/><!-- horn -->
+		<item id="2209" chance="2222"/><!-- club ring -->
 	</loot>
 </monster>

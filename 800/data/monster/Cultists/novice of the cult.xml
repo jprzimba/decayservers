@@ -34,12 +34,9 @@
 	</defenses>
 	<elements>
 		<element earthPercent="10"/>
-		<element icePercent="10"/>
-		<element holyPercent="10"/>
 		<element physicalPercent="-15"/>
 		<element energyPercent="-6"/>
 		<element firePercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<summons maxSummons="3">
 		<summon name="Chicken" interval="2000" chance="10000"/>
@@ -57,12 +54,8 @@
 		<item id="2213" chance="1666"/><!-- dwarven ring -->
 		<item id="2478" chance="6666"/><!-- brass legs -->
 		<item id="2398" chance="18427"/><!-- mace -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2199" chance="1818"/><!-- garlic necklace -->
-				<item id="2190" chance="1538"/><!-- wand of vortex -->
-				<item id="6087" chance="5000"/><!-- music sheet -->
-			</inside>
-		</item>
+		<item id="2199" chance="1818"/><!-- garlic necklace -->
+		<item id="2190" chance="1538"/><!-- wand of vortex -->
+		<item id="6087" chance="5000"/><!-- music sheet -->
 	</loot>
 </monster>

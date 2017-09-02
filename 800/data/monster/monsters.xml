@@ -170,9 +170,7 @@
 	<monster name="Diabolic Imp" file="Demons/diabolic imp.xml"/>
 	<monster name="Fire Devil" file="Demons/fire devil.xml"/>
 	<monster name="Fury" file="Demons/fury.xml"/>
-	<monster name="Gozzler" file="Demons/gozzler.xml"/>
 	<monster name="Hand of Cursed Fate" file="Demons/hand of cursed fate.xml"/>
-	<monster name="Hellspawn" file="Demons/hellspawn.xml"/>
 	<monster name="Juggernaut" file="Demons/juggernaut.xml"/>
 	<monster name="Nightmare" file="Demons/nightmare.xml"/>
 	<monster name="Plaguesmith" file="Demons/plaguesmith.xml"/>
