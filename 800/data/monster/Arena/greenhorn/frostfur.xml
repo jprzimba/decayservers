@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frostfur" nameDescription="frostfur" race="blood" experience="35" speed="170">
+<monster name="Frostfur" nameDescription="a frostfur" race="blood" experience="35" speed="170">
 	<health now="65" max="65"/>
 	<look type="52" corpse="7349"/>
 	<targetchange interval="2000" chance="5"/>

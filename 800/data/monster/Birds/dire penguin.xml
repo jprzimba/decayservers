@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<monster name="Dire Penguin" nameDescription="dire penguin" race="blood" experience="120" speed="156" manacost="0">
+<monster name="Dire Penguin" nameDescription="a dire penguin" race="blood" experience="120" speed="156" manacost="0">
 	<health now="173" max="173"/>
 	<look type="250" corpse="7334"/>
 	<targetchange interval="2000" chance="0"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="500" speed="240" manacost="0">
+<monster name="Brutus Bloodbeard" nameDescription="a brutus bloodbeard" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1200" max="1200"/>
 	<look type="98" corpse="6080"/>
 	<targetchange interval="60000" chance="0"/>
