@@ -25,10 +25,6 @@
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element deathPercent="-10"/>
-		<element icePercent="-8"/>
-	</elements>
 	<loot>
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
 		<item id="2671" countmax="2" chance="33333"/><!-- ham -->

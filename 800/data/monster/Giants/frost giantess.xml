@@ -23,11 +23,8 @@
 	</attacks>
 	<defenses armor="22" defense="23"/>
 	<elements>
-		<element icePercent="100"/>
 		<element firePercent="20"/>
-		<element holyPercent="10"/>
 		<element energyPercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="2000" chance="5">
 		<voice sentence="Ymirs Mjalle!"/>
@@ -45,12 +42,8 @@
 		<item id="7290" chance="4444"/><!-- shard -->
 		<item id="2490" chance="2777"/><!-- dark helmet -->
 		<item id="2666" countmax="2" chance="33333"/><!-- meat -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2513" chance="2500"/><!-- battle shield -->
-				<item id="7441" chance="3444"/><!-- ice cube -->
-				<item id="2671" countmax="2" chance="33333"/><!-- ham -->
-			</inside>
-		</item>
+		<item id="2513" chance="2500"/><!-- battle shield -->
+		<item id="7441" chance="3444"/><!-- ice cube -->
+		<item id="2671" countmax="2" chance="33333"/><!-- ham -->
 	</loot>
 </monster>

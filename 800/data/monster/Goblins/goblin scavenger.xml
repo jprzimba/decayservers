@@ -30,9 +30,7 @@
 	<defenses armor="8" defense="10"/>
 	<elements>
 		<element energyPercent="20"/>
-		<element holyPercent="20"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Shiny, Shiny!"/>
@@ -46,15 +44,11 @@
 		<item id="2461" chance="10000"/><!-- leather helmet -->
 		<item id="2406" chance="10000"/><!-- short sword -->
 		<item id="2467" chance="10000"/><!-- leather armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2559" chance="10000"/><!-- small axe -->
-				<item id="1294" countmax="3" chance="20000"/><!-- small stone -->
-				<item id="2667" countmax="2" chance="20000"/><!-- fish -->
-				<item id="2230" chance="10000"/><!-- bone -->
-				<item id="2235" chance="10000"/><!-- moldy cheese -->
-			</inside>
-		</item>
+		<item id="2559" chance="10000"/><!-- small axe -->
+		<item id="1294" countmax="3" chance="20000"/><!-- small stone -->
+		<item id="2667" countmax="2" chance="20000"/><!-- fish -->
+		<item id="2230" chance="10000"/><!-- bone -->
+		<item id="2235" chance="10000"/><!-- moldy cheese -->
 	</loot>
 </monster>
 

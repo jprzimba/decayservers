@@ -34,8 +34,6 @@
 	<elements>
 		<element energyPercent="10"/>
 		<element earthPercent="-10"/>
-		<element holyPercent="5"/>
-		<element deathPercent="-15"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Goblin Powahhh!"/>
@@ -46,14 +44,10 @@
 		<item id="2235" chance="10000"/><!-- moldy cheese -->
 		<item id="2461" chance="10000"/><!-- leather helmet -->
 		<item id="2230" chance="10000"/><!-- bone -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="1294" countmax="3" chance="20000"/><!-- small stone -->
-				<item id="2449" chance="10000"/><!-- bone club -->
-				<item id="2406" chance="10000"/><!-- short sword -->
-				<item id="2559" chance="10000"/><!-- small axe -->
-				<item id="2379" chance="10000"/><!-- dagger -->
-			</inside>
-		</item>
+		<item id="1294" countmax="3" chance="20000"/><!-- small stone -->
+		<item id="2449" chance="10000"/><!-- bone club -->
+		<item id="2406" chance="10000"/><!-- short sword -->
+		<item id="2559" chance="10000"/><!-- small axe -->
+		<item id="2379" chance="10000"/><!-- dagger -->
 	</loot>
 </monster>

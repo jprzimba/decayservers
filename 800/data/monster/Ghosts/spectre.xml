@@ -37,9 +37,7 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element deathPercent="100"/>
 		<element physicalPercent="60"/>
-		<element icePercent="55"/>
 		<element firePercent="-23"/>
 		<element energyPercent="-20"/>
 	</elements>
@@ -62,14 +60,10 @@
 		<item id="2134" chance="2857"/><!-- silver brooch -->
 		<item id="2642" chance="5000"/><!-- sandals -->
 		<item id="2071" chance="1818"/><!-- lyre -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2189" chance="1333"/><!-- wand of cosmic energy -->
-				<item id="6500" countmax="1" chance="2857"/><!-- demonic essence -->
-				<item id="5944" countmax="1" chance="1429"/><!-- soul orb -->
-				<item id="6300" chance="1000"/><!-- death ring -->
-				<item id="2136" chance="909"/><!--demonbone amulet -->
-			</inside>
-		</item>
+		<item id="2189" chance="1333"/><!-- wand of cosmic energy -->
+		<item id="6500" countmax="1" chance="2857"/><!-- demonic essence -->
+		<item id="5944" countmax="1" chance="1429"/><!-- soul orb -->
+		<item id="6300" chance="1000"/><!-- death ring -->
+		<item id="2136" chance="909"/><!--demonbone amulet -->
 	</loot>
 </monster>

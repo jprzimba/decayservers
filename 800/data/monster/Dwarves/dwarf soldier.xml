@@ -27,7 +27,6 @@
 	<elements>
 		<element earthPercent="75"/>
 		<element firePercent="-5"/>
-		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Hail Durin!"/>
@@ -44,12 +43,8 @@
 		<item id="2696" chance="15000"/><!-- cheese -->
 		<item id="7363" countmax="8" chance="6000"/><!-- piercing bolt -->
 		<item id="5880" chance="2500" countmax="2"/><!-- iron ore -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2525" chance="1666"/><!-- dwarven shield -->
-				<item id="2378" chance="3333"/><!-- battle axe -->
-				<item id="2213" chance="2500"/><!-- dwarven ring -->
-			</inside>
-		</item>
+		<item id="2525" chance="1666"/><!-- dwarven shield -->
+		<item id="2378" chance="3333"/><!-- battle axe -->
+		<item id="2213" chance="2500"/><!-- dwarven ring -->
 	</loot>
 </monster>

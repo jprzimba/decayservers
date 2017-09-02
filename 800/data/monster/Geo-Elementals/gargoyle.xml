@@ -31,7 +31,6 @@
 	<elements>
 		<element earthPercent="100"/>
 		<element physicalPercent="22"/>
-		<element deathPercent="20"/>
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
@@ -52,11 +51,7 @@
 		<item id="2513" chance="25000"/><!-- battle shield -->
 		<item id="2209" chance="3333"/><!-- club ring -->
 		<item id="2394" chance="5000"/><!-- morning star -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2489" chance="2500"/><!-- dark armor -->
-				<item id="2148" countmax="5" chance="100000"/><!-- gold coin -->
-			</inside>
-		</item>
+		<item id="2489" chance="2500"/><!-- dark armor -->
+		<item id="2148" countmax="5" chance="100000"/><!-- gold coin -->
 	</loot>
 </monster>

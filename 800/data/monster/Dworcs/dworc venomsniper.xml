@@ -26,10 +26,7 @@
 	<defenses armor="3" defense="15"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element holyPercent="18"/>
 		<element firePercent="-15"/>
-		<element deathPercent="-9"/>
-		<element icePercent="-6"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="grak brrretz!"/>
@@ -45,14 +42,10 @@
 		<item id="2512" chance="10000"/><!-- wooden shield -->
 		<item id="2530" chance="4000"/><!-- copper shield -->
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2385" chance="6666"/><!-- sabre -->
-				<item id="2464" chance="5000"/><!-- chain armor -->
-				<item id="2420" chance="5000"/><!-- machete -->
-				<item id="2448" chance="5000"/><!-- studded club -->
-				<item id="2007" chance="20000"/><!-- blue bottle -->
-			</inside>
-		</item>
+		<item id="2385" chance="6666"/><!-- sabre -->
+		<item id="2464" chance="5000"/><!-- chain armor -->
+		<item id="2420" chance="5000"/><!-- machete -->
+		<item id="2448" chance="5000"/><!-- studded club -->
+		<item id="2007" chance="20000"/><!-- blue bottle -->
 	</loot>
 </monster>

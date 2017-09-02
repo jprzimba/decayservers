@@ -23,9 +23,7 @@
 	<defenses armor="15" defense="20"/>
 	<elements>
 		<element energyPercent="25"/>
-		<element holyPercent="20"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Il lorstok human!"/>
@@ -42,14 +40,10 @@
 		<item id="2490" chance="4000"/><!-- dark helmet -->
 		<item id="2129" chance="6666"/><!-- wolf tooth chain -->
 		<item id="2666" countmax="3" chance="33333"/><!-- meat -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2513" chance="2500"/><!-- battle shield -->
-				<item id="2511" chance="2857"/><!-- brass shield -->
-				<item id="2381" chance="5000"/><!-- halberd -->
-				<item id="2148" countmax="10" chance="20000"/><!-- gold coin -->
-				<item id="2671" countmax="3" chance="33333"/><!-- ham -->
-			</inside>
-		</item>
+		<item id="2513" chance="2500"/><!-- battle shield -->
+		<item id="2511" chance="2857"/><!-- brass shield -->
+		<item id="2381" chance="5000"/><!-- halberd -->
+		<item id="2148" countmax="10" chance="20000"/><!-- gold coin -->
+		<item id="2671" countmax="3" chance="33333"/><!-- ham -->
 	</loot>
 </monster>

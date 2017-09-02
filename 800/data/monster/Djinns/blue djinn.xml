@@ -40,9 +40,6 @@
 	<elements>
 		<element firePercent="80"/>
 		<element energyPercent="50"/>
-		<element holyPercent="20"/>
-		<element icePercent="-10"/>
-		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -61,13 +58,9 @@
 		<item id="2663" chance="1111"/><!-- mystic turban -->
 		<item id="2745" chance="1000"/><!-- blue rose -->
 		<item id="2684" countmax="5" chance="50000"/><!-- carrot -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="1971" chance="10000"/><!-- book -->
-				<item id="2044" chance="20000"/><!-- lamp -->
-				<item id="2063" countmax="1" chance="7500"/><!-- small oil lamp -->
-				<item id="5912" countmax="1" chance="5000"/><!-- blue piece of cloth -->
-			</inside>
-		</item>
+		<item id="1971" chance="10000"/><!-- book -->
+		<item id="2044" chance="20000"/><!-- lamp -->
+		<item id="2063" countmax="1" chance="7500"/><!-- small oil lamp -->
+		<item id="5912" countmax="1" chance="5000"/><!-- blue piece of cloth -->
 	</loot>
 </monster>

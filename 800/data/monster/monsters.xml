@@ -185,7 +185,6 @@
 	<monster name="Dragon Lord" file="Dragons/dragon lord.xml"/>
 	<monster name="Dragon" file="Dragons/dragon.xml"/>
 	<monster name="Frost Dragon" file="Dragons/frost dragon.xml"/>
-	<monster name="Wyrm" file="Dragons/wyrm.xml"/>
 
 	<!-- Dwarves -->
 	<monster name="Dwarf Geomancer" file="Dwarves/dwarf geomancer.xml"/>

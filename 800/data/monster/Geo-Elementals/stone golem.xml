@@ -26,8 +26,6 @@
 		<element physicalPercent="22"/>
 		<element firePercent="20"/>
 		<element energyPercent="13"/>
-		<element deathPercent="10"/>
-		<element icePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -36,14 +34,10 @@
 		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
 		<item id="2483" chance="10000"/><!-- scale armor -->
 		<item id="5880" countmax="2" chance="2500"/><!-- iron ore -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="1295" chance="10000"/><!-- stone -->
-				<item id="1294" countmax="5" chance="20000"/><!-- small stone -->
-				<item id="2395" chance="2500"/><!-- carlin sword -->
-				<item id="2050" chance="20000"/><!-- torch -->
-				<item id="2580" chance="5000"/><!-- fishing rod -->
-			</inside>
-		</item>
+		<item id="1295" chance="10000"/><!-- stone -->
+		<item id="1294" countmax="5" chance="20000"/><!-- small stone -->
+		<item id="2395" chance="2500"/><!-- carlin sword -->
+		<item id="2050" chance="20000"/><!-- torch -->
+		<item id="2580" chance="5000"/><!-- fishing rod -->
 	</loot>
 </monster>

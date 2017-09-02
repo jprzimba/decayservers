@@ -41,9 +41,6 @@
 		<element firePercent="80"/>
 		<element energyPercent="50"/>
 		<element physicalPercent="30"/>
-		<element deathPercent="20"/>
-		<element icePercent="-10"/>
-		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -62,13 +59,9 @@
 		<item id="2187" chance="1111"/><!-- wand of inferno -->
 		<item id="2696" chance="10000"/><!-- cheese -->
 		<item id="2747" chance="10000"/><!-- grave flower -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2062" chance="5000"/><!-- small oil lamp -->
-				<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
-				<item id="2176" chance="2000"/><!-- orb -->
-				<item id="5910" countmax="1" chance="5000"/><!-- green piece of cloth -->
-			</inside>
-		</item>
+		<item id="2062" chance="5000"/><!-- small oil lamp -->
+		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="2176" chance="2000"/><!-- orb -->
+		<item id="5910" countmax="1" chance="5000"/><!-- green piece of cloth -->
 	</loot>
 </monster>

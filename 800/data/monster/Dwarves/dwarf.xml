@@ -24,7 +24,6 @@
 	<elements>
 		<element earthPercent="70"/>
 		<element firePercent="-5"/>
-		<element deathPercent="-3"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Hail Durin!"/>
@@ -38,10 +37,6 @@
 		<item id="2530" chance="6666"/><!-- copper shield -->
 		<item id="2649" chance="10000"/><!-- leather legs -->
 		<item id="5880" chance="2500" countmax="2"/><!-- iron ore -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2787" countmax="2" chance="20000"/><!-- white mushroom -->
-			</inside>
-		</item>
+		<item id="2787" countmax="2" chance="20000"/><!-- white mushroom -->
 	</loot>
 </monster>
