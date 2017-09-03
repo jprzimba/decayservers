@@ -21,20 +21,15 @@
 		<attack name="melee" interval="2000" min="-10" max="-80"/>
 	</attacks>
 	<defenses armor="18" defense="19"/>
-	<elements>
-		<element deathPercent="100"/>
-		<element holyPercent="-20"/>
-	</elements>
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
 	<loot>
 		<item id="2148" countmax="25" chance="40000"/><!-- gold coin -->
 		<item id="2229" countmax="2" chance="9727"/><!-- skull -->
 		<item id="2231" chance="4000"/><!-- big bone -->
 		<item id="6095" chance="5000"/><!-- pirate shirt -->
-		<item id="5927" chance="100000"><!-- pirate bag -->
-			<inside>
-				<item id="2376" chance="18402"/><!-- sword -->
-				<item id="2449" chance="8491"/><!-- bone club -->
-			</inside>
-		</item>
+		<item id="2376" chance="18402"/><!-- sword -->
+		<item id="2449" chance="8491"/><!-- bone club -->
 	</loot>
 </monster>

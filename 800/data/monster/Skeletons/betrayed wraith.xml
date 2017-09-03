@@ -38,12 +38,9 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
 		<element firePercent="100"/>
 		<element energyPercent="100"/>
 		<element earthPercent="100"/>
-		<element icePercent="50"/>
-		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
@@ -60,16 +57,12 @@
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
 		<item id="2394" chance="6667"/><!-- morning star -->
 		<item id="2173" chance="900"/><!-- amulet of loss -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="6558" chance="2222"/><!-- concentrated demonic blood -->
-				<item id="2387" chance="5000"/><!-- double axe -->
-				<item id="2226" chance="10000"/><!-- fishbone -->
-				<item id="5741" chance="1500"/><!-- skullhelm -->
-				<item id="2145" countmax="3" chance="2222"/><!-- small diamond -->
-				<item id="3976" countmax="25" chance="20000"/><!-- worm -->
-				<item id="7416" chance="300"/><!-- bloody edge -->
-			</inside>
-		</item>
+		<item id="6558" chance="2222"/><!-- concentrated demonic blood -->
+		<item id="2387" chance="5000"/><!-- double axe -->
+		<item id="2226" chance="10000"/><!-- fishbone -->
+		<item id="5741" chance="1500"/><!-- skullhelm -->
+		<item id="2145" countmax="3" chance="2222"/><!-- small diamond -->
+		<item id="3976" countmax="25" chance="20000"/><!-- worm -->
+		<item id="7416" chance="300"/><!-- bloody edge -->
 	</loot>
 </monster>

@@ -24,7 +24,6 @@
 	<elements>
 		<element physicalPercent="13"/>
 		<element earthPercent="12"/>
-		<element icePercent="10"/>
 		<element firePercent="-9"/>
 	</elements>
 	<loot>

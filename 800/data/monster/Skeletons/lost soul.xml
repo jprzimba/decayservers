@@ -37,11 +37,8 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element icePercent="50"/>
 		<element energyPercent="30"/>
-		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -58,15 +55,11 @@
 		<item id="2260" chance="10000"/><!-- blank rune -->
 		<item id="2480" chance="6667"/><!-- legion helmet -->
 		<item id="5806" chance="1000"/><!-- silver goblet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2463" chance="3333"/><!-- plate armor -->
-				<item id="2483" chance="10000"/><!-- scale armor -->
-				<item id="7413" chance="800"/><!-- titan axe -->
-				<item id="6526" chance="2000"/><!-- skeleton decoration -->
-				<item id="5801" chance="1538"/><!-- key ring -->
-				<item id="2197" countmax="5" chance="2200"/><!-- stone skin amulet -->
-			</inside>
-		</item>
+		<item id="2463" chance="3333"/><!-- plate armor -->
+		<item id="2483" chance="10000"/><!-- scale armor -->
+		<item id="7413" chance="800"/><!-- titan axe -->
+		<item id="6526" chance="2000"/><!-- skeleton decoration -->
+		<item id="5801" chance="1538"/><!-- key ring -->
+		<item id="2197" countmax="5" chance="2200"/><!-- stone skin amulet -->
 	</loot>
 </monster>

@@ -33,12 +33,11 @@
 	</defenses>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
@@ -57,12 +56,8 @@
 		<item id="2657" chance="5000"/><!-- simple dress -->
 		<item id="2168" chance="1333"/><!-- life ring -->
 		<item id="2170" chance="2000"/><!-- silver amulet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2654" chance="20000"/><!-- cape -->
-				<item id="2655" chance="1333"/><!-- red robe -->
-				<item id="2656" chance="600"/><!-- blue robe -->
-			</inside>
-		</item>
+		<item id="2654" chance="20000"/><!-- cape -->
+		<item id="2655" chance="1333"/><!-- red robe -->
+		<item id="2656" chance="600"/><!-- blue robe -->
 	</loot>
 </monster>

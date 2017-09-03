@@ -24,12 +24,11 @@
 	<defenses armor="25" defense="25"/>
 	<elements>
 		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
+		<immunity death="1"/>
 		<immunity drunk="0"/>
 	</immunities>
 	<loot>

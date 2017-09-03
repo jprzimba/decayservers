@@ -251,7 +251,6 @@
 	<monster name="Blue Butterfly" file="Insects/blue butterfly.xml"/>
 	<monster name="Bug" file="Insects/bug.xml"/>
 	<monster name="Centipede" file="Insects/centipede.xml"/>
-	<monster name="Cockroach" file="Insects/cockroach.xml"/>
 	<monster name="Larva" file="Insects/larva.xml"/>
 	<monster name="Pink Butterfly" file="Insects/pink butterfly.xml"/>
 	<monster name="Red Butterfly" file="Insects/red butterfly.xml"/>
@@ -352,6 +351,9 @@
 	<!-- Reptiles -->
 	<monster name="Crocodile" file="Reptiles/crocodile.xml"/>
 	<monster name="Hydra" file="Reptiles/hydra.xml"/>
+	<monster name="Cobra" file="Reptiles/cobra.xml"/>
+	<monster name="Serpent Spawn" file="Reptiles/serpent spawn.xml"/>
+	<monster name="Snake" file="Reptiles/snake.xml"/>
 
 	<!-- Serpents -->
 	<monster name="Cobra" file="Serpents/cobra.xml"/>

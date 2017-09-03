@@ -37,14 +37,10 @@
 		<item id="2120" chance="23333"/><!-- rope -->
 		<item id="2172" chance="3333"/><!-- bronze amulet -->
 		<item id="5901" countmax="1" chance="5000"/><!-- wood -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2512" chance="6666"/><!-- wooden shield -->
-				<item id="2666" countmax="2" chance="30000"/><!-- meat -->
-				<item id="2380" chance="10000"/><!-- hand axe -->
-				<item id="2170" chance="1428"/><!-- silver amulet -->
-				<item id="2448" chance="10000"/><!-- studded club -->
-			</inside>
-		</item>
+		<item id="2512" chance="6666"/><!-- wooden shield -->
+		<item id="2666" countmax="2" chance="30000"/><!-- meat -->
+		<item id="2380" chance="10000"/><!-- hand axe -->
+		<item id="2170" chance="1428"/><!-- silver amulet -->
+		<item id="2448" chance="10000"/><!-- studded club -->
 	</loot>
 </monster>

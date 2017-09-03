@@ -51,7 +51,6 @@
 	<elements>
 		<element firePercent="100"/>
 		<element energyPercent="100"/>
-		<element icePercent="100"/>
 		<element earthPercent="90"/>
 		<element holyPercent="-25"/>
 		<element physicalPercent="-33"/>
@@ -78,21 +77,17 @@
 		<item id="2167" chance="3000"/><!-- assassin star -->
 		<item id="2114" chance="1400"/><!-- piggy bank -->
 		<item id="2151" countmax="2" chance="1100"/><!-- talon -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2148" countmax="50" chance="80000"/><!-- gold coin -->
-				<item id="2146" countmax="2" chance="1400"/><!-- small sapphire -->
-				<item id="2178" countmax="1" chance="2500"/><!-- mind stone -->
-				<item id="2679" countmax="4" chance="20000"/><!-- cherry -->
-				<item id="2047" chance="15000"/><!-- candlestick -->
-				<item id="2411" chance="5000"/><!-- poison dagger -->
-				<item id="2792" countmax="5" chance="6666"/><!-- dark mushroom -->
-				<item id="2793" countmax="2" chance="6666"/><!-- mushrooms -->
-				<item id="2656" chance="2000"/><!-- blue robe -->
-				<item id="2466" chance="588"/><!-- golden armor -->
-				<item id="2436" chance="1428"/><!-- skull staff -->
-				<item id="2123" chance="500"/><!-- ring of the sky -->
-			</inside>
-		</item>
+		<item id="2148" countmax="50" chance="80000"/><!-- gold coin -->
+		<item id="2146" countmax="2" chance="1400"/><!-- small sapphire -->
+		<item id="2178" countmax="1" chance="2500"/><!-- mind stone -->
+		<item id="2679" countmax="4" chance="20000"/><!-- cherry -->
+		<item id="2047" chance="15000"/><!-- candlestick -->
+		<item id="2411" chance="5000"/><!-- poison dagger -->
+		<item id="2792" countmax="5" chance="6666"/><!-- dark mushroom -->
+		<item id="2793" countmax="2" chance="6666"/><!-- mushrooms -->
+		<item id="2656" chance="2000"/><!-- blue robe -->
+		<item id="2466" chance="588"/><!-- golden armor -->
+		<item id="2436" chance="1428"/><!-- skull staff -->
+		<item id="2123" chance="500"/><!-- ring of the sky -->
 	</loot>
 </monster>

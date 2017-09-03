@@ -33,15 +33,13 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
-		<element deathPercent="100"/>
 		<element firePercent="60"/>
 		<element energyPercent="40"/>
-		<element icePercent="33"/>
 		<element physicalPercent="-5"/>
-		<element holyPercent="-30"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="I can see you decaying!"/>
@@ -54,15 +52,11 @@
 		<item id="2230" chance="6666"/><!-- bone -->
 		<item id="2260" chance="2222"/><!-- blank rune -->
 		<item id="5902" chance="1100"/><!-- honeycomb -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2386" chance="2000"/><!-- axe -->
-				<item id="2649" chance="2500"/><!-- leather legs -->
-				<item id="6500" countmax="2" chance="2222"/><!-- demonic essence -->
-				<item id="5944" countmax="1" chance="1667"/><!-- soul orb -->
-				<item id="2436" chance="909"/><!-- skull staff -->
-				<item id="2550" chance="5000"/><!-- scythe -->
-			</inside>
-		</item>
+		<item id="2386" chance="2000"/><!-- axe -->
+		<item id="2649" chance="2500"/><!-- leather legs -->
+		<item id="6500" countmax="2" chance="2222"/><!-- demonic essence -->
+		<item id="5944" countmax="1" chance="1667"/><!-- soul orb -->
+		<item id="2436" chance="909"/><!-- skull staff -->
+		<item id="2550" chance="5000"/><!-- scythe -->
 	</loot>
 </monster>

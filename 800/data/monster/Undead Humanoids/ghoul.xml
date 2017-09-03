@@ -27,16 +27,14 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
 		<element energyPercent="20"/>
 		<element earthPercent="20"/>
-		<element icePercent="10"/>
-		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
 	</immunities>
 	<loot>
 		<item id="2148" countmax="64" chance="100000"/><!-- gold coin -->
@@ -47,13 +45,9 @@
 		<item id="2473" chance="6666"/><!-- viking helmet -->
 		<item id="2398" chance="20000"/><!-- mace -->
 		<item id="5913" countmax="1" chance="5000"/><!-- brown piece of cloth -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2460" chance="6666"/><!-- brass helmet -->
-				<item id="2229" countmax="2" chance="20000"/><!-- skull -->
-				<item id="2403" chance="10000"/><!-- knife -->
-				<item id="2168" chance="2500"/><!-- life ring -->
-			</inside>
-		</item>
+		<item id="2460" chance="6666"/><!-- brass helmet -->
+		<item id="2229" countmax="2" chance="20000"/><!-- skull -->
+		<item id="2403" chance="10000"/><!-- knife -->
+		<item id="2168" chance="2500"/><!-- life ring -->
 	</loot>
 </monster>

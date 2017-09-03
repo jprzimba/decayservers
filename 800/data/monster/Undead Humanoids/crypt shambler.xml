@@ -22,14 +22,11 @@
 		<attack name="lifedrain" interval="1000" chance="13" range="1" min="-25" max="-55"/>
 	</attacks>
 	<defenses armor="15" defense="10"/>
-	<elements>
-		<element deathPercent="100"/>
-		<element earthPercent="100"/>
-		<element holyPercent="-25"/>
-	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
+		<immunity death="1"/>
+		<immunity earth="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Uhhhhhhh!"/>
@@ -41,14 +38,10 @@
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
 		<item id="2148" countmax="15" chance="100000"/><!-- gold coin -->
 		<item id="2671" countmax="2" chance="33333"/><!-- ham -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2377" chance="2857"/><!-- two handed sword -->
-				<item id="2399" countmax="2" chance="33333"/><!-- throwing star -->
-				<item id="2450" chance="5000"/><!-- bone sword -->
-				<item id="2482" chance="20000"/><!-- studded helmet -->
-				<item id="2541" chance="2000"/><!-- bone shield -->
-			</inside>
-		</item>
+		<item id="2377" chance="2857"/><!-- two handed sword -->
+		<item id="2399" countmax="2" chance="33333"/><!-- throwing star -->
+		<item id="2450" chance="5000"/><!-- bone sword -->
+		<item id="2482" chance="20000"/><!-- studded helmet -->
+		<item id="2541" chance="2000"/><!-- bone shield -->
 	</loot>
 </monster>

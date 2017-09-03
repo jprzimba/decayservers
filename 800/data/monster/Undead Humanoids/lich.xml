@@ -41,14 +41,13 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
-		<element earthPercent="100"/>
 		<element energyPercent="80"/>
-		<element holyPercent="-35"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
+		<immunity earth="1"/>
 	</immunities>
 	<summons maxSummons="4">
 		<summon name="Bonebeast" interval="1000" chance="17" max="4"/>

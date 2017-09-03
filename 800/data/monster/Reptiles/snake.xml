@@ -25,7 +25,6 @@
 		<element earthPercent="100"/>
 		<element energyPercent="22"/>
 		<element firePercent="-10"/>
-		<element icePercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Zzzzzzt"/>

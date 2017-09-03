@@ -39,12 +39,9 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
 		<element firePercent="50"/>
 		<element earthPercent="40"/>
-		<element holyPercent="26"/>
 		<element energyPercent="-10"/>
-		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -60,13 +57,9 @@
 		<item id="7449" chance="1222"/><!-- crystal sword -->
 		<item id="7441" chance="5555"/><!-- ice cube -->
 		<item id="7387" chance="1444"/><!-- diamond sceptre -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2423" chance="3333"/><!-- clerical mace -->
-				<item id="2796" countmax="1" chance="9999"/><!-- green mushroom -->
-				<item id="2663" chance="1111"/><!-- mystic turban -->
-				<item id="7459" chance="1000"/><!-- ear muffs -->
-			</inside>
-		</item>
+		<item id="2423" chance="3333"/><!-- clerical mace -->
+		<item id="2796" countmax="1" chance="9999"/><!-- green mushroom -->
+		<item id="2663" chance="1111"/><!-- mystic turban -->
+		<item id="7459" chance="1000"/><!-- ear muffs -->
 	</loot>
 </monster>
