@@ -35,8 +35,7 @@ class RSA;
 class NetworkMessage
 {
 	public:
-		enum { header_length = 2 };
-		enum { max_body_length = NETWORKMESSAGE_MAXSIZE - header_length };
+		enum { headerLength = 2 };
 
 		// constructor/destructor
 		NetworkMessage()
@@ -47,7 +46,8 @@ class NetworkMessage
 
 	protected:
 		// resets the internal buffer to an empty message
-		void Reset(){
+		void Reset()
+		{
 			m_MsgSize = 0;
 			m_ReadPos = 4;
 		}
@@ -71,8 +71,7 @@ class NetworkMessage
 			m_ReadPos += 4;
 			return v;
 		}
-		std::string GetString();
-		std::string GetRaw();
+		std::string GetString(uint16_t size = 0);
 		Position GetPosition();
 	
 		// skips count unknown/unused bytes in an incoming message
@@ -112,16 +111,16 @@ class NetworkMessage
 		void AddItem(const Item *item);
 		void AddItemId(const Item *item);
 		void AddItemId(uint16_t itemId);
-		void AddCreature(const Creature *creature, bool known, unsigned int remove);
 	
 		int32_t getMessageLength() const { return m_MsgSize; }
 		void setMessageLength(int32_t newSize) { m_MsgSize = newSize; }
+
 		int32_t getReadPos() const { return m_ReadPos; }
-	
-		int32_t decodeHeader();
 
 		char* getBuffer() { return (char*)&m_MsgBuf[0]; }
-		char* getBodyBuffer() { m_ReadPos = 2; return (char*)&m_MsgBuf[header_length]; }
+		char* getBodyBuffer() { m_ReadPos = 2; return (char*)&m_MsgBuf[headerLength]; }
+
+		int32_t decodeHeader();
 
 	protected:
 		inline bool canAdd(int size)

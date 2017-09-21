@@ -248,7 +248,7 @@ bool ScriptManager::loadFromXml(const std::string& file, bool& enabled)
 				id = asLowerCaseString(strValue);
 
 			IntegerVec protocol;
-			protocol.push_back(CLIENT_VERSION_MIN);
+			protocol.push_back(CLIENT_VERSION);
 			if(readXMLString(versionNode, "protocol", strValue))
 				protocol = vectorAtoi(explodeString(strValue, "-"));
 
@@ -257,7 +257,7 @@ bool ScriptManager::loadFromXml(const std::string& file, bool& enabled)
 				database = intValue;
 
 			if(id == asLowerCaseString(SOFTWARE_VERSION) && database >= VERSION_DATABASE
-				&& protocol[0] >= CLIENT_VERSION_MIN && (protocol.size() < 2 || protocol[1] <= CLIENT_VERSION_MAX))
+				&& protocol[0] != CLIENT_VERSION)
 			{
 				supported = true;
 				break;

@@ -18,14 +18,13 @@
 #ifndef __RESOURCES__
 #define __RESOURCES__
 
-#define CLIENT_VERSION_MIN 800
-#define CLIENT_VERSION_MAX 800
-#define CLIENT_VERSION_STRING "Only clients with protocol 8.0 allowed!"
+#define CLIENT_VERSION 800
+#define CLIENT_MESSAGE "Only clients with protocol 8.0 allowed!"
+#define SOFTWARE_PROTOCOL "8.0"
 
 #define SOFTWARE_NAME "The Forgotten Server"
 #define SOFTWARE_DEVELOPERS "Elf, slawkens, Talaturen, KaczooH, Lithium, Kiper, Kornholijo, Tryller, frcento"
-#define SOFTWARE_VERSION "0.3 / 0.4"
-#define SOFTWARE_PROTOCOL "8.0"
+#define SOFTWARE_VERSION "0.3"
 
 #define VERSION_DATABASE 23
 #endif

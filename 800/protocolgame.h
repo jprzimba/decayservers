@@ -49,10 +49,6 @@ class ProtocolGame : public Protocol
 			player = NULL;
 		}
 
-		enum {isSingleSocket = true};
-		enum {hasChecksum = true};
-		static const char* protocolName() {return "game protocol";}
-
 		bool login(const std::string& name, uint32_t id, const std::string& password,
 			OperatingSystem_t operatingSystem, uint16_t version, bool gamemaster);
 		bool logout(bool displayEffect, bool forceLogout);
@@ -60,7 +56,7 @@ class ProtocolGame : public Protocol
 		void setPlayer(Player* p);
 
 	private:
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const char* message);
 
 		std::list<uint32_t> knownCreatureList;
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);

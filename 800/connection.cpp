@@ -136,11 +136,11 @@ void ConnectionManager::addLoginAttempt(uint32_t clientip, bool isSuccess)
 
 //*****************
 
-void Connection::closeConnection()
+void Connection::close()
 {
 	//any thread
 	#ifdef __DEBUG_NET_DETAIL__
-	std::clog << "Connection::closeConnection" << std::endl;
+	std::clog << "Connection::close" << std::endl;
 	#endif
 
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
@@ -250,12 +250,12 @@ void Connection::deleteConnectionTask()
 	delete this;
 }
 
-void Connection::acceptConnection()
+void Connection::accept()
 {
 	// Read size of te first packet
 	m_pendingRead++;
 	boost::asio::async_read(m_socket,
-		boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+		boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::headerLength),
 		boost::bind(&Connection::parseHeader, this, boost::asio::placeholders::error));
 }
 
@@ -276,7 +276,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	{
 		// Read packet content
 		m_pendingRead++;
-		m_msg.setMessageLength(size + NetworkMessage::header_length);
+		m_msg.setMessageLength(size + NetworkMessage::headerLength);
 		boost::asio::async_read(m_socket, boost::asio::buffer(m_msg.getBodyBuffer(), size),
 			boost::bind(&Connection::parsePacket, this, boost::asio::placeholders::error));
 	}
@@ -318,7 +318,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 					break;
 				default:
 				// No valid protocol
-				closeConnection();
+				close();
 				m_connectionLock.unlock();
 				return;
 				break;
@@ -334,7 +334,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		// Wait to the next packet
 		m_pendingRead++;
 		boost::asio::async_read(m_socket,
-			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::headerLength),
 			boost::bind(&Connection::parseHeader, this, boost::asio::placeholders::error));
 	}
 	else
@@ -351,23 +351,23 @@ void Connection::handleReadError(const boost::system::error_code& error)
 	if(error == boost::asio::error::operation_aborted)
 	{
 		//Operation aborted because connection will be closed
-		//Do NOT call closeConnection() from here
+		//Do NOT call close() from here
 	}
 	else if(error == boost::asio::error::eof)
 	{
 		//No more to read
-		closeConnection();
+		close();
 	}
 	else if(error == boost::asio::error::connection_reset ||
 			error == boost::asio::error::connection_aborted)
 	{
 		//Connection closed remotely
-		closeConnection();
+		close();
 	}
 	else
 	{
 		PRINT_ASIO_ERROR("Reading");
-		closeConnection();
+		close();
 	}
 	m_readError = true;
 }
@@ -479,21 +479,22 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 	if(error == boost::asio::error::operation_aborted)
 	{
 		//Operation aborted because connection will be closed
-		//Do NOT call closeConnection() from here
+		//Do NOT call close() from here
 	}
 	else if(error == boost::asio::error::eof)
 	{
 		//No more to read
-		closeConnection();
+		close();
 	}
 	else if(error == boost::asio::error::connection_reset ||
 			error == boost::asio::error::connection_aborted){
 		//Connection closed remotely
-		closeConnection();
+		close();
 	}
-	else{
+	else
+	{
 		PRINT_ASIO_ERROR("Writting");
-		closeConnection();
+		close();
 	}
 	m_writeError = true;
 }

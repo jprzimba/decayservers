@@ -67,7 +67,7 @@ public:
 	void closeAll();
 
 		bool isDisabled(uint32_t clientip);
-		bool acceptConnection(uint32_t clientip);
+		bool accept(uint32_t clientip);
 		void addLoginAttempt(uint32_t clientip, bool isSuccess);
 
 protected:
@@ -116,8 +116,8 @@ public:
 
 	boost::asio::ip::tcp::socket& getHandle() { return m_socket; }
 
-	void closeConnection();
-	void acceptConnection();
+	void close();
+	void accept();
 
 	bool send(OutputMessage_ptr msg);
 

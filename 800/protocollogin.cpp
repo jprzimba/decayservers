@@ -44,25 +44,25 @@ void ProtocolLogin::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
+void ProtocolLogin::disconnectClient(const char* message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if(output)
 	{
 		TRACK_MESSAGE(output);
-		output->AddByte(error);
+		output->AddByte(0x0A);
 		output->AddString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->closeConnection();
+	getConnection()->close();
 }
 
 bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 {
 	if(g_game.getGameState() == GAMESTATE_SHUTDOWN)
 	{
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return false;
 	}
 
@@ -73,11 +73,11 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	msg.SkipBytes(12);
 
 	if(version <= 760)
-		disconnectClient(0x0A, CLIENT_VERSION_STRING);
+		disconnectClient(CLIENT_MESSAGE);
 
 	if(!RSA_decrypt(g_otservRSA, msg))
 	{
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return false;
 	}
 
@@ -96,7 +96,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	{
 		if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
 		{
-			disconnectClient(0x0A, "Invalid account number.");
+			disconnectClient("Invalid account number.");
 			return false;
 		}
 
@@ -104,33 +104,33 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		password = "1";
 	}
 
-	if(version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX)
+	if(version != CLIENT_VERSION)
 	{
-		disconnectClient(0x0A, CLIENT_VERSION_STRING);
+		disconnectClient(CLIENT_MESSAGE);
 		return false;
 	}
 
 	if(g_game.getGameState() < GAMESTATE_NORMAL)
 	{
-		disconnectClient(0x0A, "Server is just starting up, please wait.");
+		disconnectClient("Server is just starting up, please wait.");
 		return false;
 	}
 
 	if(g_game.getGameState() == GAMESTATE_MAINTAIN)
 	{
-		disconnectClient(0x0A, "Server is under maintenance, please re-connect in a while.");
+		disconnectClient("Server is under maintenance, please re-connect in a while.");
 		return false;
 	}
 
 	if(ConnectionManager::getInstance()->isDisabled(clientIp))
 	{
-		disconnectClient(0x0A, "Too many connections attempts from your IP address, please try again later.");
+		disconnectClient("Too many connections attempts from your IP address, please try again later.");
 		return false;
 	}
 
 	if(IOBan::getInstance()->isIpBanished(clientIp))
 	{
-		disconnectClient(0x0A, "Your IP is banished!");
+		disconnectClient("Your IP is banished!");
 		return false;
 	}
 
@@ -149,7 +149,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		passwordTest(password, account.password)))
 	{
 		ConnectionManager::getInstance()->addLoginAttempt(clientIp, false);
-		disconnectClient(0x0A, "Account number or password is not correct.");
+		disconnectClient("Account number or password is not correct.");
 		return false;
 	}
 
@@ -173,7 +173,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 			(deletion ? "account won't be undeleted" : "banishment will be lifted at:\n"),
 			(deletion ? "." : formatDateEx(ban.expires).c_str()));
 
-		disconnectClient(0x0A, buffer);
+		disconnectClient(buffer);
 		return false;
 	}
 
@@ -181,7 +181,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	IOLoginData::getInstance()->removePremium(account);
 	if(!g_config.getBool(ConfigManager::ACCOUNT_MANAGER) && !account.charList.size())
 	{
-		disconnectClient(0x0A, std::string("This account does not contain any character yet.\nCreate a new character on the "
+		disconnectClient(std::string("This account does not contain any character yet.\nCreate a new character on the "
 			+ g_config.getString(ConfigManager::SERVER_NAME) + " website at " + g_config.getString(ConfigManager::URL) + ".").c_str());
 		return false;
 	}
@@ -235,6 +235,6 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->closeConnection();
+	getConnection()->close();
 	return true;
 }

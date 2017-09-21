@@ -5830,6 +5830,9 @@ bool Game::reloadInfo(ReloadInfo_t reload, uint32_t playerId/* = 0*/)
 		}
 	}
 
+	if(reload != RELOAD_MODS && !ScriptManager::getInstance()->reloadMods())
+		std::clog << "[Error - Game::reloadInfo] Failed to reload mods." << std::endl;
+
 	if(!playerId)
 		return done;
 
@@ -5843,13 +5846,17 @@ bool Game::reloadInfo(ReloadInfo_t reload, uint32_t playerId/* = 0*/)
 		return true;
 	}
 
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Failed to reload.");
+	if(reload == RELOAD_ALL)
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Failed to reload some parts.");
+	else
+		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Failed to reload.");
+
 	return false;
 }
 
 void Game::prepareGlobalSave(uint8_t minutes)
 {
-	std::clog << "Game::prepareGlobalSave in " << (uint32_t)minutes << " minutes" << std::endl;
+	std::clog << ">> Preparing global save in " << (uint32_t)minutes << " minutes" << std::endl;
 	switch(minutes)
 	{
 		case 5:

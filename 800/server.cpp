@@ -82,7 +82,7 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 {
 	if(!error)
 	{
-		connection->acceptConnection();
+		connection->accept();
 		#ifdef __DEBUG_NET_DETAIL__
 		std::clog << "accept - OK" << std::endl;
 		#endif

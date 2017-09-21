@@ -30,14 +30,10 @@ class ProtocolLogin : public Protocol
 		ProtocolLogin(Connection* connection) : Protocol(connection) {}
 		virtual ~ProtocolLogin() {}
 
-		enum {isSingleSocket = false};
-		enum {hasChecksum = true};
-		static const char* protocolName() {return "login protocol";}
-
 	protected:
 		virtual void deleteProtocolTask();
 
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const char* message);
 		bool parseFirstPacket(NetworkMessage& msg);
 };
 #endif

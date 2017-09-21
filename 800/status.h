@@ -37,14 +37,10 @@ typedef std::map<uint32_t, int64_t> IpConnectMap;
 class ProtocolStatus : public Protocol
 {
 	public:
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
-
 		ProtocolStatus(Connection* connection): Protocol(connection) {}
 		virtual ~ProtocolStatus() {}
 
-		enum {isSingleSocket = false};
-		enum {hasChecksum = false};
-		static const char* protocolName() {return "status protocol";}
+		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
 		static IpConnectMap ipConnectMap;
