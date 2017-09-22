@@ -220,7 +220,7 @@ class Creature : public AutoId, virtual public Thing
 		int32_t getStepDuration() const;
 
 		void getPathToFollowCreature();
-		int64_t getEventStepTicks() const;
+		int64_t getEventStepTicks(bool onlyDelay = false) const;
 		int64_t getTimeSinceLastMove() const;
 		virtual int32_t getStepSpeed() const {return getSpeed();}
 
@@ -230,7 +230,10 @@ class Creature : public AutoId, virtual public Thing
 			int32_t oldSpeed = getSpeed();
 			varSpeed = varSpeedDelta;
 			if(getSpeed() <= 0)
+			{
 				stopEventWalk();
+				cancelNextWalk = true;
+			}
 			else if(oldSpeed <= 0 && !listWalkDir.empty())
 				addEventWalk();
 		}
@@ -255,7 +258,7 @@ class Creature : public AutoId, virtual public Thing
 
 		//walk functions
 		bool startAutoWalk(std::list<Direction>& listDir);
-		void addEventWalk();
+		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 
 		//walk events
@@ -411,7 +414,11 @@ class Creature : public AutoId, virtual public Thing
 		void setDropLoot(lootDrop_t _lootDrop) {lootDrop = _lootDrop;}
 		void setLossSkill(bool _skillLoss) {skillLoss = _skillLoss;}
 		bool getLossSkill() const {return skillLoss;}
-		void setNoMove(bool _cannotMove) {cannotMove = _cannotMove;}
+		void setNoMove(bool _cannotMove)
+		{
+			cannotMove = _cannotMove;
+			cancelNextWalk = true;
+		}
 		bool getNoMove() const {return cannotMove;}
 
 		//creature script events
@@ -480,6 +487,7 @@ class Creature : public AutoId, virtual public Thing
 		//follow variables
 		Creature* followCreature;
 		uint32_t eventWalk;
+		bool cancelNextWalk;
 		std::list<Direction> listWalkDir;
 		uint32_t walkUpdateTicks;
 		bool hasFollowPath;

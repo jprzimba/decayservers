@@ -382,6 +382,8 @@ class LuaInterface
 		static int32_t luaDoCreatureSetHideHealth(lua_State* L);
 		static int32_t luaGetCreatureSpeakType(lua_State* L);
 		static int32_t luaDoCreatureSetSpeakType(lua_State* L);
+		static int32_t luaGetCreaturePartyShield(lua_State* L);
+		static int32_t luaDoCreatureSetPartyShield(lua_State* L);
 		static int32_t luaGetCreatureSkullType(lua_State* L);
 		static int32_t luaDoCreatureSetSkullType(lua_State* L);
 		static int32_t luaGetPlayerSkullEnd(lua_State* L);
@@ -514,6 +516,7 @@ class LuaInterface
 		static int32_t luaGetPlayerParty(lua_State* L);
 		static int32_t luaDoPlayerJoinParty(lua_State* L);
 		static int32_t luaGetPartyMembers(lua_State* L);
+		static int32_t luaDoPlayerLeaveParty(lua_State* L);
 		static int32_t luaGetCreatureStorage(lua_State* L);
 		static int32_t luaDoCreatureSetStorage(lua_State* L);
 		static int32_t luaDoPlayerAddBlessing(lua_State* L);

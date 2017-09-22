@@ -48,11 +48,11 @@ enum stackposType_t
 
 enum WorldType_t
 {
-	WORLD_TYPE_FIRST = 1,
-	WORLD_TYPE_NO_PVP = WORLD_TYPE_FIRST,
-	WORLD_TYPE_PVP = 2,
-	WORLD_TYPE_PVP_ENFORCED = 3,
-	WORLD_TYPE_LAST = WORLD_TYPE_PVP_ENFORCED
+	WORLDTYPE_FIRST = 1,
+	WORLDTYPE_NOPVP = WORLDTYPE_FIRST,
+	WORLDTYPE_PVP = 2,
+	WORLDTYPE_ENFORCED = 3,
+	WORLDTYPE_LAST = WORLDTYPE_ENFORCED
 };
 
 enum GameState_t
@@ -349,7 +349,8 @@ class Game
 		void clearSpectatorCache() {if(map) map->clearSpectatorCache();}
 
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
-		ReturnValue internalMoveCreature(Creature* actor, Creature* creature, Cylinder* fromCylinder, Cylinder* toCylinder, uint32_t flags = 0);
+		ReturnValue internalMoveCreature(Creature* actor, Creature* creature, Cylinder* fromCylinder,
+			Cylinder* toCylinder, uint32_t flags = 0, bool forceTeleport = false);
 
 		ReturnValue internalMoveItem(Creature* actor, Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
 			Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0);
@@ -422,7 +423,7 @@ class Game
 		  * \param flags optional flags to modify default behavior
 		  * \returns true if the teleportation was successful
 		  */
-		ReturnValue internalTeleport(Thing* thing, const Position& newPos, bool pushMove, uint32_t flags = 0);
+		ReturnValue internalTeleport(Thing* thing, const Position& newPos, bool forceTeleport, uint32_t flags = FLAG_NOLIMIT, bool fullTeleport = true);
 
 		/**
 			* Turn a creature to a different direction.
@@ -508,7 +509,7 @@ class Game
 		bool playerJoinParty(uint32_t playerId, uint32_t leaderId);
 		bool playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId);
 		bool playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId);
-		bool playerLeaveParty(uint32_t playerId);
+		bool playerLeaveParty(uint32_t playerId, bool forced = false);
 
 		void kickPlayer(uint32_t playerId, bool displayEffect);
 		bool broadcastMessage(const std::string& text, MessageClasses type);
@@ -545,7 +546,9 @@ class Game
 		void changeSpeed(Creature* creature, int32_t varSpeedDelta);
 		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit, bool forced = false);
 		void internalCreatureChangeVisible(Creature* creature, Visible_t visible);
+
 		void updateCreatureSkull(Creature* creature);
+		void updateCreatureShield(Creature* creature);
 		void sendPublicSquare(Player* sender, SquareColor_t color);
 
 		GameState_t getGameState() const {return gameState;}

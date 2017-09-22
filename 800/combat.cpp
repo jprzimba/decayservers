@@ -261,7 +261,7 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			&& (attackerPlayer = attacker->getMaster()->getPlayer())))
 		{
 			checkZones = true;
-			if((g_game.getWorldType() == WORLD_TYPE_NO_PVP && !Combat::isInPvpZone(attacker, target)) ||
+			if((g_game.getWorldType() == WORLDTYPE_NOPVP && !Combat::isInPvpZone(attacker, target)) ||
 				isProtected(const_cast<Player*>(attackerPlayer), const_cast<Player*>(targetPlayer))
 				|| (g_config.getBool(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET) &&
 				attackerPlayer->getDefaultOutfit().lookFeet == targetPlayer->getDefaultOutfit().lookFeet)
@@ -284,7 +284,7 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			if(target->getMaster() && target->getMaster()->getPlayer())
 			{
 				checkZones = true;
-				if(g_game.getWorldType() == WORLD_TYPE_NO_PVP && !Combat::isInPvpZone(attacker, target))
+				if(g_game.getWorldType() == WORLDTYPE_NOPVP && !Combat::isInPvpZone(attacker, target))
 					return RET_YOUMAYNOTATTACKTHISCREATURE;
 			}
 		}
@@ -612,7 +612,7 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 		if(player)
 		{
 			bool pzLock = false;
-			if(g_game.getWorldType() == WORLD_TYPE_NO_PVP || tile->hasFlag(TILESTATE_NOPVPZONE))
+			if(g_game.getWorldType() == WORLDTYPE_NOPVP || tile->hasFlag(TILESTATE_NOPVPZONE))
 			{
 				switch(itemId)
 				{
@@ -1373,7 +1373,7 @@ void MagicField::onStepInField(Creature* creature, bool purposeful/* = true*/)
 		if(Creature* owner = g_game.getCreatureByID(ownerId))
 		{
 			bool harmful = true;
-			if((g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE))
+			if((g_game.getWorldType() == WORLDTYPE_NOPVP || getTile()->hasFlag(TILESTATE_NOPVPZONE))
 				&& (owner->getPlayer() || owner->isPlayerSummon()))
 				harmful = false;
 			else if(Player* targetPlayer = creature->getPlayer())

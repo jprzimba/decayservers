@@ -71,7 +71,7 @@ extern Server* g_server;
 Game::Game()
 {
 	gameState = GAMESTATE_NORMAL;
-	worldType = WORLD_TYPE_PVP;
+	worldType = WORLDTYPE_PVP;
 	map = NULL;
 	playersRecord = lastStageLevel = 0;
 
@@ -1213,19 +1213,20 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	if((toTile = map->getTile(destPos)))
 		ret = internalMoveCreature(NULL, creature, fromTile, toTile, flags);
 
-	if(ret != RET_NOERROR)
-	{
-		if(Player* player = creature->getPlayer())
-		{
-			player->sendCancelMessage(ret);
-			player->sendCancelWalk();
-		}
-	}
+	if(ret == RET_NOERROR)
+		return RET_NOERROR;
 
+	Player* player = creature->getPlayer();
+	if(!player)
+		return ret;
+
+	player->sendCancelMessage(ret);
+	player->sendCancelWalk();
 	return ret;
 }
 
-ReturnValue Game::internalMoveCreature(Creature* actor, Creature* creature, Cylinder* fromCylinder, Cylinder* toCylinder, uint32_t flags/* = 0*/)
+ReturnValue Game::internalMoveCreature(Creature* actor, Creature* creature, Cylinder* fromCylinder,
+	Cylinder* toCylinder, uint32_t flags/* = 0*/, bool forceTeleport/* = false*/)
 {
 	//check if we can move the creature to the destination
 	ReturnValue ret = toCylinder->__queryAdd(0, creature, 1, flags);
@@ -2095,7 +2096,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	return newItem;
 }
 
-ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pushMove, uint32_t flags /*= 0*/)
+ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool forceTeleport, uint32_t flags /*= 0*/, bool fullTeleport/* = true*/)
 {
 	if(newPos == thing->getPosition())
 		return RET_NOERROR;
@@ -2107,11 +2108,10 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	{
 		if(Creature* creature = thing->getCreature())
 		{
-			if(Position::areInRange<1,1,0>(creature->getPosition(), newPos) && pushMove)
-				creature->getTile()->moveCreature(NULL, creature, toTile, false);
-			else
-				creature->getTile()->moveCreature(NULL, creature, toTile, true);
+			if(fullTeleport)
+				return internalMoveCreature(NULL, creature, creature->getParent(), toTile, flags, forceTeleport);
 
+			creature->getTile()->moveCreature(NULL, creature, toTile, forceTeleport);
 			return RET_NOERROR;
 		}
 
@@ -2129,29 +2129,16 @@ bool Game::playerMove(uint32_t playerId, Direction dir)
 	if(!player || player->isRemoved())
 		return false;
 
+	player->setIdleTime(0);
 	if(player->getNoMove())
 	{
 		player->sendCancelWalk();
 		return false;
 	}
 
-	player->stopWalk();
-	int32_t delay = player->getWalkDelay(dir);
-	if(delay > 0)
-	{
-		player->setNextAction(OTSYS_TIME() + player->getStepDuration(dir) - SCHEDULER_MINTICKS);
-		if(SchedulerTask* task = createSchedulerTask(((uint32_t)delay),
-			boost::bind(&Game::playerMove, this, playerId, dir)))
-			player->setNextWalkTask(task);
-
-		return false;
-	}
-
-	player->setFollowCreature(NULL);
-	player->onWalk(dir);
-
-	player->setIdleTime(0);
-	return internalMoveCreature(player, dir) == RET_NOERROR;
+	std::list<Direction> dirs;
+	dirs.push_back(dir);
+	return player->startAutoWalk(dirs);
 }
 
 bool Game::playerBroadcastMessage(Player* player, SpeakClasses type, const std::string& text)
@@ -3387,6 +3374,8 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	player->setAttackedCreature(attackCreature);
+	Dispatcher::getInstance().addTask(createTask(boost::bind(
+		&Game::updateCreatureWalk, this, player->getID())));
 	return true;
 }
 
@@ -3401,6 +3390,8 @@ bool Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 		followCreature = getCreatureByID(creatureId);
 
 	player->setAttackedCreature(NULL);
+	Dispatcher::getInstance().addTask(createTask(boost::bind(
+		&Game::updateCreatureWalk, this, player->getID())));
 	return player->setFollowCreature(followCreature);
 }
 
@@ -3412,8 +3403,8 @@ bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMo
 
 	player->setFightMode(fightMode);
 	player->setChaseMode(chaseMode);
-
 	player->setSecureMode(secureMode);
+
 	return true;
 }
 
@@ -3566,8 +3557,8 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 			return playerSpeakTo(player, type, receiver, text);
 		case SPEAK_CHANNEL_O:
 		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_R1:
-		case SPEAK_CHANNEL_R2:
+		case SPEAK_CHANNEL_RN:
+		case SPEAK_CHANNEL_RA:
 		{
 			if(playerTalkToChannel(player, type, text, channelId))
 				return true;
@@ -3941,6 +3932,9 @@ void Game::checkCreatures()
 
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 {
+	if(!creature)
+		return;
+
 	int32_t varSpeed = creature->getSpeed() - creature->getBaseSpeed();
 	varSpeed += varSpeedDelta;
 	creature->setSpeed(varSpeed);
@@ -4017,7 +4011,7 @@ void Game::changeLight(const Creature* creature)
 	Player* tmpPlayer = NULL;
 	for(SpectatorVec::const_iterator it = list.begin(); it != list.end(); ++it)
 	{
-		if((tmpPlayer = (*it)->getPlayer()))
+		if((tmpPlayer = (*it)->getPlayer()) && !tmpPlayer->hasCustomFlag(PlayerCustomFlag_HasFullLight))
 			tmpPlayer->sendCreatureLight(creature);
 	}
 }
@@ -4545,7 +4539,10 @@ void Game::checkLight()
 		LightInfo lightInfo;
 		getWorldLightInfo(lightInfo);
 		for(AutoList<Player>::iterator it = Player::autoList.begin(); it != Player::autoList.end(); ++it)
-			it->second->sendWorldLight(lightInfo);
+		{
+			if(!it->second->hasCustomFlag(PlayerCustomFlag_HasFullLight))
+				it->second->sendWorldLight(lightInfo);
+		}
 	}
 }
 
@@ -4604,6 +4601,19 @@ void Game::updateCreatureSkull(Creature* creature)
 	{
 		 if((tmpPlayer = (*it)->getPlayer()))
 			tmpPlayer->sendCreatureSkull(creature);
+	}
+}
+
+void Game::updateCreatureShield(Creature* creature)
+{
+	const SpectatorVec& list = getSpectators(creature->getPosition());
+
+	//send to client
+	Player* tmpPlayer = NULL;
+	for(SpectatorVec::const_iterator it = list.begin(); it != list.end(); ++it)
+	{
+		if((tmpPlayer = (*it)->getPlayer()))
+			tmpPlayer->sendCreatureShield(creature);
 	}
 }
 
@@ -4672,19 +4682,16 @@ bool Game::playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId)
 		return false;
 
 	Player* newLeader = getPlayerByID(newLeaderId);
-	if(!newLeader || newLeader->isRemoved() || !player->isPartner(newLeader))
+	if(!newLeader || newLeader->isRemoved() || !newLeader->getParty() || newLeader->getParty() != player->getParty())
 		return false;
 
 	return player->getParty()->passLeadership(newLeader);
 }
 
-bool Game::playerLeaveParty(uint32_t playerId)
+bool Game::playerLeaveParty(uint32_t playerId, bool forced/* = false*/)
 {
 	Player* player = getPlayerByID(playerId);
-	if(!player || player->isRemoved())
-		return false;
-
-	if(!player->getParty() || player->hasCondition(CONDITION_INFIGHT))
+	if(!player || player->isRemoved() || !player->getParty() || (player->hasCondition(CONDITION_INFIGHT) && !forced))
 		return false;
 
 	return player->getParty()->leave(player);
@@ -5795,10 +5802,10 @@ bool Game::reloadInfo(ReloadInfo_t reload, uint32_t playerId/* = 0*/)
 
 		case RELOAD_VOCATIONS:
 		{
-			//if(Vocations::getInstance()->reload())
+			if(Vocations::getInstance()->reload())
 				done = true;
-			//else
-			//	std::clog << "[Notice - Game::reloadInfo] Reload type does not work." << std::endl;
+			else
+				std::clog << "[Notice - Game::reloadInfo] Reload type does not work." << std::endl;
 
 			break;
 		}

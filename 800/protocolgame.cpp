@@ -1219,8 +1219,8 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 			break;
 
 		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_R1:
-		case SPEAK_CHANNEL_R2:
+		case SPEAK_CHANNEL_RN:
+		case SPEAK_CHANNEL_RA:
 			channelId = msg.GetU16();
 			break;
 
@@ -1387,7 +1387,7 @@ void ProtocolGame::parsePassPartyLeadership(NetworkMessage& msg)
 
 void ProtocolGame::parseLeaveParty(NetworkMessage& msg)
 {
-	addGameTask(&Game::playerLeaveParty, player->getID());
+	addGameTask(&Game::playerLeaveParty, player->getID(), false);
 }
 
 void ProtocolGame::parseQuests(NetworkMessage& msg)
@@ -2468,17 +2468,17 @@ void ProtocolGame::AddDistanceShoot(NetworkMessage_ptr msg, const Position& from
 
 void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature, bool known, uint32_t remove)
 {
-	if(known)
-	{
-		msg->AddU16(0x62);
-		msg->AddU32(creature->getID());
-	}
-	else
+	if(!known)
 	{
 		msg->AddU16(0x61);
 		msg->AddU32(remove);
 		msg->AddU32(creature->getID());
 		msg->AddString(creature->getHideName() ? "" : creature->getName());
+	}
+	else
+	{
+		msg->AddU16(0x62);
+		msg->AddU32(creature->getID());
 	}
 
 	if(!creature->getHideHealth())
@@ -2491,8 +2491,16 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 
 	LightInfo lightInfo;
 	creature->getCreatureLight(lightInfo);
-	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level);
-	msg->AddByte(player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color);
+	if(creature == player && player->hasCustomFlag(PlayerCustomFlag_HasFullLight))
+	{
+		lightInfo.level = 0xFF;
+		lightInfo.color = 215;
+	}
+	else
+		creature->getCreatureLight(lightInfo);
+
+	msg->AddByte(lightInfo.level);
+	msg->AddByte(lightInfo.color);
 
 	msg->AddU16(creature->getSpeed());
 	msg->AddByte(player->getSkullType(creature));
@@ -2544,26 +2552,40 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 	std::string text, uint16_t channelId, uint32_t time/*= 0*/, Position* pos/* = NULL*/)
 {
 	msg->AddByte(0xAA);
-	msg->AddU32(0x00);
-
-	//Do not add name for anonymous channel talk
-	if(type != SPEAK_CHANNEL_R2)
+	if(creature)
 	{
-        if(type != SPEAK_RVR_ANSWER)
-            msg->AddString(creature->getName());
-        else
-		    msg->AddString("Gamemaster");
+		const Player* speaker = creature->getPlayer();
+		msg->AddU32(0x00); //statment id
+
+		if(creature->getSpeakType() != SPEAK_CLASS_NONE)
+			type = creature->getSpeakType();
+
+		switch(type)
+		{
+			case SPEAK_CHANNEL_RA:
+				msg->AddString("");
+				break;
+			case SPEAK_RVR_ANSWER:
+				msg->AddString("Gamemaster");
+				break;
+			default:
+				msg->AddString(!creature->getHideName() ? creature->getName() : "");
+				break;
+		}
+
+		if(speaker && type != SPEAK_RVR_ANSWER && !speaker->isAccountManager()
+			&& !speaker->hasCustomFlag(PlayerCustomFlag_HideLevel))
+			msg->AddU16(speaker->getPlayerInfo(PLAYERINFO_LEVEL));
+		else
+			msg->AddU16(0x00);
+
 	}
 	else
+	{
+		msg->AddU32(0x00);
 		msg->AddString("");
-	
-	//Add level only for players
-	if(player->getName() == "Account Manager")
 		msg->AddU16(0x00);
-	else if(const Player* player = creature->getPlayer())
-		msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
-	else
-		msg->AddU16(0x00);
+	}
 
 	msg->AddByte(type);
 	switch(type)
@@ -2573,20 +2595,30 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 		case SPEAK_YELL:
 		case SPEAK_MONSTER_SAY:
 		case SPEAK_MONSTER_YELL:
-			msg->AddPosition(creature->getPosition());
+		{
+			if(pos)
+				msg->AddPosition(*pos);
+			else if(creature)
+				msg->AddPosition(creature->getPosition());
+			else
+				msg->AddPosition(Position(0,0,7));
+
 			break;
+		}
+
 		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_R1:
-		case SPEAK_CHANNEL_R2:
+		case SPEAK_CHANNEL_RN:
+		case SPEAK_CHANNEL_RA:
 		case SPEAK_CHANNEL_O:
 			msg->AddU16(channelId);
 			break;
+
 		case SPEAK_RVR_CHANNEL:
 		{
-		 	uint32_t t = (OTSYS_TIME() / 1000) & 0xFFFFFFFF;
-			 msg->AddU32(t - time);
+			msg->AddU32(uint32_t(OTSYS_TIME() / 1000 & 0xFFFFFFFF) - time);
+			break;
 		}
-		break;
+
 		default:
 			break;
 	}
@@ -2630,17 +2662,25 @@ void ProtocolGame::AddWorldLight(NetworkMessage_ptr msg, const LightInfo& lightI
 {
 	msg->AddByte(0x82);
 	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color));
+	msg->AddByte(lightInfo.color);
 }
 
 void ProtocolGame::AddCreatureLight(NetworkMessage_ptr msg, const Creature* creature)
 {
-	LightInfo lightInfo;
-	creature->getCreatureLight(lightInfo);
 	msg->AddByte(0x8D);
 	msg->AddU32(creature->getID());
-	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xFF : lightInfo.level));
-	msg->AddByte((player->hasCustomFlag(PlayerCustomFlag_HasFullLight) ? 0xD7 : lightInfo.color));
+
+	LightInfo lightInfo;
+	if(creature == player && player->hasCustomFlag(PlayerCustomFlag_HasFullLight))
+	{
+		lightInfo.level = 0xFF;
+		lightInfo.color = 215;
+	}
+	else
+		creature->getCreatureLight(lightInfo);
+
+	msg->AddByte(lightInfo.level);
+	msg->AddByte(lightInfo.color);
 }
 
 //tile

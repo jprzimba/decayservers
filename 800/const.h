@@ -114,11 +114,11 @@ enum SpeakClasses
     SPEAK_RVR_ANSWER    = 0x07,
     SPEAK_RVR_CONTINUE  = 0x08,
 	SPEAK_BROADCAST		= 0x09,
-	SPEAK_CHANNEL_R1	= 0x0A, //red - #c text
+	SPEAK_CHANNEL_RN	= 0x0A, //red - #c text
 	SPEAK_PRIVATE_RED	= 0x0B,	//@name@text
 	SPEAK_CHANNEL_O		= 0x0C, //orange
     //SPEAK_            = 0x0D,
-    SPEAK_CHANNEL_R2    = 0x0E,	//red anonymous - #d text
+    SPEAK_CHANNEL_RA    = 0x0E,	//red anonymous - #d text
     //SPEAK_            = 0x0F,
 	SPEAK_MONSTER_SAY	= 0x10,
 	SPEAK_MONSTER_YELL	= 0x11,

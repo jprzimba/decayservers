@@ -359,7 +359,7 @@ class Player : public Creature, public Cylinder
 		virtual void onWalkAborted();
 		virtual void onWalkComplete();
 
-		void stopWalk();
+		void stopWalk() {cancelNextWalk = true;}
 
 		void setChaseMode(chaseMode_t mode);
 		void setFightMode(fightMode_t mode) {fightMode = mode;}

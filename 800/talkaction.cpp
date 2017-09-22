@@ -745,7 +745,7 @@ bool TalkAction::guildJoin(Creature* creature, const std::string& cmd, const std
 				char buffer[80];
 				sprintf(buffer, "%s has joined the guild.", player->getName().c_str());
 				if(ChatChannel* guildChannel = g_chat.getChannel(player, 0x00))
-					guildChannel->talk(player, SPEAK_CHANNEL_R2, buffer);
+					guildChannel->talk(player, SPEAK_CHANNEL_RA, buffer);
 			}
 			else
 				player->sendCancel("You are not invited to that guild.");
@@ -922,6 +922,11 @@ bool TalkAction::thingProporties(Creature* creature, const std::string& cmd, con
 			{
 				_creature->setSkull(getSkull(parseParams(it, tokens.end())));
 				g_game.updateCreatureSkull(_creature);
+			}
+			else if(action == "shield")
+			{
+				_creature->setShield(getShields(parseParams(it, tokens.end())));
+				g_game.updateCreatureShield(_creature);
 			}
 			else if(action == "speaktype")
 				_creature->setSpeakType((SpeakClasses)atoi(parseParams(it, tokens.end()).c_str()));

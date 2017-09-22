@@ -490,17 +490,17 @@ void mainLoader(int argc, char *argv[])
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if(worldType == "pvp" || worldType == "2" || worldType == "normal")
 	{
-		g_game.setWorldType(WORLD_TYPE_PVP);
+		g_game.setWorldType(WORLDTYPE_PVP);
 		std::clog << "PvP" << std::endl;
 	}
 	else if(worldType == "no-pvp" || worldType == "nopvp" || worldType == "non-pvp" || worldType == "nonpvp" || worldType == "1" || worldType == "safe")
 	{
-		g_game.setWorldType(WORLD_TYPE_NO_PVP);
+		g_game.setWorldType(WORLDTYPE_NOPVP);
 		std::clog << "NoN-PvP" << std::endl;
 	}
 	else if(worldType == "pvp-enforced" || worldType == "pvpenforced" || worldType == "pvp-enfo" || worldType == "pvpenfo" || worldType == "pvpe" || worldType == "enforced" || worldType == "enfo" || worldType == "3" || worldType == "war")
 	{
-		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
+		g_game.setWorldType(WORLDTYPE_ENFORCED);
 		std::clog << "PvP-Enforced" << std::endl;
 	}
 	else

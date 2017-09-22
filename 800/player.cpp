@@ -1356,7 +1356,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 		setAttackedCreature(NULL);
 		onAttackedCreatureDisappear(false);
 	}
-	else if(zone == ZONE_NORMAL && g_game.getWorldType() == WORLD_TYPE_NO_PVP && attackedCreature->getPlayer())
+	else if(zone == ZONE_NORMAL && g_game.getWorldType() == WORLDTYPE_NOPVP && attackedCreature->getPlayer())
 	{
 		//attackedCreature can leave a pvp zone if not pzlocked
 		setAttackedCreature(NULL);
@@ -2031,7 +2031,7 @@ bool Player::onDeath()
 		setDropLoot(LOOT_DROP_NONE);
 		setLossSkill(false);
 	}
-	else if(skull < SKULL_RED && g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
+	else if(skull < SKULL_RED && g_game.getWorldType() != WORLDTYPE_ENFORCED)
 	{
 		Item* item = NULL;
 		for(int32_t i = SLOT_FIRST; ((skillLoss || lootDrop == LOOT_DROP_FULL) && i < SLOT_LAST); ++i)
@@ -3211,19 +3211,17 @@ bool Player::setFollowCreature(Creature* creature, bool fullPathSearch /*= false
 			deny = true;
 	}
 
-	if(deny || !Creature::setFollowCreature(creature, fullPathSearch))
-	{
-		setFollowCreature(NULL);
-		setAttackedCreature(NULL);
-		if(!deny)
-			sendCancelMessage(RET_THEREISNOWAY);
+	if(!deny && Creature::setFollowCreature(creature, fullPathSearch))
+		return true;
 
-		sendCancelTarget();
-		stopEventWalk();
-		return false;
-	}
+	setFollowCreature(NULL);
+	setAttackedCreature(NULL);
+	if(!deny)
+		sendCancelMessage(RET_THEREISNOWAY);
 
-	return true;
+	sendCancelTarget();
+	cancelNextWalk = true;
+	return false;
 }
 
 bool Player::setAttackedCreature(Creature* creature)
@@ -3319,7 +3317,7 @@ double Player::getGainedExperience(Creature* attacker) const
 void Player::onFollowCreature(const Creature* creature)
 {
 	if(!creature)
-		stopEventWalk();
+		cancelNextWalk = true;
 }
 
 void Player::setChaseMode(chaseMode_t mode)
@@ -3338,7 +3336,7 @@ void Player::setChaseMode(chaseMode_t mode)
 	else if(attackedCreature)
 	{
 		setFollowCreature(NULL);
-		stopEventWalk();
+		cancelNextWalk = true;
 	}
 }
 
@@ -3355,14 +3353,6 @@ void Player::onWalkComplete()
 
 	walkTaskEvent = Scheduler::getInstance().addEvent(walkTask);
 	walkTask = NULL;
-}
-
-void Player::stopWalk()
-{
-	if(listWalkDir.empty())
-		return;
-
-	stopEventWalk();
 }
 
 void Player::getCreatureLight(LightInfo& light) const
@@ -3468,7 +3458,7 @@ void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condit
 	{
 		remove = false;
 		//Means the condition is from an item, id == slot
-		if(g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED)
+		if(g_game.getWorldType() == WORLDTYPE_ENFORCED)
 		{
 			if(Item* item = getInventoryItem((slots_t)condition->getId()))
 			{
@@ -3855,13 +3845,13 @@ Skulls_t Player::getSkullType(const Creature* creature) const
 {
 	if(const Player* player = creature->getPlayer())
 	{
-		if(g_game.getWorldType() != WORLD_TYPE_PVP)
+		if(g_game.getWorldType() != WORLDTYPE_PVP)
 			return SKULL_NONE;
 
 		if((player == this || (skull != SKULL_NONE && player->getSkull() < SKULL_RED)) && player->hasAttacked(this))
 			return SKULL_YELLOW;
 
-		if(player->getSkull() == SKULL_NONE && isPartner(player) && g_game.getWorldType() != WORLD_TYPE_NO_PVP)
+		if(player->getSkull() == SKULL_NONE && isPartner(player) && g_game.getWorldType() != WORLDTYPE_NOPVP)
 			return SKULL_GREEN;
 	}
 
@@ -3886,7 +3876,7 @@ void Player::addAttacked(const Player* attacked)
 
 void Player::setSkullEnd(time_t _time, bool login, Skulls_t _skull)
 {
-	if(g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED)
+	if(g_game.getWorldType() == WORLDTYPE_ENFORCED)
 		return;
 
 	bool requireUpdate = false;
@@ -3913,7 +3903,7 @@ void Player::setSkullEnd(time_t _time, bool login, Skulls_t _skull)
 bool Player::addUnjustifiedKill(const Player* attacked)
 {
 	if(!g_config.getBool(ConfigManager::USE_FRAG_HANDLER) || hasFlag(
-		PlayerFlag_NotGainInFight) || g_game.getWorldType() != WORLD_TYPE_PVP
+		PlayerFlag_NotGainInFight) || g_game.getWorldType() != WORLDTYPE_PVP
 		|| hasCustomFlag(PlayerCustomFlag_NotGainUnjustified) || hasCustomFlag(
 		PlayerCustomFlag_NotGainSkull) || attacked == this)
 		return false;

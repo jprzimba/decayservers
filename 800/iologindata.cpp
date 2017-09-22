@@ -716,7 +716,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 	query << "`sex` = " << player->sex << ", ";
 	query << "`balance` = " << player->balance << ", ";
 	query << "`stamina` = " << player->getStamina() << ", ";
-	if(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
+	if(g_game.getWorldType() != WORLDTYPE_ENFORCED)
 	{
 		Skulls_t skull = SKULL_RED;
 		query << "`skull` = " << skull << ", ";

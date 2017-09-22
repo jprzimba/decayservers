@@ -1616,7 +1616,7 @@ void LuaInterface::registerFunctions()
 	//getClosestFreeTile(cid, targetpos[, extended = false[, ignoreHouse = true]])
 	lua_register(m_luaState, "getClosestFreeTile", LuaInterface::luaGetClosestFreeTile);
 
-	//doTeleportThing(cid, newpos[, pushmove])
+	//doTeleportThing(cid, newpos[, pushmove = true[, fullTeleport = true]])
 	lua_register(m_luaState, "doTeleportThing", LuaInterface::luaDoTeleportThing);
 
 	//doTransformItem(uid, newId[, count/subType])
@@ -2083,6 +2083,12 @@ void LuaInterface::registerFunctions()
 	//doCreatureSetLookDirection(cid, dir)
 	lua_register(m_luaState, "doCreatureSetLookDirection", LuaInterface::luaDoCreatureSetLookDir);
 
+	//getCreaturePartyShield(cid[, target])
+	lua_register(m_luaState, "getCreaturePartyShield", LuaInterface::luaGetCreaturePartyShield);
+
+	//doCreatureSetPartyShield(cid, shield)
+	lua_register(m_luaState, "doCreatureSetPartyShield", LuaInterface::luaDoCreatureSetPartyShield);
+
 	//getCreatureSkullType(cid[, target])
 	lua_register(m_luaState, "getCreatureSkullType", LuaInterface::luaGetCreatureSkullType);
 
@@ -2154,6 +2160,9 @@ void LuaInterface::registerFunctions()
 
 	//doPlayerJoinParty(cid, lid)
 	lua_register(m_luaState, "doPlayerJoinParty", LuaInterface::luaDoPlayerJoinParty);
+
+	//doPlayerLeaveParty(cid[, forced = false])
+	lua_register(m_luaState, "doPlayerLeaveParty", LuaInterface::luaDoPlayerLeaveParty);
 
 	//getPartyMembers(lid)
 	lua_register(m_luaState, "getPartyMembers", LuaInterface::luaGetPartyMembers);
@@ -3246,9 +3255,13 @@ int32_t LuaInterface::luaGetClosestFreeTile(lua_State* L)
 
 int32_t LuaInterface::luaDoTeleportThing(lua_State* L)
 {
-	//doTeleportThing(cid, newpos[, pushmove = TRUE])
-	bool pushMove = true;
-	if(lua_gettop(L) > 2)
+	//doTeleportThing(cid, newpos[, pushMove = true[, fullTeleport = true]])
+	bool fullTeleport = true, pushMove = true;
+	int32_t params = lua_gettop(L);
+	if(params > 3)
+		fullTeleport = popNumber(L);
+
+	if(params > 2)
 		pushMove = popNumber(L);
 
 	PositionEx pos;
@@ -3256,7 +3269,7 @@ int32_t LuaInterface::luaDoTeleportThing(lua_State* L)
 
 	ScriptEnviroment* env = getEnv();
 	if(Thing* tmp = env->getThingByUID(popNumber(L)))
-		lua_pushboolean(L, g_game.internalTeleport(tmp, pos, pushMove) == RET_NOERROR);
+		lua_pushboolean(L, g_game.internalTeleport(tmp, pos, !pushMove, FLAG_NOLIMIT, fullTeleport) == RET_NOERROR);
 	else
 	{
 		errorEx(getError(LUA_ERROR_THING_NOT_FOUND));
@@ -5070,7 +5083,7 @@ int32_t LuaInterface::luaSetWorldType(lua_State* L)
 	//setWorldType(type)
 	WorldType_t type = (WorldType_t)popNumber(L);
 
-	if(type >= WORLD_TYPE_FIRST && type <= WORLD_TYPE_LAST)
+	if(type >= WORLDTYPE_FIRST && type <= WORLDTYPE_LAST)
 	{
 		g_game.setWorldType(type);
 		lua_pushboolean(L, true);
@@ -7731,6 +7744,55 @@ int32_t LuaInterface::luaGetCreatureNoMove(lua_State* L)
 	return 1;
 }
 
+int32_t LuaInterface::luaGetCreaturePartyShield(lua_State* L)
+{
+	//getCreaturePartyShield(cid[, target])
+	uint32_t tid = 0;
+	if(lua_gettop(L) > 1)
+		tid = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		if(!tid)
+			lua_pushnumber(L, creature->getShield());
+		else if(Creature* target = env->getCreatureByUID(tid))
+			lua_pushnumber(L, creature->getPartyShield(target));
+		else
+		{
+			errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+			lua_pushboolean(L, false);
+		}
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaInterface::luaDoCreatureSetPartyShield(lua_State* L)
+{
+	//doCreatureSetPartyShield(cid, shield)
+	PartyShields_t shield = (PartyShields_t)popNumber(L);
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		creature->setShield(shield);
+		g_game.updateCreatureShield(creature);
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
 int32_t LuaInterface::luaGetCreatureSkullType(lua_State* L)
 {
 	//getCreatureSkullType(cid[, target])
@@ -8348,6 +8410,26 @@ int32_t LuaInterface::luaDoPlayerJoinParty(lua_State* L)
 	}
 
 	g_game.playerJoinParty(player->getID(), leader->getID());
+	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaInterface::luaDoPlayerLeaveParty(lua_State* L)
+{
+	//doPlayerLeaveParty(cid[, forced = false])
+	bool forced = false;
+	if(lua_gettop(L) > 1)
+		forced = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	Player* player = env->getPlayerByUID(popNumber(L));
+	if(!player)
+	{
+		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	g_game.playerLeaveParty(player->getID(), forced);
 	lua_pushboolean(L, true);
 	return 1;
 }
