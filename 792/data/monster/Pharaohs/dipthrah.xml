@@ -43,7 +43,6 @@
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
-		<immunity death="1"/>
 	</immunities>
 	<summons maxSummons="4">
 		<summon name="Priestess" interval="2000" chance="15" max="3"/>

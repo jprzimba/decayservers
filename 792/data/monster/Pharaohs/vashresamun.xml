@@ -37,7 +37,6 @@
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
-		<immunity death="1"/>
 	</immunities>
 	<summons maxSummons="2">
 		<summon name="Banshee" interval="2000" chance="20" max="2"/>

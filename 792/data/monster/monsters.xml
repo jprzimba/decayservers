@@ -179,7 +179,6 @@
 
 	<!-- Hydro-Elementals -->
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive water elemental.xml"/>
-	<monster name="Roaring Water Elemental" file="Hydro-Elementals/roaring water elemental.xml"/>
 	<monster name="Water Elemental" file="Hydro-Elementals/water elemental.xml"/>
 
 	<!-- Insects -->
@@ -273,7 +272,6 @@
 	<monster name="Blazing Fire Elemental" file="Pyro-Elementals/blazing fire elemental.xml"/>
 	<monster name="Blistering Fire Elemental" file="Pyro-Elementals/blistering fire elemental.xml"/>
 	<monster name="Fire Elemental" file="Pyro-Elementals/fire elemental.xml"/>
-	<monster name="Fire Overlord" file="Pyro-Elementals/fire overlord.xml"/>
 	<monster name="Hellfire Fighter" file="Pyro-Elementals/hellfire fighter.xml"/>
 	<monster name="Massive Fire Elemental" file="Pyro-Elementals/massive fire elemental.xml"/>
 
@@ -314,8 +312,6 @@
 	<monster name="Bonebeast" file="Skeletons/bonebeast.xml"/>
 	<monster name="Bone Beast" file="Skeletons/bonebeast.xml"/>
 	<monster name="Demon Skeleton" file="Skeletons/demon skeleton.xml"/>
-	<monster name="Dreadbeast" file="Skeletons/dreadbeast.xml"/>
-	<monster name="Dread Beast" file="Skeletons/dreadbeast.xml"/>
 	<monster name="Lost Soul" file="Skeletons/lost soul.xml"/>
 	<monster name="Skeleton" file="Skeletons/skeleton.xml"/>
 
