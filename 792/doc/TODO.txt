@@ -18,5 +18,5 @@
 [ LIST
 	* Add alot usefull TFS 0.3/0.4 features
 	* Add stamina system
-	* Make configurable buy/sell house syste for players paying from bank balance
+	* Make configurable buy/sell house system for players paying from bank balance
 ]

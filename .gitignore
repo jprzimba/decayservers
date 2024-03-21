@@ -1,3 +1,24 @@
-*.o
-*.res
-forgottenserver/792/dev-cpp/Makefile.win
+# Visual Studio temporary files
+.vs/
+*.suo
+*.user
+*.aps
+*.pdb
+*.idb
+*.pch
+*.obj
+*.log
+*.tlog
+*.ipch
+*.manifest
+*.exp
+*.exe
+*.dll
+*.lib
+*.ilk
+*.ncb
+*.sdf
+*.opensdf
+*.sln.docstates
+*.sln.ide
+*.sln.layout
