@@ -1,6 +1,7 @@
 	-- The Forgotten Server Config
 
 	-- SQL Settings
+	sqlType = "sqlite"
 	passwordType = "plain"
 	mysqlHost = "127.0.0.1"
 	mysqlUser = "otserv"
@@ -8,6 +9,7 @@
 	mysqlPort = 3306
 	mysqlDatabase = "otserv"
 	startupDatabaseOptimization = true
+	sqliteDatabase = "forgottenserver.s3db"
 
 	-- Connection Settings
 	ip = "127.0.0.1"

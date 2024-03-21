@@ -92,6 +92,10 @@ class ConfigManager
 			PASSWORDTYPE,
 			MAP_AUTHOR,
 			MAP_STORAGE_TYPE,
+			SQLITE_DB,
+			#ifdef MULTI_SQL_DRIVERS
+			SQL_TYPE,
+			#endif
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 

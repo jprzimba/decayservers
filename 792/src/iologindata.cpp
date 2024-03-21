@@ -100,7 +100,7 @@ bool IOLoginData::createAccount(uint32_t accountNumber, std::string newPassword)
 		newPassword = transformToSHA1(newPassword);
 
 	DBQuery query;
-	query << "INSERT INTO `accounts` (`id`, `password`, `type`, `premdays`, `lastday`, `key`, `warnings``) VALUES (" << accountNumber << ", " << db->escapeString(newPassword) << ", 1, 0, 0, 0, 0);";
+	query << "INSERT INTO `accounts` (`id`, `password`, `type`, `premdays`, `lastday`, `key`, `blocked`, `warnings`) VALUES (" << accountNumber << ", " << db->escapeString(newPassword) << ", 1, 0, 0, 0, 0, 0);";
 	return db->executeQuery(query.str());	return db->executeQuery(query.str());
 }
 
@@ -1124,8 +1124,8 @@ bool IOLoginData::createCharacter(uint32_t accountNumber, std::string characterN
 		return false;
 
 	Vocation* vocation = g_vocations.getVocation(vocationId);
-	Vocation* rookVoc = g_vocations.getVocation(0);
-	uint16_t healthMax = 150, manaMax = 0, capMax = 400, lookType = 136, hpGain = vocation->getHPGain(), manaGain = vocation->getManaGain(), capGain = vocation->getCapGain(), rookHpGain = rookVoc->getHPGain(), rookManaGain = rookVoc->getManaGain(), rookCapGain = rookVoc->getCapGain();
+	Vocation* rookVoc = g_vocations.getVocation(VOCATION_NONE);
+	uint16_t healthMax = 150, manaMax = 0, capMax = 400, lookType = 136;
 	if(sex == PLAYERSEX_MALE)
 		lookType = 128;
 
@@ -1134,7 +1134,7 @@ bool IOLoginData::createCharacter(uint32_t accountNumber, std::string characterN
 	if(level > 1)
 		exp = Player::getExpForLevel(level);
 
-	uint32_t tmpLevel = std::min<uint32_t>((uint32_t)7, level - 1);
+	uint32_t tmpLevel = (uint32_t)std::min<int32_t>(7, level - 1);
 	if(tmpLevel > 0)
 	{
 		healthMax += rookVoc->getHPGain() * tmpLevel;

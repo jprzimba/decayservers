@@ -307,7 +307,7 @@ bool Chat::addUserToChannel(Player* player, uint16_t channelId)
 	if(channel && channel->addUser(player))
 		return channel;
 
-	return NULL;
+	return false;
 }
 
 bool Chat::removeUserFromChannel(Player* player, uint16_t channelId)

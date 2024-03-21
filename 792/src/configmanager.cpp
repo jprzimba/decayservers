@@ -62,9 +62,13 @@ bool ConfigManager::load()
 		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", "root");
 		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
+		string[SQLITE_DB] = getGlobalString(L, "sqliteDatabase", "forgottenserver.s3db");
 		string[PASSWORDTYPE] = getGlobalString(L, "passwordType", "plain");
+		#ifdef MULTI_SQL_DRIVERS
+		string[SQL_TYPE] = getGlobalString(L, "sqlType", "sqlite");
+		#endif
+
 		integer[PASSWORD_TYPE] = PASSWORD_TYPE_PLAIN;
-	
 		integer[PORT] = getGlobalNumber(L, "port", 7171);
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[SERVERSAVE_H] = getGlobalNumber(L, "serverSaveHour", 3);

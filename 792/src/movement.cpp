@@ -533,7 +533,8 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 		}
 
 		//Gather vocation information
-		std::list<std::string> vocStringList;
+		typedef std::list<std::string> STRING_LIST;
+		STRING_LIST vocStringList;
 		for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
 			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
 			if(!vocationNameAttribute) {
@@ -553,17 +554,20 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			wieldInfo |= WIELDINFO_VOCREQ;
 		}
 
-		for(const std::string& str : vocStringList) {
-			if(!vocationString.empty()) {
-				if(str != vocStringList.back()) {
-					vocationString += ", ";
-				} else {
-					vocationString += " and ";
+		if(!vocStringList.empty())
+		{
+			for(STRING_LIST::iterator it = vocStringList.begin(); it != vocStringList.end(); ++it)
+			{
+				if(*it != vocStringList.front())
+				{
+					if(*it != vocStringList.back())
+						vocationString += ", ";
+					else
+						vocationString += " and ";
 				}
+				vocationString += *it;
+				vocationString += "s";
 			}
-
-			vocationString += str;
-			vocationString += "s";
 		}
 	}
 	return true;

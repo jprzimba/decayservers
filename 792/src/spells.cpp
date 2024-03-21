@@ -440,11 +440,9 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		"drowncondition"
 	};
 
-	//static size_t size = sizeof(reservedList) / sizeof(const char*);
-	//for(size_t i = 0; i < size; ++i) {
-	for(const char* reserved : reservedList) {
-		if(strcasecmp(reserved, name.c_str()) == 0) {
-			std::clog << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
+	for(uint32_t i = 0; i < sizeof(reservedList)/sizeof(const char*); ++i) {
+		if(strcasecmp(reservedList[i], name.c_str()) == 0) {
+			std::clog << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 			return false;
 		}
 	}

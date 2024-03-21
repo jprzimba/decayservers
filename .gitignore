@@ -1,4 +1,7 @@
-# Visual Studio temporary files
+# Ignore files
+*.o
+*.rar
+*.win
 .vs/
 *.suo
 *.user

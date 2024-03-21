@@ -43,6 +43,13 @@
 #endif
 #endif
 
+#undef MULTI_SQL_DRIVERS
+#define SQL_DRIVERS __USE_SQLITE__+__USE_MYSQL__
+
+#if SQL_DRIVERS > 1
+	#define MULTI_SQL_DRIVERS
+#endif
+
 enum passwordType_t
 {
 	PASSWORD_TYPE_PLAIN = 0,
@@ -88,15 +95,19 @@ enum passwordType_t
 #define _WIN32_WINNT 0x0601
 
 #ifdef __GNUC__
-
+	#if __GNUC__ >= 4
+		#include <tr1/unordered_map>
+		#include <tr1/unordered_set>
+		#define OTSERV_HASH_MAP std::tr1::unordered_map
+		#define OTSERV_HASH_SET std::tr1::unordered_set
+	#else
+		#include <ext/hash_map>
+		#include <ext/hash_set>
+		#define OTSERV_HASH_MAP __gnu_cxx::hash_map
+		#define OTSERV_HASH_SET __gnu_cxx::hash_set
+	#endif
 	#include <assert.h>
 	#define ATOI64 atoll
-	
-	#include <unordered_map>
-	#include <unordered_set>
-	#define OTSERV_HASH_MAP std::unordered_map
-	#define OTSERV_HASH_SET std::unordered_set
-	
 #else
 
 	typedef unsigned long long uint64_t;

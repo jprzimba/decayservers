@@ -104,52 +104,76 @@ void Status::removePlayer()
 
 std::string Status::getStatusString() const
 {
-	pugi::xml_document doc;
+    pugi::xml_document doc;
+    std::stringstream responseStream;
 
-	pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
-	decl.append_attribute("version") = "1.0";
+    pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
+    decl.append_attribute("version") = "1.0";
 
-	pugi::xml_node tsqp = doc.append_child("tsqp");
-	tsqp.append_attribute("version") = "1.0";
+    pugi::xml_node tsqp = doc.append_child("tsqp");
+    tsqp.append_attribute("version") = "1.0";
 
-	pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
-	serverinfo.append_attribute("uptime") = std::to_string(getUptime()).c_str();
-	serverinfo.append_attribute("ip") = g_config.getString(ConfigManager::IP).c_str();
-	serverinfo.append_attribute("servername") = g_config.getString(ConfigManager::SERVER_NAME).c_str();
-	serverinfo.append_attribute("port") = std::to_string(g_config.getNumber(ConfigManager::PORT)).c_str();
-	serverinfo.append_attribute("location") = g_config.getString(ConfigManager::LOCATION).c_str();
-	serverinfo.append_attribute("url") = g_config.getString(ConfigManager::URL).c_str();
-	serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
-	serverinfo.append_attribute("version") = STATUS_SERVER_VERSION;
-	serverinfo.append_attribute("client") = STATUS_SERVER_PROTOCOL;
+    pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
 
-	pugi::xml_node owner = tsqp.append_child("owner");
-	owner.append_attribute("name") = g_config.getString(ConfigManager::OWNER_NAME).c_str();
-	owner.append_attribute("email") = g_config.getString(ConfigManager::OWNER_EMAIL).c_str();
+    responseStream << getUptime();
+    serverinfo.append_attribute("uptime") = responseStream.str().c_str();
 
-	pugi::xml_node players = tsqp.append_child("players");
-	players.append_attribute("online") = std::to_string(m_playersOnline).c_str();
-	players.append_attribute("max") = std::to_string(g_config.getNumber(ConfigManager::MAX_PLAYERS)).c_str();
-	players.append_attribute("peak") = std::to_string(g_game.getLastPlayersRecord()).c_str();
+    serverinfo.append_attribute("ip") = g_config.getString(ConfigManager::IP).c_str();
+    serverinfo.append_attribute("servername") = g_config.getString(ConfigManager::SERVER_NAME).c_str();
 
-	pugi::xml_node monsters = tsqp.append_child("monsters");
-	monsters.append_attribute("total") = std::to_string(g_game.getMonstersOnline()).c_str();
+    std::stringstream portStream;
+    portStream << g_config.getNumber(ConfigManager::PORT);
+    serverinfo.append_attribute("port") = portStream.str().c_str();
 
-	pugi::xml_node map = tsqp.append_child("map");
-	map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
-	map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
+    serverinfo.append_attribute("location") = g_config.getString(ConfigManager::LOCATION).c_str();
+    serverinfo.append_attribute("url") = g_config.getString(ConfigManager::URL).c_str();
+    serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
+    serverinfo.append_attribute("version") = STATUS_SERVER_VERSION;
+    serverinfo.append_attribute("client") = STATUS_SERVER_PROTOCOL;
 
-	uint32_t mapWidth, mapHeight;
-	g_game.getMapDimensions(mapWidth, mapHeight);
-	map.append_attribute("width") = std::to_string(mapWidth).c_str();
-	map.append_attribute("height") = std::to_string(mapHeight).c_str();
+    pugi::xml_node owner = tsqp.append_child("owner");
+    owner.append_attribute("name") = g_config.getString(ConfigManager::OWNER_NAME).c_str();
+    owner.append_attribute("email") = g_config.getString(ConfigManager::OWNER_EMAIL).c_str();
 
-	pugi::xml_node motd = tsqp.append_child("motd");
-	motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
+    pugi::xml_node players = tsqp.append_child("players");
 
-	std::ostringstream ss;
-	doc.save(ss, "", pugi::format_raw);
-	return ss.str();
+    std::stringstream playersOnlineStream;
+    playersOnlineStream << m_playersOnline;
+    players.append_attribute("online") = playersOnlineStream.str().c_str();
+
+    std::stringstream maxPlayersStream;
+    maxPlayersStream << g_config.getNumber(ConfigManager::MAX_PLAYERS);
+    players.append_attribute("max") = maxPlayersStream.str().c_str();
+
+    std::stringstream peakPlayersStream;
+    peakPlayersStream << g_game.getLastPlayersRecord();
+    players.append_attribute("peak") = peakPlayersStream.str().c_str();
+
+    pugi::xml_node monsters = tsqp.append_child("monsters");
+
+    std::stringstream monstersOnlineStream;
+    monstersOnlineStream << g_game.getMonstersOnline();
+    monsters.append_attribute("total") = monstersOnlineStream.str().c_str();
+
+    pugi::xml_node map = tsqp.append_child("map");
+    map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
+    map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
+
+    uint32_t mapWidth, mapHeight;
+    g_game.getMapDimensions(mapWidth, mapHeight);
+
+    std::stringstream mapWidthStream, mapHeightStream;
+    mapWidthStream << mapWidth;
+    mapHeightStream << mapHeight;
+    map.append_attribute("width") = mapWidthStream.str().c_str();
+    map.append_attribute("height") = mapHeightStream.str().c_str();
+
+    pugi::xml_node motd = tsqp.append_child("motd");
+    motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
+
+    std::ostringstream ss;
+    doc.save(ss, "", pugi::format_raw);
+    return ss.str();
 }
 
 void Status::getInfo(uint32_t requestedInfo, OutputMessage* output, NetworkMessage& msg) const

@@ -18,32 +18,25 @@
 // Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////
 
-#ifdef __USE_MYSQL__
+#ifdef __USE_SQLITE__
 
-#ifndef __OTSERV_DATABASEMYSQL_H__
-#define __OTSERV_DATABASEMYSQL_H__
+#ifndef __DATABASE_SQLITE_H__
+#define __DATABASE_SQLITE_H__
 
 #ifndef __OTSERV_DATABASE_H__
 #error "database.h should be included first."
 #endif
 
 #include "definitions.h"
-#include "otsystem.h"
-
-#if defined(WIN32) && !defined(_MSC_VER)
-#include <mysql/mysql.h>
-#else
-#include <mysql.h>
-#endif
-
+#include <sqlite3.h>
 #include <sstream>
 #include <map>
 
-class DatabaseMySQL : public _Database
+class DatabaseSQLite : public _Database
 {
 	public:
-		DatabaseMySQL();
-		DATABASE_VIRTUAL ~DatabaseMySQL();
+		DatabaseSQLite();
+		DATABASE_VIRTUAL ~DatabaseSQLite();
 
 		DATABASE_VIRTUAL bool getParam(DBParam_t param);
 
@@ -62,21 +55,26 @@ class DatabaseMySQL : public _Database
 
 		DATABASE_VIRTUAL void freeResult(DBResult *res);
 
-		DATABASE_VIRTUAL uint64_t getLastInsertId() {return (uint64_t)mysql_insert_id(&m_handle);}
+		DATABASE_VIRTUAL uint64_t getLastInsertId() {return (uint64_t)sqlite3_last_insert_rowid(m_handle);}
 
-		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_MYSQL;}
+		DATABASE_VIRTUAL std::string getStringComparer() {return "LIKE ";}
+		DATABASE_VIRTUAL std::string getUpdateLimiter() {return ";";}
+		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_SQLITE;}
 
-		DATABASE_VIRTUAL std::string getClientName() {return "MySQL";}
-		DATABASE_VIRTUAL const char* getClientVersion() {return mysql_get_client_info();}
-		DATABASE_VIRTUAL uint64_t getClientVersionNumeric() {return mysql_get_client_version();}
+		DATABASE_VIRTUAL std::string getClientName() {return "SQLite";}
+		DATABASE_VIRTUAL const char* getClientVersion() {return sqlite3_libversion();}
+		DATABASE_VIRTUAL uint64_t getClientVersionNumeric() {return sqlite3_libversion_number();}
 
 	protected:
-		MYSQL m_handle;
+		std::string _parse(const std::string& s);
+
+		boost::recursive_mutex sqliteLock;
+		sqlite3* m_handle;
 };
 
-class MySQLResult : public _DBResult
+class SQLiteResult : public _DBResult
 {
-	friend class DatabaseMySQL;
+	friend class DatabaseSQLite;
 
 	public:
 		DATABASE_VIRTUAL int32_t getDataInt(const std::string& s);
@@ -87,11 +85,10 @@ class MySQLResult : public _DBResult
 		DATABASE_VIRTUAL bool next();
 
 	protected:
-		MySQLResult(MYSQL_RES* res);
-		DATABASE_VIRTUAL ~MySQLResult();
+		SQLiteResult(sqlite3_stmt* stmt);
+		DATABASE_VIRTUAL ~SQLiteResult();
 
-		MYSQL_RES* m_handle;
-		MYSQL_ROW m_row;
+		sqlite3_stmt* m_handle;
 };
 
 #endif

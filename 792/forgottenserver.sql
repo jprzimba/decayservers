@@ -23,6 +23,15 @@ DROP TABLE IF EXISTS `global_storage`;
 DROP TABLE IF EXISTS `players`;
 DROP TABLE IF EXISTS `accounts`;
 
+CREATE TABLE `server_config`
+(
+	`config` varchar(50) NOT NULL,
+	`value` varchar(256) NOT NULL DEFAULT '',
+	UNIQUE KEY `config` (`config`)
+) ENGINE=InnoDB;
+
+INSERT INTO `server_config` VALUES ('db_version','1'),('encryption','0');
+
 CREATE TABLE `accounts`
 (
 	`id` INT NOT NULL AUTO_INCREMENT,

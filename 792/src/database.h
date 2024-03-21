@@ -26,11 +26,28 @@
 #include <sstream>
 #include "enums.h"
 
+#ifdef MULTI_SQL_DRIVERS
+#define DATABASE_VIRTUAL virtual
+#define DATABASE_CLASS _Database
+#define DBRES_CLASS _DBResult
+class _Database;
+class _DBResult;
+#else
 #define DATABASE_VIRTUAL
+#if defined(__USE_MYSQL__)
 #define DATABASE_CLASS DatabaseMySQL
 #define DBRES_CLASS MySQLResult
 class DatabaseMySQL;
 class MySQLResult;
+#elif defined(__USE_SQLITE__)
+#define DATABASE_CLASS DatabaseSQLite
+#define DBRES_CLASS SQLiteResult
+class DatabaseSQLite;
+class SQLiteResult;
+#else
+#error "You must define at least one database driver, __USE_MYSQL__ or __USE_SQLITE__."
+#endif
+#endif
 
 typedef DATABASE_CLASS Database;
 typedef DBRES_CLASS DBResult;
@@ -99,7 +116,7 @@ class _Database
 		* @param std::string query command
 		* @return true on success, false on error
 		*/
-		DATABASE_VIRTUAL bool executeQuery(const std::string &query) { return 0; }
+		DATABASE_VIRTUAL bool executeQuery(const std::string& query) { return 0; }
 
 		/**
 		 * Returns ID of last inserted row
@@ -116,7 +133,7 @@ class _Database
 		* @param std::string query
 		* @return results object (null on error)
 		*/
-		DATABASE_VIRTUAL DBResult* storeQuery(const std::string &query) { return 0; }
+		DATABASE_VIRTUAL DBResult* storeQuery(const std::string& query) { return 0; }
 
 		/**
 		* Escapes string for query.
@@ -126,7 +143,7 @@ class _Database
 		* @param std::string string to be escaped
 		* @return quoted string
 		*/
-		DATABASE_VIRTUAL std::string escapeString(const std::string &s) { return "''"; }
+		DATABASE_VIRTUAL std::string escapeString(const std::string& s) { return "''"; }
 
 		/**
 		* Escapes string for pattern query.
@@ -136,7 +153,7 @@ class _Database
 		* @param std::string string to be escaped
 		* @return quoted string
 		*/
-		DATABASE_VIRTUAL std::string escapePatternString(const std::string &s) { return "''"; }
+		DATABASE_VIRTUAL std::string escapePatternString(const std::string& s) { return "''"; }
 
 		/**
 		* Escapes binary stream for query.
@@ -171,6 +188,13 @@ class _Database
 		DATABASE_VIRTUAL std::string getStringComparer() {return "= ";}
 
 		DATABASE_VIRTUAL std::string getUpdateLimiter() {return " LIMIT 1;";}
+
+		/**
+		* Get database engine
+		*
+		* @return the database engine type
+		*/
+		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_NONE;}
 
 		/**
 		* Get database engine name
@@ -212,25 +236,25 @@ class _DBResult
 		*\return The Integer value of the selected field and row
 		*\param s The name of the field
 		*/
-		DATABASE_VIRTUAL int32_t getDataInt(const std::string &s) { return 0; }
+		DATABASE_VIRTUAL int32_t getDataInt(const std::string& s) { return 0; }
 
 		/** Get the Long value of a field in database
 		*\return The Long value of the selected field and row
 		*\param s The name of the field
 		*/
-		DATABASE_VIRTUAL int64_t getDataLong(const std::string &s) { return 0; }
+		DATABASE_VIRTUAL int64_t getDataLong(const std::string& s) { return 0; }
 
 		/** Get the String of a field in database
 		*\return The String of the selected field and row
 		*\param s The name of the field
 		*/
-		DATABASE_VIRTUAL std::string getDataString(const std::string &s) { return "''"; }
+		DATABASE_VIRTUAL std::string getDataString(const std::string& s) { return "''"; }
 
 		/** Get the blob of a field in database
 		*\return a PropStream that is initiated with the blob data field, if not exist it returns NULL.
 		*\param s The name of the field
 		*/
-		DATABASE_VIRTUAL const char* getDataStream(const std::string &s, unsigned long &size) { return 0; }
+		DATABASE_VIRTUAL const char* getDataStream(const std::string& s, unsigned long &size) { return 0; }
 
 		/**
 		* Moves to next result in set.
@@ -319,8 +343,14 @@ class DBInsert
 		std::string m_buf;
 };
 
-
+#ifndef MULTI_SQL_DRIVERS
+#if defined(__USE_MYSQL__)
 #include "databasemysql.h"
+#elif defined(__USE_SQLITE__)
+#include "databasesqlite.h"
+#endif
+#endif
+
 class DBTransaction
 {
 	public:

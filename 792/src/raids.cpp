@@ -592,7 +592,9 @@ void AreaSpawnEvent::addMonster(const std::string& monsterName, uint32_t minAmou
 
 bool AreaSpawnEvent::executeEvent()
 {
-	for(MonsterSpawn* spawn : m_spawnList) {
+	for(MonsterSpawnList::iterator it = m_spawnList.begin(); it != m_spawnList.end(); it++) {
+		MonsterSpawn* spawn = (*it);
+
 		uint32_t amount = random_range(spawn->minAmount, spawn->maxAmount);
 		for(uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn->name);

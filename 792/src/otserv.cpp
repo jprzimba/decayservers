@@ -195,8 +195,20 @@ int main(int argc, char *argv[])
 	Database* db = Database::getInstance();
 	if(!db->isConnected())
 	{
-		startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information.");
-		return -1;
+		switch(db->getDatabaseEngine())
+		{
+			case DATABASE_ENGINE_MYSQL:
+				startupErrorMessage("Failed to connect to database, read doc/MYSQL_HELP for information or try SQLite which doesn't require any connection.");
+				return -1;
+
+			case DATABASE_ENGINE_SQLITE:
+				startupErrorMessage("Failed to connect to sqlite database file, make sure it exists and is readable.");
+				return -1;
+
+			default:
+				startupErrorMessage("Unkwown sqlType in config.lua, valid sqlTypes are: \"mysql\" and \"sqlite\".");
+				return -1;
+		}
 	}
 	std::clog << " " << db->getClientName() << " " << db->getClientVersion() << std::endl;
 

@@ -775,7 +775,8 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 						if(start > 0) {
 							std::list<int32_t> damageList;
 							ConditionDamage::generateDamageList(damage, start, damageList);
-							for(int32_t damageValue : damageList) {
+							for (std::list<int32_t>::iterator it = damageList.begin(); it != damageList.end(); ++it) {
+                                int32_t damageValue = *it;
 								conditionDamage->addDamage(1, ticks, -damageValue);
 							}
 

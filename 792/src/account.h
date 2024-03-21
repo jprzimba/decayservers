@@ -32,8 +32,7 @@ class Account
 		Account();
 		~Account();
 
-		uint32_t accnumber, premiumDays;
-		time_t lastDay = 0;
+		uint32_t accnumber, lastDay, premiumDays;
 		AccountType_t accountType;
 		int32_t warnings;
 		std::string recoveryKey, password;
