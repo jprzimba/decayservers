@@ -209,7 +209,7 @@ void Game::setGameState(GameState_t newState)
 
 void Game::saveGameState()
 {
-	std::clog << "> Saving server..." << std::endl;
+	std::clog << "Saving server..." << std::endl;
 	uint64_t start = OTSYS_TIME();
 	IOLoginData* io = IOLoginData::getInstance();
 	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
@@ -221,7 +221,7 @@ void Game::saveGameState()
 	map->saveMap();
 	ScriptEnvironment::saveGameState();
 
-	std::clog << "> SAVE: Complete in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+	std::clog << "SAVE: Complete in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 }
 
 void Game::loadGameState()
@@ -2016,7 +2016,7 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text, Speak
 
 	if(type >= SPEAK_CLASS_FIRST && type <= SPEAK_CLASS_LAST)
 	{
-		std::clog << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
+		std::clog << "" << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 			(*it).second->sendCreatureSay(player, type, text);
 		return true;
@@ -4364,7 +4364,7 @@ bool Game::broadcastMessage(const std::string& text, MessageClasses type)
 {
 	if(type >= MSG_CLASS_FIRST && type <= MSG_CLASS_LAST)
 	{
-		std::clog << "> Broadcasted message: \"" << text << "\"." << std::endl;
+		std::clog << "Broadcasted message: \"" << text << "\"." << std::endl;
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 			(*it).second->sendTextMessage(type, text);
 		return true;
@@ -4462,7 +4462,7 @@ void Game::updatePremium(Account account)
 		account.lastDay = timeNow;
 
 	if(!IOLoginData::getInstance()->saveAccount(account))
-		std::clog << "> ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
+		std::clog << "ERROR: Failed to save account: " << account.accnumber << "!" << std::endl;
 }
 
 void Game::autoSave()
@@ -4605,7 +4605,7 @@ void Game::loadMotd()
 	FILE* file = fopen("lastMotd.txt", "r");
 	if(file == NULL)
 	{
-		std::clog << "> ERROR: Failed to load lastMotd.txt" << std::endl;
+		std::clog << "ERROR: Failed to load lastMotd.txt" << std::endl;
 		lastMotdNum = random_range(5, 500);
 		return;
 	}
@@ -4637,7 +4637,7 @@ void Game::savePlayersRecord()
 	FILE* file = fopen("playersRecord.txt", "w"); 
 	if(file == NULL)
 	{
-		std::clog << "> ERROR: Failed to save playersRecord.txt" << std::endl;
+		std::clog << "ERROR: Failed to save playersRecord.txt" << std::endl;
 		return;
 	}
 
@@ -4650,7 +4650,7 @@ void Game::loadPlayersRecord()
 	FILE* file = fopen("playersRecord.txt", "r");
 	if(file == NULL)
 	{
-		std::clog << "> ERROR: Failed to load playersRecord.txt" << std::endl;
+		std::clog << "ERROR: Failed to load playersRecord.txt" << std::endl;
 		lastPlayersRecord = 0;
 		return;
 	}

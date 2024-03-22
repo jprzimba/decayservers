@@ -91,7 +91,7 @@ OTSYS_THREAD_SIGNALVAR g_loaderSignal;
 void startupErrorMessage(std::string errorStr)
 {
 	if(errorStr.length() > 0)
-		std::clog << "> ERROR: " << errorStr << std::endl;
+		std::clog << "ERROR: " << errorStr << std::endl;
 
 	#ifdef WIN32
 	system("pause");
@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
 	#ifdef WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 	#endif
-	std::clog << ">> " << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")." << std::endl;
-	std::clog << ">> Compiled with " << BOOST_COMPILER << std::endl;
-	std::clog << ">> Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
+	std::clog << "" << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")." << std::endl;
+	std::clog << "Compiled with " << BOOST_COMPILER << std::endl;
+	std::clog << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
 
 #if defined(__amd64__) || defined(_M_X64)
 	std::clog << "x64" << std::endl;
@@ -125,16 +125,16 @@ int main(int argc, char *argv[])
 #else
 	std::clog << "unknown" << std::endl;
 #endif
-	std::clog << ">> A server developed by Talaturen, Kornholijo & Elf." << std::endl;
-	std::clog << ">> Server modfied and updated by Tryller." << std::endl;
-	std::clog << ">> Visit http://otland.net/." << std::endl;
+	std::clog << "A server developed by Talaturen, Kornholijo & Elf." << std::endl;
+	std::clog << "Server modfied and updated by Tryller." << std::endl;
+	std::clog << "Visit http://otland.net/." << std::endl;
 
 
 	std::clog << std::endl;
 	
 #if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
 	if(getuid() == 0 || geteuid() == 0)
-		std::clog << ">> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+		std::clog << "WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
 		return 1;
 	}
 #endif
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 
 	srand((unsigned int)OTSYS_TIME());
 	// read global config
-	std::clog << ">> Loading config" << std::endl;
+	std::clog << "Loading config" << std::endl;
 	if(!g_config.load())
 	{
 		startupErrorMessage("Unable to load config.lua!");
@@ -184,14 +184,14 @@ int main(int argc, char *argv[])
 #endif
 
 	//load RSA key
-	std::clog << ">> Loading RSA key" << std::endl;
+	std::clog << "Loading RSA key" << std::endl;
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
 	const char* q("7630979195970404721891201847792002125535401292779123937207447574596692788513647179235335529307251350570728407373705564708871762033017096809910315212884101");
 	const char* d("46730330223584118622160180015036832148732986808519344675210555262940258739805766860224610646919605860206328024326703361630109888417839241959507572247284807035235569619173792292786907845791904955103601652822519121908367187885509270025388641700821735345222087940578381210879116823013776808975766851829020659073");
 	g_otservRSA = new RSA();
 	g_otservRSA->setKey(p, q, d);
 
-	std::clog << ">> Loading database driver..." << std::flush;
+	std::clog << "Loading database driver..." << std::flush;
 	Database* db = Database::getInstance();
 	if(!db->isConnected())
 	{
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	}
 	std::clog << " " << db->getClientName() << " " << db->getClientVersion() << std::endl;
 
-	std::clog << ">> Running database manager" << std::endl;
+	std::clog << "Running database manager" << std::endl;
 	DatabaseManager* dbManager = DatabaseManager::getInstance();
 	if(!dbManager->isDatabaseSetup())
 	{
@@ -221,31 +221,31 @@ int main(int argc, char *argv[])
 	}
 
 	for(uint32_t version = dbManager->updateDatabase(); version != 0; version = dbManager->updateDatabase())
-		std::clog << "> Database has been updated to version " << version << "." << std::endl;
+		std::clog << "Database has been updated to version " << version << "." << std::endl;
 
 	dbManager->checkEncryption();
 
 	if(g_config.getBool(ConfigManager::OPTIMIZE_DATABASE) && !dbManager->optimizeTables())
-		std::clog << "> No tables were optimized." << std::endl;
+		std::clog << "No tables were optimized." << std::endl;
 
-	std::clog << ">> Loading bans" << std::endl;
+	std::clog << "Loading bans" << std::endl;
 	g_bans.init();
 
-	std::clog << ">> Loading groups" << std::endl;
+	std::clog << "Loading groups" << std::endl;
 	if(!Groups::getInstance()->loadFromXml())
 	{
 		startupErrorMessage("Unable to load groups!");
 		return -1;
 	}
 
-	std::clog << ">> Loading vocations" << std::endl;
+	std::clog << "Loading vocations" << std::endl;
 	if(!g_vocations.loadFromXml())
 	{
 		startupErrorMessage("Unable to load vocations!");
 		return -1;
 	}
 
-	std::clog << ">> Loading items" << std::endl;
+	std::clog << "Loading items" << std::endl;
 	if(Item::items.loadFromOtb("data/items/items.otb"))
 	{
 		startupErrorMessage("Unable to load items (OTB)!");
@@ -258,18 +258,18 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	
-	std::clog << ">> Loading script systems" << std::endl;
+	std::clog << "Loading script systems" << std::endl;
 	if(!ScriptingManager::getInstance()->loadScriptSystems())
 		startupErrorMessage("");
 
-	std::clog << ">> Loading monsters" << std::endl;
+	std::clog << "Loading monsters" << std::endl;
 	if(!g_monsters.loadFromXml())
 	{
 		startupErrorMessage("Unable to load monsters!");
 		return -1;
 	}
 	
-	std::clog << ">> Loading outfits" << std::endl;
+	std::clog << "Loading outfits" << std::endl;
 	Outfits* outfits = Outfits::getInstance();
 	if(!outfits->loadFromXml())
 	{
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	std::clog << ">> Loading experience stages" << std::endl;
+	std::clog << "Loading experience stages" << std::endl;
 	if(!g_game.loadExperienceStages())
 	{
 		startupErrorMessage("Unable to load experience stages!");
@@ -288,20 +288,20 @@ int main(int argc, char *argv[])
 	if(passwordType == "md5")
 	{
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_MD5);
-		std::clog << ">> Using MD5 passwords" << std::endl;
+		std::clog << "Using MD5 passwords" << std::endl;
 	}
 	else if(passwordType == "sha1")
 	{
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_SHA1);
-		std::clog << ">> Using SHA1 passwords" << std::endl;
+		std::clog << "Using SHA1 passwords" << std::endl;
 	}
 	else
 	{
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_PLAIN);
-		std::clog << ">> Using plaintext passwords" << std::endl;
+		std::clog << "Using plaintext passwords" << std::endl;
 	}
 
-	std::clog << ">> Checking world type... ";
+	std::clog << "Checking world type... ";
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if(worldType == "pvp")
 	{
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
 	status->setMapAuthor(g_config.getString(ConfigManager::MAP_AUTHOR));
 	status->setMapName(g_config.getString(ConfigManager::MAP_NAME));
 
-	std::clog << ">> Loading map" << std::endl;
+	std::clog << "Loading map" << std::endl;
 	if(!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME)))
 	{
 		startupErrorMessage("Failed to load map");
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	std::clog << ">> Loaded all modules, server starting up..." << std::endl;
+	std::clog << "Loaded all modules, server starting up..." << std::endl;
 
 	std::pair<uint32_t, uint32_t> IpNetMask;
 	IpNetMask.first  = inet_addr("127.0.0.1");
@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 	serverIPs.push_back(IpNetMask);
 
 	Server server(INADDR_ANY, g_config.getNumber(ConfigManager::PORT));
-	std::clog << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
+	std::clog << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 	g_server = &server;
 	server.run();
 

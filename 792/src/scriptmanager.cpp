@@ -67,44 +67,44 @@ bool ScriptingManager::loadScriptSystems()
 {
 	if(!g_weapons->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load Weapons!" << std::endl;
+		std::clog << "ERROR: Unable to load Weapons!" << std::endl;
 		return false;
 	}
 	g_weapons->loadDefaults();
 
 	if(!g_spells->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load Spells!" << std::endl;
+		std::clog << "ERROR: Unable to load Spells!" << std::endl;
 		return false;
 	}
 
 	if(!g_actions->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load Actions!" << std::endl;
+		std::clog << "ERROR: Unable to load Actions!" << std::endl;
 		return false;
 	}
 
 	if(!g_talkActions->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load TalkActions!" << std::endl;
+		std::clog << "ERROR: Unable to load TalkActions!" << std::endl;
 		return false;
 	}
 
 	if(!g_moveEvents->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load MoveEvents!" << std::endl;
+		std::clog << "ERROR: Unable to load MoveEvents!" << std::endl;
 		return false;
 	}
 
 	if(!g_creatureEvents->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load CreatureEvents!" << std::endl;
+		std::clog << "ERROR: Unable to load CreatureEvents!" << std::endl;
 		return false;
 	}
 
 	if(!g_globalEvents->loadFromXml())
 	{
-		std::clog << "> ERROR: Unable to load GlobalEvents!" << std::endl;
+		std::clog << "ERROR: Unable to load GlobalEvents!" << std::endl;
 		return false;
 	}
 	

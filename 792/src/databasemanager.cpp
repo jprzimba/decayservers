@@ -43,7 +43,7 @@ bool DatabaseManager::optimizeTables()
 			do
 			{
 				std::string tableName = result->getDataString("TABLE_NAME");
-				std::clog << "> Optimizing table " << tableName << "..." << std::flush;
+				std::clog << "Optimizing table " << tableName << "..." << std::flush;
 
 				query.str("");
 				query << "OPTIMIZE TABLE `" << tableName << "`;";
@@ -62,13 +62,13 @@ bool DatabaseManager::optimizeTables()
 			if(!db->executeQuery("VACUUM;"))
 				return false;
 
-			std::clog << "> Optimized database." << std::endl;
+			std::clog << "Optimized database." << std::endl;
 			break;
 		}
 
 		default:
 		{
-			std::clog << "> Optimization is not supported for this database engine." << std::endl;
+			std::clog << "Optimization is not supported for this database engine." << std::endl;
 			break;
 		}
 	}
@@ -192,7 +192,7 @@ uint32_t DatabaseManager::updateDatabase()
 	{
 		case 0:
 		{
-			std::clog << "> Updating database to version 1 (Only db ready)" << std::endl;
+			std::clog << "Updating database to version 1 (Only db ready)" << std::endl;
 			registerDatabaseConfig("db_version", 1);
 			return 1;
 		}
@@ -278,7 +278,7 @@ void DatabaseManager::checkEncryption()
 				oldName = "plain";
 
 			g_config.setNumber(ConfigManager::PASSWORD_TYPE, oldValue);
-			std::clog << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to \"" << oldName << "\"!" << std::endl;
+			std::clog << "WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to \"" << oldName << "\"!" << std::endl;
 			return;
 		}
 
@@ -305,7 +305,7 @@ void DatabaseManager::checkEncryption()
 				else
 					db->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`), `key` = MD5(`key`);");
 
-				std::clog << "> Password type has been updated to MD5." << std::endl;
+				std::clog << "Password type has been updated to MD5." << std::endl;
 				break;
 			}
 
@@ -330,7 +330,7 @@ void DatabaseManager::checkEncryption()
 				else
 					db->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`), `key` = SHA1(`key`);");
 
-				std::clog << "> Password type has been updated to SHA1." << std::endl;
+				std::clog << "Password type has been updated to SHA1." << std::endl;
 				break;
 			}
 

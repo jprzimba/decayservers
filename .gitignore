@@ -1,4 +1,6 @@
 # Ignore files
+*.res
+*.layout
 *.o
 *.rar
 *.win
