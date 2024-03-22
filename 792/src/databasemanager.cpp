@@ -200,13 +200,13 @@ void DatabaseManager::updateDatabase()
 
 	int32_t version = getDatabaseVersion();
 	do
-    {
-        char filename[100];
-        std::snprintf(filename, sizeof(filename), "data/migrations/%d.lua", version);
+	{
+		char filename[100];
+		std::snprintf(filename, sizeof(filename), "data/migrations/%d.lua", version);
 		if(luaL_dofile(L, filename) != 0)
-        {
+		{
 			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			          << lua_tostring(L, -1) << std::endl;
+			<< lua_tostring(L, -1) << std::endl;
 			break;
 		}
 
@@ -215,15 +215,15 @@ void DatabaseManager::updateDatabase()
 
 		lua_getglobal(L, "onUpdateDatabase");
 		if(lua_pcall(L, 0, 1, 0) != 0)
-        {
+		{
 			LuaScriptInterface::resetScriptEnv();
 			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			          << lua_tostring(L, -1) << std::endl;
+			<< lua_tostring(L, -1) << std::endl;
 			break;
 		}
 
 		if(!LuaScriptInterface::getBoolean(L, -1, false))
-        {
+		{
 			LuaScriptInterface::resetScriptEnv();
 			break;
 		}
@@ -234,7 +234,7 @@ void DatabaseManager::updateDatabase()
 
 		LuaScriptInterface::resetScriptEnv();
 	}
-    while (true);
+	while (true);
 	lua_close(L);
 }
 
