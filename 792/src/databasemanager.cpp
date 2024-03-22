@@ -20,8 +20,7 @@
 
 #include "databasemanager.h"
 #include "tools.h"
-
-#include "ban.h"
+#include "luascript.h"
 
 #include "configmanager.h"
 extern ConfigManager g_config;
@@ -179,27 +178,64 @@ int32_t DatabaseManager::getDatabaseVersion()
 	return -1;
 }
 
-uint32_t DatabaseManager::updateDatabase()
+void DatabaseManager::updateDatabase()
 {
-	Database* db = Database::getInstance();
-	DBQuery query;
+	lua_State* L = luaL_newstate();
+	if(!L)
+		return;
 
-	int32_t databaseVersion = getDatabaseVersion();
-	if(databaseVersion < 0)
-		return 0;
+	luaL_openlibs(L);
 
-	switch(databaseVersion)
-	{
-		case 0:
-		{
-			std::clog << "Updating database to version 1 (Only db ready)" << std::endl;
-			registerDatabaseConfig("db_version", 1);
-			return 1;
+#ifndef LUAJIT_VERSION
+	// bit operations for Lua, based on bitlib project release 24
+	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
+	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
+#endif
+
+	// db table
+	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
+
+	// result table
+	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
+
+	int32_t version = getDatabaseVersion();
+	do
+    {
+        char filename[100];
+        std::snprintf(filename, sizeof(filename), "data/migrations/%d.lua", version);
+		if(luaL_dofile(L, filename) != 0)
+        {
+			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
+			          << lua_tostring(L, -1) << std::endl;
+			break;
 		}
 
-		default: break;
+		if(!LuaScriptInterface::reserveScriptEnv())
+			break;
+
+		lua_getglobal(L, "onUpdateDatabase");
+		if(lua_pcall(L, 0, 1, 0) != 0)
+        {
+			LuaScriptInterface::resetScriptEnv();
+			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
+			          << lua_tostring(L, -1) << std::endl;
+			break;
+		}
+
+		if(!LuaScriptInterface::getBoolean(L, -1, false))
+        {
+			LuaScriptInterface::resetScriptEnv();
+			break;
+		}
+
+		version++;
+		std::clog << "Database has been updated to version " << version << '.' << std::endl;
+		registerDatabaseConfig("db_version", version);
+
+		LuaScriptInterface::resetScriptEnv();
 	}
-	return 0;
+    while (true);
+	lua_close(L);
 }
 
 bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t &value)

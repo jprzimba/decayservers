@@ -220,9 +220,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	for(uint32_t version = dbManager->updateDatabase(); version != 0; version = dbManager->updateDatabase())
-		std::clog << "Database has been updated to version " << version << "." << std::endl;
-
+	dbManager->updateDatabase();
 	dbManager->checkEncryption();
 
 	if(g_config.getBool(ConfigManager::OPTIMIZE_DATABASE) && !dbManager->optimizeTables())

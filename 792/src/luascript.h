@@ -282,6 +282,12 @@ class LuaScriptInterface
 			}
 		}
 
+    	static void resetScriptEnv()
+    	{
+    		assert(m_scriptEnvIndex >= 0);
+    		m_scriptEnv[m_scriptEnvIndex--].resetEnv();
+    	}
+
 		static void releaseScriptEnv()
 		{
 			if(m_scriptEnvIndex >= 0)
@@ -303,6 +309,15 @@ class LuaScriptInterface
 
 		static int32_t luaErrorHandler(lua_State* L);
 		int32_t callFunction(uint32_t nParams);
+
+		static bool getBoolean(lua_State* L, int32_t arg) { return lua_toboolean(L, arg) != 0; }
+		static bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
+		{
+			if(lua_isboolean(L, arg) == 0)
+				return defaultValue;
+
+			return lua_toboolean(L, arg) != 0;
+		}
 
 		//push/pop common structures
 		static void pushThing(lua_State* L, Thing* thing, uint32_t thingid);
@@ -328,6 +343,40 @@ class LuaScriptInterface
 		static void setFieldBool(lua_State* L, const char* index, bool val);
 		static bool getFieldBool(lua_State* L, const char* key);
 		static std::string escapeString(const std::string& string);
+
+		static const luaL_Reg luaBitReg[13];
+		static int luaBitNot(lua_State* L);
+		static int luaBitAnd(lua_State* L);
+		static int luaBitOr(lua_State* L);
+		static int luaBitXor(lua_State* L);
+		static int luaBitLeftShift(lua_State* L);
+		static int luaBitRightShift(lua_State* L);
+		static int luaBitUNot(lua_State* L);
+		static int luaBitUAnd(lua_State* L);
+		static int luaBitUOr(lua_State* L);
+		static int luaBitUXor(lua_State* L);
+		static int luaBitULeftShift(lua_State* L);
+		static int luaBitURightShift(lua_State* L);
+
+		static const luaL_Reg luaDatabaseTable[10];
+		static int32_t luaDatabaseExecute(lua_State* L);
+		static int32_t luaDatabaseStoreQuery(lua_State* L);
+		static int32_t luaDatabaseEscapeString(lua_State* L);
+		static int32_t luaDatabaseEscapeBlob(lua_State* L);
+		static int32_t luaDatabaseLastInsertId(lua_State* L);
+		static int32_t luaDatabaseStringComparer(lua_State* L);
+		static int32_t luaDatabaseUpdateLimiter(lua_State* L);
+		static int32_t luaDatabaseConnected(lua_State* L);
+		static int32_t luaDatabaseTableExists(lua_State* L);
+
+		static const luaL_Reg luaResultTable[8];
+		static int32_t luaResultGetDataInt(lua_State* L);
+		static int32_t luaResultGetDataLong(lua_State* L);
+		static int32_t luaResultGetDataString(lua_State* L);
+		static int32_t luaResultGetDataStream(lua_State* L);
+		static int32_t luaResultGetAllData(lua_State* L);
+		static int32_t luaResultNext(lua_State* L);
+		static int32_t luaResultFree(lua_State* L);
 
 	protected:
 		virtual bool closeState();
@@ -626,40 +675,6 @@ class LuaScriptInterface
 		//
 
 		static int32_t internalGetPlayerInfo(lua_State* L, PlayerInfo_t info);
-
-		static const luaL_Reg luaBitReg[13];
-		static int luaBitNot(lua_State* L);
-		static int luaBitAnd(lua_State* L);
-		static int luaBitOr(lua_State* L);
-		static int luaBitXor(lua_State* L);
-		static int luaBitLeftShift(lua_State* L);
-		static int luaBitRightShift(lua_State* L);
-		static int luaBitUNot(lua_State* L);
-		static int luaBitUAnd(lua_State* L);
-		static int luaBitUOr(lua_State* L);
-		static int luaBitUXor(lua_State* L);
-		static int luaBitULeftShift(lua_State* L);
-		static int luaBitURightShift(lua_State* L);
-
-		static const luaL_Reg luaDatabaseTable[10];
-		static int32_t luaDatabaseExecute(lua_State* L);
-		static int32_t luaDatabaseStoreQuery(lua_State* L);
-		static int32_t luaDatabaseEscapeString(lua_State* L);
-		static int32_t luaDatabaseEscapeBlob(lua_State* L);
-		static int32_t luaDatabaseLastInsertId(lua_State* L);
-		static int32_t luaDatabaseStringComparer(lua_State* L);
-		static int32_t luaDatabaseUpdateLimiter(lua_State* L);
-		static int32_t luaDatabaseConnected(lua_State* L);
-		static int32_t luaDatabaseTableExists(lua_State* L);
-
-		static const luaL_Reg luaResultTable[8];
-		static int32_t luaResultGetDataInt(lua_State* L);
-		static int32_t luaResultGetDataLong(lua_State* L);
-		static int32_t luaResultGetDataString(lua_State* L);
-		static int32_t luaResultGetDataStream(lua_State* L);
-		static int32_t luaResultGetAllData(lua_State* L);
-		static int32_t luaResultNext(lua_State* L);
-		static int32_t luaResultFree(lua_State* L);
 
 		lua_State* m_luaState;
 		std::string m_lastLuaError;

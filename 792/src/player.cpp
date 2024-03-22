@@ -1780,7 +1780,7 @@ void Player::addManaSpent(uint64_t amount)
 			reqMana = vocation->getReqMana(magLevel + 1);
 		}
 
-		if (magLevel != origLevel)
+		if(magLevel != origLevel)
 		{
 			std::stringstream MaglvMsg;
 			MaglvMsg << "You advanced to magic level " << magLevel << ".";
