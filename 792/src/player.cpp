@@ -3514,6 +3514,17 @@ bool Player::remOutfit(uint32_t _looktype, uint32_t _addons)
 	return m_playerOutfits.remOutfit(outfit);
 }
 
+uint32_t Player::getOutfitAddons(uint32_t looktype)
+{
+	const OutfitListType& outfits = m_playerOutfits.getOutfits();
+	for(OutfitListType::const_iterator it = outfits.begin(); it != outfits.end(); ++it)
+	{
+		if((*it)->looktype == looktype)
+			return (*it)->addons;
+	}
+	return 0;
+}
+
 void Player::setSex(PlayerSex_t newSex)
 {
 	sex = newSex;

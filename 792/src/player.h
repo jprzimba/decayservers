@@ -110,7 +110,7 @@ typedef std::list<std::string> LearnedInstantSpellList;
 typedef std::list<uint32_t> InvitedToGuildsList;
 typedef std::list<Party*> PartyList;
 
-#define PLAYER_MAX_SPEED 1500
+#define PLAYER_MAX_SPEED 9999
 #define PLAYER_MIN_SPEED 10
 
 class Player : public Creature, public Cylinder
@@ -417,6 +417,7 @@ class Player : public Creature, public Cylinder
 		bool canWear(uint32_t _looktype, uint32_t _addons);
 		void addOutfit(uint32_t _looktype, uint32_t _addons);
 		bool remOutfit(uint32_t _looktype, uint32_t _addons);
+		uint32_t getOutfitAddons(uint32_t looktype);
 		bool canLogout();
 
 		//creature events
@@ -810,7 +811,7 @@ class Player : public Creature, public Cylinder
 			if(!hasFlag(PlayerFlag_SetMaxSpeed))
 				baseSpeed = 220 + (2* (level - 1));
 			else
-				baseSpeed = 900;
+				baseSpeed = PLAYER_MAX_SPEED;
 		}
 
 		bool isPromoted();
