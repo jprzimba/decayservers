@@ -1882,7 +1882,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 		switch(info)
 		{
 			case PlayerInfoAccess:
-				value = player->accessLevel;
+				value = player->getAccess();
 				break;
 
 			case PlayerInfoLevel:

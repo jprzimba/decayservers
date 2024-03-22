@@ -141,9 +141,9 @@ TalkActionResult_t TalkActions::onPlayerSpeak(Player* player, SpeakClasses type,
 		if(it->first == cmdstring[it->second->getFilter()] || !it->second->isSensitive() && !strcasecmp(it->first.c_str(), cmdstring[it->second->getFilter()].c_str()))
 		{
 			TalkAction* talkAction = it->second;
-			if(talkAction->getAccess() > player->getAccessLevel())
+			if(talkAction->getAccess() > player->getAccess())
 			{
-				if(player->getAccessLevel() > 0)
+				if(player->hasFlag(PlayerFlag_GamemasterPrivileges))
 				{
 					player->sendCancel("You are not able to execute this action.");
 					g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -884,7 +884,7 @@ bool TalkAction::getInfo(Creature* creature, const std::string& cmd, const std::
 	Player* paramPlayer = g_game.getPlayerByName(param);
 	if(paramPlayer)
 	{
-		if(player != paramPlayer && paramPlayer->getAccessLevel() >= player->getAccessLevel())
+		if(player != paramPlayer && paramPlayer->getAccess() >= player->getAccess())
 		{
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You can not get info about this player.");
 			return false;
@@ -893,7 +893,7 @@ bool TalkAction::getInfo(Creature* creature, const std::string& cmd, const std::
 		*(uint32_t*)&ip = paramPlayer->lastIP;
 		std::stringstream info;
 		info << "name:    " << paramPlayer->name << std::endl <<
-			"access:  " << paramPlayer->accessLevel << std::endl <<
+			"access:  " << paramPlayer->getAccess() << std::endl <<
 			"level:   " << paramPlayer->level << std::endl <<
 			"maglvl:  " << paramPlayer->magLevel << std::endl <<
 			"speed:   " << paramPlayer->getSpeed() <<std::endl <<

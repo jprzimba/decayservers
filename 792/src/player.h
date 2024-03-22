@@ -32,6 +32,7 @@
 #include "protocolgame.h"
 #include "ioguild.h"
 #include "party.h"
+#include "group.h"
 
 #include <vector>
 #include <ctime>
@@ -197,8 +198,8 @@ class Player : public Creature, public Cylinder
 		bool isInvitedToGuild(uint32_t guild_id) const;
 		void leaveGuild();
 
-		void setFlags(uint64_t flags){groupFlags = flags;}
-		bool hasFlag(PlayerFlags value) const {return (0 != (groupFlags & ((uint64_t)1 << value)));}
+		void setFlags(uint64_t flags) {if(group) group->setFlags(flags);}
+		bool hasFlag(PlayerFlags value) const {return group != NULL && group->hasFlag(value);}
 
 		void addBlessing(uint64_t blessings_){blessings = blessings_;}
 		bool hasBlessing(int value) const {return (0 != (blessings & ((short)1 << value)));}
@@ -224,18 +225,21 @@ class Player : public Creature, public Cylinder
 		void setGroupId(int32_t newId);
 		int32_t getGroupId() const {return groupId;}
 
+		void setGroup(Group* newGroup);
+		Group* getGroup() const {return group;}
+
 		void resetIdleTime() {idleTime = 0;}
 		bool getNoMove() const {return mayNotMove;}
 
 		bool isInGhostMode() const {return ghostMode;}
 		void switchGhostMode() {ghostMode = !ghostMode;}
 		bool canSeeGhost(const Creature* creature) const
-			{return (creature->getPlayer() && creature->getPlayer()->getAccessLevel() <= accessLevel);}
+			{return (creature->getPlayer() && creature->getPlayer()->getAccess() <= getAccess());}
 
 		bool isAccountManager() const {return accountManager;}
 
 		uint32_t getAccount() const {return accountNumber;}
-		uint16_t getAccessLevel() const {return accessLevel;}
+		uint16_t getAccess() const {return group ? group->getAccess() : 0;}
 		AccountType_t getAccountType() const {return accountType;}
 
 		uint32_t getLevel() const {return level;}
@@ -668,7 +672,6 @@ class Player : public Creature, public Cylinder
 		uint32_t levelPercent;
 		uint32_t magLevel;
 		uint32_t magLevelPercent;
-		uint16_t accessLevel;
 		AccountType_t accountType;
 		int32_t premiumDays;
 		uint64_t experience;
@@ -681,7 +684,6 @@ class Player : public Creature, public Cylinder
 		Vocation* vocation;
 		PlayerSex_t sex;
 		int32_t soul, soulMax;
-		uint64_t groupFlags;
 		uint32_t blessings;
 		uint32_t MessageBufferTicks;
 		int32_t MessageBufferCount;
@@ -695,8 +697,10 @@ class Player : public Creature, public Cylinder
 		std::string groupName;
 		int32_t idleTime;
 		int32_t groupId;
-		OperatingSystem_t operatingSystem;
 		uint32_t clientVersion;
+
+		OperatingSystem_t operatingSystem;
+		Group* group;
 
 		bool talkState[14], accountManager;
 		int32_t newVocation;

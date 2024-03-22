@@ -406,6 +406,9 @@ enum PlayerFlags
 	PlayerFlag_HasFullLight,				//2^41 = 2199023255552
 	PlayerFlag_NotSearchable,				//2^42 = 4398046511104
 	PlayerFlag_CanUseAllOutfitAddons,		//2^43 = 8796093022208
+	PlayerFlag_HideLevel,					//2^44 = 17592186044416
+	PlayerFlag_ShowGroupNameInsteadOfVocation,	//2^45 = 35184372088832
+	PlayerFlag_GamemasterPrivileges,		//2^46 = 70368744177664
 
 	//add new flags here
 	PlayerFlag_LastFlag

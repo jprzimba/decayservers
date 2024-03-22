@@ -84,8 +84,6 @@ Creature()
 	damageImmunities = 0;
 	conditionImmunities = 0;
 	conditionSuppressions = 0;
-	accessLevel = 0;
-	groupName = "";
 	groupId = 0;
 	lastLoginSaved = 0;
 	lastLogout = 0;
@@ -95,26 +93,27 @@ Creature()
 	MessageBufferTicks = 0;
 	MessageBufferCount = 0;
 	nextAction = 0;
-
 	windowTextId = 0;
-	writeItem = NULL;
 	maxWriteLen = 0;
-
-	editHouse = NULL;
 	editListId = 0;
-
-	pzLocked = false;
 	bloodHitCount = 0;
 	shieldBlockCount = 0;
-	lastAttackBlockType = BLOCK_NONE;
+
+	writeItem = NULL;
+	group = NULL;
+	editHouse = NULL;
+
+	pzLocked = false;
 	addAttackSkillPoint = false;
+	mayNotMove = false;
+
+	lastAttackBlockType = BLOCK_NONE;
+
 	lastAttack = 0;
 	shootRange = 1;
 
 	blessings = 0;
 	bankBalance = 0;
-
-	mayNotMove = false;
 
 	chaseMode = CHASEMODE_STANDSTILL;
 	fightMode = FIGHTMODE_ATTACK;
@@ -149,7 +148,6 @@ Creature()
 
 	maxDepotLimit = 1000;
 	maxVipLimit = 20;
-	groupFlags = 0;
 
  	accountManager = false;
 	removeChar = "";
@@ -236,8 +234,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 	if(lookDistance == -1)
 	{
 		s << "yourself.";
-		if(accessLevel != 0)
-			s << " You are " << groupName << ".";
+		if(hasFlag(PlayerFlag_ShowGroupNameInsteadOfVocation))
+			s << " You are " << group->getName() << ".";
 		else if(vocation_id != VOCATION_NONE)
 			s << " You are " << vocation->getVocDescription() << ".";
 		else
@@ -246,7 +244,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 	else
 	{
 		s << name;
-		if(accessLevel == 0)
+		if(!hasFlag(PlayerFlag_HideLevel))
 			s << " (Level " << level << ")";
 		s << ".";
 
@@ -255,8 +253,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 		else
 			s << " He";
 
-		if(accessLevel != 0)
-			s << " is " << groupName << ".";
+		if(hasFlag(PlayerFlag_ShowGroupNameInsteadOfVocation))
+			s << " is " << group->getName() << ".";
 		else if(vocation_id != VOCATION_NONE)
 			s << " is " << vocation->getVocDescription() << ".";
 		else
@@ -907,7 +905,7 @@ bool Player::addDepot(Depot* depot, uint32_t depotId)
 		return false;
 
 	depots[depotId] = depot;
-	depot->setMaxDepotLimit(maxDepotLimit);
+	depot->setMaxDepotLimit((group != NULL ? group->getDepotLimit(isPremium()) : 1000));
 	return true;
 }
 
@@ -2260,7 +2258,7 @@ bool Player::addVIP(uint32_t _guid, std::string& name, bool isOnline, bool inter
 		return false;
 	}
 
-	if(VIPList.size() > maxVipLimit)
+	if(VIPList.size() > (size_t)(group ? group->getMaxVips(isPremium()) : g_config.getNumber(ConfigManager::VIPLIST_DEFAULT_LIMIT)))
 	{
 		if(!internal)
 			sendTextMessage(MSG_STATUS_SMALL, "You cannot add more buddies.");
@@ -4213,25 +4211,20 @@ void Player::setGuildLevel(GuildLevel_t newGuildLevel)
 
 void Player::setGroupId(int32_t newId)
 {
-	const PlayerGroup* group = IOLoginData::getInstance()->getPlayerGroup(newId);
-	if(group)
+	if(Group* tmp = Groups::getInstance()->getGroup(newId))
 	{
 		groupId = newId;
-		groupName = group->m_name;
-		toLowerCaseString(groupName);
-		setFlags(group->m_flags);
-		accessLevel = group->m_access;
-
-		if(group->m_maxdepotitems > 0)
-			maxDepotLimit = group->m_maxdepotitems;
-		else if(isPremium())
-			maxDepotLimit = 2000;
-		
-		if(group->m_maxviplist > 0)
-			maxVipLimit = group->m_maxviplist;
-		else if(isPremium())
-			maxVipLimit = 100;
+		group = tmp;
 	}
+}
+
+void Player::setGroup(Group* newGroup)
+{
+	if(!newGroup)
+		return;
+
+	group = newGroup;
+	groupId = group->getId();
 }
 
 PartyShields_t Player::getPartyShield(const Player* player) const

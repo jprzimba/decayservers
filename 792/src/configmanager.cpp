@@ -132,7 +132,10 @@ bool ConfigManager::load()
 	integer[MAX_GUILD_NAME] = getGlobalNumber(L, "maxGuildNameLength", 20);
 	integer[SUPRISEBAG_PERCENT] = getGlobalNumber(L, "surpriseBagPercent", 0);
 	integer[HOUSES_PER_ACCOUNT] = getGlobalNumber(L, "housesPerOneAccount", -1);
-
+	integer[VIPLIST_DEFAULT_LIMIT] = getGlobalNumber(L, "vipListDefaultLimit", 20);
+	integer[VIPLIST_DEFAULT_PREMIUM_LIMIT] = getGlobalNumber(L, "vipListDefaultPremiumLimit", 100);
+	integer[DEFAULT_DEPOT_SIZE_PREMIUM]	= getGlobalNumber(L, "defaultDepotSizePremium", 2000);
+	integer[DEFAULT_DEPOT_SIZE] = getGlobalNumber(L, "defaultDepotSize", 2000);
 
 	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBool(L, "noDamageToSameLookfeet", false);
 	boolean[AIMBOT_HOTKEY_ENABLED] = getGlobalBool(L, "hotkeyAimbotEnabled", true);

@@ -101,8 +101,16 @@
 	rateSpawn = 1
 	deSpawnRange = 2
 	deSpawnRadius = 50
-	monstersDropSurpriseBags = true
+	monstersDropSurpriseBags = false
 	surpriseBagPercent = 0
+
+	-- Depot
+	defaultDepotSizePremium = 2000
+	defaultDepotSize = 1000
+
+	-- VIP list
+	vipListDefaultLimit = 20
+	vipListDefaultPremiumLimit = 100
 
 	-- Spells
 	spellNameInsteadOfWords = false

@@ -25,18 +25,7 @@
 #include "account.h"
 #include "player.h"
 #include "database.h"
-
-class PlayerGroup
-{
-	public:
-		PlayerGroup(){}
-		~PlayerGroup(){}
-		std::string m_name;
-		uint64_t m_flags;
-		uint32_t m_access;
-		uint32_t m_maxdepotitems;
-		uint32_t m_maxviplist;
-};
+#include "group.h"
 
 typedef std::pair<int32_t, Item*> itemBlock;
 typedef std::list<itemBlock> ItemBlockList;
@@ -81,15 +70,12 @@ class IOLoginData
 		bool createCharacter(uint32_t accountNumber, std::string characterName, int32_t vocationId, PlayerSex_t sex);
 		int16_t deleteCharacter(uint32_t accountNumber, const std::string characterName);
 		bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
-		const PlayerGroup* getPlayerGroup(uint32_t groupid);
 		bool hasGuild(uint32_t guid);
 		uint32_t getLastIPByName(std::string name);
 		void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 
 	protected:
 		bool storeNameByGuid(Database &mysql, uint32_t guid);
-
-		const PlayerGroup* getPlayerGroupByAccount(uint32_t accno);
 		struct StringCompareCase
 		{
 			bool operator()(const std::string& l, const std::string& r) const
@@ -105,9 +91,7 @@ class IOLoginData
 
 		typedef std::map<uint32_t, std::string> NameCacheMap;
 		typedef std::map<std::string, uint32_t, StringCompareCase> GuidCacheMap;
-		typedef std::map<uint32_t, PlayerGroup*> PlayerGroupMap;
 
-		PlayerGroupMap playerGroupMap;
 		NameCacheMap nameCacheMap;
 		GuidCacheMap guidCacheMap;
 };

@@ -316,8 +316,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 		manaSpent = 0;
 
 	player->manaSpent = manaSpent;
-	player->magLevelPercent = Player::getPercentLevel(player->manaSpent,
-		nextManaCount);
+	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
 	player->health = result->getDataInt("health");
 	player->healthMax = result->getDataInt("healthmax");
@@ -930,18 +929,10 @@ bool IOLoginData::getGuidByNameEx(uint32_t &guid, bool &specialVip, std::string&
 
 	name = result->getDataString("name");
 	guid = result->getDataInt("id");
-	const PlayerGroup* accountGroup = getPlayerGroupByAccount(result->getDataInt("account_id"));
-	const PlayerGroup* playerGroup = getPlayerGroup(result->getDataInt("group_id"));
+	if(Group* group = Groups::getInstance()->getGroup(result->getDataInt("group_id")))
+		specialVip = group->hasFlag(PlayerFlag_SpecialVIP);
+
 	db->freeResult(result);
-
-	uint64_t flags = 0;
-	if(playerGroup)
-		flags |= playerGroup->m_flags;
-
-	if(accountGroup)
-		flags |= accountGroup->m_flags;
-
-	specialVip = (0 != (flags & ((uint64_t)1 << PlayerFlag_SpecialVIP)));
 	return true;
 }
 
@@ -971,44 +962,6 @@ bool IOLoginData::playerExists(uint32_t guid)
 
 	db->freeResult(result);
 	return true;
-}
-
-const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
-{
-	PlayerGroupMap::const_iterator it = playerGroupMap.find(groupid);
-	if(it != playerGroupMap.end())
-		return it->second;
-	else
-	{
-		Group* group = Groups::getInstance()->getGroup(groupid);
-		PlayerGroup* playerGroup = new PlayerGroup;
-
-		playerGroup->m_name = group->getName();
-		playerGroup->m_flags = group->getFlags();
-		playerGroup->m_access = group->getAccess();
-		playerGroup->m_maxdepotitems = group->getDepotLimit();
-		playerGroup->m_maxviplist = group->getMaxVips();
-
-		playerGroupMap[groupid] = playerGroup;
-		return playerGroup;
-	}
-	return NULL;
-}
-
-const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
-{
-	Database* db = Database::getInstance();
-	DBQuery query;
-	DBResult* result;
-
-	query << "SELECT `group_id` FROM `accounts` WHERE `id` = " << accno;
-	if((result = db->storeQuery(query.str())))
-	{
-		const uint32_t groupId = result->getDataInt("group_id");
-		db->freeResult(result);
-		return getPlayerGroup(groupId);
-	}
-	return NULL;
 }
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
