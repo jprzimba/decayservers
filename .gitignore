@@ -1,5 +1,7 @@
 # Ignore files
 *.res
+*.s3db
+*lastMotd.txt
 *.layout
 *.o
 *.rar
