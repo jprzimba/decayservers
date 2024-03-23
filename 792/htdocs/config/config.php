@@ -15,8 +15,13 @@ $config['site']['one_email'] = false;
 $config['site']['create_account_verify_mail'] = false;
 $config['site']['verify_code'] = true;
 $config['site']['email_days_to_change'] = 3;
-$config['site']['newaccount_premdays'] = 999;
+$config['site']['newaccount_premdays'] = 0;
 $config['site']['send_register_email'] = false;
+
+/* if you eanle this option you will add
+extra values to new character and it starts at level 8
+*/
+$config['site']['add_extra_info'] = true;
 
 # Create Character Options
 $config['site']['newchar_vocations'] = array(1 => 'Sorcerer Sample', 2 => 'Druid Sample', 3 => 'Paladin Sample', 4 => 'Knight Sample');
@@ -62,8 +67,7 @@ $config['site']['guild_description_lines_limit'] = 6;
 $config['site']['guild_motd_chars_limit'] = 250;
 
 # PAGE: adminpanel.php
-# define min acocunt type to access admin panel
-$config['site']['acc_type'] = 5;
+$config['site']['access_admin_panel'] = 3;
 
 # PAGE: latestnews.php
 $config['site']['news_limit'] = 6;

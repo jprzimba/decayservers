@@ -30,7 +30,7 @@ else
 
 $logged = false;
 $account_logged = new Account();
-$acc_type_of_acc_logged = 0;
+$group_account = 0;
 // with ONLY_PAGE option we want disable useless SQL queries
 if(!ONLY_PAGE)
 {
@@ -40,7 +40,7 @@ if(!ONLY_PAGE)
 	$account_logged = Visitor::getAccount();
 	// group of acc. logged
 	if(Visitor::isLogged())
-		$acc_type_of_acc_logged = Visitor::getAccount()->getPageAccess();
+		$group_account = Visitor::getAccount()->getPageAccess();
 }
 $layout_name = './layouts/' . Website::getWebsiteConfig()->getValue('layout');
 

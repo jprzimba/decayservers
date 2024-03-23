@@ -342,7 +342,7 @@ echo "<a href='?subtopic=shopsystem&action=show_history'>
     <div class='RightChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
   </div>
 </a>";
-if($acc_type_of_acc_logged >= $config['site']['acc_type'])
+if($group_account >= $config['site']['access_admin_panel'])
 echo "<a href='?subtopic=shopadmin'>
   <div id='submenu_shopadmin' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>

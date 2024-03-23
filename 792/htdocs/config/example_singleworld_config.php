@@ -56,8 +56,7 @@ $config['site']['guild_description_lines_limit'] = 6;
 $config['site']['guild_motd_chars_limit'] = 250;
 
 # PAGE: adminpanel.php
-# define min acocunt type to access admin panel
-$config['site']['acc_type'] = 5;
+$config['site']['access_admin_panel'] = 3;
 
 # PAGE: latestnews.php
 $config['site']['news_limit'] = 6;
