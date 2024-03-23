@@ -30,7 +30,7 @@ CREATE TABLE `server_config`
 	UNIQUE KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` VALUES ('db_version','1'),('encryption','0');
+INSERT INTO `server_config` VALUES ('db_version','2'),('encryption','0');
 
 CREATE TABLE `accounts`
 (

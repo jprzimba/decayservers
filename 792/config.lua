@@ -1,13 +1,14 @@
 	-- The Forgotten Server Config
 
 	-- SQL Settings
-	sqlType = "sqlite"
+	-- sqlType: mysql and sqlite supported.
+	sqlType = "mysql"
 	passwordType = "plain"
 	mysqlHost = "127.0.0.1"
-	mysqlUser = "otserv"
-	mysqlPass = ""
+	mysqlUser = "root"
+	mysqlPass = "root"
 	mysqlPort = 3306
-	mysqlDatabase = "otserv"
+	mysqlDatabase = "forgottenserver"
 	startupDatabaseOptimization = true
 	sqliteDatabase = "forgottenserver.s3db"
 
@@ -26,7 +27,7 @@
 	replaceKickOnLogin = true
 
 	-- Account Manager
-	accountManager = true
+	accountManager = false
 	newPlayerChooseVoc = true
 	newPlayerSpawnPosX = 1000
 	newPlayerSpawnPosY = 1000
