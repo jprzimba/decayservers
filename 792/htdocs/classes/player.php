@@ -5,6 +5,7 @@ if(!defined('INITIALIZED'))
 class Player extends ObjectData
 {
 	const LOADTYPE_ID = 'id';
+	const LOADTYPE_NAME = 'name';
 	public static $table = 'players';
 	public $data = array('name' => null, 'group_id' => null, 'account_id' => null, 'level' => null, 'vocation' => null, 'health' => null, 'healthmax' => null, 'experience' => null, 'lookbody' => null, 'lookfeet' => null, 'lookhead' => null, 'looklegs' => null, 'looktype' => null, 'lookaddons' => null, 'maglevel' => null, 'mana' => null, 'manamax' => null, 'manaspent' => null, 'soul' => null, 'town_id' => null, 'posx' => null, 'posy' => null, 'posz' => null, 'conditions' => null, 'cap' => null, 'sex' => null, 'lastlogin' => null, 'lastip' => null, 'save' => null, 'redskull' => null, 'redskulltime' => null, 'rank_id' => null, 'guildnick' => null, 'lastlogout' => null, 'blessings' => null, 'balance' => null, 'direction' => null, 'loss_experience' => null, 'loss_mana' => null, 'loss_skills' => null, 'premend' => null, 'online' => null, 'deleted' => null, 'description' => null, 'create_ip' => null, 'create_date' => null, 'comment' => null, 'hide_char' => null);
 	public static $fields = array('id', 'name', 'group_id', 'account_id', 'level', 'vocation', 'health', 'healthmax', 'experience', 'lookbody', 'lookfeet', 'lookhead', 'looklegs', 'looktype', 'lookaddons', 'maglevel', 'mana', 'manamax', 'manaspent', 'soul', 'town_id', 'posx', 'posy', 'posz', 'conditions', 'cap', 'sex', 'lastlogin', 'lastip', 'save', 'redskull', 'redskulltime', 'rank_id', 'guildnick', 'lastlogout', 'blessings', 'balance', 'direction', 'loss_experience', 'loss_mana', 'loss_skills', 'premend', 'online', 'deleted', 'description', 'create_ip', 'create_date', 'comment', 'hide_char');
@@ -37,6 +38,11 @@ class Player extends ObjectData
 	public function loadById($id)
 	{
 		$this->load($id, self::LOADTYPE_ID);
+	}
+
+	public function loadByName($name)
+	{
+		$this->load($name, self::LOADTYPE_NAME);
 	}
 
 	public function save($forceInsert = false)
@@ -421,5 +427,5 @@ class Player extends ObjectData
 	public function unsetSave(){$this->setSave(0);}
 	public function getTownId(){return $this->getTown();}
 	public function getHideChar(){return $this->isHidden();}
-	public function find($id){$this->loadById($id);}
+	public function find($name){$this->loadByName($name);}
 }

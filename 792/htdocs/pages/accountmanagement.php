@@ -484,7 +484,7 @@ else
 				$player_account = $player->getAccount();
 				if($account_logged->getId() == $player_account->getId())
 				{
-					if($_POST['changecommentsave'] == 1)
+					if(isset($_POST['changecommentsave']) == 1)
 					{
 						$player->set("hide_char", $new_hideacc);
 						$player->set("comment", $new_comment);
@@ -524,9 +524,9 @@ else
 //### DELETE character from account ###
 	if($action == "deletecharacter")
 	{
-		$player_name = trim($_POST['delete_name']);
-		$password_verify = trim($_POST['delete_password']);
-		if($_POST['deletecharactersave'] == 1)
+		$player_name = isset($_POST['delete_name']) ? trim($_POST['delete_name']) : '';
+		$password_verify = isset($_POST['delete_password']) ? trim($_POST['delete_password']) : '';
+		if(isset($_POST['deletecharactersave']) == 1)
 		{
 			if(!empty($player_name) && !empty($password_verify))
 			{
