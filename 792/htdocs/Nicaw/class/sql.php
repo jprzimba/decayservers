@@ -25,26 +25,26 @@ private $sql_connection;
 public function __construct($server, $user, $password, $database){
 
     //warn if MySQL extension is not installed
-    if(!extension_loaded('mysql'))
+    if(!extension_loaded('mysqli'))
         throw new aacException('MySQL library is not installed. Database access is impossible. '.AAC::HelpLink(0));
 
     //establish a link to MySQL
-    $con = mysql_connect($server,$user,$password);
+    $con = mysqli_connect($server, $user, $password, $database);
     if ($con === false){
         throw new aacException('Unable to connect to mysql server. Please make sure it is up and running and you have correct user/password in config.inc.php. '.AAC::HelpLink(1));
         return false;
     }
 
     //select otserv database
-    if (!mysql_select_db($database)){
+    if (!mysqli_select_db($con, $database)){
         throw new aacException('Unable to select database: '.$database.'. Make sure it exists. '.AAC::HelpLink(2));
         return false;
     }
 
     //retrieve table list
-	$result = mysql_query('SHOW TABLES');
+	$result = mysqli_query($con, 'SHOW TABLES');
 	if ($result === false) return false;
-	while ($a = mysql_fetch_array($result))
+	while ($a = mysqli_fetch_array($result))
 	$this->sql_tables[] = $a[0];
 
     //assign the connection
@@ -60,13 +60,13 @@ public function isTable($mixed) {
 public function __destruct(){
     if(is_resource($this->last_query))
         mysql_free_result($this->last_query);
-    mysql_close($this->sql_connection);
+    mysqli_close($this->sql_connection);
 }
 
 //Creates tables
 public function setup(){
 	$tables = explode(';', file_get_contents('documents/shema.mysql'));
-	foreach ($tables as $table) mysql_query($table);
+	foreach ($tables as $table) mysqli_query$con, ($table);
 }
 
 //Perform simple SQL query
@@ -157,7 +157,7 @@ public function repairTables()
 	{
 		if (isset($this->sql_tables))
 			foreach($this->sql_tables as $table)
-				mysql_query('REPAIR TABLE '.$table);
+				mysqli_query('REPAIR TABLE '.$table);
 		return $return;
 	}
 

@@ -19,24 +19,32 @@
 include ("../include.inc.php");
 require ('check.php');
 
-$ip = @file_get_contents('http://aac.nicaw.net/get_ip.php');
-if (!empty($ip)){
-	if ($config = @file_get_contents($cfg['dirdata'].'../config.lua')){
-		if (long2ip(ip2long($ip)) === $ip){
-			$new = preg_replace('/ip\s=\s".+?"/', 'ip = "'.$ip.'"',$config,1,$count);
-			if ($count == 1){
-				file_put_contents($cfg['dirdata'].'../config.lua',$new);
-				$msg = 'IP updated to: '.$ip;
-			}else
-				$msg = 'Can\'t find IP record'; 
-		}else $msg = 'Invalid IP'; 
-	}else $msg = 'Can\'t find config.lua'; 
-}else $msg = 'Sorry, service unavailable'; 
-if (!empty($msg)){
-	//create new message
-	$box = new IOBox('message');
-	$box->addMsg($msg);
-	$box->addClose('OK');
-	$box->show();
+$ip = $_SERVER['REMOTE_ADDR'];
+if (!empty($ip)) {
+    if ($config = @file_get_contents($cfg['dirdata'].'../config.lua')) {
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            $new = preg_replace('/ip\s=\s".+?"/', 'ip = "'.$ip.'"', $config, 1, $count);
+            if ($count == 1) {
+                file_put_contents($cfg['dirdata'].'../config.lua', $new);
+                $msg = 'IP updated to: '.$ip;
+            } else {
+                $msg = 'Can\'t find IP record';
+            }
+        } else {
+            $msg = 'Invalid IP';
+        }
+    } else {
+        $msg = 'Can\'t find config.lua';
+    }
+} else {
+    $msg = 'Sorry, service unavailable';
 }
+if (!empty($msg)) {
+    //create new message
+    $box = new IOBox('message');
+    $box->addMsg($msg);
+    $box->addClose('OK');
+    $box->show();
+}
+
 ?>

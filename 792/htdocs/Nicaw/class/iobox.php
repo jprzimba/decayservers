@@ -83,8 +83,14 @@ public function addLabel($code){
 	$this->label = '<legend>'.$code.'</legend>';
 }
 public function getCode(){
-	if (isset($_POST['ajax']))
-		$code = '<table cellspacing="10px" id="iobox" onmouseup="iobox_mouseup()" class="draggable"><tr><td><fieldset>'.$this->label.'<form id="'.$this->name.'" action="javascript:setStyle(\'iobox\',\'visibility\',\'hidden\'); ajax(document.getElementById(\'iobox\').parentNode.id,\''.htmlspecialchars($this->target).'\', $(\''.$this->name.'\').serialize(),true);" method="post">'."\n";
+	if (isset($_POST['ajax'])) {
+		$code = '<table cellspacing="10px" id="iobox" onmouseup="iobox_mouseup()" class="draggable"><tr><td><fieldset>'.$this->label.'<form id="'.$this->name.'" action="javascript:setStyle(\'iobox\',\'visibility\',\'hidden\'); ajax(document.getElementById(\'iobox\').parentNode.id,\'';
+		
+		// Check if $this->target is set before using htmlspecialchars
+		$targetValue = isset($this->target) ? htmlspecialchars($this->target) : '';
+	
+		$code .= $targetValue . '\', $(\''.$this->name.'\').serialize(),true);" method="post">'."\n";
+	}
 	else
 		$code = '<div id="iobox" class="iobox"><fieldset>'.$this->label.'<form id="'.$this->name.'" action="'.htmlspecialchars($this->target).'" method="post">';
 	foreach ($this->elements as $element)

@@ -42,9 +42,9 @@ include ("header.inc.php");
 $errors = '';
 if(!extension_loaded('gd'))
 	$errors .= '<li>GD library is not installed. It is essential for image manipulations.</li>';
-if(!extension_loaded('mysql'))
+if(!extension_loaded('mysqli'))
 	$errors .= '<li>MySQL library is not installed. Database access is impossible.</li>';
-if(get_magic_quotes_gpc())
+if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
 	$errors .= '<li>Magic quotes is on! While this option may be important for other scripts, you can safely disable it for this AAC.</li>';
 if(ini_get('register_globals'))
 	$errors .= '<li>Register globals is on! This feature is DEPRECATED and REMOVED as of PHP 6.0.0. Relying on this feature is highly discouraged.</li>';
@@ -60,23 +60,6 @@ if (!empty($errors))
 $ServerXML = simplexml_load_file('status.xml');
 $params = htmlspecialchars('?url='.$cfg['server_url'].'&version='.$cfg['aac_version'].'&remote_ip='.$_SERVER['REMOTE_ADDR'].'&server_ip='.$_SERVER['SERVER_ADDR'].'&port='.$_SERVER['SERVER_PORT'].'&server_software='.urlencode($_SERVER['SERVER_SOFTWARE']).'&otserv_type='.$ServerXML->serverinfo['server'].$ServerXML->serverinfo['version']);
 ?>
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-if (Cookies.get('allow_iframe') == null){
-	if (confirm('AAC will now contact external site and send your server details.\r\nNo personal information submited.\r\nIs that OK?')){
-		Cookies.create('allow_iframe','yes',31);
-	}else{
-    Cookies.create('allow_iframe','no',31);
-	}
-}
-if (Cookies.get('allow_iframe') == 'yes'){
-	document.write('<iframe width="100%" height="400px" src="http://aac.nicaw.net/<?php echo $params?>" ></iframe>');
-}
-if (Cookies.get('allow_iframe') == 'no'){
-  document.write('<span onclick="Cookies.erase(\'allow_iframe\'); location.reload(false);" style="cursor: pointer">Click here to enable iframe</span>');
-}
-//]]>
-</script>
 </div>
 <div class="bot"></div>
 </div>

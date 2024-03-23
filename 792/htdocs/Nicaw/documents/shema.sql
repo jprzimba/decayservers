@@ -8,6 +8,12 @@ CREATE TABLE `nicaw_accounts` (
   UNIQUE KEY `account_id` (`account_id`)
 ) ENGINE = InnoDB;
 
+ALTER TABLE `accounts`
+ADD COLUMN `rlname` VARCHAR(50) NULL,
+ADD COLUMN `location` VARCHAR(50) NULL,
+ADD COLUMN `comment` TINYTEXT NULL,
+ADD COLUMN `reveal_characters` TINYINT(1) NOT NULL DEFAULT '1';
+
 CREATE TABLE `nicaw_account_logs` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `account_id` int(11) NOT NULL,

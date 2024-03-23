@@ -11,19 +11,19 @@
 ##################################################
 
 # Set data directory of your OT server
-$cfg['dirdata'] = 'C:/OTServ/data/';
+$cfg['dirdata'] = 'C:/Users/shynz/Documents/GitHub/otserv/792/data/';
 
-$cfg['house_file'] = 'world/Tibia-house.xml';
+$cfg['house_file'] = 'world/Evolutions-house.xml';
 
 # MySQL server settings
 $cfg['SQL_Server'] = 'localhost';
 $cfg['SQL_User'] = 'root';
-$cfg['SQL_Password'] = 'pass';
-$cfg['SQL_Database'] = 'otserv2';
+$cfg['SQL_Password'] = 'root';
+$cfg['SQL_Database'] = 'nicaw';
 
 # Must correspond to your OTServ configuration
 # Options: plain, md5, sha1
-$cfg['password_type'] = 'md5';
+$cfg['password_type'] = 'plain';
 
 # Not currently supported by OTServ, leave empty
 $cfg['password_salt'] = '';

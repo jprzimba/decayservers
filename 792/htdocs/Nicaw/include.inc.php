@@ -31,13 +31,12 @@ if (ini_get('register_globals')){
 	    }
 	}
 }
-//emulate magic_quotes_gpc = off
-if( get_magic_quotes_gpc() )
-{
-  $_POST = array_map('stripslashes', $_POST);
-  $_GET = array_map('stripslashes', $_GET);
-  $_COOKIE = array_map('stripslashes', $_COOKIE);
-  $_REQUEST = array_map('stripslashes', $_REQUEST);
+// Emulate magic_quotes_gpc = off if available
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+    $_POST = array_map('stripslashes', $_POST);
+    $_GET = array_map('stripslashes', $_GET);
+    $_COOKIE = array_map('stripslashes', $_COOKIE);
+    $_REQUEST = array_map('stripslashes', $_REQUEST);
 }
 
 require ('config.inc.php');
