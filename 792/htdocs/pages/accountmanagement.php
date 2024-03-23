@@ -283,11 +283,12 @@ else
 	}
 
 //############## GENERATE RECOVERY KEY ###########
+	$dontshowtableagain = 0;
 	if($action == "registeraccount")
 	{
-		$reg_password = trim($_POST['reg_password']);
+		$reg_password = isset($_POST['reg_password']) ? trim($_POST['reg_password']) : '';
 		$old_key = $account_logged->getCustomField("key");
-		if($_POST['registeraccountsave'] == "1")
+		if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 		{
 			if($account_logged->isValidPassword($reg_password))
 			{
