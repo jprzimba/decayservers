@@ -246,13 +246,14 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	std::clog << "Loading items" << std::endl;
+	std::clog << "Loading items (OTB)" << std::endl;
 	if(Item::items.loadFromOtb("data/items/items.otb"))
 	{
 		startupErrorMessage("Unable to load items (OTB)!");
 		return -1;
 	}
 	
+	std::clog << "Loading items (XML)" << std::endl;
 	if(!Item::items.loadFromXml())
 	{
 		startupErrorMessage("Unable to load items (XML)!");
