@@ -23,6 +23,9 @@ if(!$logged)
 	}
 else
 {
+	$account_email_change = '';
+	$player_number_counter = 0;
+
 	if($action == "")
 	{
 		$account_reckey = $account_logged->getCustomField("key");
@@ -260,9 +263,10 @@ else
 	
 //########### CHANGE PUBLIC INFORMATION (about account owner) ######################
 	if($action == "changeinfo") {
-		$new_rlname = htmlspecialchars(trim($_POST['info_rlname']));
-		$new_location = htmlspecialchars(trim($_POST['info_location']));
-		if($_POST['changeinfosave'] == 1) {
+		$new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(trim($_POST['info_rlname'])) : '';
+		$new_location = isset($_POST['info_location']) ? htmlspecialchars(trim($_POST['info_location'])) : '';
+
+		if (isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 		//save data from form
 			$account_logged->set("rlname", $new_rlname);
 			$account_logged->set("location", $new_location);
