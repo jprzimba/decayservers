@@ -52,7 +52,7 @@ Account IOLoginData::loadAccount(uint32_t accno, bool preLoad /*= false*/)
 	DBQuery query;
 	DBResult* result;
 
-	query << "SELECT `id`, `password`, `type`, `premdays`, `lastday`, `key`, `warnings` FROM accounts WHERE `id` = " << accno << ";";
+	query << "SELECT * FROM accounts WHERE `id` = " << accno << ";";
 	if((result = db->storeQuery(query.str())))
 	{
 		acc.accnumber = result->getDataInt("id");
@@ -1021,8 +1021,15 @@ bool IOLoginData::isPremium(uint32_t guid)
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
+	Group* group = Groups::getInstance()->getGroup(result->getDataInt("group_id"));
+	const uint32_t account = result->getDataInt("account_id");
+	
+	db->freeResult(result);
+	if(group && group->hasFlag(PlayerFlag_IsAlwaysPremium))
+		return true;
+
 	query.str("");
-	query << "SELECT `premdays` FROM `accounts` WHERE `id` = " << result->getDataInt("account_id") << ";";
+	query << "SELECT `premdays` FROM `accounts` WHERE `id` = " << account << ";";
 	db->freeResult(result);
 	if(!(result = db->storeQuery(query.str())))
 		return false;
