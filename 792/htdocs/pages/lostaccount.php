@@ -6,7 +6,7 @@ if($config['site']['send_emails'])
 {
 	if($action == '')
 	{
-		$main_content .= 'The Lost Account Interface can help you to get back your account name and password. Please enter your character name and select what you want to do.<BR>
+		$main_content .= 'The Lost Account Interface can help you to get back your account number and password. Please enter your character name and select what you want to do.<BR>
 		<FORM ACTION="?subtopic=lostaccount&action=step1" METHOD=post>
 		<INPUT TYPE=hidden NAME="character" VALUE="">
 		<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
@@ -18,7 +18,7 @@ if($config['site']['send_emails'])
 		<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 		<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>What do you want?</B></TD></TR>
 		<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
-		<INPUT TYPE=radio NAME="action_type" VALUE="email"> Send me new password and my account name to account e-mail adress.<BR>
+		<INPUT TYPE=radio NAME="action_type" VALUE="email"> Send me new password and my account number to account e-mail adress.<BR>
 		<INPUT TYPE=radio NAME="action_type" VALUE="reckey"> I got <b>recovery key</b> and want set new password and e-mail adress to my account.<BR>
 		</TD></TR>
 		</TABLE>
@@ -97,14 +97,14 @@ if($config['site']['send_emails'])
 						$acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
 						$newcode = NULL;
 						for($i=0; $i < 30; $i++) {
-							$cnum[$i] = $acceptedChars{mt_rand(0, 33)};
+							$cnum[$i] = $acceptedChars[mt_rand(0, 33)];;
 							$newcode .= $cnum[$i];
 						}
 						$mailBody = '<html>
 						<body>
-						<h3>Your account name and password!</h3>
+						<h3>Your account number and password!</h3>
 						<p>You or someone else requested new password for  your account on server <a href="'.$config['server']['url'].'"><b>'.htmlspecialchars($config['server']['serverName']).'</b></a> with this e-mail.</p>
-						<p>Account name: '.htmlspecialchars($account->getName()).'</p>
+						<p>Account number: '.htmlspecialchars($account->getName()).'</p>
 						<p>Password: <i>You will set new password when you press on link.</i></p>
 						<br />
 						<p>Press on link to set new password. This link will work until next >new password request< in Lost Account Interface.</p>
@@ -181,7 +181,7 @@ if($config['site']['send_emails'])
 				$account_key = $account->getCustomField('key');
 				if(!empty($account_key))
 				{
-							$main_content .= 'If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
+							$main_content .= 'If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account number.<BR>
 							<FORM ACTION="?subtopic=lostaccount&action=step2" METHOD=post>
 							<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 							<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Please enter your recovery key</B></TD></TR>
@@ -323,22 +323,22 @@ if($config['site']['send_emails'])
 								$account->setEMail($new_email);
 								$account->setPassword($new_pass);
 								$account->save();
-								$main_content .= 'Your account name, new password and new e-mail.<BR>
+								$main_content .= 'Your account number, new password and new e-mail.<BR>
 								<FORM ACTION="?subtopic=accountmanagement" onsubmit="return validate_form(this)" METHOD=post>
 								<INPUT TYPE=hidden NAME="character" VALUE="">
 								<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
-								<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Your account name, new password and new e-mail</B></TD></TR>
+								<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Your account number, new password and new e-mail</B></TD></TR>
 								<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
-								Account name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.htmlspecialchars($account->getName()).'</b><BR>
+								Account number:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.htmlspecialchars($account->getName()).'</b><BR>
 								New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.htmlspecialchars($new_pass).'</b><BR>
 								New e-mail address:&nbsp;<b>'.htmlspecialchars($new_email).'</b><BR>';
 								if($account->getCustomField('next_email') < time())
 								{
 									$mailBody = '<html>
 									<body>
-									<h3>Your account name and new password!</h3>
+									<h3>Your account number and new password!</h3>
 									<p>Changed password and e-mail to your account in Lost Account Interface on server <a href="'.$config['server']['url'].'"><b>'.$config['server']['serverName'].'</b></a></p>
-									<p>Account name: <b>'.htmlspecialchars($account->getName()).'</b></p>
+									<p>Account number: <b>'.htmlspecialchars($account->getName()).'</b></p>
 									<p>New password: <b>'.htmlspecialchars($new_pass).'</b></p>
 									<p>E-mail: <b>'.htmlspecialchars($new_email).'</b> (this e-mail)</p>
 									<br />
@@ -364,7 +364,7 @@ if($config['site']['send_emails'])
 									$mail->Body = $mailBody;
 									if($mail->Send())
 									{
-										$main_content .= '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!';
+										$main_content .= '<br /><small>Sent e-mail with your account number and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!';
 									}
 									else
 									{
@@ -461,7 +461,7 @@ if($config['site']['send_emails'])
 					<INPUT TYPE=hidden NAME="character" VALUE="'.htmlspecialchars($character).'">
 					<INPUT TYPE=hidden NAME="code" VALUE="'.htmlspecialchars($code).'">
 					<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
-					<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Code & account name</B></TD></TR>
+					<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Code & account number</B></TD></TR>
 					<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
 					New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE=password ID="passor" NAME="passor" VALUE="" SIZE="40")><BR />
 					Repeat new password:&nbsp;<INPUT TYPE=password ID="passor2" NAME="passor2" VALUE="" SIZE="40")><BR />
@@ -527,12 +527,12 @@ if($config['site']['send_emails'])
 						<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Changed password</B></TD></TR>
 						<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
 						New password:&nbsp;<b>'.htmlspecialchars($newpassword).'</b><BR />
-						Account name:&nbsp;&nbsp;&nbsp;<i>(Already on your e-mail)</i><BR />';
+						Account number:&nbsp;&nbsp;&nbsp;<i>(Already on your e-mail)</i><BR />';
 						$mailBody = '<html>
 						<body>
-						<h3>Your account name and password!</h3>
+						<h3>Your account number and password!</h3>
 						<p>Changed password to your account in Lost Account Interface on server <a href="'.$config['server']['url'].'"><b>'.htmlspecialchars($config['server']['serverName']).'</b></a></p>
-						<p>Account name: <b>'.htmlspecialchars($account->getName()).'</b></p>
+						<p>Account number: <b>'.htmlspecialchars($account->getName()).'</b></p>
 						<p>New password: <b>'.htmlspecialchars($newpassword).'</b></p>
 						<br />
 						<p><u>It\'s automatic e-mail from OTS Lost Account System. Do not reply!</u></p>
@@ -558,7 +558,7 @@ if($config['site']['send_emails'])
 						$mail->Body = $mailBody;
 						if($mail->Send())
 						{
-							$main_content .= '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
+							$main_content .= '<br /><small>New password work! Sent e-mail with your password and account number. You should receive this e-mail in 15 minutes. You can login now with new password!';
 						}
 						else
 						{

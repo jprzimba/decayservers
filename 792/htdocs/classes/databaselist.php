@@ -144,37 +144,39 @@ class DatabaseList extends DatabaseHandler implements Iterator, Countable
 			$this->tables[$tables] = $tables;
 	}
 
-    public function current()
-    {
-        return $this->getResult($this->iterator);
-    }
+	public function current(): mixed
+	{
+		return $this->getResult($this->iterator);
+	}	
 
-    public function rewind()
-    {
-		if(!isset($this->data))
+	public function next(): void
+	{
+		++$this->iterator;
+	}
+	
+	public function key(): mixed
+	{
+		return $this->iterator;
+	}
+	
+	public function valid(): bool
+	{
+		return isset($this->data[$this->iterator]);
+	}
+	
+	public function rewind(): void
+	{
+		if (!isset($this->data)) {
 			$this->load();
-        $this->iterator = 0;
-    }
-
-    public function next()
-    {
-        ++$this->iterator;
-    }
-
-    public function key()
-    {
-        return $this->iterator;
-    }
-
-    public function valid()
-    {
-        return isset($this->data[$this->iterator]);
-    }
-
-    public function count()
-    {
-		if(!isset($this->data))
+		}
+		$this->iterator = 0;
+	}
+	
+	public function count(): int
+	{
+		if (!isset($this->data)) {
 			$this->load();
-        return count($this->data);
-    }
+		}
+		return count($this->data);
+	}	
 }

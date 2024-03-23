@@ -35,7 +35,7 @@ $config['site']['smtp_user'] = "xxx@gmx.com";
 $config['site']['smtp_pass'] = "xxxx";
 
 # PAGE: whoisonline.php
-$config['site']['private-servlist.com_server_id'] = 1;
+$config['site']['private-servlist.com_server_id'] = 0;
 /*
 Server id on 'private-servlist.com' to show Players Online Chart (whoisonline.php page), set 0 to disable Chart feature.
 To use this feature you must register on 'private-servlist.com' and add your server.

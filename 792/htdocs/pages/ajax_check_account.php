@@ -13,16 +13,16 @@ if(strlen($account) < 32)
 {
 	if(!check_account_name($account))
 	{
-		echo '<font color="red">Invalid account name format. Use only A-Z and numbers 0-9.</font>';
+		echo '<font color="red">Invalid account number format. Use only A-Z and numbers 0-9.</font>';
 		exit;
 	}
 	$account_db = new Account();
 	$account_db->find($account);
 	if($account_db->isLoaded())
-		echo '<font color="red">Account with this name already exist.</font>';
+		echo '<font color="red">Account with this number already exist.</font>';
 	else
-		echo '<font color="green">Good account name ( '.htmlspecialchars($account).' ). You can create account.</font>';
+		echo '<font color="green">Good account number ( '.htmlspecialchars($account).' ). You can create account.</font>';
 }
 else
-	echo '<font color="red">Account name is too long (max. 32 chars).</font>';
+	echo '<font color="red">Account number is too long (max. 32 chars).</font>';
 exit;
