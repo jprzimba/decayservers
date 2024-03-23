@@ -2,7 +2,7 @@
 # Account Maker Config
 $config['site']['serverPath'] = "C:/Users/shynz/Documents/GitHub/otserv/792/";
 $config['site']['useServerConfigCache'] = false;
-$towns_list = array(1 => 'Thais', 2 => 'Venore', 5 => 'Carlin');
+$towns_list = array(1 => 'Enigma City');
 
 $config['site']['outfit_images_url'] = 'http://outfit-images.ots.me/outfit.php';
 $config['site']['item_images_url'] = 'http://item-images.ots.me/960/';

@@ -65,7 +65,7 @@ foreach($words_blocked as $word)
 		echo '</b></font>';
 		exit;
 	}
-for($i = 0; $i < strlen($name); $i++)
+for($i = 0; $i < strlen($name) - 2; $i++)
 	if($name[$i] == $name[($i+1)] && $name[$i] == $name[($i+2)])
 	{
 		echo '<font color="red">Name can\'t contain 3 same letters one by one.</font><br /><font color="green"><u>Good:</u> M<b>oo</b>nster</font><font color="red"><br />Wrong: M<b>ooo</b>nster</font>';

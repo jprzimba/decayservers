@@ -2,7 +2,7 @@
 # Account Maker Config
 $config['site']['serverPath'] = "C:/ots/";
 $config['site']['useServerConfigCache'] = false;
-$towns_list[0] = array(1 => 'Thais', 2 => 'Venore', 5 => 'Carlin');
+$towns_list[0] = array(1 => 'Wnigma City');
 
 # Create Account Options
 $config['site']['one_email'] = false;
