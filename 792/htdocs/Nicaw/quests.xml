@@ -1,0 +1,30 @@
+<quests>
+
+<quest id="1234" value="1" title="kvest" level="0">
+<description>
+with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+</description>
+<rewards>
+crambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s 
+</rewards>
+</quest>
+
+<quest id="1235" value="5" title="stupid" level="0">
+<description>
+Just a test quest
+</description>
+<rewards>
+You get nothing naab!
+</rewards>
+</quest>
+
+<quest id="1236" value="2" title="who are yo" level="0">
+<description>
+Just a test quest
+</description>
+<rewards>
+You get nothing naab!
+</rewards>
+</quest>
+
+</quests>

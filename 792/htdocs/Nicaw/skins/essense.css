@@ -1,0 +1,188 @@
+/*
+    Copyright (C) 2007  Nicaw
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+html {
+	overflow-y: scroll;
+}
+body {
+	margin-bottom: 50px;
+	background: #FFFFFF url(essense/img1.gif) repeat-x;
+	font: normal 13px "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #3B3B3B;
+	margin: 0;
+	padding: 0;
+}
+img {
+	border: 0;
+}
+a, li {
+	color: black;
+}
+h1, h2, h3 {
+	color: #4F789F;
+}
+h2 {
+	font: normal normal 16pt "Georgia",serif;
+    text-decoration: none;
+	height: 40px;
+	padding-left: 25px;
+}
+
+legend {
+	color: black;
+}
+form,input {
+	margin: 0; 
+	padding: 0; 
+	display: inline;
+}
+fieldset{
+	padding: 5px;
+}
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+li span:hover {
+	color: green;
+}
+a:hover{
+	color: green;
+}
+.color0 {
+	background-color: #4b753a;
+	color: white;
+}
+.color1 {
+	background-color: #e2e2e2;
+}
+.color2 {
+	background-color: #f5f5f5;
+}
+.online {
+	color: #51850d;
+	font-weight: bold;
+}
+.offline {
+	font-weight: bold;
+}
+.clearer {
+	clear: both; 
+	font-size: 0;
+}
+.top {
+	background: #BABABA;
+	color: #5A5A43;
+	font: bold 1.1em Tahoma,sans-serif;
+	line-height: 30px;
+	margin: 0;
+	padding-left: 12px;
+	text-align: center;
+}
+.task-menu{
+	cursor: pointer;
+}
+.task-menu li{
+	list-style-type: none;
+	height: 16px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	padding-bottom: 5px;
+}
+.task-menu li:hover {
+	background-color: #e2e2e2;
+}
+#container {
+	border: 1px solid black;
+	border-top: 0;
+	width: 700px;
+	margin: 0 auto;
+}
+#header {	
+	width: 700px;
+	height: 150px;
+	background: #69B10A url(essense/img2.jpg);
+}
+#server_name {
+	color: white;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-style: italic;
+	font-weight: normal;
+	float: left;
+	padding: 80px 0 0 20px;
+	letter-spacing: -3px;
+	font-size: 48px;
+}
+#panel {
+	float: left;
+	width: 200px;
+	margin-top: 20px;
+}	
+#panel li {
+	display: inline;
+}
+#panel a {
+	display: block;
+	padding: 5px 15px;
+	border-bottom: 1px solid #FFFFFF;
+	text-decoration: none;
+	color: #3B3B3B;
+	background-color: #e2e2e2;
+}
+#panel a:hover {
+	background: #4F789F;
+	color: #FFFFFF;	
+}
+#panel .mid {
+	border-bottom: 1px solid #EAEADA;
+	text-align: center;
+	background-color: #e2e2e2;
+	padding: 10px;
+}
+#panel a:hover {
+	font-weight: bold;
+}
+#content {
+	float: right;
+	width: 499px;
+	margin-top: 20px;
+}
+#content .mid {
+	padding: 10px;
+}
+#error {
+	position: absolute;
+	/*IE position: static;*/
+	color: red;
+	font-weight: bold;
+	margin-left: 200px;
+	cursor: pointer;
+}
+#captcha-image {
+	margin-top: 5px;
+}
+#form #iobox{
+	position: fixed;
+	/*IE position: absolute;*/
+	background-color: #e2e2e2;
+	border: 1px solid #000;
+	cursor: move;
+}
+#form #iobox fieldset {
+	cursor: default;
+}

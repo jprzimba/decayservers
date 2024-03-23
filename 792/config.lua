@@ -8,7 +8,7 @@
 	mysqlUser = "root"
 	mysqlPass = "root"
 	mysqlPort = 3306
-	mysqlDatabase = "forgottenserver"
+	mysqlDatabase = "nicaw"
 	startupDatabaseOptimization = true
 	sqliteDatabase = "forgottenserver.s3db"
 
