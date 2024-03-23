@@ -10,12 +10,10 @@ function InitializePage() {
 }
 
 // functions for mouse-over and click events of non-content-buttons
-function MouseOverBigButton(source)
-{
+function MouseOverBigButton(source) {
   source.firstChild.style.visibility = "visible";
 }
-function MouseOutBigButton(source)
-{
+function MouseOutBigButton(source) {
   source.firstChild.style.visibility = "hidden";
 }
 
@@ -25,9 +23,8 @@ function MouseOutBigButton(source)
  */
 
 // initialisation of the loginbox status by the value of the variable 'loginStatus' which is provided to the HTML-document by PHP in the file 'header.inc'
-function LoadLoginBox()
-{
-  if(loginStatus == "false") {
+function LoadLoginBox() {
+  if (loginStatus == "false") {
     document.getElementById('LoginstatusText_1').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-you-are-not-logged-in.gif')";
     document.getElementById('ButtonText').style.backgroundImage = "url('" + IMAGES + "/buttons/_sbutton_login.gif')";
     document.getElementById('LoginstatusText_2').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-create-account.gif')";
@@ -43,26 +40,23 @@ function LoadLoginBox()
 }
 
 // mouse-over and click events of the loginbox
-function MouseOverLoginBoxText(source)
-{
+function MouseOverLoginBoxText(source) {
   source.lastChild.style.visibility = "visible";
   source.firstChild.style.visibility = "hidden";
 }
-function MouseOutLoginBoxText(source)
-{
+function MouseOutLoginBoxText(source) {
   source.firstChild.style.visibility = "visible";
   source.lastChild.style.visibility = "hidden";
 }
-function LoginButtonAction()
-{
-  if(loginStatus == "false") {
+function LoginButtonAction() {
+  if (loginStatus == "false") {
     window.location = LINK_ACCOUNT + "?subtopic=accountmanagement";
   } else {
     window.location = LINK_ACCOUNT + "?subtopic=accountmanagement";
   }
 }
 function LoginstatusTextAction(source) {
-  if(loginStatus == "false") {
+  if (loginStatus == "false") {
     window.location = LINK_ACCOUNT + "?subtopic=createaccount";
   } else {
     window.location = LINK_ACCOUNT + "?subtopic=accountmanagement&action=logout";
@@ -79,28 +73,25 @@ menu[0] = new Object();
 var unloadhelper = false;
 
 // load the menu and set the active submenu item by using the variable 'activeSubmenuItem' (provided to HTML-document by PHP in the file 'header.inc'
-function LoadMenu()
-{
-  document.getElementById("submenu_"+activeSubmenuItem).style.color = "white";
-  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
-  if(self.name.lastIndexOf("&") == -1) {
+function LoadMenu() {
+  document.getElementById("submenu_" + activeSubmenuItem).style.color = "white";
+  document.getElementById("ActiveSubmenuItemIcon_" + activeSubmenuItem).style.visibility = "visible";
+  if (self.name.lastIndexOf("&") == -1) {
     self.name = "news=1&account=0&community=0&library=0&forum=0&shops=0&";
   }
   FillMenuArray();
   InitializeMenu();
 }
-function SaveMenu()
-{
-  if(unloadhelper == false) {
+function SaveMenu() {
+  if (unloadhelper == false) {
     SaveMenuArray();
     unloadhelper = true;
   }
 }
 
 // store the values of the variable 'self.name' in the array menu
-function FillMenuArray()
-{
-  while(self.name.length > 0 ){
+function FillMenuArray() {
+  while (self.name.length > 0) {
     var mark1 = self.name.indexOf("=");
     var mark2 = self.name.indexOf("&");
     var menuItemName = self.name.substr(0, mark1);
@@ -110,30 +101,28 @@ function FillMenuArray()
 }
 
 // hide or show the corresponding submenus
-function InitializeMenu()
-{
-  for(menuItemName in menu[0]) {
-    if(menu[0][menuItemName] == "0") {
-      document.getElementById(menuItemName+"_Submenu").style.visibility = "hidden";
-      document.getElementById(menuItemName+"_Submenu").style.display = "none";
-      document.getElementById(menuItemName+"_Lights").style.visibility = "visible";
-      document.getElementById(menuItemName+"_Extend").style.backgroundImage = "url(" + IMAGES + "/general/plus.gif)";
+function InitializeMenu() {
+  for (menuItemName in menu[0]) {
+    if (menu[0][menuItemName] == "0") {
+      document.getElementById(menuItemName + "_Submenu").style.visibility = "hidden";
+      document.getElementById(menuItemName + "_Submenu").style.display = "none";
+      document.getElementById(menuItemName + "_Lights").style.visibility = "visible";
+      document.getElementById(menuItemName + "_Extend").style.backgroundImage = "url(" + IMAGES + "/general/plus.gif)";
     }
     else {
-      document.getElementById(menuItemName+"_Submenu").style.visibility = "visible";
-      document.getElementById(menuItemName+"_Submenu").style.display = "block";
-      document.getElementById(menuItemName+"_Lights").style.visibility = "hidden";
-      document.getElementById(menuItemName+"_Extend").style.backgroundImage = "url(" + IMAGES + "/general/minus.gif)";
+      document.getElementById(menuItemName + "_Submenu").style.visibility = "visible";
+      document.getElementById(menuItemName + "_Submenu").style.display = "block";
+      document.getElementById(menuItemName + "_Lights").style.visibility = "hidden";
+      document.getElementById(menuItemName + "_Extend").style.backgroundImage = "url(" + IMAGES + "/general/minus.gif)";
     }
   }
 }
 
 // reconstruct the variable "self.name" out of the array menu
-function SaveMenuArray()
-{
+function SaveMenuArray() {
   var stringSlices = "";
   var temp = "";
-  for(menuItemName in menu[0]) {
+  for (menuItemName in menu[0]) {
     stringSlices = menuItemName + "=" + menu[0][menuItemName] + "&";
     temp = temp + stringSlices;
   }
@@ -141,47 +130,40 @@ function SaveMenuArray()
 }
 
 // onClick open or close submenus
-function MenuItemAction(sourceId)
-{
-  if(menu[0][sourceId] == 1) {
+function MenuItemAction(sourceId) {
+  if (menu[0][sourceId] == 1) {
     CloseMenuItem(sourceId);
   }
   else {
     OpenMenuItem(sourceId);
   }
 }
-function OpenMenuItem(sourceId)
-{
+function OpenMenuItem(sourceId) {
   menu[0][sourceId] = 1;
-  document.getElementById(sourceId+"_Submenu").style.visibility = "visible";
-  document.getElementById(sourceId+"_Submenu").style.display = "block";
-  document.getElementById(sourceId+"_Lights").style.visibility = "hidden";
-  document.getElementById(sourceId+"_Extend").style.backgroundImage = "url(" + IMAGES + "/general/minus.gif)";
+  document.getElementById(sourceId + "_Submenu").style.visibility = "visible";
+  document.getElementById(sourceId + "_Submenu").style.display = "block";
+  document.getElementById(sourceId + "_Lights").style.visibility = "hidden";
+  document.getElementById(sourceId + "_Extend").style.backgroundImage = "url(" + IMAGES + "/general/minus.gif)";
 }
-function CloseMenuItem(sourceId)
-{
+function CloseMenuItem(sourceId) {
   menu[0][sourceId] = 0;
-  document.getElementById(sourceId+"_Submenu").style.visibility = "hidden";
-  document.getElementById(sourceId+"_Submenu").style.display = "none";
-  document.getElementById(sourceId+"_Lights").style.visibility = "visible";
-  document.getElementById(sourceId+"_Extend").style.backgroundImage = "url(" + IMAGES + "/general/plus.gif)";
+  document.getElementById(sourceId + "_Submenu").style.visibility = "hidden";
+  document.getElementById(sourceId + "_Submenu").style.display = "none";
+  document.getElementById(sourceId + "_Lights").style.visibility = "visible";
+  document.getElementById(sourceId + "_Extend").style.backgroundImage = "url(" + IMAGES + "/general/plus.gif)";
 }
 
 // mouse-over effects of menubuttons and submenuitems
-function MouseOverMenuItem(source)
-{
+function MouseOverMenuItem(source) {
   source.firstChild.style.visibility = "visible";
 }
-function MouseOutMenuItem(source)
-{
+function MouseOutMenuItem(source) {
   source.firstChild.style.visibility = "hidden";
 }
-function MouseOverSubmenuItem(source)
-{
+function MouseOverSubmenuItem(source) {
   source.style.backgroundColor = "#14433F";
 }
-function MouseOutSubmenuItem(source)
-{
+function MouseOutSubmenuItem(source) {
   source.style.backgroundColor = "#0D2E2B";
 }
 
@@ -192,17 +174,15 @@ function MouseOutSubmenuItem(source)
  */
 
 // set cursor focus in form (g_FormName) to field (g_FieldName)
-function SetFormFocus()
-{
-  if (g_FormName.length > 0 && g_FieldName.length > 0 ) {
+function SetFormFocus() {
+  if (g_FormName.length > 0 && g_FieldName.length > 0) {
     document.forms[g_FormName].elements[g_FieldName].focus();
   }
 }
 
 
 // toggle masked texts with readable texts
-function ToggleMaskedText(a_TextFieldID)
-{
+function ToggleMaskedText(a_TextFieldID) {
   m_DisplayedText = document.getElementById('Display' + a_TextFieldID).innerHTML;
   m_MaskedText = document.getElementById('Masked' + a_TextFieldID).innerHTML;
   m_ReadableText = document.getElementById('Readable' + a_TextFieldID).innerHTML;

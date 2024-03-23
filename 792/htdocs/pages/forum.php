@@ -6,11 +6,11 @@ $number_of_rows = 0;
 // CONFIG
 $level_limit = 30; // minimum 1 character with 30 lvl on account to post
 $post_interval = 20; // 20 seconds between posts
-$group_not_blocked = $config['site']['access_admin_panel']; // group id of player that can always post, remove post, remove threads
+$group_not_blocked = $config['site']['acc_type']; // group id of player that can always post, remove post, remove threads
 $posts_per_page = 20;
 $threads_per_page = 20;
 // SECTION WITH ID 1 IS FOR "NEWS", ONLY ADMINS CAN CREATE NEW THREAD IN IT
-$sections = array(1 => 'News', 2 => 'Wars', 3 => 'Quests', 4 => 'Pictures', 5 => 'Bug Report');
+$sections = array(1 => 'News', 2 => 'Quests', 3 => 'Pictures', 4 => 'Bug Report');
 $sections_desc = array(1 => 'Here you can comment news.', 2 => 'Feel free to tell what you think about your enemy.', 3 => 'Talk with others about quests you made and how to make them.', 4 => 'Show others your best photos from server!', 5 => 'Report bugs on website and in-game here.');
 // END
 function canPost($account)
@@ -199,6 +199,7 @@ if(!$logged)
 
 if($action == 'show_board')
 {
+    $links_to_pages = '';
     $section_id = (int) $_REQUEST['id'];
     $page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 0;
     $threads_count = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS threads_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " = ".(int) $section_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . "")->fetch();
@@ -219,7 +220,7 @@ if($action == 'show_board')
         {
             if(!is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
             $main_content .= '<tr bgcolor="'.$bgcolor.'"><td>';
-            if($logged && $group_id_of_acc_logged >= $group_not_blocked)
+            if($logged && $acc_type_of_acc_logged >= $group_not_blocked)
                 $main_content .= '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.htmlspecialchars($thread['post_topic']).' <?\')"><font color="red">[REMOVE]</font></a>  ';
             $main_content .= '<a href="?subtopic=forum&action=show_thread&id='.$thread['id'].'">'.htmlspecialchars($thread['post_topic']).'</a><br /><small>'.htmlspecialchars(substr(removeBBCode($thread['post_text']), 0, 50)).'...</small></td><td><a href="?subtopic=characters&name='.urlencode($thread['name']).'">'.$thread['name'].'</a></td><td>'.(int) $thread['replies'].'</td><td>'.(int) $thread['views'].'</td><td>';
             if($thread['last_post'] > 0)
@@ -282,12 +283,12 @@ if($action == 'show_thread')
                 $main_content .= '<br />on '.date('d.m.y H:i:s', $thread['edit_date']);
             }
             $main_content .= '</font></td><td>';
-            if($logged && $group_id_of_acc_logged >= $group_not_blocked)
+            if($logged && $acc_type_of_acc_logged >= $group_not_blocked)
                 if($thread['first_post'] != $thread['id'])
                     $main_content .= '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove post of '.htmlspecialchars($thread['name']).'?\')"><font color="red">REMOVE POST</font></a>';
                 else
                     $main_content .= '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.htmlspecialchars($thread['post_topic']).' <?\')"><font color="red">REMOVE THREAD</font></a>';
-            if($logged && ($thread['account_id'] == $account_logged->getId() || $group_id_of_acc_logged >= $group_not_blocked))
+            if($logged && ($thread['account_id'] == $account_logged->getId() || $acc_type_of_acc_logged >= $group_not_blocked))
                 $main_content .= '<br/><a href="?subtopic=forum&action=edit_post&id='.$thread['id'].'">EDIT POST</a>';
             if($logged)
                 $main_content .= '<br/><a href="?subtopic=forum&action=new_post&thread_id='.$thread_id.'&quote='.$thread['id'].'">Quote</a>';
@@ -301,7 +302,7 @@ if($action == 'show_thread')
 }
 if($action == 'remove_post')
 {
-    if($logged && $group_id_of_acc_logged >= $group_not_blocked)
+    if($logged && $acc_type_of_acc_logged >= $group_not_blocked)
     {
         $id = (int) $_REQUEST['id'];
         $post = $SQL->query("SELECT " . $SQL->fieldName('id') . ", " . $SQL->fieldName('first_post') . ", " . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->fieldName('id') . " = ".$id." LIMIT 1")->fetch();
@@ -331,7 +332,7 @@ if($action == 'new_post')
 {
     if($logged)
     {
-        if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
+        if(canPost($account_logged) || $acc_type_of_acc_logged >= $group_not_blocked)
         {
             $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
             $thread_id = (int) $_REQUEST['thread_id'];
@@ -375,7 +376,7 @@ if($action == 'new_post')
                     if(count($errors) == 0)
                     {
                         $last_post = $account_logged->getCustomField('last_post');
-                        if($last_post+$post_interval-time() > 0 && $group_id_of_acc_logged < $group_not_blocked)
+                        if($last_post+$post_interval-time() > 0 && $acc_type_of_acc_logged < $group_not_blocked)
                             $errors[] = 'You can post one time per '.$post_interval.' seconds. Next post after '.($last_post+$post_interval-time()).' second(s).';
                     }
                     if(count($errors) == 0)
@@ -438,7 +439,7 @@ if($action == 'edit_post')
 {
     if($logged)
     {
-        if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
+        if(canPost($account_logged) || $acc_type_of_acc_logged >= $group_not_blocked)
         {
             $post_id = (int) $_REQUEST['id'];
             $thread = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_aid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $post_id." LIMIT 1")->fetch();
@@ -446,7 +447,7 @@ if($action == 'edit_post')
             {
                 $first_post = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_aid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $thread['first_post']." LIMIT 1")->fetch();
                 $main_content .= '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$thread['section'].'">'.$sections[$thread['section']].'</a> >> <a href="?subtopic=forum&action=show_thread&id='.$thread['first_post'].'">'.htmlspecialchars($first_post['post_topic']).'</a> >> <b>Edit post</b>';
-                if($account_logged->getId() == $thread['author_aid'] || $group_id_of_acc_logged >= $group_not_blocked)
+                if($account_logged->getId() == $thread['author_aid'] || $acc_type_of_acc_logged >= $group_not_blocked)
                 {
                     $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
                     $saved = false;
@@ -544,22 +545,23 @@ if($action == 'edit_post')
 
 if($action == 'new_topic')
 {
+    $errors = [];
     if($logged)
     {
-        if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
+        if(canPost($account_logged) || $acc_type_of_acc_logged >= $group_not_blocked)
         {
             $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
             $section_id = (int) $_REQUEST['section_id'];
             $main_content .= '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$section_id.'">'.$sections[$section_id].'</a> >> <b>Post new thread</b><br />';
             if(isset($sections[$section_id]))
             {
-                if($section_id == 1 && $group_id_of_acc_logged < $group_not_blocked)
+                if($section_id == 1 && $acc_type_of_acc_logged < $group_not_blocked)
                     $errors[] = 'Only moderators and admins can post on news board.';
-                $quote = (int) $_REQUEST['quote'];
-                $text = trim(codeLower($_REQUEST['text']));
-                $char_id = (int) $_REQUEST['char_id'];
-                $post_topic = trim($_REQUEST['topic']);
-                $smile = (int) $_REQUEST['smile'];
+                $quote = (int)isset($_REQUEST['quote']) ? $_REQUEST['quote'] : '';
+                $text = trim(codeLower(isset($_REQUEST['text']) ? $_REQUEST['text'] : ''));
+                $char_id = (int)isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : '';
+                $post_topic = trim(isset($_REQUEST['topic']) ? $_REQUEST['topic'] : '');
+                $smile = (int)isset($_REQUEST['smile']) ? $_REQUEST['smile'] : '';
                 $saved = false;
                 if(isset($_REQUEST['save']))
                 {
@@ -593,7 +595,7 @@ if($action == 'new_topic')
                     if(count($errors) == 0)
                     {
                         $last_post = $account_logged->getCustomField('last_post');
-                        if($last_post+$post_interval-time() > 0 && $group_id_of_acc_logged < $group_not_blocked)
+                        if($last_post+$post_interval-time() > 0 && $acc_type_of_acc_logged < $group_not_blocked)
                             $errors[] = 'You can post one time per '.$post_interval.' seconds. Next post after '.($last_post+$post_interval-time()).' second(s).';
                     }
                     if(count($errors) == 0)

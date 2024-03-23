@@ -30,7 +30,7 @@ else
 
 $logged = false;
 $account_logged = new Account();
-$group_id_of_acc_logged = 0;
+$acc_type_of_acc_logged = 0;
 // with ONLY_PAGE option we want disable useless SQL queries
 if(!ONLY_PAGE)
 {
@@ -40,7 +40,7 @@ if(!ONLY_PAGE)
 	$account_logged = Visitor::getAccount();
 	// group of acc. logged
 	if(Visitor::isLogged())
-		$group_id_of_acc_logged = Visitor::getAccount()->getPageAccess();
+		$acc_type_of_acc_logged = Visitor::getAccount()->getPageAccess();
 }
 $layout_name = './layouts/' . Website::getWebsiteConfig()->getValue('layout');
 
@@ -138,9 +138,13 @@ function check_name_new_char($name)
 	foreach($words_blocked as $word)
 		if (!(strpos($name_to_check, $word) === false))
 			return false;
-	for($i = 0; $i < strlen($name_to_check); $i++)
-		if($name_to_check[$i] == $name_to_check[($i+1)] && $name_to_check[$i] == $name_to_check[($i+2)])
-			return false;
+	if (!empty($name_to_check) && strlen($name_to_check) >= 3) {
+		for ($i = 0; $i < strlen($name_to_check) - 2; $i++) {
+			if ($name_to_check[$i] == $name_to_check[$i + 1] && $name_to_check[$i] == $name_to_check[$i + 2]) {
+				return false;
+			}
+		}
+	} 
 	for($i = 0; $i < strlen($name_to_check); $i++)
 		if($name_to_check[$i-1] == ' ' && $name_to_check[$i+1] == ' ')
 			return false;

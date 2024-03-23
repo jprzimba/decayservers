@@ -51,7 +51,7 @@ if($action == '')
 				$description = $description_with_lines;
 			$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD><IMG SRC="'. $guild->getGuildLogoLink() .'" WIDTH=64 HEIGHT=64></TD>
 			<TD valign="top"><B>'.htmlspecialchars($guild->getName()).'</B><BR/>'.$description.'';
-			if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
+			if($acc_type_of_acc_logged >= $config['site']['acc_type'])
 				$main_content .= '<br /><a href="?subtopic=guilds&action=deletebyadmin&guild='.$guild->getId().'">Delete this guild (for ADMIN only!)</a>';
 			$main_content .= '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild->getId().'" METHOD=post><TR><TD>
 			<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$layout_name.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
@@ -1679,7 +1679,7 @@ if($action == 'deletebyadmin')
 	{
 		if($logged)
 		{
-			if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
+			if($acc_type_of_acc_logged >= $config['site']['acc_type'])
 			{
 				if($_POST['todo'] == 'save')
 				{
@@ -1849,7 +1849,7 @@ if($action == 'cleanup_players')
 {
 	if($logged)
 	{
-		if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
+		if($acc_type_of_acc_logged >= $config['site']['acc_type'])
 		{
 			$players_list = new DatabaseList('Player');
 		}

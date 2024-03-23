@@ -196,7 +196,7 @@ Format: number, 0 - 255
 
 
 # PAGE: adminpanel.php
-$config['site']['access_admin_panel'] = 3;
+$config['site']['acc_type'] = 5;
 Page Access level needed to open Admin Panel and Write 'News' on forum.
 Format: number, higher then 0
 

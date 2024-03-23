@@ -2,7 +2,7 @@
 if(!defined('INITIALIZED'))
 	exit;
 
-if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
+if($acc_type_of_acc_logged >= $config['site']['acc_type'])
 {
 	$main_content .= 'Admin panel is not available in this version of Gesior acc. maker as there is no option to show :(';
 }
