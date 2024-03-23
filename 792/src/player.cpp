@@ -80,6 +80,7 @@ Creature()
 	magLevelPercent = 0;
 	magLevel = 0;
 	experience = 0;
+	stamina = STAMINA_MAX;
 
 	damageImmunities = 0;
 	conditionImmunities = 0;

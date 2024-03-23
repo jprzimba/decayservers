@@ -164,6 +164,9 @@ class Player : public Creature, public Cylinder
 
 		uint64_t getBankBalance() const {return bankBalance;}
 		void setBankBalance(uint64_t balance) {bankBalance = balance;}
+		
+		unsigned int getStamina() const {return stamina;}
+		void setStamina(unsigned int newStamina) {stamina = newStamina;}
 
 		Vocation* getVocation() const {return vocation;}
 
@@ -638,6 +641,8 @@ class Player : public Creature, public Cylinder
 		void death();
 		virtual void dropCorpse();
 		virtual Item* getCorpse();
+		
+		unsigned int stamina;
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,

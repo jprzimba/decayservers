@@ -2,6 +2,7 @@
 *.res
 *.s3db
 *lastMotd.txt
+*playersRecord.txt
 *.layout
 *.o
 *.rar

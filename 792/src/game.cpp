@@ -215,6 +215,7 @@ void Game::saveGameState()
 	for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 	{
 		(*it).second->loginPosition = (*it).second->getPosition();
+		(*it).second->lastLogout = time(NULL);
 		io->savePlayer((*it).second, false);
 	}
 
@@ -762,6 +763,12 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 		}
 		else if(player->isPromoted())
 			player->setVocation(player->vocation->getFromVocation());
+
+		uint32_t timeOffLine = time(NULL) - player->getLastLogout();
+		unsigned int newStamina = player->getStamina() + timeOffLine * g_config.getNumber(ConfigManager::STAMINA_AMOUNT);
+		player->setStamina(newStamina);
+		if(player->getStamina() > STAMINA_MAX)
+			player->setStamina(STAMINA_MAX);
 	}
 
 	addCreatureCheck(creature);

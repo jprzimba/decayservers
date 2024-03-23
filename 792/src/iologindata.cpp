@@ -247,7 +247,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	DBQuery query;
 	DBResult* result;
 
-	query << "SELECT `id`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `redskulltime`, `redskull`, `guildnick`, `rank_id`, `town_id`, `balance` FROM `players` WHERE `name` " << db->getStringComparer() << db->escapePatternString(name) << " LIMIT 1;";
+	query << "SELECT * FROM `players` WHERE `name` " << db->getStringComparer() << db->escapePatternString(name) << " LIMIT 1;";
 	if(!(result = db->storeQuery(query.str())))
 		return false;
 
@@ -347,6 +347,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 
 	player->lastLoginSaved = result->getDataLong("lastlogin");
 	player->lastLogout = result->getDataLong("lastlogout");
+	player->stamina = result->getDataInt("stamina");
 
 	player->town = result->getDataInt("town_id");
 	Town* town = Towns::getInstance().getTown(player->town);
@@ -702,6 +703,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 		query << "`redskull` = " << redSkull << ", ";
 	}
 	query << "`lastlogout` = " << player->getLastLogout() << ", ";
+	query << "`stamina` = " << player->stamina << ", ";
 	query << "`balance` = " << player->bankBalance << ", ";
 	query << "`blessings` = " << player->blessings;
 	if(g_config.getBool(ConfigManager::INGAME_GUILD_SYSTEM))

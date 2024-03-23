@@ -488,4 +488,9 @@ const int violationReasons[6] =
 	
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) < PSTRG_##range##_SIZE))
 
+//56 hours like tibia 7.9 protocol
+#define STAMINA_MAX 201600
+//14 hours to drop player expto 0 like tibia 7.9 protocol
+#define STAMINA_MIN 50400
+
 #endif

@@ -20,13 +20,14 @@
 		* Game protocol 7.9x support with 7.92 items.
 		* Global events from TFS 0.2.15.
 		* GOD's can move items from far.
-		* Server supports only MySQL.
+		* Server supports SQLite and MySQL.
 		* Add bank balance.
 		* Removed libxml and add pugixml support.
 		* Add data/libs/ for compats and funcitons.
 		* Moved all commands to talkactions.
 		* Moved grups from database to data/XML/groups.xml.
 		* Very fast clean system from Evolutions source.
+		* Stamina system.
 		* Add alot of lua functions from latest 0.2/0.3/0.4 The Forgotten Server and OpenTibia SVN.
 			- isPlayerGhost(cid)
 			- getPlayerParty(cid)

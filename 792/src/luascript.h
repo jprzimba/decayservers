@@ -358,7 +358,7 @@ class LuaScriptInterface
 		static int luaBitULeftShift(lua_State* L);
 		static int luaBitURightShift(lua_State* L);
 
-		static const luaL_Reg luaDatabaseTable[10];
+		static const luaL_Reg luaDatabaseTable[11];
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);
 		static int32_t luaDatabaseEscapeString(lua_State* L);
@@ -368,6 +368,7 @@ class LuaScriptInterface
 		static int32_t luaDatabaseUpdateLimiter(lua_State* L);
 		static int32_t luaDatabaseConnected(lua_State* L);
 		static int32_t luaDatabaseTableExists(lua_State* L);
+		static int32_t luaDatabaseGetDatabaseEngine(lua_State* L);
 
 		static const luaL_Reg luaResultTable[8];
 		static int32_t luaResultGetDataInt(lua_State* L);

@@ -20,7 +20,6 @@
 
 #include "databasemanager.h"
 #include "tools.h"
-#include "luascript.h"
 
 #include "configmanager.h"
 extern ConfigManager g_config;
@@ -178,64 +177,53 @@ int32_t DatabaseManager::getDatabaseVersion()
 	return -1;
 }
 
-void DatabaseManager::updateDatabase()
+uint32_t DatabaseManager::updateDatabase()
 {
-	lua_State* L = luaL_newstate();
-	if(!L)
-		return;
+	Database* db = Database::getInstance();
+	DBQuery query;
 
-	luaL_openlibs(L);
+	int32_t databaseVersion = getDatabaseVersion();
+	if(databaseVersion < 0)
+		return 0;
 
-#ifndef LUAJIT_VERSION
-	// bit operations for Lua, based on bitlib project release 24
-	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
-	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
-#endif
-
-	// db table
-	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
-
-	// result table
-	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
-
-	int32_t version = getDatabaseVersion();
-	do
+	switch(databaseVersion)
 	{
-		char filename[100];
-		std::snprintf(filename, sizeof(filename), "data/migrations/%d.lua", version);
-		if(luaL_dofile(L, filename) != 0)
+		case 0:
 		{
-			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			<< lua_tostring(L, -1) << std::endl;
-			break;
+			std::clog << "Updating database to version 1 (Only db ready)" << std::endl;
+			registerDatabaseConfig("db_version", 1);
+			return 1;
 		}
 
-		if(!LuaScriptInterface::reserveScriptEnv())
-			break;
-
-		lua_getglobal(L, "onUpdateDatabase");
-		if(lua_pcall(L, 0, 1, 0) != 0)
+		case 1:
 		{
-			LuaScriptInterface::resetScriptEnv();
-			std::clog << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			<< lua_tostring(L, -1) << std::endl;
-			break;
+			std::clog << "Updating database to version 2 (bank balance)" << std::endl;
+			Database* db = Database::getInstance();
+			if(db->getDatabaseEngine() == DATABASE_ENGINE_MYSQL)
+				db->executeQuery("ALTER TABLE `players` ADD `balance` BIGINT UNSIGNED NOT NULL DEFAULT 0");
+			else
+				db->executeQuery("ALTER TABLE `players` ADD `balance` INTEGER NOT NULL DEFAULT 0");
+
+			registerDatabaseConfig("db_version", 2);
+			return 2;
+		}
+		
+		case 2:
+		{
+			std::clog << "Updating database to version 3 (stamina)" << std::endl;
+			Database* db = Database::getInstance();
+			if(db->getDatabaseEngine() == DATABASE_ENGINE_MYSQL)
+				db->executeQuery("ALTER TABLE `players` ADD `stamina` BIGINT UNSIGNED NOT NULL DEFAULT 201600");
+			else
+				db->executeQuery("ALTER TABLE `players` ADD `stamina` INTEGER NOT NULL DEFAULT 201600");
+
+			registerDatabaseConfig("db_version", 3);
+			return 3;
 		}
 
-		if(!LuaScriptInterface::getBoolean(L, -1, false))
-		{
-			LuaScriptInterface::resetScriptEnv();
-			break;
-		}
-
-		version++;
-		std::clog << "Database has been updated to version " << version << '.' << std::endl;
-		registerDatabaseConfig("db_version", version);
-
-		LuaScriptInterface::resetScriptEnv();
+		default: break;
 	}
-	while (true);
-	lua_close(L);
+	return 0;
 }
 
 bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t &value)

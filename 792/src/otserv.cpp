@@ -112,7 +112,8 @@ int main(int argc, char *argv[])
 	#ifdef WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 	#endif
-	std::clog << "" << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")." << std::endl;
+	std::clog << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " (" << STATUS_SERVER_CODENAME << ")." << std::endl;
+	std::clog << "Software Version: "  SOFTWARE_VERSION << "." << std::endl;
 	std::clog << "Compiled with " << BOOST_COMPILER << std::endl;
 	std::clog << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
 
@@ -220,7 +221,9 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	dbManager->updateDatabase();
+	for(uint32_t version = dbManager->updateDatabase(); version != 0; version = dbManager->updateDatabase())
+		std::clog << "Database has been updated to version " << version << "." << std::endl;
+
 	dbManager->checkEncryption();
 
 	if(g_config.getBool(ConfigManager::OPTIMIZE_DATABASE) && !dbManager->optimizeTables())

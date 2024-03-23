@@ -7334,6 +7334,7 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] =
 	{"updateLimiter", LuaScriptInterface::luaDatabaseUpdateLimiter},
 	{"connected", LuaScriptInterface::luaDatabaseConnected},
 	{"tableExists", LuaScriptInterface::luaDatabaseTableExists},
+	{"getDatabaseEngine", LuaScriptInterface::luaDatabaseGetDatabaseEngine},
 	{NULL,NULL}
 };
 
@@ -7377,6 +7378,13 @@ int32_t LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
 	DBQuery query;
 	lua_pushnumber(L, Database::getInstance()->getLastInsertId());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDatabaseGetDatabaseEngine(lua_State* L)
+{
+	DBQuery query;
+	lua_pushnumber(L, Database::getInstance()->getDatabaseEngine());
 	return 1;
 }
 

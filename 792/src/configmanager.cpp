@@ -90,7 +90,6 @@ bool ConfigManager::load()
 	string[MAP_STORAGE_TYPE] = getGlobalString(L, "mapStorageType", "relational");
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 
-
 	integer[LOGIN_TRIES] = getGlobalNumber(L, "loginTries", 3);
 	integer[RETRY_TIMEOUT] = getGlobalNumber(L, "retryTimeout", 30 * 1000);
 	integer[LOGIN_TIMEOUT] = getGlobalNumber(L, "loginTimeout", 5 * 1000);
@@ -136,7 +135,9 @@ bool ConfigManager::load()
 	integer[VIPLIST_DEFAULT_PREMIUM_LIMIT] = getGlobalNumber(L, "vipListDefaultPremiumLimit", 100);
 	integer[DEFAULT_DEPOT_SIZE_PREMIUM]	= getGlobalNumber(L, "defaultDepotSizePremium", 2000);
 	integer[DEFAULT_DEPOT_SIZE] = getGlobalNumber(L, "defaultDepotSize", 2000);
-
+	integer[STAMINA_AMOUNT] = getGlobalNumber(L, "staminaOfflineGainAmount", 1);
+	integer[STAMINA_LOST_MONSTER] = getGlobalNumber(L, "staminaLostMonster", 2);
+ 
 	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBool(L, "noDamageToSameLookfeet", false);
 	boolean[AIMBOT_HOTKEY_ENABLED] = getGlobalBool(L, "hotkeyAimbotEnabled", true);
 	boolean[REMOVE_AMMO] = getGlobalBool(L, "removeAmmoWhenUsingDistanceWeapon", true);

@@ -1064,8 +1064,32 @@ double Creature::getDamageRatio(Creature* attacker) const
 uint64_t Creature::getGainedExperience(Creature* attacker) const
 {
 	uint64_t lostExperience = getLostExperience();
-	return attacker->getPlayer() ? ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_game.getExperienceStage(attacker->getPlayer()->getLevel()))) : ((uint64_t)std::floor(getDamageRatio(attacker) * lostExperience * g_config.getNumber(ConfigManager::RATE_EXPERIENCE)));
+	Player* player = attacker->getPlayer();
+	uint64_t experienceMultiplier = player ? g_game.getExperienceStage(player->getLevel()) : g_config.getNumber(ConfigManager::RATE_EXPERIENCE);
+    
+	uint64_t gainedExperience = std::floor(getDamageRatio(attacker) * lostExperience * experienceMultiplier);
+
+	if(player)
+	{
+		if (player->getStamina() > g_config.getNumber(ConfigManager::STAMINA_LOST_MONSTER))
+		{
+		   	unsigned int newStamina = player->getStamina() - g_config.getNumber(ConfigManager::STAMINA_LOST_MONSTER);
+			player->setStamina(newStamina);
+		}
+		else
+			player->setStamina(0);
+
+		if (player->getStamina() > STAMINA_MIN)
+			return gainedExperience;
+		else if (player->getStamina() > 0)
+			return gainedExperience / 2;
+		else
+			return 0;
+	}
+	else
+		return gainedExperience;
 }
+
 
 bool Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 {
