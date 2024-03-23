@@ -3,6 +3,12 @@ if(!defined('INITIALIZED'))
 	exit;
 
 $number_of_rows = 0;
+$length = 0;
+$player_on_account = false;
+$saved = false;
+$errors = [];
+$counters = array();
+
 // CONFIG
 $level_limit = 30; // minimum 1 character with 30 lvl on account to post
 $post_interval = 20; // 20 seconds between posts
@@ -11,7 +17,7 @@ $posts_per_page = 20;
 $threads_per_page = 20;
 // SECTION WITH ID 1 IS FOR "NEWS", ONLY ADMINS CAN CREATE NEW THREAD IN IT
 $sections = array(1 => 'News', 2 => 'Quests', 3 => 'Pictures', 4 => 'Bug Report');
-$sections_desc = array(1 => 'Here you can comment news.', 2 => 'Feel free to tell what you think about your enemy.', 3 => 'Talk with others about quests you made and how to make them.', 4 => 'Show others your best photos from server!', 5 => 'Report bugs on website and in-game here.');
+$sections_desc = array(1 => 'Here you can comment news.', 2 => 'Talk with others about quests you made and how to make them.', 3 => 'Show others your best photos from server!', 4 => 'Report bugs on website and in-game here.');
 // END
 function canPost($account)
 {
@@ -158,8 +164,6 @@ if(!$logged)
         $main_content .= '<table width="100%"><tr bgcolor="'.$config['site']['vdarkborder'].'"><td><font color="white" size="1"><b>Board</b></font></td><td><font color="white" size="1"><b>Posts</b></font></td><td><font color="white" size="1"><b>Threads</b></font></td><td align="center"><font color="white" size="1"><b>Last Post</b></font></td></tr>';
         $info = $SQL->query("SELECT " . $SQL->fieldName('section') . ", COUNT(" . $SQL->fieldName('id') . ") AS 'threads', SUM(" . $SQL->fieldName('replies') . ") AS 'replies' FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->fieldName('first_post') . " = " . $SQL->fieldName('id') . " GROUP BY " . $SQL->fieldName('section') . "")->fetchAll();
         
-        $counters = array(); // Inicialize a variável $counters como um array vazio
-        
         foreach($info as $data)
             $counters[$data['section']] = array('threads' => $data['threads'], 'posts' => $data['replies'] + $data['threads']);
         
@@ -200,7 +204,7 @@ if(!$logged)
 if($action == 'show_board')
 {
     $links_to_pages = '';
-    $section_id = (int) $_REQUEST['id'];
+    $section_id = (int) isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
     $page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 0;
     $threads_count = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS threads_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " = ".(int) $section_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . "")->fetch();
     for($i = 0; $i < $threads_count['threads_count'] / $threads_per_page; $i++)
@@ -242,11 +246,18 @@ if($action == 'show_board')
 }
 if($action == 'show_thread')
 {
-    $thread_id = (int) $_REQUEST['id'];
-    $page = (int) $_REQUEST['page'];
+    $thread_id = (int) isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
     $thread_name = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " AND " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " LIMIT 1")->fetch();
+    
+    if(isset($_REQUEST['page'])) {
+        $page = (int) $_REQUEST['page'];
+    } else {
+        $page = 0;
+    }
+
     if(!empty($thread_name['name']))
     {
+        $links_to_pages = '';
         $posts_count = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS posts_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id)->fetch();
         for($i = 0; $i < $posts_count['posts_count'] / $threads_per_page; $i++)
         {
@@ -335,17 +346,17 @@ if($action == 'new_post')
         if(canPost($account_logged) || $acc_type_of_acc_logged >= $group_not_blocked)
         {
             $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
-            $thread_id = (int) $_REQUEST['thread_id'];
+            $thread_id = (int) isset($_REQUEST['thread_id']) ? $_REQUEST['thread_id'] : '';
             $thread = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $thread_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id." LIMIT 1")->fetch();
             $main_content .= '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$thread['section'].'">'.$sections[$thread['section']].'</a> >> <a href="?subtopic=forum&action=show_thread&id='.$thread_id.'">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
             if(isset($thread['id']))
             {
-                $quote = (int) $_REQUEST['quote'];
-                $text = trim(codeLower($_REQUEST['text']));
-                $char_id = (int) $_REQUEST['char_id'];
-                $post_topic = trim($_REQUEST['topic']);
-                $smile = (int) $_REQUEST['smile'];
-                $saved = false;
+                $quote = (int) isset($_REQUEST['quote']) ? $_REQUEST['quote'] : '';
+                $text = trim(codeLower(isset($_REQUEST['test']) ? $_REQUEST['test'] : ''));
+                $char_id = (int) isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : '';
+                $post_topic = trim(isset($_REQUEST['topic']) ? $_REQUEST['topic'] : '');
+                $smile = (int) isset($_REQUEST['smile']) ? $_REQUEST['smile'] : '';;
+
                 if(isset($_REQUEST['quote']))
                 {
                     $quoted_post = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $quote)->fetchAll();
@@ -354,14 +365,16 @@ if($action == 'new_post')
                 }
                 elseif(isset($_REQUEST['save']))
                 {
-                    $lenght = 0;
-                    for($i = 0; $i <= strlen($text); $i++)
-                    {
-                        if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-                            $lenght++;
+
+                    if (!empty($text)) {
+                        for($i = 0; $i <= strlen($text); $i++)
+                        {
+                            if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
+                                $length++;
+                        }
                     }
-                    if($lenght < 1 || strlen($text) > 15000)
-                        $errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
+                    if($length < 1 || strlen($text) > 15000)
+                        $errors[] = 'Too short or too long post (short: '.$length.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
                     if($char_id == 0)
                         $errors[] = 'Please select a character.';
                     $player_on_account == false;
@@ -392,6 +405,8 @@ if($action == 'new_post')
                         $main_content .= '<br />Thank you for posting.<br /><a href="?subtopic=forum&action=show_thread&id='.$thread_id.'">GO BACK TO LAST THREAD</a>';
                     }
                 }
+
+                $errors = [];
                 if(!$saved)
                 {
                     if(count($errors) > 0)
@@ -441,7 +456,7 @@ if($action == 'edit_post')
     {
         if(canPost($account_logged) || $acc_type_of_acc_logged >= $group_not_blocked)
         {
-            $post_id = (int) $_REQUEST['id'];
+            $post_id = (int) isset($_REQUEST['id']) ? $_REQUEST['id'] : '';;
             $thread = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_aid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $post_id." LIMIT 1")->fetch();
             if(isset($thread['id']))
             {
@@ -450,34 +465,39 @@ if($action == 'edit_post')
                 if($account_logged->getId() == $thread['author_aid'] || $acc_type_of_acc_logged >= $group_not_blocked)
                 {
                     $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
-                    $saved = false;
                     if(isset($_REQUEST['save']))
                     {
                         $text = trim(codeLower($_REQUEST['text']));
                         $char_id = (int) $_REQUEST['char_id'];
                         $post_topic = trim($_REQUEST['topic']);
-                        $smile = (int) $_REQUEST['smile'];
-                        $lenght = 0;
-                        for($i = 0; $i <= strlen($post_topic); $i++)
-                        {
-                            if(ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126)
-                                $lenght++;
+                        $smile = (int)isset($_REQUEST['smile']) ? $_REQUEST['smile'] : '';;
+                        $length = 0;
+                        for($i = 0; $i < strlen($post_topic); $i++) {
+                            if(isset($post_topic[$i]) && ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126) {
+                                $length++;
+                            }
                         }
-                        if(($lenght < 1 || strlen($post_topic) > 60) && $thread['id'] == $thread['first_post'])
-                            $errors[] = 'Too short or too long topic (short: '.$lenght.' long: '.strlen($post_topic).' letters). Minimum 1 letter, maximum 60 letters.';
-                        $lenght = 0;
-                        for($i = 0; $i <= strlen($text); $i++)
-                        {
-                            if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-                                $lenght++;
+                        
+                        
+                        if(($length < 1 || strlen($post_topic) > 60) && $thread['id'] == $thread['first_post'])
+                            $errors[] = 'Too short or too long topic (short: '.$length.' long: '.strlen($post_topic).' letters). Minimum 1 letter, maximum 60 letters.';
+                        $length = 0;
+                        for($i = 0; $i < strlen($text); $i++) {
+                            if(isset($text[$i]) && ord($text[$i]) >= 33 && ord($text[$i]) <= 126) {
+                                $length++;
+                            }
                         }
-                        if($lenght < 1 || strlen($text) > 15000)
-                            $errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
+                        
+                        $player_on_account = false;
+                        if($length < 1 || strlen($text) > 15000)
+                            $errors[] = 'Too short or too long post (short: '.$length.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
                         if($char_id == 0)
                             $errors[] = 'Please select a character.';
                         if(empty($post_topic) && $thread['id'] == $thread['first_post'])
                             $errors[] = 'Thread topic can\'t be empty.';
                         $player_on_account == false;
+
+
                         if(count($errors) == 0)
                         {
                             foreach($players_from_account as $player)
@@ -507,6 +527,7 @@ if($action == 'edit_post')
                     }
                     if(!$saved)
                     {
+                        $errors = [];
                         if(count($errors) > 0)
                         {
                             $main_content .= '<br /><font color="red" size="2"><b>Errors occured:</b>';
@@ -565,22 +586,22 @@ if($action == 'new_topic')
                 $saved = false;
                 if(isset($_REQUEST['save']))
                 {
-                    $lenght = 0;
+                    $length = 0;
                     for($i = 0; $i <= strlen($post_topic); $i++)
                     {
                         if(ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126)
-                            $lenght++;
+                            $length++;
                     }
-                    if($lenght < 1 || strlen($post_topic) > 60)
-                        $errors[] = 'Too short or too long topic (short: '.$lenght.' long: '.strlen($post_topic).' letters). Minimum 1 letter, maximum 60 letters.';
-                    $lenght = 0;
+                    if($length < 1 || strlen($post_topic) > 60)
+                        $errors[] = 'Too short or too long topic (short: '.$length.' long: '.strlen($post_topic).' letters). Minimum 1 letter, maximum 60 letters.';
+
                     for($i = 0; $i <= strlen($text); $i++)
                     {
                         if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-                            $lenght++;
+                            $length++;
                     }
-                    if($lenght < 1 || strlen($text) > 15000)
-                        $errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
+                    if($length < 1 || strlen($text) > 15000)
+                        $errors[] = 'Too short or too long post (short: '.$length.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
                     if($char_id == 0)
                         $errors[] = 'Please select a character.';
                     $player_on_account == false;
