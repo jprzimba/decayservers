@@ -23,8 +23,8 @@ class Account {
         $this->sql = AAC::$SQL;
     }
 
-    public function find($name) {
-        $acc = $this->sql->myRetrieve('accounts', array('name' => $name));
+    public function find($accnumber) {
+        $acc = $this->sql->myRetrieve('accounts', array('id' => $accnumber));
         if ($acc === false) return false;
         $this->load($acc['id']);
         return true;
@@ -55,6 +55,10 @@ class Account {
         //load attributes from database
         $acc = $this->sql->myRetrieve('accounts', array('id' => $id));
         $nicaw_acc = $this->sql->myRetrieve('nicaw_accounts', array('account_id' => $id));
+        if ($nicaw_acc === false) {
+            return false;
+        }
+
         if ($this->sql->failed()) throw new aacException('Cannot load account:<br/>'.$this->sql->getError());
         if ($acc === false) {
             return false;
@@ -64,7 +68,6 @@ class Account {
 		}
         //arranging attributes, ones on the left will be used all over the aac
         $this->attrs['accno'] = (int) $acc['id'];
-        $this->attrs['name'] = (string) $acc['name'];
         $this->attrs['password'] = (string) $acc['password'];
         $this->attrs['email'] = (string) $acc['email'];
         $this->attrs['rlname'] = $nicaw_acc['rlname'];
@@ -79,7 +82,6 @@ class Account {
 
     public function save() {
         $acc['id'] = $this->attrs['accno'];
-        $acc['name'] = $this->attrs['name'];
         $acc['password'] = $this->attrs['password'];
         $acc['email'] = $this->attrs['email'];
 
@@ -113,7 +115,6 @@ class Account {
         $SQL = AAC::$SQL;
 
         unset($d);
-        $d['name'] = $name;
         $d['password'] = Account::encodePassword($password);
         $d['email'] = $email;
         if (!$SQL->myInsert('accounts',$d)) throw new aacException('Account::Create() Cannot insert attributes:<br/>'.$SQL->getError());

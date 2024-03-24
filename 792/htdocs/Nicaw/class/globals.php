@@ -30,9 +30,12 @@ class AAC {
             && !file_exists($cfg['dirdata'].'npc/'.$name.'.xml');
     }
 
-    static public function ValidPassword($pass) {
+    /*static public function ValidPassword($pass) {
         return strlen($pass) > 5 && strlen($pass) <= 50 && preg_match('/^[a-zA-Z0-9~!@#%&;,:\\\^\$\.\|\?\*\+\(\)]*$/',$pass);
-    }
+    }*/
+    static public function ValidPassword($pass) {
+        return strlen($pass) > 5 && strlen($pass) <= 50 && preg_match('/^[a-zA-Z0-9]*$/',$pass);
+    }    
 
     static public function ValidAccountNumber($n) {
         return is_numeric($n) && $n > 100000 && $n < 100000000;

@@ -125,12 +125,13 @@ public function escape_string($string)
 
 //Quotes a value so it's safe to use in SQL statement
 public function quote($value)
-  {
-    if(is_numeric($value) && $value[0] != '0')
-	  return (int) $value;
-	else
-      return '\''.$this->escape_string($value).'\'';
-  }
+{
+    if (is_numeric($value) && strpos($value, '.') === false && strpos($value, ',') === false) {
+        return (int)$value;
+    } else {
+        return '\'' . $this->escape_string($value) . '\'';
+    }
+}
 
 //Return last error
 public function getError()
@@ -172,9 +173,9 @@ public function myInsert($table,$data)
 	{global $cfg;
 		$fields = array_keys($data);
 		$values = array_values($data);
-		$query = 'INSERT INTO `'.mysql_escape_string($table).'` (';
+		$query = 'INSERT INTO `'.mysqli_escape_string($this->sql_connection, $table).'` (';
 		foreach ($fields as $field)
-			$query.= '`'.mysql_escape_string($field).'`,';
+			$query.= '`'.mysqli_escape_string($this->sql_connection, $field).'`,';
 		$query = substr($query, 0, strlen($query)-1);
 		$query.= ') VALUES (';
 		foreach ($values as $value)
@@ -196,9 +197,9 @@ public function myReplace($table,$data)
 	{global $cfg;
 		$fields = array_keys($data);
 		$values = array_values($data);
-		$query = 'REPLACE INTO `'.mysql_escape_string($table).'` (';
+		$query = 'REPLACE INTO `'.mysqli_escape_string($this->sql_connection, $table).'` (';
 		foreach ($fields as $field)
-			$query.= '`'.mysql_escape_string($field).'`,';
+			$query.= '`'.mysqli_escape_string($this->sql_connection, $field).'`,';
 		$query = substr($query, 0, strlen($query)-1);
 		$query.= ') VALUES (';
 		foreach ($values as $value)
@@ -245,15 +246,15 @@ public function myUpdate($table,$data,$where,$limit=1)
 	{
 		$fields = array_keys($data); 
 		$values = array_values($data);
-		$query = 'UPDATE `'.mysql_escape_string($table).'` SET ';
+		$query = 'UPDATE `'.mysqli_escape_string($this->sql_connection, $table).'` SET ';
 		for ($i = 0; $i < count($fields); $i++)
-			$query.= '`'.mysql_escape_string($fields[$i]).'` = '.$this->quote($values[$i]).', ';
+			$query.= '`'.mysqli_escape_string($this->sql_connection, $fields[$i]).'` = '.$this->quote($values[$i]).', ';
 		$query = substr($query, 0, strlen($query)-2);
 		$query.=' WHERE (';
 		$fields = array_keys($where); 
 		$values = array_values($where);
 		for ($i = 0; $i < count($fields); $i++)
-			$query.= '`'.mysql_escape_string($fields[$i]).'` = '.$this->quote($values[$i]).' AND ';
+			$query.= '`'.mysqli_escape_string($this->sql_connection, $fields[$i]).'` = '.$this->quote($values[$i]).' AND ';
 		$query = substr($query, 0, strlen($query)-4);
 		if (isset($limit))
 			$query.=') LIMIT '.$limit.';';

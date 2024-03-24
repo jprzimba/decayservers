@@ -55,7 +55,7 @@ foreach ($XML->category as $cat){
 if(!empty($_SESSION['account'])) {
     $account = new Account();
     $account->load($_SESSION['account']);
-    echo 'Logged in as: <b>'.$account->attrs['name'].'</b><br/>';
+    echo 'Logged in as: <b>'.$account->attrs['accno'].'</b><br/>';
     echo '<button onclick="window.location.href=\'login.php?logout&amp;redirect=account.php\'">Logout</button><hr/>';
 }
 ?>
