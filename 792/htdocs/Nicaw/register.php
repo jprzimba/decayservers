@@ -122,7 +122,7 @@ var observerCallback = function(el, value) {
     var params = new Array();
     params['el_id'] = el.id;
     params['email'] = $('email').value;
-    params['accnumber'] = $('accnaccnumberame').value;
+    params['accnumber'] = $('accnumber').value;
 <?php if (!$cfg['Email_Validate']) {?>
     params['password'] = $('password').value;
     params['confirm'] = $('confirm').value;
