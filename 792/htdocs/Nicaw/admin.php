@@ -30,7 +30,6 @@ include ("header.inc.php");
 <li onclick="ajax('form','tools/poll_create.php','',true)" style=" background-image: url(resource/chart_bar_add.png);">Create Poll</li>
 <li onclick="ajax('form','tools/character_search.php','script=tools/character_delete.php',true)" style=" background-image: url(resource/user_delete.png);">Delete Player</li>
 <li onclick="ajax('form','tools/character_search.php','script=tools/character_group.php',true)" style=" background-image: url(resource/user_gray.png);">Create GM</li>
-<li onclick="ajax('form','tools/group_create.php','',true)" style=" background-image: url(resource/group_add.png);">Create Group</li>
 <li onclick="ajax('form','tools/ip_update.php','',true)" style=" background-image: url(resource/computer_link.png);">Update IP</li>
 <li onclick="ajax('form','tools/table_repair.php','',true)" style=" background-image: url(resource/database_error.png);">Repair Tables</li>
 <li onclick="self.window.location.href='tools/php_info.php'" style=" background-image: url(resource/information.png);">PHP Info</li>
