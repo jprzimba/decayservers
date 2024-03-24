@@ -27,8 +27,8 @@ $cfg['max_ban_time'] = 2*30*24*60*60; //2 months
 <div class="mid">
 <?php
 $SQL = AAC::$SQL;
-$SQL->myQuery('SELECT players.name, bans.expires, bans.active FROM bans, players WHERE bans.type = 2 AND players.id = bans.value OR bans.type = 3 AND players.account_id = bans.value ORDER BY expires ASC');
-if ($SQL->failed()) 
+$SQL->myQuery('SELECT * FROM bans LEFT JOIN players ON bans.player = players.id WHERE bans.type = 2 OR bans.type = 3 ORDER BY bans.time ASC');
+if ($SQL->failed())
 	throw new aacException('SQL query failed:<br/>'.$SQL->getError());
 echo '<table style="width:100%">'."\n";
 echo '<tr class="color0"><td style="width:25%"><b>Name</b></td><td style="width:50%"><b>Ban Ends</b></td><td style="width:25%"><b>Time Left</b></td></tr>'."\n";
