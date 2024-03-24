@@ -1611,7 +1611,7 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	}
 }
 
-void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
+void ProtocolGame::sendAddMarker(const Position& pos, MapMarks_t markType, const std::string& desc)
 {
 	NetworkMessage* msg = getOutputBuffer();
 	if(msg)

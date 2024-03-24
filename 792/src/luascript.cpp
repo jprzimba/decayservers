@@ -3137,7 +3137,7 @@ int LuaScriptInterface::luaDoAddMark(lua_State *L)
 	if(parameters > 3)
 		description = popString(L);
 
-	uint32_t type = popNumber(L);
+	MapMarks_t type = (MapMarks_t)popNumber(L);
 	popPosition(L, pos, stackpos);
 	uint32_t cid = popNumber(L);
 

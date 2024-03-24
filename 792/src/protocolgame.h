@@ -177,7 +177,7 @@ class ProtocolGame : public Protocol
 		void sendTextMessage(MessageClasses mclass, const std::string& message);
 		void sendReLoginWindow();
 
-		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc);
+		void sendAddMarker(const Position& pos, MapMarks_t markType, const std::string& desc);
 
 		void sendCreatureSkull(const Creature* creature);
 		void sendCreatureShield(const Creature* creature);

@@ -583,7 +583,7 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendLockRuleViolation();}
 		void sendRuleViolationCancel(const std::string& name)
 			{if(client) client->sendRuleViolationCancel(name);}
-		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
+		void sendAddMarker(const Position& pos, MapMarks_t markType, const std::string& desc)
 			{if(client) client->sendAddMarker(pos, markType, desc);}
 		void sendQuestLog()
 			{if(client) client->sendQuestLog(); }
