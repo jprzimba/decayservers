@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation>
-<category name="Server">
-<item href="news.php">News</item>
-<item href="account.php">Account</item>
-<item href="register.php">Sign Up</item>
-<item href="bans.php">Bans</item>
-</category>
-<category name="Community">
-<item href="characters.php">Characters</item>
-<item href="online-list.php">Who Is Online?</item>
-<item href="ranks.php?sort=level">Highscores</item>
-<item href="houses.php">Houses</item>
-<item href="guilds.php">Guilds</item>
-</category>
+    <category name="Server">
+        <item href="news.php">News</item>
+        <item href="bans.php">Bans</item>
+        <item href="info.php">Server Info</item>
+    </category>
+
+    <category name="Account">
+        <item href="account.php">Account</item>
+        <item href="register.php">Sign Up</item>
+    </category>
+
+    <category name="Community">
+        <item href="characters.php">Characters</item>
+        <item href="online-list.php">Who Is Online?</item>
+        <item href="ranks.php?sort=level">Highscores</item>
+        <item href="houses.php">Houses</item>
+        <item href="guilds.php">Guilds</item>
+    </category>
+
+    <category name="Library">
+        <item href="spells.php">Spells</item>
+        <item href="voting.php">Voting</item>
+    </category>
 <!--
 <category name="Other">
 <item href="spells.php">Spells</item>
