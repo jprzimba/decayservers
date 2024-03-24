@@ -73,7 +73,7 @@ $cfg['ranks_access'] = 2;
 $cfg['start_page'] = 'news.php';
 
 # Name shown in window title
-$cfg['server_name'] = 'Forgottten';
+$cfg['server_name'] = 'Forgotten';
 
 # Server ip and port for getting status. 
 # In most cases localhost should be used
