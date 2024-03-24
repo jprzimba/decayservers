@@ -94,7 +94,7 @@ public function failed(){
 public function fetch_array(){
     if (!$this->failed())
         if (isset($this->last_query))
-            return mysql_fetch_array($this->last_query);
+            return mysqli_fetch_array($this->last_query);
         else
             throw new aacException('Attempt to fetch a null query.');
     else
@@ -119,9 +119,9 @@ public function num_rows()
 
 //Quotes a string
 public function escape_string($string)
-  {
-    return mysql_real_escape_string($string);
-  }
+{
+    return mysqli_real_escape_string($this->sql_connection, $string);
+}
 
 //Quotes a value so it's safe to use in SQL statement
 public function quote($value)
@@ -216,21 +216,29 @@ public function myReplace($table,$data)
 	}
 	
 //Retrieve single row
-public function myRetrieve($table,$data)
-	{
-		$fields = array_keys($data); 
-		$values = array_values($data);
-		$query = 'SELECT * FROM `'.mysql_escape_string($table).'` WHERE (';
-		for ($i = 0; $i < count($fields); $i++)
-			$query.= '`'.mysql_escape_string($fields[$i]).'` = '.$this->quote($values[$i]).' AND ';
-		$query = substr($query, 0, strlen($query)-4);
-		$query.=');';
-		$this->myQuery($query);
-		if ($this->failed()) return false;
-		if ($this->num_rows() <= 0) return false;
-		if ($this->num_rows() > 1) throw new aacException('Unexpected SQL answer. More than one item exists.');
-		return $this->fetch_array();
-	}
+public function myRetrieve($table, $data)
+{
+    $fields = array_keys($data);
+    $values = array_values($data);
+    $query = 'SELECT * FROM `' . $this->escape_string($table) . '` WHERE (';
+    for ($i = 0; $i < count($fields); $i++) {
+        $query .= '`' . $this->escape_string($fields[$i]) . '` = ' . $this->quote($values[$i]) . ' AND ';
+    }
+    $query = rtrim($query, ' AND ');
+    $query .= ');';
+    $this->myQuery($query);
+    if ($this->failed()) {
+        return false;
+    }
+    if ($this->num_rows() <= 0) {
+        return false;
+    }
+    if ($this->num_rows() > 1) {
+        throw new aacException('Unexpected SQL answer. More than one item exists.');
+    }
+    return $this->fetch_array();
+}
+
 
 //Update data
 public function myUpdate($table,$data,$where,$limit=1)
