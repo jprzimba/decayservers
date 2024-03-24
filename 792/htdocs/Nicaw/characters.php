@@ -69,7 +69,7 @@ include("header.inc.php");
                 echo '</td></tr>';
             }
             echo '</table>';
-            if (strlen($account->attrs['comment'])>0) {
+            if (!empty($account->attrs['comment']) && strlen($account->attrs['comment']) > 0) {
                 echo "<b>Comments</b><br/><div style=\"overflow:hidden\"><pre>".htmlspecialchars($account->attrs['comment'])."</pre></div><br/>\n";
             }
             echo '<hr/>';

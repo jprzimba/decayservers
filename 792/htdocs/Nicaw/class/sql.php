@@ -119,9 +119,14 @@ public function num_rows()
 
 
 //Quotes a string
-public function escape_string($string)
+public function realScapeString($string)
 {
     return mysqli_real_escape_string($this->sql_connection, $string);
+}
+
+public function scapeString($string)
+{
+    return mysqli_escape_string($this->sql_connection, $string);
 }
 
 //Quotes a value so it's safe to use in SQL statement
@@ -130,7 +135,7 @@ public function quote($value)
     if (is_numeric($value) && strpos($value, '.') === false && strpos($value, ',') === false) {
         return (int)$value;
     } else {
-        return '\'' . $this->escape_string($value) . '\'';
+        return '\'' . $this->realScapeString($value) . '\'';
     }
 }
 
@@ -222,9 +227,9 @@ public function myRetrieve($table, $data)
 {
     $fields = array_keys($data);
     $values = array_values($data);
-    $query = 'SELECT * FROM `' . $this->escape_string($table) . '` WHERE (';
+    $query = 'SELECT * FROM `' . $this->realScapeString($table) . '` WHERE (';
     for ($i = 0; $i < count($fields); $i++) {
-        $query .= '`' . $this->escape_string($fields[$i]) . '` = ' . $this->quote($values[$i]) . ' AND ';
+        $query .= '`' . $this->realScapeString($fields[$i]) . '` = ' . $this->quote($values[$i]) . ' AND ';
     }
     $query = rtrim($query, ' AND ');
     $query .= ');';

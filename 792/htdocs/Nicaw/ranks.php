@@ -47,7 +47,7 @@ if ($_GET['sort'] == 'level' || $_GET['sort'] == 'maglevel'){
     if($SQL->isTable('groups')) {
 	$query = 'SELECT groups.access, groups.id, players.name, players.level, players.maglevel, players.experience FROM players LEFT OUTER JOIN groups ON players.group_id = groups.id ORDER BY `'.mysql_escape_string($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
     } else {
-        $query = 'SELECT 0 AS access, players.name, players.level, players.maglevel, players.experience FROM players ORDER BY `'.mysql_escape_string($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
+        $query = 'SELECT 0 AS access, players.name, players.level, players.maglevel, players.experience FROM players ORDER BY `'.$SQL->scapeString($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
     }
     $key = $_GET['sort'];
 }elseif (in_array($_GET['sort'],$cfg['skill_names'])){
