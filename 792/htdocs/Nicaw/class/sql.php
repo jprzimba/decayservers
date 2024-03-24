@@ -158,12 +158,16 @@ public function analyze()
 	}
 	
 public function repairTables()
-	{
-		if (isset($this->sql_tables))
-			foreach($this->sql_tables as $table)
-				mysql_query('REPAIR TABLE '.$table);
-		return $return;
+{
+	$return = [];
+	if (isset($this->sql_tables)) {
+		foreach ($this->sql_tables as $table) {
+			$result = $this->myQuery('REPAIR TABLE ' . $table);
+			$return[$table] = $result;
+		}
 	}
+	return $return;
+}
 
 ######################################
 # Methods for simple  data access    #

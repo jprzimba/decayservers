@@ -87,7 +87,7 @@ public function getCode(){
 		$code = '<table cellspacing="10px" id="iobox" onmouseup="iobox_mouseup()" class="draggable"><tr><td><fieldset>'.$this->label.'<form id="'.$this->name.'" action="javascript:setStyle(\'iobox\',\'visibility\',\'hidden\'); ajax(document.getElementById(\'iobox\').parentNode.id,\'';
 		
 		// Check if $this->target is set before using htmlspecialchars
-		$targetValue = isset($this->target['confirm']) ? htmlspecialchars($this->target['confirm']) : '';
+		$targetValue = isset($this->target) ? htmlspecialchars($this->target) : '';
 	
 		$code .= $targetValue . '\', $(\''.$this->name.'\').serialize(),true);" method="post">'."\n";
 	}
