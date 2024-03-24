@@ -34,13 +34,7 @@
 	<rune name="Magic Wall" id="2293" allowfaruse="1" charges="3" lvl="32" maglv="9" exhaustion="1000" aggressive="0" blocktype="all" script="support/magic wall rune.lua"/>
 	<rune name="Paralyze" id="2278" allowfaruse="1" charges="1" lvl="54" maglv="18" exhaustion="2000" mana="1400" needtarget="1" blocktype="solid" script="support/paralyze rune.lua"/>
 
-	<!-- Attack Spells -->
-	<instant name="Death Strike" words="exori mort" lvl="16" mana="20" prem="1" direction="1" exhaustion="2000" needlearn="0" script="attack/death strike.lua">
-		<vocation name="Sorcerer" /> 
-		<vocation name="Master Sorcerer" />
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</instant>
+
 	<instant name="Flame Strike" words="exori flam" lvl="12" mana="20" prem="1" direction="1" exhaustion="2000" needlearn="0" script="attack/flame strike.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
@@ -77,10 +71,6 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant name="Fierce Berserk" words="exori gran" lvl="70" mana="340" prem="1" needweapon="1" exhaustion="2000" needlearn="0" script="attack/fierce berserk.lua">
-		<vocation name="Knight" />
-		<vocation name="Elite Knight" />
-	</instant>		
 	<instant name="Poison Storm" words="exevo gran mas pox" lvl="55" mana="600" prem="1" selftarget="1" exhaustion="2000" needlearn="0" script="attack/poison storm.lua">
 		<vocation name="Druid"/>    
 		<vocation name="Elder Druid"/>
