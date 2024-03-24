@@ -14,8 +14,8 @@ if ($cfg['Email_Validate']) {
     echo 'Please enter a valid email address if we need to contact you.';
 }
 ?></div></td></tr>
-<tr><td width="40%" style="vertical-align: top"><label for="accname"><b>Account Number:</b></label></td>
-<td width="60%"><input id="accname" type="text" />&nbsp;<span id="accname_state"></span><div>
+<tr><td width="40%" style="vertical-align: top"><label for="accnumber"><b>Account Number:</b></label></td>
+<td width="60%"><input id="accnumber" type="text" />&nbsp;<span id="accnumber_state"></span><div>
 Account number consists of only numbers 0-9 and least 6 characters long.
 </div></td></tr>
 <?php
@@ -63,7 +63,7 @@ function onRulesCheck(node) {
 function onSubmit() {
     var params = new Array();
     params['email'] = $('email').value;
-    params['accname'] = $('accname').value;
+    params['accnumber'] = $('accnumber').value;
 
     params['rlname'] = $('rlname').value;
     params['location'] = $('location').value;
@@ -122,7 +122,7 @@ var observerCallback = function(el, value) {
     var params = new Array();
     params['el_id'] = el.id;
     params['email'] = $('email').value;
-    params['accname'] = $('accname').value;
+    params['accnumber'] = $('accnaccnumberame').value;
 <?php if (!$cfg['Email_Validate']) {?>
     params['password'] = $('password').value;
     params['confirm'] = $('confirm').value;
@@ -133,8 +133,8 @@ var observerCallback = function(el, value) {
             onSuccess: function(transport) {
                 var param = transport.request.options.parameters;
                 var XML = parseXML(transport.responseText);
-                if (param.el_id == 'accname') {
-                    updateState('accname', XML);
+                if (param.el_id == 'accnumber') {
+                    updateState('accnumber', XML);
                     updateState('password', XML);
                 } else if (param.el_id == 'password') {
                     updateState('password', XML);
@@ -148,7 +148,7 @@ var observerCallback = function(el, value) {
 }
 
 new Form.Element.Observer('email', 2, observerCallback);
-new Form.Element.Observer('accname', 2, observerCallback);
+new Form.Element.Observer('accnumber', 2, observerCallback);
 <?php if (!$cfg['Email_Validate']) {?>
 new Form.Element.Observer('password', 2, observerCallback);
 new Form.Element.Observer('confirm', 2, observerCallback);
