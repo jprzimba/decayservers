@@ -271,9 +271,9 @@ public function myDelete($table,$data,$limit = 1)
 	{
 		$fields = array_keys($data); 
 		$values = array_values($data);
-		$query = 'DELETE FROM `'.mysql_escape_string($table).'` WHERE (';
+		$query = 'DELETE FROM `'.mysqli_escape_string($this->sql_connection, $table).'` WHERE (';
 		for ($i = 0; $i < count($fields); $i++)
-			$query.= '`'.mysql_escape_string($fields[$i]).'` = '.$this->quote($values[$i]).' AND ';
+			$query.= '`'.mysqli_escape_string($this->sql_connection, $fields[$i]).'` = '.$this->quote($values[$i]).' AND ';
 		$query = substr($query, 0, strlen($query)-4);
 		if ($limit > 0)
 			$query.=') LIMIT '.$limit.';';

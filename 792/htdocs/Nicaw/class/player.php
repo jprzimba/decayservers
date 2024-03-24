@@ -130,14 +130,8 @@ WHERE t1.kill_id = t2.kill_id
     //Load player attributes
         $player = $this->sql->myRetrieve('players', array('id' => $id));
         if ($player === false) return false;
-        $group = $this->sql->myRetrieve('groups', array('id' => (int) $player['group_id']));
-        if ($group === false)
-            $this->attrs['access'] = 0;
-        else {
-            $this->attrs['group'] = (int) $player['group_id'];
-            $this->attrs['access'] = (int) $group['access'];
-            $this->attrs['position'] = (string) $group['name'];
-        }
+
+
         if(isset($player['online'])) {
             if((bool) $player['online'] == true) {
                 $this->is_online = true;
@@ -155,6 +149,7 @@ WHERE t1.kill_id = t2.kill_id
         }
         $this->attrs['id'] = (int) $player['id'];
         $this->attrs['name'] = (string) $player['name'];
+        $this->attrs['group'] = (int) $player['group_id'];
         $this->attrs['account'] = (int) $player['account_id'];
         $this->attrs['level'] = (int) $player['level'];
         $this->attrs['vocation'] = (int) $player['vocation'];

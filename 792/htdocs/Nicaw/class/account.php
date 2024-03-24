@@ -17,7 +17,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 class Account {
-    private $attrs, $sql, $guilds, $players;
+    private $attrs, $sql, $guilds;
+    private $players = [];
 
     public function __construct() {
         $this->sql = AAC::$SQL;
