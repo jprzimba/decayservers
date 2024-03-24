@@ -44,21 +44,13 @@ if (!isset($_GET['page']) || $_GET['page'] < 0) $p = 0;
 else $p = (int) $_GET['page'];
 
 if ($_GET['sort'] == 'level' || $_GET['sort'] == 'maglevel'){
-    if($SQL->isTable('groups')) {
-	$query = 'SELECT groups.access, groups.id, players.name, players.level, players.maglevel, players.experience FROM players LEFT OUTER JOIN groups ON players.group_id = groups.id ORDER BY `'.mysql_escape_string($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
-    } else {
-        $query = 'SELECT 0 AS access, players.name, players.level, players.maglevel, players.experience FROM players ORDER BY `'.$SQL->scapeString($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
-    }
+	$query = 'SELECT * FROM players ORDER BY `'.$SQL->scapeString($_GET['sort']).'` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
     $key = $_GET['sort'];
 }elseif (in_array($_GET['sort'],$cfg['skill_names'])){
-    if($SQL->isTable('groups')) {
-	$query = 'SELECT groups.access, a1.* FROM (SELECT players.group_id, players.name, player_skills.value FROM players, player_skills WHERE players.id = player_skills.player_id AND player_skills.skillid = '.array_search($_GET['sort'], $cfg['skill_names']) .') AS a1 LEFT OUTER JOIN groups ON a1.group_id = groups.id ORDER BY `value` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
-    } else {
-        $query = 'SELECT 0 AS access, a1.* FROM (SELECT players.group_id, players.name, player_skills.value FROM players, player_skills WHERE players.id = player_skills.player_id AND player_skills.skillid = '.array_search($_GET['sort'], $cfg['skill_names']) .') AS a1 ORDER BY `value` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
-    }
-        $key = 'value';
+    $query = 'SELECT 0 AS group_id, a1.* FROM (SELECT players.group_id, players.name, player_skills.value FROM players, player_skills WHERE players.id = player_skills.player_id AND player_skills.skillid = '.array_search($_GET['sort'], $cfg['skill_names']) .') AS a1 ORDER BY `value` DESC LIMIT '.$cfg['ranks_per_page']*$p.', '.$cfg['ranks_per_page'].';';
+	$key = 'value';
 }elseif ($_GET['sort'] == 'census'){
-	$SQL->myQuery('SELECT players.sex, COUNT(players.id) as number FROM `players` GROUP BY players.sex');
+	$SQL->myQuery('SELECT players.sex, COUNT(players.id) AS number FROM `players` GROUP BY players.sex');
 	$total = 0;
 	while ($a = $SQL->fetch_array()){
 		$genders[$a['sex']] = $a['number'];
@@ -70,7 +62,7 @@ if ($_GET['sort'] == 'level' || $_GET['sort'] == 'maglevel'){
 	foreach (array_keys($genders) as $gender)
 		echo '<tr><td>'.$gender_names[$gender].'</td><td>'.percent_bar($genders[$gender],$total).'</td><td>('.$genders[$gender].')</td></tr>';
 	echo '</table></p>';
-	$SQL->myQuery('SELECT players.vocation, COUNT(players.id) as number FROM `players` GROUP BY players.vocation');
+	$SQL->myQuery('SELECT players.vocation, COUNT(players.id) AS number FROM `players` GROUP BY players.vocation');
 	$total = 0;
 	while ($a = $SQL->fetch_array()){
 		$vocations[$a['vocation']] = $a['number'];
@@ -98,11 +90,11 @@ if (isset($query)){
 	else{
 		$i = $cfg['ranks_per_page']*$p;
 		while($a = $SQL->fetch_array())
-		if ($a['access'] < $cfg['ranks_access'])
-			{
-				$i++;
-				echo '<tr '.getStyle($i).'><td>'.$i.'</td><td><a href="characters.php?player_name='.urlencode($a['name']).'">'.htmlspecialchars($a['name']).'</a></td><td>'.$a[$key].'</td></tr>'."\n";
-			}
+		if ($a['group_id'] < $cfg['ranks_access'] && $a['name'] !== 'Account Manager')
+		{
+			$i++;
+			echo '<tr '.getStyle($i).'><td>'.$i.'</td><td><a href="characters.php?player_name='.urlencode($a['name']).'">'.htmlspecialchars($a['name']).'</a></td><td>'.$a[$key].'</td></tr>'."\n";
+		}
 	}
 }
 ?>

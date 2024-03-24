@@ -25,38 +25,47 @@ $account = new Account();
 $form = new Form('email');
 //check if any data was submited
 if ($form->exists()){
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	//validate email
 	if (AAC::ValidEmail($form->attrs['email'])){
 		//check if password match
-		if ($account->checkPassword($form->attrs['password'])){
-			$account->logAction($account->attrs['email'].' changed to '.$form->attrs['email']);
-			$account->setAttr('email',$form->attrs['email']);
-			if ($account->save()){
-				//create new message
-				$msg = new IOBox('message');
-				$msg->addMsg('Email was successfuly changed.');
-				$msg->addClose('Finish');
-				$msg->show();
-			}else $error = 'Failed saving account';
-		}else{$error = "Incorrect password";}
-	}else{$error = "Bad email address";}
-	if (!empty($error)){
-		//create new message
-		$msg = new IOBox('message');
-		$msg->addMsg($error);
-		$msg->addReload('<< Back');
-		$msg->addClose('OK');
-		$msg->show();
-	}
-}else{
-	//create new form
-	$form = new IOBox('email');
-	$form->target = $_SERVER['PHP_SELF'];
-	$form->addLabel('Change Email');
-	$form->addInput('password','password');
-	$form->addInput('email','text',$account->attrs['email']);
-	$form->addClose('Cancel');
-	$form->addSubmit('Next >>');
-	$form->show();
+        if ($account->checkPassword($_POST['password'])) {
+            $account->logAction($account->attrs['email'].' changed to '.$_POST['email']);
+            $account->setAttr('email', $_POST['email']);
+            if ($account->save()) {
+                // Cria uma mensagem de sucesso
+                $msg = new IOBox('message');
+                $msg->addMsg('Email was successfully changed.');
+                $msg->addClose('Finish');
+                $msg->show();
+            } else {
+                $error = 'Failed saving account';
+            }
+        } else {
+            $error = "Incorrect password";
+        }
+    } else {
+        $error = "Bad email address";
+    }
+
+    if (!empty($error)) {
+        // Cria uma mensagem de erro
+        $msg = new IOBox('message');
+        $msg->addMsg($error);
+        $msg->addReload('<< Back');
+        $msg->addClose('OK');
+        $msg->show();
+    }
+}
+} else {
+    // Cria o formulário para alterar o email
+    $form = new IOBox('email');
+    $form->target = $_SERVER['PHP_SELF'];
+    $form->addLabel('Change Email');
+    $form->addInput('password','password');
+    $form->addInput('email','text',$account->attrs['email']);
+    $form->addClose('Cancel');
+    $form->addSubmit('Next >>');
+    $form->show();
 }
 ?>

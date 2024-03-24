@@ -37,10 +37,12 @@ if ($form->exists()){
 		}
 }else{
 	//create new form
+	$commentValue = isset($account->attrs['comment']) ? htmlspecialchars($account->attrs['comment']) : '';
+
 	$form = new IOBox('comments');
 	$form->target = $_SERVER['PHP_SELF'];
 	$form->addLabel('Edit Comments');
-	$form->addTextbox('comment',htmlspecialchars($account->attrs['comment']));
+	$form->addTextbox('comment', $commentValue);
 	$form->addClose('Cancel');
 	$form->addSubmit('Save');
 	$form->show();

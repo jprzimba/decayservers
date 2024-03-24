@@ -47,7 +47,7 @@ if ($form->exists()){
 				}else{$error = "Old password incorrect";}
 			}else{$error = "Your password matches account number";}
 		}else{$error = "Passwords do not match";}
-	}else{$error = "Valid password contains:<ul><li>Letters A-Z</li><li>Digits 0-9</li><li>Symbols ".htmlspecialchars('~!@#%&;,:\\^$.|?*+()"')."</li></ul>";}
+	}else{$error = "Valid password contains:<ul><li>Letters A-Z</li><li>Digits 0-9</li></ul>";}
 	if (!empty($error)){
 		//create new message
 		$msg = new IOBox('message');
