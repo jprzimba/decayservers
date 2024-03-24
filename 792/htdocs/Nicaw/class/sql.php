@@ -29,7 +29,7 @@ public function __construct($server, $user, $password, $database){
         throw new aacException('MySQL library is not installed. Database access is impossible. '.AAC::HelpLink(0));
 
     //establish a link to MySQL
-    $con = mysqli_connect($server, $user, $password, $database);
+    $con = mysqli_connect($server,$user,$password,$database);
     if ($con === false){
         throw new aacException('Unable to connect to mysql server. Please make sure it is up and running and you have correct user/password in config.inc.php. '.AAC::HelpLink(1));
         return false;
@@ -66,17 +66,17 @@ public function __destruct(){
 //Creates tables
 public function setup(){
 	$tables = explode(';', file_get_contents('documents/shema.mysql'));
-	foreach ($tables as $table) mysqli_query$con, ($table);
+	foreach ($tables as $table) mysqli_query($this->sql_connection, $table);
 }
 
 //Perform simple SQL query
 public function myQuery($q){
     if(is_resource($this->last_query))
         mysql_free_result($this->last_query);
-	$this->last_query = mysql_query($q, $this->sql_connection);
-    $this->last_insert_id = mysql_insert_id();
+	$this->last_query = mysqli_query($this->sql_connection, $q);
+    $this->last_insert_id = mysqli_insert_id($this->sql_connection);
 	if ($this->last_query === false){
-		$this->last_error = 'Error #'.mysql_errno()."\n".$q."\n" . mysql_error() . "\n";
+		$this->last_error = 'Error #'.mysqli_errno($this->sql_connection)."\n".$q."\n" . mysqli_error($this->sql_connection) . "\n";
 		$analysis = $this->analyze();
 		if ($analysis !== false)
 			throw new aacException($analysis."\n".$this->last_error);
@@ -108,12 +108,14 @@ public function insert_id(){
   
 //Returns the number of rows affected
 public function num_rows()
-  {
-    if (!$this->failed())
-      return mysql_num_rows($this->last_query);
-    else
-      throw new aacException('Attempt to count failed query'."\n".$this->last_error);
-  }
+{
+    if (!$this->failed()) {
+        return mysqli_num_rows($this->last_query);
+    } else {
+        throw new aacException('Attempt to count failed query'."\n".$this->last_error);
+    }
+}
+
 
 //Quotes a string
 public function escape_string($string)
@@ -157,7 +159,7 @@ public function repairTables()
 	{
 		if (isset($this->sql_tables))
 			foreach($this->sql_tables as $table)
-				mysqli_query('REPAIR TABLE '.$table);
+				mysql_query('REPAIR TABLE '.$table);
 		return $return;
 	}
 

@@ -14,9 +14,9 @@ if ($cfg['Email_Validate']) {
     echo 'Please enter a valid email address if we need to contact you.';
 }
 ?></div></td></tr>
-<tr><td width="40%" style="vertical-align: top"><label for="accname"><b>Desired Account Name:</b></label></td>
+<tr><td width="40%" style="vertical-align: top"><label for="accname"><b>Account Number:</b></label></td>
 <td width="60%"><input id="accname" type="text" />&nbsp;<span id="accname_state"></span><div>
-Account name consists of letters a-z, numbers 0-9, underscores _ and is at least 6 characters long.
+Account number consists of only numbers 0-9 and least 6 characters long.
 </div></td></tr>
 <?php
 if (!$cfg['Email_Validate']) {?>

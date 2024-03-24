@@ -39,17 +39,17 @@ if (empty($_POST['email'])) {
     $email = $_POST['email'];
 }
 
-//account name formating rules
-if (empty($_POST['accname'])) {
-    $errors['accname'] = 'empty account name';
-}elseif (!AAC::ValidAccountName($_POST['accname'])) {
-    $errors['accname'] = 'not a valid account name';
+//account number formating rules
+if (empty($_POST['accnumber'])) {
+    $errors['accnumber'] = 'empty account number';
+}elseif (!AAC::ValidAccountNumber($_POST['accnumber'])) {
+    $errors['accnumber'] = 'not a valid account number';
 }else {
 //check for existing name
-    if($account->existsName(strtolower($_POST['accname']))) {
-        $errors['accname'] = 'account name is already used';
+    if($account->accountNumberExists(strtolower($_POST['accnumber']))) {
+        $errors['accnumber'] = 'account number is already used';
     } else {
-        $accname = strtolower($_POST['accname']);
+        $accnumber = strtolower($_POST['accnumber']);
     }
 }
 
@@ -61,8 +61,8 @@ if ($cfg['Email_Validate']) {
         $errors['password'] = 'empty password';
     }elseif (!AAC::ValidPassword($_POST['password'])) {
         $errors['password'] = 'not a valid password';
-    }elseif (isset($_POST['accname']) && strtolower($_POST['password']) == strtolower($_POST['accname'])) {
-        $errors['password'] = 'password cannot match account name';
+    }elseif (isset($_POST['accnumber']) && strtolower($_POST['password']) == strtolower($_POST['accnumber'])) {
+        $errors['password'] = 'password cannot match account number';
     }elseif (empty($_POST['confirm'])){
         $errors['confirm'] = 'empty password';
     }elseif ($_POST['password'] != $_POST['confirm']) {
@@ -82,11 +82,11 @@ if (count($errors) > 0) {
 }elseif (count($errors) == 0 && isset($_POST['submit'])) {
 
     //create the account
-    $account = Account::Create($accname, $password, $email, substr($_POST['rlname'], 0, 50), substr($_POST['location'], 0, 50));
+    $account = Account::Create($accnumber, $password, $email, substr($_POST['rlname'], 0, 50), substr($_POST['location'], 0, 50));
 
     if ($cfg['Email_Validate']) {
         $body = "Here is your login information for <a href=\"http://$cfg[server_url]/\">$cfg[server_name]</a><br/>
-<b>Account name:</b> $accname<br/>
+<b>Account number:</b> $accnumber<br/>
 <b>Password:</b> $password<br/>
 <br/>
 Powered by <a href=\"http://nicaw.net/\">Nicaw AAC</a>";

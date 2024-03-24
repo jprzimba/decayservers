@@ -42,7 +42,7 @@ $cfg['password_salt'] = '';
  * Need more? Look http://otfans.net/ and
  * http://sourceforge.net/projects/nicaw-acc/files/
  */
-$cfg['skin'] = 'silica';
+$cfg['skin'] = 'thebr';
 
 # In case you want to upload skins somewhere else
 $cfg['skin_url'] = 'skins/';
@@ -73,7 +73,7 @@ $cfg['ranks_access'] = 2;
 $cfg['start_page'] = 'news.php';
 
 # Name shown in window title
-$cfg['server_name'] = 'Nicaw SQL';
+$cfg['server_name'] = 'Forgottten';
 
 # Server ip and port for getting status. 
 # In most cases localhost should be used
@@ -150,20 +150,11 @@ NOTICE
 Town IDs must be correct and match those in your map
 */
 # Town names
-$cfg['temple'][1]['name'] = 'Devland';
-$cfg['temple'][2]['name'] = 'Forgotten';
-$cfg['temple'][3]['name'] = 'Evolutions';
-$cfg['temple'][4]['name'] = 'Thais';
-$cfg['temple'][5]['name'] = 'Ab\'Dendriel';
-$cfg['temple'][6]['name'] = 'Kazordoon';
-$cfg['temple'][7]['name'] = 'Something else?';
-$cfg['temple'][8]['name'] = 'Darashia';
-$cfg['temple'][9]['name'] = 'Port Hope';
-$cfg['temple'][10]['name'] = 'Liberty Bay';
+$cfg['temple'][1]['name'] = 'Enigma City';
 
 # Now set which town(s) you want to use in character making
-$cfg['temple'][1]['x'] = 410;
-$cfg['temple'][1]['y'] = 573;
+$cfg['temple'][1]['x'] = 1000;
+$cfg['temple'][1]['y'] = 1000;
 $cfg['temple'][1]['z'] = 7;
 $cfg['temple'][1]['enabled'] = true;
 
@@ -175,7 +166,7 @@ $cfg['temple'][2]['enabled'] = false;
 $cfg['temple'][3]['x'] = 1000;
 $cfg['temple'][3]['y'] = 1000;
 $cfg['temple'][3]['z'] = 7;
-$cfg['temple'][3]['enabled'] = true;
+$cfg['temple'][3]['enabled'] = false;
 
 ##################################################
 #                 Vocation Config                #

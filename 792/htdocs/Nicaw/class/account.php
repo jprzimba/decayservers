@@ -178,9 +178,9 @@ class Account {
         return $this->attrs['password'] == (string)$pass && !empty($pass);
     }
 
-    static public function existsName($name) {
-        AAC::$SQL->myQuery('SELECT * FROM `accounts` WHERE `name` = '.AAC::$SQL->quote($name));
-        if (AAC::$SQL->failed()) throw new aacException('Account::existsName() failed. If your server doesn\'t support account names pelase use AAC release v3.20');
+    static public function accountNumberExists($number) {
+        AAC::$SQL->myQuery('SELECT * FROM `accounts` WHERE `id` = '.AAC::$SQL->quote($number));
+        if (AAC::$SQL->failed()) throw new aacException('Account::accountNumberExists() failed. If your server doesn\'t support account number pelase use AAC modified by Tryller');
         if (AAC::$SQL->num_rows() > 0) return true;
         return false;
     }

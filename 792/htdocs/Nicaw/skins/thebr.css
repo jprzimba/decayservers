@@ -1,0 +1,288 @@
+/*
+    Copyright (C) 2007  Nicaw (thebr edition)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+html {
+    overflow: auto;
+}
+body {
+    margin-bottom: 50px;
+    background-color: #051122;
+    background-image: url(https://static.tibia.com/images/global/header/background-artwork.webp);
+    background-position: top;
+    background-repeat:no-repeat;
+    font: normal 13px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+pre {
+    font-family: monospace;
+    font-size: 10pt;
+}
+img {
+    border: 0;
+}
+a {
+    color: #000;
+}
+h1,h2,h3,h4,h5 {
+    background-repeat: no-repeat;
+    font: normal normal 1.5em "Georgia",serif;
+    text-decoration: none;
+    padding-left: 10px;
+}
+h2 {
+    padding-left: 50px;
+    font-size: 1.8em;
+}
+h3 {
+    padding-left: 5px;
+    font-size: 1.5em;
+}
+h4 {
+    padding-left: 10px;
+    font-size: 1.3em;
+}
+
+legend {
+    color: #000;
+}
+form,input {
+    margin: 0; 
+    padding: 0; 
+    display: inline;
+}
+fieldset{
+    padding: 5px;
+}
+
+ul.simple {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+li span:hover {
+    color: #0F0;
+}
+
+a:hover{
+    font-weight: normal;
+    color: green;
+}
+.color0 {
+    background-color: #505050;
+    color: white;
+}
+.color1 {
+    background-color: #d4c0a1;
+}
+.top {
+    color: #000;
+}
+
+.players {
+    font: normal 13px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+.online {
+    font: normal 13px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: green;
+    font-weight: bold;
+    text-decoration:underline;
+}
+
+#server_state p {
+    margin: 0;
+}
+
+.offline {
+    font-weight: bold;
+    color: red;
+}
+.clearer {
+    clear: both; 
+    font-size: 0;
+}
+.task-menu{
+    cursor: pointer;
+}
+.task-menu li {
+    list-style-type: none;
+    height: 16px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    padding-bottom: 5px;
+}
+.task-menu li:hover {
+    transition: all ease 0.2s;
+    font-weight: bold;
+    color: black;
+}
+#container {
+    width: 750px;
+    margin: 0 auto;
+}
+#header {	
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 700px;
+    height: 200px;
+}
+#server_name{
+    font-family: 'Bitstream Vera Sans', Tahoma;
+    font-weight: bolder;
+    font-size: 25pt;
+    color: gold;
+    margin-left: 250px;
+    margin-right: 50px;
+    margin-top: 200px;
+}
+#panel {
+    position: absolute;
+    margin-top: 200px;
+    color: white;
+}
+#panel li {
+    display: inline;
+}	
+#panel a{
+    background: #000 url(thebr/button-menu.gif) top;
+    margin-left: 4px;
+    width: 136px;
+    height: 17px;
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Verdana, sans-serif;
+    padding-top: 10px;
+    padding-left: 20px;
+    cursor: pointer;
+}
+#panel a:hover {
+    background: url(thebr/button-menu-over.gif);
+    color: gold;
+}
+#panel .top {
+    background: url(thebr/ptop.png) top;
+    width: 145px;
+    height: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Verdana, sans-serif;
+    padding-top: 10px;
+    padding-left: 20px;
+
+}
+#panel .ba {
+    background-image: url(thebr/bline.png);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 40px;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+
+}
+#panel .mid {
+    background: url(thebr/bgm.png)repeat-y;
+    text-align: center;
+    margin-left: 4px;
+    padding: 10px;
+    width: 136px;
+}
+
+#panel .bot {
+    background-image: url(thebr/pbot.png);
+    background-repeat: no-repeat;
+    margin-left:-1px;
+    padding: 0;
+    margin-bottom: 10px;
+    width: 165px;
+    height: 12px;
+
+}
+#panel ul {
+    width: 176px;
+    padding: 0;
+    margin: 0;
+}
+#content {
+    position: absolute;
+    margin-left: 195px;
+    margin-top: 250px;
+    color: #5a2800;
+}
+#content .top {
+    background: url(thebr/mline-top.png) top no-repeat;
+    width: 500px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    font-family: Verdana, sans-serif;
+    padding-top: 10px;
+    color: white;
+}
+#content .mid {
+    background: url(thebr/mbg.png) top repeat-y;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 479px;
+    min-height: 200px;
+}
+#content .bot {
+    background: url(thebr/mline-bot.png) bottom no-repeat;
+    height: 17px;
+    width: 500px;
+    margin-bottom: 15px;
+}
+#error {
+    position: absolute;
+    /*IE position: static;*/
+    color: red;
+    font-weight: bold;
+    margin-left: 200px;
+    cursor: pointer;
+}
+#captcha-image {
+    margin-top: 5px;
+}
+#choose-skill {
+    float: left;
+    margin-right: 20px;
+}
+#form #iobox{
+    position: fixed;
+    /*IE position: absolute;*/
+    background-color: #e2e2e2;
+    border: 1px solid #000;
+    cursor: move;
+}
+#form #iobox fieldset {
+    cursor: default;
+}
