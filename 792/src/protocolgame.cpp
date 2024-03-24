@@ -2210,7 +2210,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 					msg->AddByte(0x6D);
 					msg->AddPosition(oldPos);
 					msg->AddByte(oldStackPos);
-					msg->AddPosition(newPos);
+					msg->AddPosition(creature->getPosition());
 				}
 
 				if(newPos.z > oldPos.z)
