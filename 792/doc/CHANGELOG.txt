@@ -57,9 +57,6 @@
 			- levelToCreateGuild
 			- minGuildNameLength
 			- maxGuildNameLength
-		* New monsters configs at config.lua
-			- monstersDropSurpriseBags
-			- surpriseBagPercent
 		* Configurable spells at config.lua
 			- spellNameInsteadOfWords
 			- emoteSpells
