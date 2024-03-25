@@ -129,7 +129,6 @@ bool ConfigManager::load()
 	integer[LEVEL_TO_CREATE_GUILD] = getGlobalNumber(L, "levelToCreateGuild", 8);
 	integer[MIN_GUILD_NAME] = getGlobalNumber(L, "minGuildNameLength", 4);
 	integer[MAX_GUILD_NAME] = getGlobalNumber(L, "maxGuildNameLength", 20);
-	integer[SUPRISEBAG_PERCENT] = getGlobalNumber(L, "surpriseBagPercent", 0);
 	integer[HOUSES_PER_ACCOUNT] = getGlobalNumber(L, "housesPerOneAccount", -1);
 	integer[VIPLIST_DEFAULT_LIMIT] = getGlobalNumber(L, "vipListDefaultLimit", 20);
 	integer[VIPLIST_DEFAULT_PREMIUM_LIMIT] = getGlobalNumber(L, "vipListDefaultPremiumLimit", 100);
@@ -157,7 +156,6 @@ bool ConfigManager::load()
 	boolean[ALLOW_CHANGEOUTFIT] = getGlobalBool(L, "allowChangeOutfit", true);
 	boolean[CLEAN_PZ] = getGlobalBool(L, "cleanProtectedZones", true);
 	boolean[ENABLE_RULE_VIOLATION_REPORTS] = getGlobalBool(L, "enableRuleViolationReports", false);
-	boolean[SURPRISE_BAGS] = getGlobalBool(L, "monstersDropSurpriseBags", false);
 	boolean[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool(L, "spellNameInsteadOfWords", false);
 	boolean[EMOTE_SPELLS] = getGlobalBool(L, "emoteSpells", false);
 	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);

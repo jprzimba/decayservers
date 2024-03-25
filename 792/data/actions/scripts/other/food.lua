@@ -15,6 +15,6 @@ function onUse(cid, item, frompos, item2, topos)
 	
 	doPlayerFeed(cid, size)
 	doRemoveItem(item.uid, 1)
-	doCreatureSay(cid, sound, TALKTYPE_SAY)
+	doCreatureSay(cid, sound, TALKTYPE_ORANGE_1)
 	return true
 end

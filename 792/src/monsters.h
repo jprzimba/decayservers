@@ -142,7 +142,6 @@ class MonsterType
 
 		MonsterScriptList scriptList;
 
-		void createSurpriseBag(Container* corpse, std::string name);
 		void createLoot(Container* corpse);
 		void createLootContainer(Container* parent, const LootBlock& lootblock);
 		Item* createLootItem(const LootBlock& lootblock);

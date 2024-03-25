@@ -160,20 +160,6 @@ void MonsterType::createLoot(Container* corpse)
 	corpse->__startDecaying();
 }
 
-void MonsterType::createSurpriseBag(Container* corpse, std::string name)
-{
-	if(!g_config.getBool(ConfigManager::SURPRISE_BAGS))
-        return;
-
-	MonsterType* mType = g_monsters.getMonsterType(name);
-	if(corpse->capacity() - corpse->size() > 0){
-		int32_t surpriseBagId = random_range(6570, 6571);
-		if(random_range(1,100) <= g_config.getNumber(ConfigManager::SUPRISEBAG_PERCENT)){
-			corpse->__internalAddThing(Item::CreateItem(surpriseBagId, 1));
-		}
-	}
-}
-
 Item* MonsterType::createLootItem(const LootBlock& lootBlock)
 {
 	Item* tmpItem = NULL;

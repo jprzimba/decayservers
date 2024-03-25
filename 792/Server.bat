@@ -2,7 +2,7 @@
 title OTserv Auto-restarter 
 echo OTserv Auto-Restarter
 :begin 
-TheForgottenServer.exe 
+TheForgottenServer-debug.exe 
 echo Server restarting
 goto begin 
 :goto begin

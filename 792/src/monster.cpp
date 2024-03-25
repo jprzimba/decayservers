@@ -1283,11 +1283,10 @@ void Monster::updateLookDirection()
 
 void Monster::dropLoot(Container* corpse)
 {
-	if(corpse && lootDrop){
-		if(!getMaster()){
+	if(corpse && lootDrop)
+	{
+		if(!getMaster())
 			mType->createLoot(corpse);
-			mType->createSurpriseBag(corpse, getName());
-		}
 	}
 }
 

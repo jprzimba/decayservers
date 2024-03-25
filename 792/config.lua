@@ -102,8 +102,6 @@
 	rateSpawn = 1
 	deSpawnRange = 2
 	deSpawnRadius = 50
-	monstersDropSurpriseBags = false
-	surpriseBagPercent = 0
 
 	-- Stamina
 	-- staminaOfflineGainAmount: is the amount of stamina that the player will recover according to the time he was offline
