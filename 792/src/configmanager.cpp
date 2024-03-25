@@ -162,6 +162,7 @@ bool ConfigManager::load()
 	boolean[EMOTE_SPELLS] = getGlobalBool(L, "emoteSpells", false);
 	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);
 	boolean[REPLACE_KICK_ON_LOGIN] = getGlobalBool(L, "replaceKickOnLogin", true);
+	boolean[STOP_ATTACK_AT_EXIT] = getGlobalBool(L, "stopAttackingAtExit", false);
 
 	m_loaded = true;
 	lua_close(L);

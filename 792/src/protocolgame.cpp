@@ -1115,12 +1115,8 @@ void ProtocolGame::parseCancelMove(NetworkMessage& msg)
 
 void ProtocolGame::parseReceivePing(NetworkMessage& msg)
 {
-	if(m_now > m_nextPing)
-	{
-		Dispatcher::getDispatcher().addTask(
-			createTask(boost::bind(&Game::playerReceivePing, &g_game, player->getID())));
-		m_nextPing = m_now + 2000;
-	}
+	Dispatcher::getDispatcher().addTask(
+		createTask(boost::bind(&Game::playerReceivePing, &g_game, player->getID())));
 }
 
 void ProtocolGame::parseAutoWalk(NetworkMessage& msg)

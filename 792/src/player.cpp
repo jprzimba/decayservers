@@ -81,6 +81,8 @@ Creature()
 	magLevel = 0;
 	experience = 0;
 	stamina = STAMINA_MAX;
+	
+	lastPing = lastPong = OTSYS_TIME();
 
 	damageImmunities = 0;
 	conditionImmunities = 0;
@@ -89,8 +91,6 @@ Creature()
 	lastLoginSaved = 0;
 	lastLogout = 0;
  	lastIP = 0;
-	npings = 0;
-	internalPing = 0;
 	MessageBufferTicks = 0;
 	MessageBufferCount = 0;
 	nextAction = 0;
@@ -1154,23 +1154,22 @@ void Player::sendStats()
 
 void Player::sendPing()
 {
-	internalPing++;
-
-	//1 ping each 5 seconds
-	if(internalPing >= 5000)
+	int64_t timeNow = OTSYS_TIME();
+	if(timeNow - lastPing >= 5000)
 	{
-		internalPing = 0;
-		npings++;
+		lastPing = timeNow;
 		if(client)
 			client->sendPing();
+		else if(g_config.getBool(ConfigManager::STOP_ATTACK_AT_EXIT))
+			setAttackedCreature(NULL);
 	}
 
-	if(canLogout())
+	if((timeNow - lastPong) >= 60000 && canLogout())
 	{
-		if(!client)
-			g_game.removeCreature(this, true);
-		else if(npings > 24)
+		if(client)
 			client->logout(true, true);
+		else if(g_creatureEvents->playerLogout(this))
+			g_game.removeCreature(this, true);
 	}
 }
 

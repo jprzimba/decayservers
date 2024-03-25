@@ -66,6 +66,7 @@ class ConfigManager
 			EMOTE_SPELLS,
 			EXPERIENCE_STAGES,
 			REPLACE_KICK_ON_LOGIN,
+			STOP_ATTACK_AT_EXIT,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

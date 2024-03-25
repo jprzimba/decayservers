@@ -13,7 +13,7 @@
 	sqliteDatabase = "forgottenserver.s3db"
 
 	-- Connection Settings
-	ip = "crystalserver.servegame.com"
+	ip = "127.0.0.1"
 	port = 7171
 	loginTries = 0
 	retryTimeout = 30 * 1000
@@ -58,6 +58,7 @@
 	allowChangeOutfit = true
 	noDamageToSameLookfeet = false
 	experienceByKillingPlayers = false
+	stopAttackingAtExit = false
 
 	-- Highscores and Deathlist
 	highscoreDisplayPlayers = 15
