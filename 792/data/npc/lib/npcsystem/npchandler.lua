@@ -1,5 +1,6 @@
 -- Advanced NPC System (Created by Jiddo),
 -- Modified by Talaturen.
+-- Modified by Tryller.
 
 if(NpcHandler == nil) then	
 	-- Constant indexes for defining default messages.
@@ -140,30 +141,32 @@ if(NpcHandler == nil) then
 	-- Calls the callback function represented by id for all modules added to this npchandler with the given arguments.
 	function NpcHandler:processModuleCallback(id, ...)
 		local ret = true
-		for i, module in pairs(self.modules) do
+		for _, module in pairs(self.modules) do
 			local tmpRet = true
 			if(id == CALLBACK_CREATURE_APPEAR and module.callbackOnCreatureAppear ~= nil) then
-				tmpRet = module:callbackCreatureAppear(unpack(arg))
+				tmpRet = module:callbackOnCreatureAppear(...)
 			elseif(id == CALLBACK_CREATURE_DISAPPEAR and module.callbackOnCreatureDisappear ~= nil) then
-				tmpRet = module:callbackCreatureDisappear(unpack(arg))
+				tmpRet = module:callbackOnCreatureDisappear(...)
 			elseif(id == CALLBACK_CREATURE_SAY and module.callbackOnCreatureSay ~= nil) then
-				tmpRet = module:callbackCreatureSay(unpack(arg))
+				tmpRet = module:callbackOnCreatureSay(...)
 			elseif(id == CALLBACK_ONTHINK and module.callbackOnThink ~= nil) then
-				tmpRet = module:callbackOnThink(unpack(arg))
+				tmpRet = module:callbackOnThink(...)
 			elseif(id == CALLBACK_GREET and module.callbackOnGreet ~= nil) then
-				tmpRet = module:callbackOnGreet(unpack(arg))
+				tmpRet = module:callbackOnGreet(...)
 			elseif(id == CALLBACK_FAREWELL and module.callbackOnFarewell ~= nil) then
-				tmpRet = module:callbackOnFarewell(unpack(arg))
+				tmpRet = module:callbackOnFarewell(...)
 			elseif(id == CALLBACK_MESSAGE_DEFAULT and module.callbackOnMessageDefault ~= nil) then
-				tmpRet = module:callbackOnMessageDefault(unpack(arg))
+				tmpRet = module:callbackOnMessageDefault(...)
 			elseif(id == CALLBACK_MODULE_RESET and module.callbackOnModuleReset ~= nil) then
-				tmpRet = module:callbackOnModuleReset(unpack(arg))
+				tmpRet = module:callbackOnModuleReset(...)
 			end
+
 			if(not tmpRet) then
 				ret = false
 				break
 			end
 		end
+
 		return ret
 	end
 	
