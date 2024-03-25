@@ -1928,7 +1928,7 @@ void ProtocolGame::sendPing()
 
 void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, uint8_t type)
 {
-	if((canSee(from) || canSee(to)) && type <= 41)
+	if((canSee(from) || canSee(to)) && type <= 15)
 	{
 		NetworkMessage* msg = getOutputBuffer();
 		TRACK_MESSAGE(msg);
@@ -1939,7 +1939,7 @@ void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, u
 
 void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
 {
-	if(canSee(pos) && type <= 56)
+	if(canSee(pos) && type <= 30)
 	{
 		NetworkMessage* msg = getOutputBuffer();
 		TRACK_MESSAGE(msg);
