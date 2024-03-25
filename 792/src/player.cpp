@@ -1691,10 +1691,11 @@ void Player::onThink(uint32_t interval)
 		checkRedSkullTicks(interval);
 }
 
-uint32_t Player::isMuted()
+bool Player::isMuted(uint16_t channelId, SpeakClasses type, uint32_t& time)
 {
+	time = 0;
 	if(hasFlag(PlayerFlag_CannotBeMuted))
-		return 0;
+		return false;
 
 	int32_t muteTicks = 0;
 	for(ConditionList::iterator it = conditions.begin(); it != conditions.end(); ++it)
@@ -1702,7 +1703,9 @@ uint32_t Player::isMuted()
 		if((*it)->getType() == CONDITION_MUTED && (*it)->getTicks() > muteTicks)
 			muteTicks = (*it)->getTicks();
 	}
-	return ((uint32_t)muteTicks / 1000);
+
+	time = (uint32_t)muteTicks / 1000;
+	return time > 0 && (type != SPEAK_CHANNEL_Y || (channelId != CHANNEL_GUILD && !g_chat.isPrivateChannel(channelId)));
 }
 
 void Player::addMessageBuffer()

@@ -183,4 +183,6 @@ enum passwordType_t
 #define M_PI 3.14159265358979323846
 #endif
 
+#define NETWORKMESSAGE_MAXSIZE 15360
+
 #endif

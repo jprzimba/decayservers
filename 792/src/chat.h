@@ -103,7 +103,9 @@ class Chat
 
 		ChatChannel* getChannel(Player* player, uint16_t channelId);
 		ChatChannel* getChannelById(uint16_t channelId);
+
 		PrivateChatChannel* getPrivateChannel(Player* player);
+		bool isPrivateChannel(uint16_t channelId) const {return m_privateChannels.find(channelId) != m_privateChannels.end();}
 
 	private:
 		typedef std::map<uint16_t, ChatChannel*> NormalChannelMap;
@@ -118,3 +120,4 @@ class Chat
 };
 
 #endif
+

@@ -115,23 +115,45 @@ ChatChannel::ChatChannel(uint16_t channelId, std::string channelName)
 	
 bool ChatChannel::addUser(Player* player)
 {
-	if(m_users.find(player->getID()) != m_users.end())
+	UsersMap::iterator it = m_users.find(player->getID());
+	if(it != m_users.end())
 		return false;
 
-	if(m_id == CHANNEL_GUILD && IOGuild::getInstance()->getMotd(player->getGuildId()).length())
+	switch(m_id)
 	{
-		uint32_t playerId = player->getID();
-		uint32_t guildId = player->getGuildId();
-		Scheduler::getScheduler().addEvent(createSchedulerTask(150, boost::bind(
-			&Game::sendGuildMotd, &g_game, playerId, guildId)));
-	}
+		case CHANNEL_GUILD:
+		{
+			uint32_t playerId = player->getID();
+			uint32_t guildId = player->getGuildId();
+			if(IOGuild::getInstance()->getMotd(player->getGuildId()).length())
+				Scheduler::getScheduler().addEvent(createSchedulerTask(150, boost::bind(&Game::sendGuildMotd, &g_game, playerId, guildId)));
+			break;
+		}
 
+		case CHANNEL_GAMEMASTER:
+			if(player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
+				return false;
+			break;
 
-	if(CHANNEL_RVR && !g_config.getBool(ConfigManager::ENABLE_RULE_VIOLATION_REPORTS))
-	{
-		uint32_t playerId = player->getID();
-		Scheduler::getScheduler().addEvent(createSchedulerTask(150, boost::bind(
-			&Game::sendRVRDisabled, &g_game, playerId)));
+		case CHANNEL_TUTOR:
+			if(player->getAccountType() < ACCOUNT_TYPE_TUTOR)
+				return false;
+			break;
+
+		case CHANNEL_RVR:
+			if(!player->hasFlag(PlayerFlag_CanAnswerRuleViolations) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
+				return false;
+			break;
+
+		case CHANNEL_TRADE:
+			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
+				return false;
+			break;
+
+		case CHANNEL_TRADEROOK:
+			if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() != VOCATION_NONE)
+				return false;
+			break;
 	}
 
 	m_users[player->getID()] = player;
@@ -159,7 +181,7 @@ bool ChatChannel::talk(Player* fromPlayer, SpeakClasses type, const std::string&
 	if(m_id != CHANNEL_RVR && m_users.find(fromPlayer->getID()) == m_users.end())
 		return false;
 
-	if(!fromPlayer->hasFlag(PlayerFlag_CannotBeMuted) && (m_id == CHANEL_TRADE || m_id == CHANNEL_TRADEROOK))
+	if(!fromPlayer->hasFlag(PlayerFlag_CannotBeMuted) && (m_id == CHANNEL_TRADE || m_id == CHANNEL_TRADEROOK))
 	{
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_TRADETICKS, 120000, 0);
 		fromPlayer->addCondition(condition);
@@ -192,17 +214,17 @@ Chat::Chat()
 	if(newChannel)
 		m_normalChannels[CHANNEL_GAMECHAT] = newChannel;
 
-	newChannel = new ChatChannel(CHANEL_TRADE, "Trade");
+	newChannel = new ChatChannel(CHANNEL_TRADE, "Trade");
 	if(newChannel)
-		m_normalChannels[CHANEL_TRADE] = newChannel;
+		m_normalChannels[CHANNEL_TRADE] = newChannel;
 
 	newChannel = new ChatChannel(CHANNEL_TRADEROOK, "Trade-Rookgaard");
 	if(newChannel)
 		m_normalChannels[CHANNEL_TRADEROOK] = newChannel;
 
-	newChannel = new ChatChannel(CHANEL_HELP, "Help");
+	newChannel = new ChatChannel(CHANNEL_HELP, "Help");
 	if(newChannel)
-		m_normalChannels[CHANEL_HELP] = newChannel;
+		m_normalChannels[CHANNEL_HELP] = newChannel;
 
 	newChannel = new PrivateChatChannel(CHANNEL_PRIVATE, "Private Chat Channel");
 	if(newChannel)
@@ -349,12 +371,12 @@ bool Chat::talkToChannel(Player* player, SpeakClasses type, const std::string& t
 
 	if(player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
 	{
-		if(player->hasCondition(CONDITION_TRADETICKS) && (channelId == CHANEL_TRADE || channelId == CHANNEL_TRADEROOK))
+		if(player->hasCondition(CONDITION_TRADETICKS) && (channelId == CHANNEL_TRADE || channelId == CHANNEL_TRADEROOK))
 		{
 			player->sendCancel("You may only place one offer in two minutes.");
 			return false;
 		}
-		else if(player->getLevel() < 2 && channelId < CHANEL_HELP)
+		else if(player->getLevel() < 2 && channelId < CHANNEL_HELP)
 		{
 			player->sendCancel("You may not speak into channels as long as you are on level 1.");
 			return false;
@@ -1083,7 +1105,7 @@ ChatChannel* Chat::getChannel(Player* player, uint16_t channelId)
 				break;
 			}
 
-			case CHANEL_TRADE:
+			case CHANNEL_TRADE:
 			{
 				if(player->getAccountType() < ACCOUNT_TYPE_SENIORTUTOR && player->getVocationId() == VOCATION_NONE)
 					return NULL;
@@ -1131,3 +1153,4 @@ PrivateChatChannel* Chat::getPrivateChannel(Player* player)
 	}
 	return NULL;
 }
+

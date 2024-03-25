@@ -158,6 +158,7 @@ bool ConfigManager::load()
 	boolean[ENABLE_RULE_VIOLATION_REPORTS] = getGlobalBool(L, "enableRuleViolationReports", false);
 	boolean[SPELL_NAME_INSTEAD_WORDS] = getGlobalBool(L, "spellNameInsteadOfWords", false);
 	boolean[EMOTE_SPELLS] = getGlobalBool(L, "emoteSpells", false);
+	boolean[BUFFER_SPELL_FAILURE] = getGlobalBool(L, "bufferMutedOnSpellFailure", false);
 	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);
 	boolean[REPLACE_KICK_ON_LOGIN] = getGlobalBool(L, "replaceKickOnLogin", true);
 	boolean[STOP_ATTACK_AT_EXIT] = getGlobalBool(L, "stopAttackingAtExit", false);

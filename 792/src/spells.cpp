@@ -46,7 +46,7 @@ Spells::~Spells()
 	clear();
 }
 
-ReturnValue Spells::playerSaySpell(Player* player, const std::string& words)
+ReturnValue Spells::onPlayerSay(Player* player, const std::string& words)
 {
 	std::string reWords = words;
 	trimString(reWords);

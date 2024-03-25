@@ -2021,7 +2021,7 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text, Speak
 
 	if(type >= SPEAK_CLASS_FIRST && type <= SPEAK_CLASS_LAST)
 	{
-		std::clog << "" << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
+		std::clog << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it)
 			(*it).second->sendCreatureSay(player, type, text);
 		return true;
@@ -3269,24 +3269,39 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 
 	player->resetIdleTime();
 
-	uint32_t muteTime = player->isMuted();
-	if(muteTime > 0)
+	uint32_t muteTime = 0;
+	bool muted = player->isMuted(channelId, type, muteTime);
+	if(muted)
 	{
-		char buffer[50];
+		char buffer[75];
 		sprintf(buffer, "You are still muted for %d seconds.", muteTime);
 		player->sendTextMessage(MSG_STATUS_SMALL, buffer);
 		return false;
 	}
 
-	TalkActionResult_t result;
-	result = g_talkActions->onPlayerSpeak(player, type, text);
-	if(result == TALKACTION_BREAK)
+	if(player->getName() == "Account Manager")
+	{
+		player->removeMessageBuffer();
+		return internalCreatureSay(player, SPEAK_SAY, text);
+	}
+
+	if(g_talkActions->onPlayerSpeak(player, type, text))
 		return true;
 
-	if(playerSaySpell(player, text))
-		return true;
+	if(!muted)
+	{
+		ReturnValue ret = RET_NOERROR;
+		if(!muteTime)
+		{
+			ret = g_spells->onPlayerSay(player, text);
+			if(ret == RET_NOERROR || (ret == RET_NEEDEXCHANGE && !g_config.getBool(ConfigManager::BUFFER_SPELL_FAILURE)))
+				return true;
+		}
 
-	player->removeMessageBuffer();
+		player->removeMessageBuffer();
+		if(ret == RET_NEEDEXCHANGE)
+			return true;
+	}
 
 	switch(type)
 	{
@@ -3323,21 +3338,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		default:
 			break;
 	}
-	return false;
-}
-
-bool Game::playerSaySpell(Player* player, const std::string& text)
-{
-	if(player->getName() == "Account Manager")
-		return internalCreatureSay(player, SPEAK_SAY, text);
-
-	std::string words = text;
-	ReturnValue result = g_spells->playerSaySpell(player, words);
-	if(result == RET_NOTPOSSIBLE)
-		return internalCreatureSay(player, SPEAK_SAY, words);
-	else if(result == RET_NOERROR)
-		return true;
-
 	return false;
 }
 
@@ -3424,14 +3424,14 @@ bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::str
 	{
 		case SPEAK_CHANNEL_Y:
 		{
-			if(channelId == 0x08 && (player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) || player->getAccountType() > ACCOUNT_TYPE_NORMAL))
+			if(channelId == CHANNEL_HELP && (player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) || player->getAccountType() > ACCOUNT_TYPE_NORMAL))
 				type = SPEAK_CHANNEL_O;
 			break;
 		}
 
 		case SPEAK_CHANNEL_O:
 		{
-			if(channelId != 0x08 || (!player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) && player->getAccountType() == ACCOUNT_TYPE_NORMAL))
+			if(channelId != CHANNEL_HELP || (!player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) && player->getAccountType() == ACCOUNT_TYPE_NORMAL))
 				type = SPEAK_CHANNEL_Y;
 			break;
 		}

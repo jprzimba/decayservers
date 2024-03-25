@@ -66,6 +66,7 @@ class ConfigManager
 			EXPERIENCE_STAGES,
 			REPLACE_KICK_ON_LOGIN,
 			STOP_ATTACK_AT_EXIT,
+			BUFFER_SPELL_FAILURE,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

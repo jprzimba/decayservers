@@ -268,7 +268,7 @@ class Player : public Creature, public Cylinder
 
 		virtual bool isPushable() const;
 		virtual int32_t getThrowRange() const {return 1;}
-		uint32_t isMuted();
+		bool isMuted(uint16_t channelId, SpeakClasses type, uint32_t& time);
 		void addMessageBuffer();
 		void removeMessageBuffer();
 

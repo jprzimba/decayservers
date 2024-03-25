@@ -118,6 +118,7 @@
 	vipListDefaultPremiumLimit = 100
 
 	-- Spells
+	bufferMutedOnSpellFailure = false
 	spellNameInsteadOfWords = false
 	emoteSpells = false
 

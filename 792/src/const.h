@@ -23,8 +23,6 @@
 
 #include "definitions.h"
 
-#define NETWORKMESSAGE_MAXSIZE 15360
-
 enum ChatChannels_t
 {
 	CHANNEL_GUILD	= 0x00,
@@ -37,6 +35,7 @@ enum ChatChannels_t
 	CHANEL_HELP		= 0x08,
 	CHANNEL_PRIVATE = 0xFFFF
 };
+
 
 enum MagicEffectClasses
 {
