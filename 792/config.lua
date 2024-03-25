@@ -58,7 +58,6 @@
 	allowChangeOutfit = true
 	noDamageToSameLookfeet = false
 	experienceByKillingPlayers = false
-	stopAttackingAtExit = false
 
 	-- Highscores and Deathlist
 	highscoreDisplayPlayers = 15
@@ -148,6 +147,7 @@
 	maxMessageBuffer = 4
 	kickIdlePlayerAfterMinutes = 15
 	enableRuleViolationReports = true
+	stopAttackingAtExit = false
 
 	-- Status
 	ownerName = ""
