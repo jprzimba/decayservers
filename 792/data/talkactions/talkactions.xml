@@ -31,7 +31,7 @@
 	<talkaction access="3" log="yes" words="/ghost" function="ghost"/>
 	<talkaction access="3" log="yes" words="/info" function="getinfo"/>
 	<talkaction access="3" log="yes" words="/raid" function="forceraid"/>
-	<talkaction access="3" log="yes" words="/newtype" function="newtype"/>
+	<talkaction access="3" log="yes" words="/newtype" script="newtype.lua"/>
 
 	<!-- Players -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

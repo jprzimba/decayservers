@@ -275,8 +275,6 @@ bool TalkAction::loadFunction(const std::string& functionName)
 		m_function = setHouseOwner;
 	else if(tmpFunctionName == "removething")
 		m_function = removeThing;
-	else if(tmpFunctionName == "newtype")
-		m_function = newType;
 	else
 	{
 		std::clog << "[Warning - TalkAction::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -1044,23 +1042,3 @@ bool TalkAction::removeThing(Creature* creature, const std::string& cmd, const s
 	}
 	return false;
 }
-
-bool TalkAction::newType(Creature* creature, const std::string& cmd, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
-
-	int32_t lookType = atoi(param.c_str());
-	if(lookType < 0 || lookType == 1 || lookType == 135 || lookType > 160 && lookType < 192 || lookType > 247)
-		player->sendTextMessage(MSG_STATUS_SMALL, "This looktype does not exist.");
-	else
-	{
-		g_game.internalCreatureChangeOutfit(creature, (const Outfit_t&)lookType);
-		return true;
-	}
-
-	return false;
-}
-
-

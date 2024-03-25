@@ -1185,23 +1185,21 @@ Item* Monster::getCorpse()
 
 bool Monster::inDespawnRange(const Position& pos)
 {
-	if(spawn)
-	{
-		if(Monster::despawnRadius == 0)
-			return false;
-
-		if(!Spawns::getInstance()->isInZone(masterPos, Monster::despawnRadius, pos))
-			return true;
-
-		if(Monster::despawnRange == 0)
-			return false;
-
-		if(std::abs(pos.z - masterPos.z) > Monster::despawnRange)
-			return true;
-
+	if(!spawn || mType->isLureable)
 		return false;
-	}
-	return false;
+
+	int32_t radius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
+	if(!radius)
+		return false;
+
+	if(!Spawns::getInstance()->isInZone(masterPos, radius, pos))
+		return true;
+
+	int32_t range = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
+	if(!range)
+		return false;
+
+	return std::abs(pos.z - masterPos.z) > range;
 }
 
 bool Monster::despawn()

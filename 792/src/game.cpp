@@ -238,8 +238,6 @@ int32_t Game::loadMap(std::string filename)
 	maxPlayers = g_config.getNumber(ConfigManager::MAX_PLAYERS);
 	inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
 	Player::maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
-	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
-	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
 
 	std::string file = getFilePath(FILE_TYPE_CONFIG, "world/" + filename + ".otbm");
 	if(!fileExists(file.c_str()))
