@@ -2004,7 +2004,7 @@ void Player::death()
 			++it;
 	}
 
-	loginPosition = masterPos;
+	loginPosition = masterPosition;
 
 	if(skillLoss)
 	{

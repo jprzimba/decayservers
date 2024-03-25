@@ -76,6 +76,7 @@ class Groups
 		}
 
 		bool loadFromXml();
+		bool parseGroupNode(xmlNodePtr p);
 
 		void clear();
 		bool reload();

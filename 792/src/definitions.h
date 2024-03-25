@@ -23,9 +23,11 @@
 
 #include "exception.h"
 
-//pugixml
-#include "pugicast.h"
-#include <pugixml.hpp>
+#ifdef __XML_GCC_FREE__
+	#define xmlFreeOTSERV(s)	free(s)
+#else
+	#define xmlFreeOTSERV(s)	xmlFree(s)
+#endif
 
 #ifdef __DEBUG_EXCEPTION_REPORT__
 	#define DEBUG_REPORT int *a = NULL; *a = 1;

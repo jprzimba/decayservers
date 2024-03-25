@@ -57,7 +57,7 @@ class TalkActions : public BaseEvents
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		virtual bool registerEvent(Event* event, xmlNodePtr p);
 		virtual void clear();
 	
 		typedef std::list< std::pair<std::string, TalkAction* > > TalkActionList;
@@ -74,7 +74,7 @@ class TalkAction : public Event
 		TalkAction(LuaScriptInterface* _interface);
 		virtual ~TalkAction();
 		
-		virtual bool configureEvent(const pugi::xml_node& node);
+		virtual bool configureEvent(xmlNodePtr p);
 		virtual bool loadFunction(const std::string& functionName);
 	
 		std::string getWords() const {return m_words;}

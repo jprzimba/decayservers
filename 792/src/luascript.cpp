@@ -1896,7 +1896,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			case PlayerInfoMasterPos:
 			{
 				Position pos;
-				pos = player->masterPos;
+				pos = player->masterPosition;
 				pushPosition(L, pos, 0);
 				return 1;
 			}
@@ -3881,7 +3881,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetTown(lua_State* L)
 		Town* town = Towns::getInstance().getTown(townid);
 		if(town)
 		{
-			player->masterPos = town->getTemplePosition();
+			player->masterPosition = town->getTemplePosition();
 			player->setTown(townid);
 			lua_pushboolean(L, true);
 		}

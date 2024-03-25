@@ -147,6 +147,99 @@ std::string asUpperCaseString(const std::string& source)
 	return s;
 }
 
+bool readXMLInteger(xmlNodePtr node, const char* tag, int& value)
+{
+	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
+	if(nodeValue)
+	{
+		value = atoi(nodeValue);
+		xmlFreeOTSERV(nodeValue);
+		return true;
+	}
+
+	return false;
+}
+
+bool readXMLInteger64(xmlNodePtr node, const char* tag, int64_t& value)
+{
+	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
+	if(!nodeValue)
+		return false;
+
+	value = atoll(nodeValue);
+	xmlFree(nodeValue);
+	return true;
+}
+
+bool readXMLFloat(xmlNodePtr node, const char* tag, float& value)
+{
+	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
+	if(nodeValue)
+	{
+		value = atof(nodeValue);
+		xmlFreeOTSERV(nodeValue);
+		return true;
+	}
+
+	return false;
+}
+
+bool utf8ToLatin1(char* intext, std::string& outtext)
+{
+	outtext = "";
+
+	if(intext == NULL)
+		return false;
+
+	int32_t inlen  = strlen(intext);
+	if(inlen == 0)
+		return false;
+
+	int32_t outlen = inlen * 2;
+	unsigned char* outbuf = new uint8_t[outlen];
+	int32_t res = UTF8Toisolat1(outbuf, &outlen, (unsigned char*)intext, &inlen);
+	if(res < 0)
+	{
+		delete[] outbuf;
+		return false;
+	}
+
+	outbuf[outlen] = '\0';
+	outtext = (char*)outbuf;
+	delete[] outbuf;
+	return true;
+}
+
+bool readXMLString(xmlNodePtr node, const char* tag, std::string& value)
+{
+	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
+	if(nodeValue)
+	{
+		if(!utf8ToLatin1(nodeValue, value))
+			value = nodeValue;
+
+		xmlFreeOTSERV(nodeValue);
+		return true;
+	}
+
+	return false;
+}
+
+bool readXMLContentString(xmlNodePtr node, std::string& value)
+{
+	char* nodeValue = (char*)xmlNodeGetContent(node);
+	if(nodeValue)
+	{
+		if(!utf8ToLatin1(nodeValue, value))
+			value = nodeValue;
+
+		xmlFreeOTSERV(nodeValue);
+		return true;
+	}
+
+	return false;
+}
+
 std::vector<std::string> explodeString(const std::string& inString, const std::string& separator)
 {
 	std::vector<std::string> returnVector;

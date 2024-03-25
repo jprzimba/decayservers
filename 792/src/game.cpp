@@ -4904,48 +4904,54 @@ bool Game::loadExperienceStages()
 	if(!g_config.getBool(ConfigManager::EXPERIENCE_STAGES))
 		return true;
 
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
-	if(!result) {
-		std::clog << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
-		return false;
-	}
+	std::string filename = "data/XML/stages.xml";
+	xmlDocPtr doc = xmlParseFile(filename.c_str());
+	if(doc)
+	{
+		xmlNodePtr root, p;
+		int32_t intVal, low, high, mult;
+		root = xmlDocGetRootElement(doc);
+		if(xmlStrcmp(root->name,(const xmlChar*)"stages"))
+		{
+			xmlFreeDoc(doc);
+			return false;
+		}
+		p = root->children;
 
-	for(pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
-		if(strcasecmp(stageNode.name(), "stage") == 0){
-			uint32_t minLevel, maxLevel, multiplier;
+		while(p)
+		{
+			if(!xmlStrcmp(p->name, (const xmlChar*)"stage"))
+			{
+				if(readXMLInteger(p, "minlevel", intVal))
+					low = intVal;
+				else
+					low = 1;
 
-			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
-			if(minLevelAttribute) {
-				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
-			} else {
-				minLevel = 1;
-			}
+				if(readXMLInteger(p, "maxlevel", intVal))
+					high = intVal;
+				else
+				{
+					high = 0;
+					lastStageLevel = low;
+					useLastStageLevel = true;
+				}
 
-			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
-			if(maxLevelAttribute) {
-				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
-			} else {
-				maxLevel = 0;
-				lastStageLevel = minLevel;
-				useLastStageLevel = true;
-			}
+				if(readXMLInteger(p, "multiplier", intVal))
+					mult = intVal;
+				else
+					mult = 1;
 
-			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
-			if(multiplierAttribute) {
-				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
-			} else {
-				multiplier = 1;
-			}
-
-			if(useLastStageLevel) {
-				stages[lastStageLevel] = multiplier;
-			} else {
-				for(uint32_t i = minLevel; i <= maxLevel; ++i) {
-					stages[i] = multiplier;
+				if(useLastStageLevel)
+					stages[lastStageLevel] = mult;
+				else
+				{
+					for(int32_t iteratorValue = low; iteratorValue <= high; iteratorValue++)
+						stages[iteratorValue] = mult;
 				}
 			}
+			p = p->next;
 		}
+		xmlFreeDoc(doc);
 	}
 	return true;
 }

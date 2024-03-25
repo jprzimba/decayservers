@@ -17,6 +17,9 @@
 #include "otpch.h"
 #include <iostream>
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+
 #include "group.h"
 #include "tools.h"
 #include "configmanager.h"
@@ -41,45 +44,67 @@ bool Groups::reload()
 
 bool Groups::loadFromXml()
 {
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
-	if(!result) {
-		std::clog << "[Error - Groups::loadFromXml] Failed to load data/XML/groups.xml: " << result.description() << std::endl;
+	xmlDocPtr doc = xmlParseFile(getFilePath(FILE_TYPE_XML, "groups.xml").c_str());
+	if(!doc)
+	{
+		std::clog << "[Warning - Groups::loadFromXml] Cannot load groups file." << std::endl;
 		return false;
 	}
 
-	for(pugi::xml_node groupNode = doc.child("groups").first_child(); groupNode; groupNode = groupNode.next_sibling()) {
-		pugi::xml_attribute attr;
-		if(attr = groupNode.attribute("id"))
-		{
-			Group* group = new Group(pugi::cast<uint32_t>(attr.value()));
-			
-			if(attr = groupNode.attribute("name"))
-			{
-				group->setFullName(attr.as_string());
-				group->setName(asLowerCaseString(attr.as_string()));
-			}
-
-			if(attr = groupNode.attribute("flags"))
-				group->setFlags(pugi::cast<int64_t>(attr.value()));
-			
-			if(attr = groupNode.attribute("access"))
-				group->setAccess(pugi::cast<int32_t>(attr.value()));
-
-			if(attr = groupNode.attribute("depotLimit"))
-				group->setDepotLimit(pugi::cast<int32_t>(attr.value()));
-			
-			if(attr = groupNode.attribute("maxVips"))
-				group->setMaxVips(pugi::cast<int32_t>(attr.value()));
-
-			groupsMap[group->getId()] = group;
-		}
-		else
-		{
-			std::clog << "[Warning - Groups::loadFromXml] Missing group id." << std::endl;
-			return false;
-		}
+	xmlNodePtr p, root = xmlDocGetRootElement(doc);
+	if(xmlStrcmp(root->name,(const xmlChar*)"groups"))
+	{
+		std::clog << "[Error - Groups::loadFromXml] Malformed groups file." << std::endl;
+		xmlFreeDoc(doc);
+		return false;
 	}
+
+	p = root->children;
+	while(p)
+	{
+		parseGroupNode(p);
+		p = p->next;
+	}
+
+	xmlFreeDoc(doc);
+	return true;
+}
+
+bool Groups::parseGroupNode(xmlNodePtr p)
+{
+	if(xmlStrcmp(p->name, (const xmlChar*)"group"))
+		return false;
+
+	int32_t intValue;
+	if(!readXMLInteger(p, "id", intValue))
+	{
+		std::clog << "[Warning - Groups::parseGroupNode] Missing group id." << std::endl;
+		return false;
+	}
+
+	std::string strValue;
+	int64_t int64Value;
+
+	Group* group = new Group(intValue);
+	if(readXMLString(p, "name", strValue))
+	{
+		group->setFullName(strValue);
+		group->setName(asLowerCaseString(strValue));
+	}
+
+	if(readXMLInteger64(p, "flags", int64Value))
+		group->setFlags(int64Value);
+
+	if(readXMLInteger(p, "access", intValue))
+		group->setAccess(intValue);
+
+	if(readXMLInteger(p, "depotLimit", intValue))
+		group->setDepotLimit(intValue);
+
+	if(readXMLInteger(p, "maxVips", intValue))
+		group->setMaxVips(intValue);
+
+	groupsMap[group->getId()] = group;
 	return true;
 }
 

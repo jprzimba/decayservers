@@ -133,7 +133,7 @@ class RaidEvent
 		RaidEvent() {}
 		virtual ~RaidEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		virtual bool configureRaidEvent(xmlNodePtr eventNode);
 
 		virtual bool executeEvent() {return false;}
 		uint32_t getDelay() const {return m_delay;}
@@ -154,7 +154,7 @@ class AnnounceEvent : public RaidEvent
 		AnnounceEvent() {}
 		virtual ~AnnounceEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		virtual bool configureRaidEvent(xmlNodePtr eventNode);
 
 		virtual bool executeEvent();
 
@@ -169,7 +169,7 @@ class SingleSpawnEvent : public RaidEvent
 		SingleSpawnEvent() {}
 		virtual ~SingleSpawnEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		virtual bool configureRaidEvent(xmlNodePtr eventNode);
 
 		virtual bool executeEvent();
 
@@ -184,7 +184,7 @@ class AreaSpawnEvent : public RaidEvent
 		AreaSpawnEvent() {}
 		virtual ~AreaSpawnEvent();
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		virtual bool configureRaidEvent(xmlNodePtr eventNode);
 
 		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
@@ -202,10 +202,8 @@ class ScriptEvent : public RaidEvent, public Event
 		ScriptEvent();
 		~ScriptEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-		virtual bool configureEvent(const pugi::xml_node& node) {
-			return false;
-		}
+		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureEvent(xmlNodePtr p) {return false;}
 
 		bool executeEvent();
 

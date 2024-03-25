@@ -184,49 +184,84 @@ bool Quests::reload()
 
 bool Quests::loadFromXml()
 {
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/quests.xml");
-	if(!result) {
-		std::clog << "[Error - Quests::loadFromXml] Failed to load data/XML/quests.xml: " << result.description() << std::endl;
-		return false;
-	}
+	std::string filename = "data/XML/quests.xml";
+	xmlDocPtr doc = xmlParseFile(filename.c_str());
+	if(doc)
+	{
+		xmlNodePtr root, p;
+		root = xmlDocGetRootElement(doc);
+		if(xmlStrcmp(root->name,(const xmlChar*)"quests") == 0)
+		{
+			int32_t intValue;
+			std::string strValue;
+			uint16_t id = 0;
+			p = root->children;
+			while(p)
+			{
+				if(xmlStrcmp(p->name, (const xmlChar*)"quest") == 0)
+				{
+					std::string name;
+					uint32_t startStorageID = 0, startStorageValue = 0;
+					if(readXMLString(p, "name", strValue))
+						name = strValue;
+						
+					if(readXMLInteger(p, "startstorageid", intValue))
+						startStorageID = intValue;
 
-	uint16_t id = 0;
-	for(pugi::xml_node questNode = doc.child("quests").first_child(); questNode; questNode = questNode.next_sibling()) {
-			std::string name;
-			int32_t startStorageID = 0, startStorageValue = 0;
-			name = questNode.attribute("name").as_string();
-			startStorageID = pugi::cast<int32_t>(questNode.attribute("startstorageid").value());
-			startStorageValue = pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value());
-			
-			Quest *quest = new Quest(name, id, startStorageID, startStorageValue);
+					if(readXMLInteger(p, "startstoragevalue", intValue))
+						startStorageValue = intValue;
+					
+					Quest *quest = new Quest(name, id, startStorageID, startStorageValue);
+					xmlNodePtr tmpNode = p->children;
+					while(tmpNode)
+					{
+						if(xmlStrcmp(tmpNode->name, (const xmlChar*)"mission") == 0)
+						{
+							std::string missionName;
+							uint32_t storageID = 0, startValue = 0, endValue = 0;
+							if(readXMLString(tmpNode, "name", strValue))
+								missionName = strValue;
 
-		for(pugi::xml_node missionNode = questNode.first_child(); missionNode; missionNode = missionNode.next_sibling()) {
-			std::string missionName, missionState;
-			int32_t storageID = 0, startValue = 0, endValue = 0;
-			missionName = missionNode.attribute("name").as_string();
-			storageID = pugi::cast<int32_t>(missionNode.attribute("storageid").value());
-			startValue = pugi::cast<int32_t>(missionNode.attribute("startvalue").value());
-			endValue = pugi::cast<int32_t>(missionNode.attribute("endvalue").value());
-			missionState = missionNode.attribute("description").as_string();
-			
-			Mission* mission = new Mission(missionName, storageID, startValue, endValue);
+							if(readXMLInteger(tmpNode, "storageid", intValue))
+								storageID = intValue;
 
-			if(missionState.empty()) {
-				for(pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
-					int32_t missionID = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
-					mission->state[missionID] = new MissionState(missionStateNode.attribute("description").as_string(), missionID);
+							if(readXMLInteger(tmpNode, "startvalue", intValue))
+								startValue = intValue;
+							
+							if(readXMLInteger(tmpNode, "endvalue", intValue))
+								endValue = intValue;
+							
+							xmlNodePtr tmpNode2 = tmpNode->children;
+
+							Mission *mission = new Mission(missionName, storageID, startValue, endValue);
+							while(tmpNode2)
+							{
+								if(xmlStrcmp(tmpNode2->name, (const xmlChar*)"missionstate") == 0)
+								{
+									std::string description;
+									uint32_t missionID;
+									if(readXMLInteger(tmpNode2, "id", intValue))
+										missionID = intValue;
+									if(readXMLString(tmpNode2, "description", strValue))
+										description = strValue;
+									mission->state[missionID] = new MissionState(description, missionID);
+								}
+								tmpNode2 = tmpNode2->next;
+							}
+							quest->missions.push_back(mission);
+						}
+						tmpNode = tmpNode->next;
+					}
+					quests.push_back(quest);
 				}
-			} else {
-				mission->mainState = new MissionState(missionState, 0);
+				id++;
+				p = p->next;
 			}
-			
-			quest->addMission(mission);
 		}
-		id++;
-		quests.push_back(quest);
+		xmlFreeDoc(doc);
+		return true;
 	}
-	return true;
+	return false;
 }
 
 Quest *Quests::getQuestByID(uint16_t id)

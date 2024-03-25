@@ -15,9 +15,6 @@
 #include <winerror.h>
 #endif
 
-//pugixml
-#include <pugixml.hpp>
-
 //boost
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>

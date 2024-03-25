@@ -105,20 +105,23 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 		return NULL;
 }
 
-bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
+bool MoveEvents::registerEvent(Event* event, xmlNodePtr p)
 {
 	MoveEvent* moveEvent = dynamic_cast<MoveEvent*>(event);
-	if(!moveEvent) {
+	if(!moveEvent)
 		return false;
-	}
 
 	bool success = true;
+	int32_t id, endId;
+	std::string str;
 
 	MoveEvent_t eventType = moveEvent->getEventType();
-	if(eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
-		pugi::xml_attribute tileItemAttribute = node.attribute("tileitem");
-		if(tileItemAttribute && pugi::cast<uint16_t>(tileItemAttribute.value()) == 1) {
-			switch (eventType) {
+	if(eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM)
+	{
+		if(readXMLInteger(p, "tileitem", id) && id == 1)
+		{
+			switch(eventType)
+			{
 				case MOVE_EVENT_ADD_ITEM:
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
 					break;
@@ -131,73 +134,77 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		}
 	}
 
-	pugi::xml_attribute attr;
-	if((attr = node.attribute("itemid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		addEvent(moveEvent, id, m_itemIdMap);
-		if(moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+	if(readXMLInteger(p, "itemid", id))
+	{
+		if(moveEvent->getEventType() == MOVE_EVENT_EQUIP)
+		{
 			ItemType& it = Item::items.getItemType(id);
 			it.wieldInfo = moveEvent->getWieldInfo();
 			it.minReqLevel = moveEvent->getReqLevel();
 			it.minReqMagicLevel = moveEvent->getReqMagLv();
 			it.vocationString = moveEvent->getVocationString();
 		}
-	} else if((attr = node.attribute("fromid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("toid").value());
 
 		addEvent(moveEvent, id, m_itemIdMap);
-
-		if(moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+	}
+	else if(readXMLInteger(p, "fromid", id) && readXMLInteger(p, "toid", endId))
+	{
+		if(moveEvent->getEventType() == MOVE_EVENT_EQUIP)
+		{
 			ItemType& it = Item::items.getItemType(id);
 			it.wieldInfo = moveEvent->getWieldInfo();
 			it.minReqLevel = moveEvent->getReqLevel();
 			it.minReqMagicLevel = moveEvent->getReqMagLv();
 			it.vocationString = moveEvent->getVocationString();
 
-			while (++id <= endId) {
-				addEvent(new MoveEvent(moveEvent), id, m_itemIdMap);
-
-				ItemType& tit = Item::items.getItemType(id);
-				tit.wieldInfo = moveEvent->getWieldInfo();
-				tit.minReqLevel = moveEvent->getReqLevel();
-				tit.minReqMagicLevel = moveEvent->getReqMagLv();
-				tit.vocationString = moveEvent->getVocationString();
-			}
-		} else {
-			while (++id <= endId) {
-				addEvent(new MoveEvent(moveEvent), id, m_itemIdMap);
+			addEvent(moveEvent, id, m_itemIdMap);
+			while(id < endId)
+			{
+				addEvent(new MoveEvent(moveEvent), ++id, m_itemIdMap);
+				it = Item::items.getItemType(id);
+				it.wieldInfo = moveEvent->getWieldInfo();
+				it.minReqLevel = moveEvent->getReqLevel();
+				it.minReqMagicLevel = moveEvent->getReqMagLv();
+				it.vocationString = moveEvent->getVocationString();
 			}
 		}
-	} else if((attr = node.attribute("uniqueid"))) {
-		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_uniqueIdMap);
-	} else if((attr = node.attribute("fromuid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("touid").value());
+		else
+		{
+			addEvent(moveEvent, id, m_itemIdMap);
+			while(id < endId)
+				addEvent(new MoveEvent(moveEvent), ++id, m_itemIdMap);
+		}
+	}
+	else if(readXMLInteger(p, "uniqueid", id))
 		addEvent(moveEvent, id, m_uniqueIdMap);
-		while (++id <= endId) {
-			addEvent(new MoveEvent(moveEvent), id, m_uniqueIdMap);
-		}
-	} else if((attr = node.attribute("actionid"))) {
-		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_actionIdMap);
-	} else if((attr = node.attribute("fromaid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("toaid").value());
+	else if(readXMLInteger(p, "fromuid", id) && readXMLInteger(p, "touid", endId))
+	{
+		addEvent(moveEvent, id, m_uniqueIdMap);
+		while(id < endId)
+			addEvent(new MoveEvent(moveEvent), ++id, m_uniqueIdMap);
+	}
+	else if(readXMLInteger(p, "actionid", id))
 		addEvent(moveEvent, id, m_actionIdMap);
-		while (++id <= endId) {
-			addEvent(new MoveEvent(moveEvent), id, m_actionIdMap);
-		}
-	} else if((attr = node.attribute("pos"))) {
-		std::vector<int32_t> posList = vectorAtoi(explodeString(attr.as_string(), ";"));
-		if(posList.size() >= 3) {
+	else if(readXMLInteger(p, "fromaid", id) && readXMLInteger(p, "toaid", endId))
+	{
+		addEvent(moveEvent, id, m_actionIdMap);
+		while(id < endId)
+			addEvent(new MoveEvent(moveEvent), ++id, m_actionIdMap);
+	}
+	else if(readXMLString(p, "pos", str))
+	{
+		std::vector<int32_t> posList = vectorAtoi(explodeString(str, ";"));
+		if(posList.size() >= 3)
+		{
 			Position pos(posList[0], posList[1], posList[2]);
 			addEvent(moveEvent, pos, m_positionMap);
-		} else {
-			success = false;
 		}
-	} else {
-		success = false;
+		else
+			success = false;
 	}
+	else
+		success = false;
+
 	return success;
 }
 
@@ -449,126 +456,133 @@ std::string MoveEvent::getScriptEventName()
 	}
 }
 
-bool MoveEvent::configureEvent(const pugi::xml_node& node)
+bool MoveEvent::configureEvent(xmlNodePtr p)
 {
-	pugi::xml_attribute eventAttr = node.attribute("event");
-	if(!eventAttr) {
-		std::clog << "[Error - MoveEvent::configureMoveEvent] Missing event" << std::endl;
-		return false;
-	}
-
-	std::string tmpStr = asLowerCaseString(eventAttr.as_string());
-	if(tmpStr == "stepin") {
-		m_eventType = MOVE_EVENT_STEP_IN;
-	} else if(tmpStr == "stepout") {
-		m_eventType = MOVE_EVENT_STEP_OUT;
-	} else if(tmpStr == "equip") {
-		m_eventType = MOVE_EVENT_EQUIP;
-	} else if(tmpStr == "deequip") {
-		m_eventType = MOVE_EVENT_DEEQUIP;
-	} else if(tmpStr == "additem") {
-		m_eventType = MOVE_EVENT_ADD_ITEM;
-	} else if(tmpStr == "removeitem") {
-		m_eventType = MOVE_EVENT_REMOVE_ITEM;
-	} else {
-		std::clog << "Error: [MoveEvent::configureMoveEvent] No valid event name " << eventAttr.as_string() << std::endl;
-		return false;
-	}
-
-	if(m_eventType == MOVE_EVENT_EQUIP || m_eventType == MOVE_EVENT_DEEQUIP) {
-		pugi::xml_attribute slotAttribute = node.attribute("slot");
-		if(slotAttribute) {
-			std::string tmpStr = asLowerCaseString(slotAttribute.as_string());
-			if(tmpStr == "head") {
-				slot = SLOT_HEAD;
-			} else if(tmpStr == "necklace") {
-				slot = SLOT_NECKLACE;
-			} else if(tmpStr == "backpack") {
-				slot = SLOT_BACKPACK;
-			} else if(tmpStr == "armor") {
-				slot = SLOT_ARMOR;
-			} else if(tmpStr == "right-hand") {
-				slot = SLOT_RIGHT;
-			} else if(tmpStr == "left-hand") {
-				slot = SLOT_LEFT;
-			} else if(tmpStr == "hand" || tmpStr == "shield") {
-				slot = (slots_t) (SLOT_RIGHT | SLOT_LEFT);
-			} else if(tmpStr == "legs") {
-				slot = SLOT_LEGS;
-			} else if(tmpStr == "feet") {
-				slot = SLOT_FEET;
-			} else if(tmpStr == "ring") {
-				slot = SLOT_RING;
-			} else if(tmpStr == "ammo") {
-				slot = SLOT_AMMO;
-			} else {
-				std::clog << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: " << slotAttribute.as_string() << std::endl;
-			}
-		}
-
-		wieldInfo = 0;
-
-		pugi::xml_attribute levelAttribute = node.attribute("level");
-		if(levelAttribute) {
-			reqLevel = pugi::cast<int32_t>(levelAttribute.value());
-			if(reqLevel > 0) {
-				wieldInfo |= WIELDINFO_LEVEL;
-			}
-		}
-
-		pugi::xml_attribute magLevelAttribute = node.attribute("maglevel");
-		if(magLevelAttribute) {
-			reqMagLevel = pugi::cast<int32_t>(magLevelAttribute.value());
-			if(reqMagLevel > 0) {
-				wieldInfo |= WIELDINFO_MAGLV;
-			}
-		}
-
-		pugi::xml_attribute premiumAttribute = node.attribute("premium");
-		if(premiumAttribute) {
-			premium = premiumAttribute.as_bool();
-			if(premium) {
-				wieldInfo |= WIELDINFO_PREMIUM;
-			}
-		}
-
-		//Gather vocation information
-		typedef std::list<std::string> STRING_LIST;
-		STRING_LIST vocStringList;
-		for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
-			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
-			if(!vocationNameAttribute) {
-				continue;
-			}
-
-			int32_t vocationId = g_vocations.getVocationId(vocationNameAttribute.as_string());
-			if(vocationId != -1) {
-				vocEquipMap[vocationId] = true;
-				if(vocationNode.attribute("showInDescription").as_bool(true)) {
-					vocStringList.push_back(asLowerCaseString(vocationNameAttribute.as_string()));
-				}
-			}
-		}
-
-		if(!vocEquipMap.empty()) {
-			wieldInfo |= WIELDINFO_VOCREQ;
-		}
-
-		if(!vocStringList.empty())
+	std::string str;
+	int32_t intValue;
+	if(readXMLString(p, "event", str))
+	{
+		std::string tmpStr = asLowerCaseString(str);
+		if(tmpStr == "stepin")
+			m_eventType = MOVE_EVENT_STEP_IN;
+		else if(tmpStr == "stepout")
+			m_eventType = MOVE_EVENT_STEP_OUT;
+		else if(tmpStr == "equip")
+			m_eventType = MOVE_EVENT_EQUIP;
+		else if(tmpStr == "deequip")
+			m_eventType = MOVE_EVENT_DEEQUIP;
+		else if(tmpStr == "additem")
+			m_eventType = MOVE_EVENT_ADD_ITEM;
+		else if(tmpStr == "removeitem")
+			m_eventType = MOVE_EVENT_REMOVE_ITEM;
+		else
 		{
-			for(STRING_LIST::iterator it = vocStringList.begin(); it != vocStringList.end(); ++it)
+			std::clog << "Error: [MoveEvent::configureMoveEvent] No valid event name " << str << std::endl;
+			return false;
+		}
+
+		if(m_eventType == MOVE_EVENT_EQUIP || m_eventType == MOVE_EVENT_DEEQUIP)
+		{
+			if(readXMLString(p, "slot", str))
 			{
-				if(*it != vocStringList.front())
+				std::string tmpStr = asLowerCaseString(str);
+				if(tmpStr == "head")
+					slot = SLOT_HEAD;
+				else if(tmpStr == "necklace")
+					slot = SLOT_NECKLACE;
+				else if(tmpStr == "backpack")
+					slot = SLOT_BACKPACK;
+				else if(tmpStr == "armor")
+					slot = SLOT_ARMOR;
+				else if(tmpStr == "right-hand")
+					slot = SLOT_RIGHT;
+				else if(tmpStr == "left-hand")
+					slot = SLOT_LEFT;
+				else if(tmpStr == "two-handed") // A "cheated" slot type
+					slot = SLOT_LEFT;
+				else if(tmpStr == "legs")
+					slot = SLOT_LEGS;
+				else if(tmpStr == "feet")
+					slot = SLOT_FEET;
+				else if(tmpStr == "ring")
+					slot = SLOT_RING;
+				else if(tmpStr == "ammo")
+					slot = SLOT_AMMO;
+				else
+					std::clog << "Warning: [MoveEvent::configureMoveEvent] " << "Unknown slot type " << str << std::endl;
+			}
+
+			wieldInfo = 0;
+			if(readXMLInteger(p, "lvl", intValue) || readXMLInteger(p, "level", intValue))
+			{
+	 			reqLevel = intValue;
+				if(reqLevel > 0)
+					wieldInfo |= WIELDINFO_LEVEL;
+			}
+
+			if(readXMLInteger(p, "maglv", intValue) || readXMLInteger(p, "maglevel", intValue))
+			{
+	 			reqMagLevel = intValue;
+				if(reqMagLevel > 0)
+					wieldInfo |= WIELDINFO_MAGLV;
+			}
+
+			if(readXMLInteger(p, "prem", intValue) || readXMLInteger(p, "premium", intValue))
+			{
+				premium = (intValue != 0);
+				if(premium)
+					wieldInfo |= WIELDINFO_PREMIUM;
+			}
+
+			//Gather vocation information
+			typedef std::list<std::string> STRING_LIST;
+			STRING_LIST vocStringList;
+			xmlNodePtr vocationNode = p->children;
+			while(vocationNode)
+			{
+				if(xmlStrcmp(vocationNode->name,(const xmlChar*)"vocation") == 0)
 				{
-					if(*it != vocStringList.back())
-						vocationString += ", ";
-					else
-						vocationString += " and ";
+					if(readXMLString(vocationNode, "name", str))
+					{
+						int32_t vocationId = g_vocations.getVocationId(str);
+						if(vocationId != -1)
+						{
+							vocEquipMap[vocationId] = true;
+							intValue = 1;
+							readXMLInteger(vocationNode, "showInDescription", intValue);
+							if(intValue != 0)
+							{
+								toLowerCaseString(str);
+								vocStringList.push_back(str);
+							}
+						}
+					}
 				}
-				vocationString += *it;
-				vocationString += "s";
+				vocationNode = vocationNode->next;
+			}
+
+			if(!vocStringList.empty())
+			{
+				for(STRING_LIST::iterator it = vocStringList.begin(); it != vocStringList.end(); ++it)
+				{
+					if(*it != vocStringList.front())
+					{
+						if(*it != vocStringList.back())
+							vocationString += ", ";
+						else
+							vocationString += " and ";
+					}
+					vocationString += *it;
+					vocationString += "s";
+				}
+				wieldInfo |= WIELDINFO_VOCREQ;
 			}
 		}
+	}
+	else
+	{
+		std::clog << "Error: [MoveEvent::configureMoveEvent] No event found." << std::endl;
+		return false;
 	}
 	return true;
 }

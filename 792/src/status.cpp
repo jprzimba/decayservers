@@ -104,76 +104,76 @@ void Status::removePlayer()
 
 std::string Status::getStatusString() const
 {
-    pugi::xml_document doc;
-    std::stringstream responseStream;
+	std::string xml;
+	char buffer[65];
 
-    pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
-    decl.append_attribute("version") = "1.0";
+	xmlDocPtr doc;
+	xmlNodePtr p, root;
 
-    pugi::xml_node tsqp = doc.append_child("tsqp");
-    tsqp.append_attribute("version") = "1.0";
+	doc = xmlNewDoc((const xmlChar*)"1.0");
+	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar*)"tsqp", NULL);
+	root = doc->children;
 
-    pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
+	xmlSetProp(root, (const xmlChar*)"version", (const xmlChar*)"1.0");
+	
+	p = xmlNewNode(NULL,(const xmlChar*)"serverinfo");
+	sprintf(buffer, "%u", (uint32_t)getUptime());
+	xmlSetProp(p, (const xmlChar*)"uptime", (const xmlChar*)buffer);
+	xmlSetProp(p, (const xmlChar*)"ip", (const xmlChar*)g_config.getString(ConfigManager::IP).c_str());
+	xmlSetProp(p, (const xmlChar*)"servername", (const xmlChar*)g_config.getString(ConfigManager::SERVER_NAME).c_str());
+	sprintf(buffer, "%d", g_config.getNumber(ConfigManager::PORT));
+	xmlSetProp(p, (const xmlChar*)"port", (const xmlChar*)buffer);
+	xmlSetProp(p, (const xmlChar*)"location", (const xmlChar*)g_config.getString(ConfigManager::LOCATION).c_str());
+	xmlSetProp(p, (const xmlChar*)"url", (const xmlChar*)g_config.getString(ConfigManager::URL).c_str());
+	xmlSetProp(p, (const xmlChar*)"server", (const xmlChar*)STATUS_SERVER_NAME);
+	xmlSetProp(p, (const xmlChar*)"version", (const xmlChar*)STATUS_SERVER_VERSION);
+	xmlSetProp(p, (const xmlChar*)"client", (const xmlChar*)STATUS_SERVER_PROTOCOL);
+	xmlAddChild(root, p);
 
-    responseStream << getUptime();
-    serverinfo.append_attribute("uptime") = responseStream.str().c_str();
+	p = xmlNewNode(NULL,(const xmlChar*)"owner");
+	xmlSetProp(p, (const xmlChar*)"name", (const xmlChar*)g_config.getString(ConfigManager::OWNER_NAME).c_str());
+	xmlSetProp(p, (const xmlChar*)"email", (const xmlChar*)g_config.getString(ConfigManager::OWNER_EMAIL).c_str());
+	xmlAddChild(root, p);
 
-    serverinfo.append_attribute("ip") = g_config.getString(ConfigManager::IP).c_str();
-    serverinfo.append_attribute("servername") = g_config.getString(ConfigManager::SERVER_NAME).c_str();
+	p = xmlNewNode(NULL,(const xmlChar*)"players");
+	sprintf(buffer, "%d", m_playersOnline);
+	xmlSetProp(p, (const xmlChar*)"online", (const xmlChar*)buffer);
+	sprintf(buffer, "%d", m_playersMax);
+	xmlSetProp(p, (const xmlChar*)"max", (const xmlChar*)buffer);
+	sprintf(buffer, "%d", g_game.getLastPlayersRecord());
+	xmlSetProp(p, (const xmlChar*)"peak", (const xmlChar*)buffer);
+	xmlAddChild(root, p);
+	
+	p = xmlNewNode(NULL,(const xmlChar*)"monsters");
+	sprintf(buffer, "%d", g_game.getMonstersOnline());
+	xmlSetProp(p, (const xmlChar*)"total", (const xmlChar*)buffer);
+	xmlAddChild(root, p);
 
-    std::stringstream portStream;
-    portStream << g_config.getNumber(ConfigManager::PORT);
-    serverinfo.append_attribute("port") = portStream.str().c_str();
+	p = xmlNewNode(NULL,(const xmlChar*)"map");
+	xmlSetProp(p, (const xmlChar*)"name", (const xmlChar*)m_mapName.c_str());
+	xmlSetProp(p, (const xmlChar*)"author", (const xmlChar*)m_mapAuthor.c_str());
+	uint32_t mapWidth, mapHeight;
+	g_game.getMapDimensions(mapWidth, mapHeight);
+	sprintf(buffer, "%u", mapWidth);
+	xmlSetProp(p, (const xmlChar*)"width", (const xmlChar*)buffer);
+	sprintf(buffer, "%u", mapHeight);
+	xmlSetProp(p, (const xmlChar*)"height", (const xmlChar*)buffer);
+	xmlAddChild(root, p);
 
-    serverinfo.append_attribute("location") = g_config.getString(ConfigManager::LOCATION).c_str();
-    serverinfo.append_attribute("url") = g_config.getString(ConfigManager::URL).c_str();
-    serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
-    serverinfo.append_attribute("version") = STATUS_SERVER_VERSION;
-    serverinfo.append_attribute("client") = STATUS_SERVER_PROTOCOL;
+	xmlNewTextChild(root, NULL, (const xmlChar*)"motd", (const xmlChar*)g_config.getString(ConfigManager::MOTD).c_str());
 
-    pugi::xml_node owner = tsqp.append_child("owner");
-    owner.append_attribute("name") = g_config.getString(ConfigManager::OWNER_NAME).c_str();
-    owner.append_attribute("email") = g_config.getString(ConfigManager::OWNER_EMAIL).c_str();
-
-    pugi::xml_node players = tsqp.append_child("players");
-
-    std::stringstream playersOnlineStream;
-    playersOnlineStream << m_playersOnline;
-    players.append_attribute("online") = playersOnlineStream.str().c_str();
-
-    std::stringstream maxPlayersStream;
-    maxPlayersStream << g_config.getNumber(ConfigManager::MAX_PLAYERS);
-    players.append_attribute("max") = maxPlayersStream.str().c_str();
-
-    std::stringstream peakPlayersStream;
-    peakPlayersStream << g_game.getLastPlayersRecord();
-    players.append_attribute("peak") = peakPlayersStream.str().c_str();
-
-    pugi::xml_node monsters = tsqp.append_child("monsters");
-
-    std::stringstream monstersOnlineStream;
-    monstersOnlineStream << g_game.getMonstersOnline();
-    monsters.append_attribute("total") = monstersOnlineStream.str().c_str();
-
-    pugi::xml_node map = tsqp.append_child("map");
-    map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
-    map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
-
-    uint32_t mapWidth, mapHeight;
-    g_game.getMapDimensions(mapWidth, mapHeight);
-
-    std::stringstream mapWidthStream, mapHeightStream;
-    mapWidthStream << mapWidth;
-    mapHeightStream << mapHeight;
-    map.append_attribute("width") = mapWidthStream.str().c_str();
-    map.append_attribute("height") = mapHeightStream.str().c_str();
-
-    pugi::xml_node motd = tsqp.append_child("motd");
-    motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
-
-    std::ostringstream ss;
-    doc.save(ss, "", pugi::format_raw);
-    return ss.str();
+	xmlChar* s = NULL;
+	int32_t len = 0;
+	xmlDocDumpMemory(doc, (xmlChar**)&s, &len);
+	
+	if(s)
+		xml = std::string((char*)s, len);
+	else
+		xml = "";
+	
+	xmlFreeOTSERV(s);
+	xmlFreeDoc(doc);
+	return xml;
 }
 
 void Status::getInfo(uint32_t requestedInfo, OutputMessage* output, NetworkMessage& msg) const

@@ -165,8 +165,8 @@ class Creature : public AutoID, virtual public Thing
 		Direction getDirection() const { return direction;}
 		void setDirection(Direction dir) {direction = dir;}
 
-		const Position& getMasterPos() const { return masterPos;}
-		void setMasterPos(const Position& pos, uint32_t radius = 1) { masterPos = pos; masterRadius = radius;}
+		const Position& getMasterPosition() const { return masterPosition;}
+		void setMasterPos(const Position& pos, uint32_t radius = 1) { masterPosition = pos; masterRadius = radius;}
 
 		virtual int32_t getThrowRange() const {return 1;}
 		virtual bool isPushable() const {return (getSleepTicks() <= 0);}
@@ -383,7 +383,7 @@ class Creature : public AutoID, virtual public Thing
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
-		Position masterPos;
+		Position masterPosition;
 		Position lastPosition;
 		int32_t masterRadius;
 		uint64_t lastStep;

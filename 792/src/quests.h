@@ -90,14 +90,14 @@ class Quest
 		MissionsList::const_iterator getFirstMission() const {return missions.begin();}
 		MissionsList::const_iterator getLastMission() const {return missions.end();}
 
+		MissionsList missions;
+
 	private:
 		std::string name;
 
 		uint32_t startStorageID;
 		int32_t startStorageValue;
 		uint16_t id;
-
-		MissionsList missions;
 };
 
 class Quests

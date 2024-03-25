@@ -97,7 +97,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
+bool TalkActions::registerEvent(Event* event, xmlNodePtr p)
 {
 	TalkAction* talkAction = dynamic_cast<TalkAction*>(event);
 	if(!talkAction)
@@ -204,23 +204,20 @@ TalkAction::~TalkAction()
 	//
 }
 
-bool TalkAction::configureEvent(const pugi::xml_node& node)
+bool TalkAction::configureEvent(xmlNodePtr p)
 {
-	pugi::xml_attribute attr;
-	if(attr = node.attribute("words"))
-		m_words = attr.as_string();
+	std::string strValue;
+	if(readXMLString(p, "words", strValue))
+		m_words = strValue;
 	else
 	{
 		std::clog << "[Error - TalkAction::configureEvent] No words for TalkAction." << std::endl;
 		return false;
 	}
 
-	if((attr = node.attribute("access")))
-		m_access = pugi::cast<int32_t>(attr.value());
-
-	if((attr = node.attribute("filter")))
+	if(readXMLString(p, "filter", strValue))
 	{
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		std::string tmpStrValue = asLowerCaseString(strValue);
 		if(tmpStrValue == "quotation")
 			m_filter = TALKFILTER_QUOTATION;
 		else if(tmpStrValue == "word")
@@ -228,15 +225,19 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		else if(tmpStrValue == "word-spaced")
 			m_filter = TALKFILTER_WORD_SPACED;
 		else
-			std::clog << "[Warning - TalkAction::configureEvent] Unknown filter for TalkAction: " << tmpStrValue << ", using default." << std::endl;
+			std::clog << "[Warning - TalkAction::configureEvent] Unknown filter for TalkAction: " << strValue << ", using default." << std::endl;
 	}
-	
-	if((attr = node.attribute("registerlog")) || (attr = node.attribute("log")) || (attr = node.attribute("logged")))
-		m_logged = booleanString(attr.as_string());
 
-	if((attr = node.attribute("case-sensitive")) || (attr = node.attribute("sensitive")))
-		m_sensitive = booleanString(attr.as_string());
-	
+	int32_t intValue;
+	if(readXMLInteger(p, "access", intValue))
+		m_access = intValue;
+
+	if(readXMLString(p, "log", strValue) || readXMLString(p, "logged", strValue))
+		m_logged = booleanString(strValue);
+
+	if(readXMLString(p, "case-sensitive", strValue) || readXMLString(p, "casesensitive", strValue) || readXMLString(p, "sensitive", strValue))
+		m_sensitive = booleanString(strValue);
+
 	return true;	
 }
 

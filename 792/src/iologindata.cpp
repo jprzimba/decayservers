@@ -352,10 +352,10 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	player->town = result->getDataInt("town_id");
 	Town* town = Towns::getInstance().getTown(player->town);
 	if(town)
-		player->masterPos = town->getTemplePosition();
+		player->masterPosition = town->getTemplePosition();
 	Position loginPos = player->loginPosition;
 	if(loginPos.x == 0 && loginPos.y == 0 && loginPos.z == 0)
-		player->loginPosition = player->masterPos;
+		player->loginPosition = player->masterPosition;
 
 	player->guildRankId = result->getDataInt("rank_id");
 	query.str("");

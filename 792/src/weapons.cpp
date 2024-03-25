@@ -135,21 +135,14 @@ Event* Weapons::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
+bool Weapons::registerEvent(Event* event, xmlNodePtr p)
 {
 	Weapon* weapon = dynamic_cast<Weapon*>(event);
-	if(!weapon)
-		return false;
-
-	WeaponMap::iterator it = weapons.find(weapon->getID());
-	if(it == weapons.end())
-	{
+	if(weapon)
 		weapons[weapon->getID()] = weapon;
-		return true;
-	}
-
-	std::clog << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
-	return false;
+	else
+		return false;
+	return true;
 }
 
 //monsters
@@ -192,61 +185,76 @@ void Weapon::setCombatParam(const CombatParams& _params)
 	params = _params;
 }
 
-bool Weapon::configureEvent(const pugi::xml_node& node)
+bool Weapon::configureEvent(xmlNodePtr p)
 {
-	pugi::xml_attribute attr;
-	if(!(attr = node.attribute("id")))
+	int32_t intValue;
+	std::string strValue;
+
+	if(readXMLInteger(p, "id", intValue))
+	 	id = intValue;
+	else
 	{
-		std::clog << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
+		std::clog << "Error: [Weapon::configureEvent] Weapon without id." << std::endl;
 		return false;
 	}
 
-	id = pugi::cast<uint16_t>(attr.value());
-	if((attr = node.attribute("level")))
-		level = pugi::cast<int32_t>(attr.value());
+	if(readXMLInteger(p, "lvl", intValue) || readXMLInteger(p, "level", intValue))
+	 	level = intValue;
 
-	if((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel")))
-		magLevel = pugi::cast<int32_t>(attr.value());
+	if(readXMLInteger(p, "maglv", intValue) || readXMLInteger(p, "maglevel", intValue))
+	 	magLevel = intValue;
 
-	if((attr = node.attribute("mana")))
-		mana = pugi::cast<int32_t>(attr.value());
+	if(readXMLInteger(p, "mana", intValue))
+	 	mana = intValue;
 
-	if((attr = node.attribute("manapercent")))
-		manaPercent = pugi::cast<int32_t>(attr.value());
+	if(readXMLInteger(p, "manapercent", intValue))
+	 	manaPercent = intValue;
 
-	if((attr = node.attribute("soul")))
-		soul = pugi::cast<int32_t>(attr.value());
+	if(readXMLInteger(p, "soul", intValue))
+	 	soul = intValue;
 
-	if((attr = node.attribute("exhaustion")))
-		exhaustion = pugi::cast<uint32_t>(attr.value());
+	if(readXMLInteger(p, "exhaustion", intValue))
+		exhaustion = intValue;
 
-	if((attr = node.attribute("prem")))
-		premium = attr.as_bool();
+	if(readXMLInteger(p, "prem", intValue))
+		premium = (intValue == 1);
 
-	if((attr = node.attribute("enabled")))
-		enabled = attr.as_bool();
+	if(readXMLInteger(p, "enabled", intValue))
+		enabled = (intValue == 1);
 
-	if((attr = node.attribute("unproperly")))
-		wieldUnproperly = attr.as_bool();
+	if(readXMLInteger(p, "unproperly", intValue))
+		wieldUnproperly = (intValue == 1);
+
+	if(readXMLString(p, "ammo", strValue))
+		std::clog << "Warning: ammo is not longer used in weapons.xml." << std::endl;
 
 	typedef std::list<std::string> STRING_LIST;
 	STRING_LIST vocStringList;
-	for(pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling())
+	xmlNodePtr vocationNode = p->children;
+	while(vocationNode)
 	{
-		if(!(attr = vocationNode.attribute("name")))
-			continue;
-
-		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if(vocationId != -1)
+		if(xmlStrcmp(vocationNode->name,(const xmlChar*)"vocation") == 0)
 		{
-			vocWeaponMap[vocationId] = true;
-			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if(promotedVocation != 0)
-				vocWeaponMap[promotedVocation] = true;
+			if(readXMLString(vocationNode, "name", strValue))
+			{
+				int32_t vocationId = g_vocations.getVocationId(strValue);
+				if(vocationId != -1)
+				{
+					vocWeaponMap[vocationId] = true;
+					int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
+					if(promotedVocation != 0)
+						vocWeaponMap[promotedVocation] = true;
 
-			if(vocationNode.attribute("showInDescription").as_bool(true))
-				vocStringList.push_back(asLowerCaseString(attr.as_string()));
+					readXMLInteger(vocationNode, "showInDescription", intValue);
+					if(intValue != 0)
+					{
+						toLowerCaseString(strValue);
+						vocStringList.push_back(strValue);
+					}
+				}
+			}
 		}
+		vocationNode = vocationNode->next;
 	}
 
 	range = Item::items[id].shootRange;
@@ -271,13 +279,13 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	uint32_t wieldInfo = 0;
 	if(getReqLevel() > 0)
 		wieldInfo |= WIELDINFO_LEVEL;
-
+	
 	if(getReqMagLv() > 0)
 		wieldInfo |= WIELDINFO_MAGLV;
-
+	
 	if(!vocationString.empty())
 		wieldInfo |= WIELDINFO_VOCREQ;
-
+	
 	if(isPremium())
 		wieldInfo |= WIELDINFO_PREMIUM;
 
@@ -289,7 +297,8 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 		it.minReqLevel = getReqLevel();
 		it.minReqMagicLevel = getReqMagLv();
 	}
-	return configureWeapon(Item::items[getID()]);
+
+	return true;
 }
 
 bool Weapon::loadFunction(const std::string& functionName)
@@ -546,9 +555,9 @@ WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :
 	elementDamage = 0;
 }
 
-bool WeaponMelee::configureEvent(const pugi::xml_node& node)
+bool WeaponMelee::configureEvent(xmlNodePtr p)
 {
-	if(!Weapon::configureEvent(node))
+	if(!Weapon::configureEvent(p))
 		return false;
 
 	return true;
@@ -686,9 +695,9 @@ WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
 	params.combatType = COMBAT_PHYSICALDAMAGE;
 }
 
-bool WeaponDistance::configureEvent(const pugi::xml_node& node)
+bool WeaponDistance::configureEvent(xmlNodePtr p)
 {
-	if(!Weapon::configureEvent(node))
+	if(!Weapon::configureEvent(p))
 		return false;
 
 	const ItemType& it = Item::items[id];
@@ -716,6 +725,13 @@ bool WeaponDistance::configureEvent(const pugi::xml_node& node)
 
 	if(it.ammoAction != AMMOACTION_NONE)
 		ammoAction = it.ammoAction;
+
+	int intValue;
+	if(readXMLInteger(p, "hitChance", intValue))
+		std::clog << "Warning: hitChance is not longer used in weapons.xml." << std::endl;
+
+	if(readXMLInteger(p, "breakChance", intValue))
+		std::clog << "Warning: breakChance is not longer used in weapons.xml." << std::endl;
 
 	return true;
 }
@@ -962,34 +978,32 @@ WeaponWand::WeaponWand(LuaScriptInterface* _interface) :
 	maxChange = 0;
 }
 
-bool WeaponWand::configureEvent(const pugi::xml_node& node)
+bool WeaponWand::configureEvent(xmlNodePtr p)
 {
-	if(!Weapon::configureEvent(node)) {
+	if(!Weapon::configureEvent(p))
 		return false;
-	}
 
-	pugi::xml_attribute attr;
-	if((attr = node.attribute("min"))) {
-		minChange = pugi::cast<int32_t>(attr.value());
-	}
+	int32_t intValue;
+	std::string strValue;
 
-	if((attr = node.attribute("max"))) {
-		maxChange = pugi::cast<int32_t>(attr.value());
-	}
+	if(readXMLInteger(p, "min", intValue))
+		minChange = intValue;
 
-	if((attr = node.attribute("type"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if(tmpStrValue == "earth" || tmpStrValue == "poison") {
+	if(readXMLInteger(p, "max", intValue))
+		maxChange = intValue;
+
+	if(readXMLString(p, "type", strValue))
+	{
+		std::string tmpStrValue = asLowerCaseString(strValue);
+		if(tmpStrValue == "earth" || tmpStrValue == "poison")
 			params.combatType = COMBAT_POISONDAMAGE;
-		} else if(tmpStrValue == "energy") {
+		else if(tmpStrValue == "energy")
 			params.combatType = COMBAT_ENERGYDAMAGE;
-		} else if(tmpStrValue == "fire") {
+		else if(tmpStrValue == "fire")
 			params.combatType = COMBAT_FIREDAMAGE;
-		} else {
-			std::clog << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
-		}
+		else
+			std::clog << "[Warning - WeaponWand::configureEvent] Type \"" << strValue << "\" does not exist." << std::endl;
 	}
-
 	return true;
 }
 
