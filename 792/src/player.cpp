@@ -1152,9 +1152,9 @@ void Player::sendStats()
 		client->sendStats();
 }
 
-void Player::sendPing(uint32_t interval)
+void Player::sendPing()
 {
-	internalPing += interval;
+	internalPing++;
 
 	//1 ping each 5 seconds
 	if(internalPing >= 5000)
@@ -1666,7 +1666,7 @@ uint32_t Player::getNextActionTime() const
 void Player::onThink(uint32_t interval)
 {
 	Creature::onThink(interval);
-	sendPing(interval);
+	sendPing();
 
 	MessageBufferTicks += interval;
 	if(MessageBufferTicks >= 1500)

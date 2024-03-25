@@ -46,7 +46,8 @@ $SQL = AAC::$SQL;
             <tr><td style="width: 64px; height: 64px; padding: 10px;"><img src="<?php echo $img_path?>" alt="NO IMG" height="64" width="64"/></td>
                 <td style="vertical-align: top;">
                     <b><?php echo htmlspecialchars($a['name'])?></b><hr/>
-                            <?php echo htmlspecialchars($a['description'])?>
+                    <?php echo isset($a['description']) ? htmlspecialchars($a['description']) : ''; ?>
+
                 </td></tr>
         </table>
 

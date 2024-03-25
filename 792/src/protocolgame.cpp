@@ -60,13 +60,7 @@ extern Ban g_bans;
 extern CreatureEvents* g_creatureEvents;
 Chat g_chat;
 
-#ifdef __SERVER_PROTECTION__
-#error "You should not use __SERVER_PROTECTION__"
-#define ADD_TASK_INTERVAL 40
-#define CHECK_TASK_INTERVAL 5000
-#else
 #define ADD_TASK_INTERVAL -1
-#endif
 
 // Helping templates to add dispatcher tasks
 template<class T1, class f1, class r>
@@ -590,23 +584,6 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 		return;
 
 	m_now = OTSYS_TIME();
-	#ifdef __SERVER_PROTECTION__
-	int64_t interval = m_now - m_lastTaskCheck;
-	if(interval > CHECK_TASK_INTERVAL)
-	{
-		interval = 0;
-		m_lastTaskCheck = m_now;
-		m_messageCount = 1;
-		m_rejectCount = 0;
-	}
-	else
-	{
-		m_messageCount++;
-		if((interval > 800 && interval / m_messageCount < 25))
-			getConnection()->closeConnection();
-	}
-	#endif
-
 	uint8_t recvbyte = msg.GetByte();
 	//a dead player can not performs actions
 	if((player->isRemoved() || player->getHealth() <= 0) && recvbyte != 0x14)
@@ -1041,6 +1018,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 #endif
 
 	const Position& myPos = player->getPosition();
+	
 	if(myPos.z <= 7)
 	{
 		//we are on ground level or above (7 -> 0)

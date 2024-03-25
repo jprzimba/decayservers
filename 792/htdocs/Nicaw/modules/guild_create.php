@@ -24,6 +24,7 @@ $account = new Account();
 $form = new Form('new_guild');
 //check if any data was submited
 if ($form->exists()){
+	$level_to_create_guild = $cfg['guild_leader_level'];
 	$form->attrs['Guild_Name'] = ucfirst($form->attrs['Guild_Name']);
 	//check for correct guild name
 	if (AAC::ValidGuildName($form->attrs['Guild_Name'])){
@@ -35,7 +36,7 @@ if ($form->exists()){
 				if ($owner->attrs['account'] == $_SESSION['account']){
 					//check if owner belongs to any guild
 					if (!isset($owner->guild['guild_id'])){
-						if ($owner->attrs['level'] >= $cfg['guild_leader_level']){
+						if ($owner->attrs['level'] >= $level_to_create_guild){
 							//create guild and add owner as a leader
 							$new_guild = Guild::Create($form->attrs['Guild_Name'], $owner->attrs['id']);
 							$new_guild->playerJoin($owner);
@@ -46,7 +47,7 @@ if ($form->exists()){
 							$msg->addMsg('Guild was created');
 							$msg->addClose('Finish');
 							$msg->show();
-						}else $error = 'Character level too low';
+						}else $error = 'You need level '.$level_to_create_guild.' to cerate a guild!';
 					}else $error = 'This character already belongs to guild';
 				}else $error = 'Not your character';
 			}else $error = 'Cannot load player';

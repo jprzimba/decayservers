@@ -13,7 +13,7 @@
 	sqliteDatabase = "forgottenserver.s3db"
 
 	-- Connection Settings
-	ip = "127.0.0.1"
+	ip = "crystalserver.servegame.com"
 	port = 7171
 	loginTries = 0
 	retryTimeout = 30 * 1000

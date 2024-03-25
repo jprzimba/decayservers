@@ -76,7 +76,7 @@ class Guild {
 
         $this->sql->myQuery('SELECT * FROM nicaw_guild_info WHERE id = '.$this->sql->quote($this->attrs['id']));
         $a = $this->sql->fetch_array();
-        $this->attrs['description'] = (string) $a['description'];
+        $this->attrs['description'] = isset($a['description']) ? (string) $a['description'] : '';
 
         $this->sql->myQuery('SELECT id, name, level FROM guild_ranks WHERE guild_id = '.$this->sql->quote($this->attrs['id']).' ORDER BY level DESC');
         while ($a = $this->sql->fetch_array()) {

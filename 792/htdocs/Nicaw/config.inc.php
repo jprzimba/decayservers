@@ -25,9 +25,6 @@ $cfg['SQL_Database'] = 'nicaw';
 # Options: plain, md5, sha1
 $cfg['password_type'] = 'plain';
 
-# Not currently supported by OTServ, leave empty
-$cfg['password_salt'] = '';
-
 /*
  * Look skins/ to find out which skins you have
  * Available skins:
@@ -39,6 +36,7 @@ $cfg['password_salt'] = '';
  * essense - Clean skin with green/blue motives
  * inferno - Darker skin with menu on the right
  * silica - Green skin, technology theme
+ * thebr best skin ever
  * Need more? Look http://otfans.net/ and
  * http://sourceforge.net/projects/nicaw-acc/files/
  */
@@ -61,7 +59,7 @@ $cfg['secure_session'] = false;
 $cfg['timeout_session'] = 15*60;
 
 # Maximum number of characters on account
-$cfg['maxchars'] = 10;
+$cfg['maxchars'] = 20;
 
 # Players per highscore page
 $cfg['ranks_per_page'] = 50;
@@ -131,7 +129,7 @@ $cfg['admin_ip'] = array('127.0.0.1');
 $cfg['player_delete_interval'] = 24*3600;
 
 # Minimum level to create own guild. Cannot be lower than $cfg['guild_level']
-$cfg['guild_leader_level'] = 20;
+$cfg['guild_leader_level'] = 1;
 
 # Please disable guild manager if your server features guild editing
 $cfg['guild_manager_enabled'] = true;

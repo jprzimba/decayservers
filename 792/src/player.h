@@ -545,7 +545,7 @@ class Player : public Creature, public Cylinder
 		void sendIcons() const; 
 		void sendMagicEffect(const Position& pos, unsigned char type) const
 			{if(client) client->sendMagicEffect(pos, type);}
-		void sendPing(uint32_t interval);
+		void sendPing();
 		void sendStats();
 		void sendSkills() const
 			{if(client) client->sendSkills();}
