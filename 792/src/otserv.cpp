@@ -305,17 +305,17 @@ int main(int argc, char *argv[])
 
 	std::clog << "Checking world type... ";
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
-	if(worldType == "pvp")
+	if(worldType == "pvp" || worldType == "open" || worldType == "open-pvp")
 	{
 		g_game.setWorldType(WORLD_TYPE_PVP);
 		std::clog << "PvP" << std::endl;
 	}
-	else if(worldType == "no-pvp" || worldType == "nopvp")
+	else if(worldType == "no-pvp" || worldType == "nopvp" || worldType == "safe")
 	{
 		g_game.setWorldType(WORLD_TYPE_NO_PVP);
 		std::clog << "Non PvP" << std::endl;
 	}
-	else if(worldType == "pvp-enforced" || worldType == "enforced")
+	else if(worldType == "pvp-enforced" || worldType == "enforced" || worldType == "war")
 	{
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 		std::clog << "PvP Enforced" << std::endl;
