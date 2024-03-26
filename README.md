@@ -15,7 +15,7 @@ If you like the project, feel free to contribute with a pull request and we will
 - Kiper
 - Kornholijo
 
-# Contributors for Decay Server
+# Contributors for Decay Servers
 - [Tryller](https://github.com/jprzimba)
 - [frcento](https://github.com/frcento)
 
