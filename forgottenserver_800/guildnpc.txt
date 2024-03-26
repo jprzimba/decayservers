@@ -1,0 +1,350 @@
+local target = 0
+local following = false
+local attacking = false
+local gstat = 0		-- guild status
+local grank = ''		-- guild rank
+local gname = ''		-- guild name
+local cname = ''		-- name of player who talks to us
+local pname = ''		-- name of some other player
+local maxnamelen = 30
+local maxranklen = 20
+local maxnicklen = 20
+local leaderlevel = 50
+local NONE = 0
+local INVITED = 1
+local MEMBER = 2
+local VICE = 3
+local LEADER = 4
+local allow_pattern = '^[a-zA-Z0-9 -]+$'
+
+local keywordHandler = KeywordHandler:new()
+local npcHandler = NpcHandler:new(keywordHandler)
+NpcSystem.parseParameters(npcHandler)
+
+local TopicState = {}
+-- OTServ event handling functions start
+function onCreatureAppear(cid)              npcHandler:onCreatureAppear(cid) end
+function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid) end
+function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg) end
+function onPlayerEndTrade(cid)              npcHandler:onPlayerEndTrade(cid) end
+function onPlayerCloseChannel(cid)          npcHandler:onPlayerCloseChannel(cid) end
+function onThink()                          npcHandler:onThink() end
+-- OTServ event handling functions end
+
+
+
+
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:isFocused(cid) then
+		return false
+	end
+	
+	local cname, gstat = getPlayerName(cid), getPlayerGuildRankId(cid)
+
+  	if msgcontains(msg, 'found')  or msgcontains(msg, "create") then	-- found a new guild
+			if gstat == NONE or gstat == INVITED then
+					npcHandler:say('What name your guild should have?', cid, TRUE)
+					TopicState[cid] = 1
+			elseif gstat == MEMBER or gstat == VICE or gstat == LEADER then
+					npcHandler:say('Sorry, you are member of a guild.', cid, TRUE)
+					TopicState[cid] = 0
+			end
+  	elseif msgcontains(msg, 'join')  then	-- join a guild when invited
+  			if gstat == NONE then
+  					npcHandler:say('Sorry, you are not invited to any guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  			elseif gstat == INVITED then
+  					npcHandler:say('Do you want to join ' .. getPlayerGuildName(cid) .. '?', cid, TRUE)
+  					TopicState[cid] = 3
+  			elseif gstat == MEMBER or gstat == VICE or gstat == LEADER then
+  					npcHandler:say('Sorry, you are a member of a guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+   	elseif msgcontains(msg, 'exclude') or msgcontains(msg, 'kick') then		-- kick player from a guild
+  			if gstat == VICE or gstat == LEADER then
+  				npcHandler:say('Who do you want to kick today?', cid, TRUE)
+  				TopicState[cid] = 4
+  			else
+  				npcHandler:say('Sorry, only leader and vice-leaders can kick players from a guild.', cid, TRUE)
+  				TopicState[cid] = 0
+  			end
+  	elseif msgcontains(msg, 'invite') then		-- invite player to a guild
+  			if gstat == VICE or gstat == LEADER then
+  					npcHandler:say('Who do you want to invite to your guild?', cid, TRUE)
+  					TopicState[cid] = 5
+  			else
+  					npcHandler:say('Sorry, only leader and vice-leaders can invite players to a guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+  	elseif msgcontains(msg, 'leave') then		-- leave a guild
+  			if gstat == NONE or gstat == INVITED then
+  					npcHandler:say('You are not in a guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  			elseif gstat == MEMBER or gstat == VICE then
+  					gname = getPlayerGuildName(cname)
+  					npcHandler:say('Do you want to leave ' .. gname .. '?', cid, TRUE)
+  					TopicState[cid] = 7
+  			elseif gstat == LEADER then
+  					npcHandler:say('You are a leader of a guild. If you leave, no one can invite new players. Are you sure?', cid, TRUE)
+  					TopicState[cid] = 7
+  			end
+  	elseif msgcontains(msg, 'pass') then		-- pass leadership
+  			if gstat == LEADER then
+  					npcHandler:say('Who do you want to be a new leader?', cid, TRUE)
+  					TopicState[cid] = 8
+  			else
+  					npcHandler:say('Sorry, only leader can resign from his position.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+  	elseif msgcontains(msg, 'vice') then		-- set vice leader
+			if gstat == LEADER then
+					npcHandler:say('Which member do you want to promote to vice-leader?', cid, TRUE)
+  					TopicState[cid] = 9
+  			else
+  					npcHandler:say('Sorry, only leader can promote member to vice-leader.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+  	elseif msgcontains(msg, 'member') then		-- remove vice-leader
+  			if gstat == LEADER then
+  					npcHandler:say('Which vice-leader do you want to demote to regular member?', cid, TRUE)
+  					TopicState[cid] = 10
+  			else
+  					npcHandler:say('Sorry, only leader can demote vice-leaders to members.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+  	elseif msgcontains(msg, 'nick') or msgcontains(msg, 'title') then	-- set nick
+  			if gstat == LEADER then
+  					npcHandler:say('Whom player do you want to change nick?', cid, TRUE)
+  					TopicState[cid] = 11
+  			else
+  					npcHandler:say('Sorry, only leader can change nicks.', cid, TRUE)
+  					TopicState[cid] = 0
+  			end
+  	else	-- talk_state != 0
+  			if TopicState[cid] == 1 then		-- get name of new guild
+					gname = msg
+					if string.len(gname) <= maxnamelen then
+							if string.find(gname, allow_pattern) then
+									if doPlayerSetGuildId(cid, gname) == 0 then
+											npcHandler:say('Sorry, there is already a guild with that name.', cid, TRUE)
+											TopicState[cid] = 0
+									else
+											npcHandler:say('And what rank do you wish to have?', cid, TRUE)
+											TopicState[cid] = 2
+									end
+							else
+									npcHandler:say('Sorry, guild name contains illegal characters.', cid, TRUE)
+									TopicState[cid] = 0
+							end
+					else
+							npcHandler:say('Sorry, guild name cannot be longer than ' .. maxnamelen .. ' characters.', cid, TRUE)
+							TopicState[cid] = 0
+					end
+  			elseif TopicState[cid] == 2 then		-- get rank of leader
+					grank = msg
+					if string.len(grank) <= maxranklen then
+							if string.find(grank, allow_pattern) then
+									doPlayerSetGuildLevel(cid,LEADER,grank)
+									npcHandler:say('You are now leader of your new guild.', cid, TRUE)
+									TopicState[cid] = 0
+							else
+									npcHandler:say('Sorry, rank name contains illegal characters.', cid, TRUE)
+									TopicState[cid] = 0
+							end
+					else
+							npcHandler:say('Sorry, rank name cannot be longer than ' .. maxranklen .. ' characters.', cid, TRUE)
+							TopicState[cid] = 0
+					end
+  			elseif TopicState[cid] == 3 then		-- join a guild
+  				if msg == 'yes' then
+  					setPlayerGuildStatus(cname, MEMBER)
+  					npcHandler:say('You are now member of a guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				else
+  					npcHandler:say('What else can I do for you?', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 4 then		-- kick player
+  				pname = msg
+  				gname = getPlayerGuildName(cname)
+  				gname2 = getPlayerGuildName(pname)
+
+  				if cname == pname then
+  					npcHandler:say('To kick yourself say leave.', cid, TRUE)
+  					TopicState[cid] = 0
+  				elseif gname == gname2 then
+  					gstat2 = getPlayerGuildStatus(pname)
+
+  					if gstat > gstat2 then
+  						clearPlayerGuild(pname)
+  						npcHandler:say('You kicked ' .. pname .. ' from your guild.', cid, TRUE)
+  						TopicState[cid] = 0
+  					else
+  						npcHandler:say('Sorry, vice-leaders can kick only regular members.', cid, TRUE)
+  						TopicState[cid] = 0
+  					end
+  				else
+  					npcHandler:say('Sorry, ' .. pname .. ' is not in your guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 5 then		-- get invited name
+  				pname = msg
+  				gstat = getPlayerGuildStatus(pname)
+
+  				if gstat == MEMBER or gstat == VICE or gstat == LEADER then
+  					npcHandler:say('Sorry, ' .. pname .. ' is in another guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				else
+  					npcHandler:say('And what rank do you wish to give him/her?', cid, TRUE)
+  					TopicState[cid] = 6
+  				end
+
+  			elseif TopicState[cid] == 6 then		-- get invited rank
+  				grank = msg
+
+  				if string.len(grank) <= maxranklen then
+ 					if string.find(grank, allow_pattern) then
+ 						gname = getPlayerGuildName(cname)
+ 						setPlayerGuild(pname, INVITED, grank, gname)
+ 						npcHandler:say('You have invited ' .. pname .. ' to your guild.', cid, TRUE)
+ 						TopicState[cid] = 0
+ 					else
+ 						npcHandler:say('Sorry, rank name contains illegal characters.', cid, TRUE)
+ 						TopicState[cid] = 0
+ 					end
+  				else
+					npcHandler:say('Sorry, rank name cannot be longer than ' .. maxranklen .. ' characters.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 7 then		-- leave a guild
+  				if msg == 'yes' then
+  					clearPlayerGuild(cname)
+  					npcHandler:say('You have left your guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				else
+					npcHandler:say('What else can I do for you?', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 8 then		-- pass leadership
+  				pname = msg
+  				level = getPlayerLevel(pname)
+
+  				if level >= leaderlevel then
+  					gname = getPlayerGuildName(cname)
+  					gname2 = getPlayerGuildName(pname)
+
+  					if gname == gname2 then
+  						setPlayerGuildStatus(cname,MEMBER)
+  						setPlayerGuildStatus(pname,LEADER)
+  						gname = getPlayerGuildName(cname)
+  						npcHandler:say(pname .. ' is a new leader of ' .. gname .. '.', cid, TRUE)
+  						TopicState[cid] = 0
+  					else
+  						npcHandler:say('Sorry, ' .. pname .. ' is not in your guild.', cid, TRUE)
+  						TopicState[cid] = 0;
+  					end
+  				else
+  					npcHandler:say('Sorry, ' .. pname .. ' is not online.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 9 then		-- set vice-leader
+  				pname = msg
+  				gname = getPlayerGuildName(cname)
+  				gname2 = getPlayerGuildName(pname)
+
+  				if cname == pname then
+  					npcHandler:say('To resign from leadership say pass.', cid, TRUE)
+  					TopicState[cid] = 0
+  				elseif gname == gname2 then
+  					gstat = getPlayerGuildStatus(pname)
+
+  					if gstat == INVITED then
+						npcHandler:say('Sorry, ' .. pname .. ' hasn\'t joined your guild yet.', cid, TRUE)
+						TopicState[cid] = 0
+  					elseif gstat == VICE then
+  						npcHandler:say(pname .. ' is already a vice-leader.', cid, TRUE)
+						TopicState[cid] = 0
+  					elseif gstat == MEMBER then
+  						setPlayerGuildStatus(pname, VICE)
+  						npcHandler:say(pname .. ' is now a vice-leader of your guild.', cid, TRUE)
+						TopicState[cid] = 0
+  					end
+  				else
+  					npcHandler:say('Sorry, ' .. pname .. ' is not in your guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 10 then	-- set member
+  				pname = msg
+  				gname = getPlayerGuildName(cname)
+  				gname2 = getPlayerGuildName(pname)
+
+  				if cname == pname then
+  					npcHandler:say('To resign from leadership say pass.', cid, TRUE)
+  					TopicState[cid] = 0
+  				elseif gname == gname2 then
+  					gstat = getPlayerGuildStatus(pname)
+
+  					if gstat == INVITED then
+  						npcHandler:say('Sorry, ' .. pname .. ' hasn\'t joined your guild yet.', cid, TRUE)
+  						TopicState[cid] = 0
+  					elseif gstat == VICE then
+  						setPlayerGuildStatus(pname, MEMBER)
+  						npcHandler:say(pname .. ' is now a regular member of your guild.', cid, TRUE)
+  						TopicState[cid] = 0
+  					elseif gstat == MEMBER then
+  						npcHandler:say(pname .. ' is already a regular member.', cid, TRUE)
+  						TopicState[cid] = 0
+  					end
+  				else
+  					npcHandler:say('Sorry, ' .. pname .. ' is not in your guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 11 then	-- get name of player to change nick
+  				pname = msg
+				gname = getPlayerGuildName(cname)
+  				gname2 = getPlayerGuildName(pname)
+
+  				if gname == gname2 then
+  					npcHandler:say('And what nick do you want him to have (say none to clear)?', cid, TRUE)
+  					TopicState[cid] = 12
+  				else
+  					npcHandler:say('Sorry, ' .. pname .. ' is not in your guild.', cid, TRUE)
+  					TopicState[cid] = 0
+  				end
+
+  			elseif TopicState[cid] == 12 then	-- get nick
+  				if msg == 'none' then
+  					setPlayerGuildNick(pname, '')
+  					npcHandler:say(pname .. ' now has no nick.', cid, TRUE)
+  					TopicState[cid] = 0
+  				else
+  					if string.len(msg) <= maxnicklen then
+ 						if string.find(msg, allow_pattern) then
+ 							setPlayerGuildNick(pname, msg)
+ 							npcHandler:say('You have changed ' .. pname .. '\'s nick.', cid, TRUE)
+ 							TopicState[cid] = 0
+ 						else
+							npcHandler:say('Sorry, nick contains illegal characters.', cid, TRUE)
+ 							TopicState[cid] = 0
+ 						end
+  					else
+  						npcHandler:say('Sorry, nick cannot be longer than ' .. maxnicklen .. ' characters.', cid, TRUE)
+  						TopicState[cid] = 0
+  					end
+  				end
+  		end
+		end
+	return true
+end
+
+npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
+npcHandler:setMessage(MESSAGE_WALKAWAY, "Just... Be careful. ")
+npcHandler:setMessage(MESSAGE_IDLETIMEOUT, "Anything you need just come talk to me.")
+npcHandler:setMessage(MESSAGE_NOSHOP, "I can't sell you anything, I'm sorry.")

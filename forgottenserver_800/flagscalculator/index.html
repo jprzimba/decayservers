@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Forgotten Server Flags Calclator</title>
+  <link href="jquery-ui.min.css" rel="stylesheet">
+  <script src="jquery.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  $( function() {
+    $( "#tabs" ).tabs();
+  } );
+  </script>
+<script type="text/javascript" src="int.js"></script>
+<script type="text/javascript">
+function biAND(flags, flag)
+{
+	for (var i = 0; i < flags.digits.length; ++i)
+	{
+		if(i < flag.digits.length)
+		{
+			var r1 = flags.digits[i]
+			var r2 = flag.digits[i]
+			var result = r1 & r2
+			if(result != 0)
+				return true
+		}
+	}
+	
+	return false
+}
+
+function calcFlags(custom = 'nope')
+{
+	var element = document.flagform;
+	if(custom == 'custom')
+		element = document.customflagform;
+
+	var flags = biFromDecimal("0")
+	for (var i = 0; i < element.elements.length; i++)
+	{
+		if(element.elements[i].checked)
+		{
+			var flag = biFromDecimal(element.elements[i].value)
+			flags = biAdd(flags, flag)
+		}
+	}
+
+	if(custom == 'custom')
+		document.customresultform.customflagresult.value = biToString(flags, 10)
+	else
+		document.resultform.flagresult.value = biToString(flags, 10)
+}
+
+function calcCheckboxes(custom = 'nope')
+{
+	var element = document.flagform;
+	if(custom == 'custom')
+		element = document.customflagform;
+
+	var flags = biFromDecimal("0");
+	if(custom == 'custom')
+		flags = biFromDecimal(document.getElementById('customflagresult').value)
+	else
+		flags = biFromDecimal(document.getElementById('flagresult').value)
+
+	for (var i = 0; i < element.elements.length; i++)
+	{
+		var flag = biFromDecimal(element.elements[i].value)		
+		element.elements[i].checked = biAND(flags, flag)
+	}
+}
+</script>
+</head>
+<body text="#FFFFFF" bgcolor="#000000">
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Flags</a></li>
+		<li><a href="#tabs-2">Custom Flags</a></li>
+	</ul>
+
+	<div id="tabs-1">
+		<h2>Normal Flags.</h2>
+		<form name="flagform">
+		<table id="flagtable" cellspacing="0" cellpadding="1" width="600" border="1">
+		  <tr>
+			<td>Privileges</td>
+			<td>Limitations</td>
+		  </tr>
+		  <tr>
+			<td valign="top" width="300">
+				<input type="checkbox" name="groupflags" value="8" id="CannotBeAttacked" onclick="calcFlags()"><label for="CannotBeAttacked"> Can not be attacked</label><br/>
+				<input type="checkbox" name="groupflags" value="16" id="CanConvinceAll" onclick="calcFlags()"><label for="CanConvinceAll"> Can convince all monsters</label><br/>
+				<input type="checkbox" name="groupflags" value="32" id="CanSummonAll" onclick="calcFlags()"><label for="CanSummonAll"> Can summon all monsters</label><br/>
+				<input type="checkbox" name="groupflags" value="64" id="CanIllusionAll" onclick="calcFlags()"><label for="CanIllusionAll"> Can illusion all monsters</label><br/>
+				<input type="checkbox" name="groupflags" value="128" id="CanSenseInvisibility" onclick="calcFlags()"><label for="CanSenseInvisibility"> Can sense invisibility</label><br/>
+				<input type="checkbox" name="groupflags" value="256" id="IgnoredByMonsters" onclick="calcFlags()"><label for="IgnoredByMonsters"> Ignored by monsters</label><br/>
+				<input type="checkbox" name="groupflags" value="512" id="NotGainInFight" onclick="calcFlags()"><label for="NotGainInFight"> Do not gain infight</label><br/>
+				<input type="checkbox" name="groupflags" value="1024" id="HasInfiniteMana" onclick="calcFlags()"><label for="HasInfiniteMana"> Has unlimited mana</label><br/>
+				<input type="checkbox" name="groupflags" value="2048" id="HasInfiniteSoul" onclick="calcFlags()"><label for="HasInfiniteSoul"> Has unlimited soul</label><br/>
+				<input type="checkbox" name="groupflags" value="4096" id="HasNoExhaustion" onclick="calcFlags()"><label for="HasNoExhaustion"> Do no gain exhaustion</label><br/>
+				<input type="checkbox" name="groupflags" value="32768" id="CanAlwaysLogin" onclick="calcFlags()"><label for="CanAlwaysLogin"> Can always login</label><br/>
+				<input type="checkbox" name="groupflags" value="65536" id="CanBroadcast" onclick="calcFlags()"><label for="CanBroadcast"> Can broadcast</label><br/>
+				<input type="checkbox" name="groupflags" value="131072" id="CanEditHouses" onclick="calcFlags()"><label for="CanEditHouses"> Can edit all house rights</label><br/>
+				<input type="checkbox" name="groupflags" value="262144" id="CannotBeBanned" onclick="calcFlags()"><label for="CannotBeBanned"> Can not be banned</label><br/>
+				<input type="checkbox" name="groupflags" value="524288" id="CannotBePushed" onclick="calcFlags()"><label for="CannotBePushed"> Can not be pushed</label><br/>
+				<input type="checkbox" name="groupflags" value="1048576" id="HasInfinateCapacity" onclick="calcFlags()"><label for="HasInfinateCapacity"> Has unlimited capacity</label><br/>
+				<input type="checkbox" name="groupflags" value="2097152" id="CanPushAllCreatures" onclick="calcFlags()"><label for="CanPushAllCreatures"> Can push all creatures</label><br/>
+				<input type="checkbox" name="groupflags" value="4194304" id="CanTalkRedPrivate" onclick="calcFlags()"><label for="CanTalkRedPrivate"> Talk red in private</label><br/>
+				<input type="checkbox" name="groupflags" value="8388608" id="CanTalkRedChannel" onclick="calcFlags()"><label for="CanTalkRedChannel"> Talk red in channel</label><br/>
+				<input type="checkbox" name="groupflags" value="16777216" id="TalkOrangeHelpChannel" onclick="calcFlags()"><label for="TalkOrangeHelpChannel"> Talk orange in help-channel</label><br/>
+				<input type="checkbox" name="groupflags" value="17179869184" id="IgnoreSpellCheck" onclick="calcFlags()"><label for="IgnoreSpellCheck"> Skip spell usage checks</label><br/>
+				<input type="checkbox" name="groupflags" value="34359738368" id="IgnoreWeaponCheck" onclick="calcFlags()"><label for="IgnoreWeaponCheck"> Skip weapon usage checks</label><br/>
+				<input type="checkbox" name="groupflags" value="536870912" id="SetMaxSpeed" onclick="calcFlags()"><label for="SetMaxSpeed"> Gain max speed</label><br/>
+				<input type="checkbox" name="groupflags" value="1073741824" id="SpecialVIP" onclick="calcFlags()"><label for="SpecialVIP"> Cannot be added to VIP</label><br/>
+				<input type="checkbox" name="groupflags" value="4294967296" id="CanTalkRedChannelAnonymous" onclick="calcFlags()"><label for="CanTalkRedChannelAnonymous"> Talk red anonymously</label><br/>
+				<input type="checkbox" name="groupflags" value="8589934592" id="IgnoreProtectionZone" onclick="calcFlags()"><label for="IgnoreProtectionZone"> Ignore protection-zone</label><br/>
+				<input type="checkbox" name="groupflags" value="68719476736" id="CannotBeMuted" onclick="calcFlags()"><label for="CannotBeMuted"> Can not be muted</label><br/>
+				<input type="checkbox" name="groupflags" value="137438953472" id="IsAlwaysPremium" onclick="calcFlags()"><label for="IsAlwaysPremium"> Permanent premium account</label><br/>
+				<input type="checkbox" name="groupflags" value="274877906944" id="CanAnswerRuleViolations" onclick="calcFlags()"><label for="CanAnswerRuleViolations"> Can answer rule violations</label><br/>
+				<input type="checkbox" name="groupflags" value="549755813888" id="CanReloadContent" onclick="calcFlags()"><label for="CanReloadContent"> 
+				<font color="#FF0000">Can reload content (ignore)</font></label><font color="#FF0000"><br/>
+				</font>
+				<input type="checkbox" name="groupflags" value="1099511627776" id="ShowGroupInsteadOfVocation" onclick="calcFlags()"><label for="ShowGroupInsteadOfVocation"> Show group description instead of vocation </label><br/>
+				<input type="checkbox" name="groupflags" value="2199023255552" id="HasInfiniteStamina" onclick="calcFlags()"><label for="HasInfiniteStamina"> Has infinite stamina </label><br/>
+				<input type="checkbox" name="groupflags" value="17592186044416" id="CanReportBugs" onclick="calcFlags()"><label for="CanReportBugs"> Can report bugs </label><br/>
+				<input type="checkbox" name="groupflags" value="35184372088832" id="CanSeeSpecialDescription" onclick="calcFlags()"><label for="CanSeeSpecialDescription"> 
+				<font color="#FF0000">Extended description (ignore)</font></label><br/>
+				<input type="checkbox" name="groupflags" value="70368744177664" id="CannotBeSeen" onclick="calcFlags()"><label for="CannotBeSeen"> Total invisibility </label>
+			</td>
+			<td valign="top" width="300">
+				<input type="checkbox" name="groupflags" value="1" id="CannotUseCombat" onclick="calcFlags()"><label for="CannotUseCombat"> Can not use combat</label><br/>
+				<input type="checkbox" name="groupflags" value="2" id="CannotAttackPlayer" onclick="calcFlags()"><label for="CannotAttackPlayer"> Can not attack players</label><br/>
+				<input type="checkbox" name="groupflags" value="4" id="CannotAttackMonster" onclick="calcFlags()"><label for="CannotAttackMonster"> Can not attack monsters</label><br/>
+				<input type="checkbox" name="groupflags" value="8192" id="CannotUseSpells" onclick="calcFlags()"><label for="CannotUseSpells"> Cannot use spells</label><br/>
+				<input type="checkbox" name="groupflags" value="16384" id="CannotPickupItem" onclick="calcFlags()"><label for="CannotPickupItem"> Cannot pickup items</label><br/>
+				<input type="checkbox" name="groupflags" value="33554432" id="NotGainExperience" onclick="calcFlags()"><label for="NotGainExperience"> Do not gain experience</label><br/>
+				<input type="checkbox" name="groupflags" value="67108864" id="NotGainMana" onclick="calcFlags()"><label for="NotGainMana"> Do not gain mana</label><br/>
+				<input type="checkbox" name="groupflags" value="134217728" id="NotGainHealth" onclick="calcFlags()"><label for="NotGainHealth"> Do not gain health</label><br/>
+				<input type="checkbox" name="groupflags" value="268435456" id="NotGainSkill" onclick="calcFlags()"><label for="NotGainSkill"> Do not gain skill</label><br/>
+				<input type="checkbox" name="groupflags" value="2147483648" id="NotGenerateLoot" onclick="calcFlags()"><label for="NotGenerateLoot"> Can not gain loot</label><br/>
+				<input type="checkbox" name="groupflags" value="4398046511104" id="CannotMoveItems" onclick="calcFlags()"><label for="CannotMoveItems"> Can not move items </label><br/>
+				<input type="checkbox" name="groupflags" value="8796093022208" id="CannotMoveCreatures" onclick="calcFlags()"><label for="CannotMoveCreatures"> Can not move creatures </label>
+			</td>
+		  </tr>
+		</table>
+
+		</form>
+
+		<form name="resultform" id="resultform">
+			<p><strong>Flags: </strong>
+			<input type="text" id="flagresult" name="flagresult"> </p>
+			<input type="button" value="Update" id="flagclick" onclick="calcCheckboxes()" name="flagclick">
+		</form>
+	</div>
+
+	<div id="tabs-2">
+		<h2>Custom Flags.</h2>
+		<form name="customflagform">
+		<table id="customflagtable" cellspacing="0" cellpadding="2" width="600" border="1">
+			<tr>
+				<td>Player flags</td>
+				<td>Account flags</td>
+			</tr>
+			<tr>
+				<td valign="top" width="300">
+					<input type="checkbox" name="customgroupflags" value="1" id="AllowIdle" onclick="calcFlags('custom')"><label for="AllowIdle"> Allow Idle</label><br/>
+					<input type="checkbox" name="customgroupflags" value="2" id="CanSeePosition" onclick="calcFlags('custom')"><label for="CanSeePosition"> Can see position onLook</label><br/>
+					<input type="checkbox" name="customgroupflags" value="4" id="CanSeeItemDetails" onclick="calcFlags('custom')"><label for="CanSeeItemDetails"> Can see item details onLook</label><br/>
+					<input type="checkbox" name="customgroupflags" value="8" id="CanSeeCreatureDetails" onclick="calcFlags('custom')"><label for="CanSeeCreatureDetails"> Can see creature details onLook</label><br/>
+					<input type="checkbox" name="customgroupflags" value="16" id="NotSearchable" onclick="calcFlags('custom')"><label for="NotSearchable"> Cannot be searched with exiva spell</label><br/>
+					<input type="checkbox" name="customgroupflags" value="32" id="GamemasterPrivileges" onclick="calcFlags('custom')"><label for="GamemasterPrivileges"> Gamemaster privileges*</label><br/>
+					<input type="checkbox" name="customgroupflags" value="64" id="CanThrowAnywhere" onclick="calcFlags('custom')"><label for="CanThrowAnywhere"> Can throw items anywhere</label><br/>
+					<input type="checkbox" name="customgroupflags" value="128" id="CanPushAllItems" onclick="calcFlags('custom')"><label for="CanPushAllItems"> Can push any item</label><br/>
+					<input type="checkbox" name="customgroupflags" value="256" id="CanMoveAnywhere" onclick="calcFlags('custom')"><label for="CanMoveAnywhere"> Can teleport to unstandable tiles</label><br/>
+					<input type="checkbox" name="customgroupflags" value="512" id="CanMoveFromFar" onclick="calcFlags('custom')"><label for="CanMoveFromFar"> Can move things from far</label><br/>
+					<input type="checkbox" name="customgroupflags" value="2048" id="HasFullLight" onclick="calcFlags('custom')"><label for="HasFullLight"> Has full light by default</label><br/>
+					<input type="checkbox" name="customgroupflags" value="8192" id="HideLevel" onclick="calcFlags('custom')"><label for="HideLevel"> Hide level</label><br/>
+					<input type="checkbox" name="customgroupflags" value="16384" id="IsProtected" onclick="calcFlags('custom')"><label for="IsProtected"> Is protected</label><br/>
+					<input type="checkbox" name="customgroupflags" value="32768" id="IsImmune" onclick="calcFlags('custom')"><label for="IsImmune"> Is immune to fields</label><br/>
+					<input type="checkbox" name="customgroupflags" value="65536" id="NotGainSkull" onclick="calcFlags('custom')"><label for="NotGainSkull"> Doesn't gain skulls</label><br/>
+					<input type="checkbox" name="customgroupflags" value="131072" id="NotGainUnjustified" onclick="calcFlags('custom')"><label for="NotGainUnjustified"> Doesn't gain unjustified kills</label><br/>
+					<input type="checkbox" name="customgroupflags" value="262144" id="IgnorePacification" onclick="calcFlags('custom')"><label for="IgnorePacification"> Ignore pacfication</label><br/>
+					<input type="checkbox" name="customgroupflags" value="524288" id="IgnoreLoginDelay" onclick="calcFlags('custom')"><label for="IgnoreLoginDelay"> Ignore login delay</label><br/>
+					<input type="checkbox" name="customgroupflags" value="1048576" id="CanStairhop" onclick="calcFlags('custom')"><label for="CanStairhop"> Can stairhop</label><br/>
+					<input type="checkbox" name="customgroupflags" value="2097152" id="CanTurnhop" onclick="calcFlags('custom')"><label for="CanTurnhop"> Can turnhop</label><br/>
+					<input type="checkbox" name="customgroupflags" value="4194304" id="IgnoreHouseRent" onclick="calcFlags('custom')"><label for="IgnoreHouseRent"> Ignore house rent</label><br/>
+					<input type="checkbox" name="customgroupflags" value="8388608" id="CanWearAllAddons" onclick="calcFlags('custom')"><label for="CanWearAllAddons"> Can wear all addons</label>
+				</td>
+				<td valign="top" width="300">
+					<input type="checkbox" name="customgroupflags" value="1024" id="CanLoginMultipleCharacters" onclick="calcFlags('custom')"><label for="CanLoginMultipleCharacters"> Can login multiple characters at one time</label><br/>
+					<input type="checkbox" name="customgroupflags" value="4096" id="CanLogoutAnytime" onclick="calcFlags('custom')"><label for="CanLogoutAnytime"> Character can logout anytime and anywhere</label>
+				</td>
+			</tr>
+		</table>
+		</form>
+
+		<form name="customresultform" id="customresultform">
+			<p><strong>Flags: </strong>
+			<input type="text" id="customflagresult" name="customflagresult"> </p>
+			<input type="button" value="Update" id="customflagclick" onclick="calcCheckboxes('custom')" name="customflagclick">
+		</form>
+	</div>
+</div>
+</body>
+</html>
