@@ -51,6 +51,7 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 		default:
 			return false;
 	}
+
 	return false;
 }
 
@@ -62,6 +63,7 @@ bool Condition::unserialize(PropStream& propStream)
 		if(!unserializeProp((ConditionAttr_t)attr_type, propStream))
 			return false;
 	}
+
 	return true;
 }
 
@@ -305,6 +307,7 @@ uint32_t ConditionGeneric::getIcons() const
 		default:
 			break;
 	}
+
 	return icons;
 }
 
@@ -384,6 +387,7 @@ bool ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.ADD_UCHAR(CONDITIONATTR_STATS);
 		propWriteStream.ADD_VALUE(stats[i]);
 	}
+
 	return true;
 }
 
@@ -688,6 +692,7 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 		manaGain = value;
 		return true;
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -729,6 +734,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 			creature->changeMana(manaGain);
 		}
 	}
+
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -757,6 +763,7 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 		default:
 			return false;
 	}
+
 	return ret;
 }
 
@@ -801,6 +808,7 @@ bool ConditionSoul::unserializeProp(ConditionAttr_t attr, PropStream& propStream
 		soulTicks = value;
 		return true;
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -833,6 +841,7 @@ bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 			}
 		}
 	}
+
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -911,6 +920,7 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 		default:
 			return false;
 	}
+
 	return ret;
 }
 
@@ -954,6 +964,7 @@ bool ConditionDamage::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 			setTicks(getTicks() + damageInfo.interval);
 		return true;
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -976,6 +987,7 @@ bool ConditionDamage::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.ADD_UCHAR(CONDITIONATTR_INTERVALDATA);
 		propWriteStream.ADD_VALUE((*it));
 	}
+
 	return true;
 }
 
@@ -1025,6 +1037,7 @@ bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 		if(getTicks() != -1)
 			setTicks(getTicks() + damageInfo.interval);
 	}
+
 	return true;
 }
 
@@ -1053,6 +1066,7 @@ bool ConditionDamage::init()
 				addDamage(1, tickInterval, -*it);
 		}
 	}
+
 	return (!damageList.empty());
 }
 
@@ -1067,6 +1081,7 @@ bool ConditionDamage::startCondition(Creature* creature)
 		if(getNextDamage(damage))
 			return doDamage(creature, damage);
 	}
+
 	return true;
 }
 
@@ -1108,6 +1123,7 @@ bool ConditionDamage::executeCondition(Creature* creature, int32_t interval)
 			interval = 0;
 		}
 	}
+
 	return Condition::executeCondition(creature, interval);
 }
 
@@ -1128,6 +1144,7 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 
 		return true;
 	}
+
 	return false;
 }
 
@@ -1237,6 +1254,7 @@ uint32_t ConditionDamage::getIcons() const
 		default:
 			break;
 	}
+
 	return icons;
 }
 
@@ -1447,6 +1465,7 @@ uint32_t ConditionSpeed::getIcons() const
 		default:
 			break;
 	}
+
 	return icons;
 }
 
@@ -1507,6 +1526,7 @@ bool ConditionOutfit::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.ADD_UCHAR(CONDITIONATTR_OUTFIT);
 		propWriteStream.ADD_VALUE(*it);
 	}
+
 	return true;
 }
 
@@ -1572,6 +1592,7 @@ bool ConditionLight::startCondition(Creature* creature)
 	lightChangeInterval = ticks / lightInfo.level;
 	creature->setCreatureLight(lightInfo);
 	g_game.changeLight(creature);
+
 	return true;
 }
 
@@ -1590,6 +1611,7 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 			g_game.changeLight(creature);
 		}
 	}
+
 	return Condition::executeCondition(creature, interval);
 }
 
@@ -1634,6 +1656,7 @@ bool ConditionLight::setParam(ConditionParam_t param, int32_t value)
 				return false;
 		}
 	}
+
 	return false;
 }
 

@@ -170,6 +170,7 @@ int64_t Creature::getSleepTicks() const
 		int64_t delay = stepDuration - (ct - lastStep) + extraStepDuration;
 		return delay;
 	}
+
 	return 0;
 }
 

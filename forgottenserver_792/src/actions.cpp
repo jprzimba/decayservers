@@ -443,6 +443,7 @@ bool Action::configureEvent(xmlNodePtr p)
 		if(intValue == 0)
 			setCheckLineOfSight(false);
 	}
+
 	return true;
 }
 
@@ -480,6 +481,7 @@ bool Action::highscoreBook(Player* player, Item* item, const PositionEx& posFrom
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -493,6 +495,7 @@ bool Action::increaseItemId(Player* player, Item* item, const PositionEx& posFro
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -506,6 +509,7 @@ bool Action::decreaseItemId(Player* player, Item* item, const PositionEx& posFro
 			return true;
 		}
 	}
+
 	return false;
 }
 

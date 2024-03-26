@@ -130,6 +130,7 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 		max = (int32_t)maxa;
 		return true;
 	}
+
 	return false;
 }
 
@@ -169,6 +170,7 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 		default:
 			break;
 	}
+
 	return COMBAT_NONE;
 }
 
@@ -195,6 +197,7 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 		default:
 			break;
 	}
+
 	return CONDITION_NONE;
 }
 
@@ -250,6 +253,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 	{
 		return RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 	}
+
 	return Combat::canDoCombat(player, target);
 }
 
@@ -384,6 +388,7 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			}
 		}
 	}
+
 	return RET_NOERROR;
 }
 
@@ -475,6 +480,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 			break;
 		}
 	}
+
 	return false;
 }
 
@@ -545,6 +551,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 			break;
 		}
 	}
+
 	return NULL;
 }
 
@@ -568,6 +575,7 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 		CombatConditionFunc(caster, target, params, NULL);
 		CombatDispelFunc(caster, target, params, NULL);
 	}
+
 	return result;
 }
 
@@ -587,6 +595,7 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 		CombatConditionFunc(caster, target, params, NULL);
 		CombatDispelFunc(caster, target, params, NULL);
 	}
+
 	return result;
 }
 
@@ -605,6 +614,7 @@ bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const Comba
 			result = target->addCombatCondition(conditionCopy);
 		}
 	}
+
 	return result;
 }
 
@@ -615,6 +625,7 @@ bool Combat::CombatDispelFunc(Creature* caster, Creature* target, const CombatPa
 		target->removeCondition(caster, params.dispelType);
 		return true;
 	}
+
 	return false;
 }
 
@@ -736,6 +747,7 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 			combatTileEffects(list, caster, *it, params);
 		}
 	}
+
 	postCombatEffects(caster, pos, params);
 }
 
@@ -1057,6 +1069,7 @@ void AreaCombat::clear()
 {
 	for(AreaCombatMap::iterator it = areas.begin(); it != areas.end(); ++it)
 		delete it->second;
+
 	areas.clear();
 }
 
@@ -1106,17 +1119,9 @@ bool AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 		tmpPos.x -= cols;
 		tmpPos.y++;
 	}
+
 	return true;
 }
-
-/*int32_t round(float v)
-{
-	int32_t t = (long)std::floor(v);
-	if((v - t) > 0.5)
-		return t + 1;
-	else
-		return t;
-}*/
 
 void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const
 {
@@ -1203,6 +1208,7 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 				(*output)[rotatedY + rotateCenterY][rotatedX + rotateCenterX] = (*input)[y][x];
 			}
 		}
+
 		output->setCenter(rotateCenterY, rotateCenterX);
 	}
 }

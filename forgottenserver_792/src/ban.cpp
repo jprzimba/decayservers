@@ -137,6 +137,7 @@ bool Ban::isIpDisabled(uint32_t clientip)
 			return true;
 		}
 	}
+
 	OTSYS_THREAD_UNLOCK(banLock, "");
 	return false;
 }
@@ -243,6 +244,7 @@ bool IOBan::getBanInformation(uint32_t account, uint32_t& bannedBy, uint32_t& ba
 		deletion = true;
 		return true;
 	}
+
 	return false;
 }
 

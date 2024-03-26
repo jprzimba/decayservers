@@ -1151,6 +1151,7 @@ PrivateChatChannel* Chat::getPrivateChannel(Player* player)
 		if((channel = it->second) && channel->getOwner() == player->getGUID())
 			return channel;
 	}
+
 	return NULL;
 }
 
