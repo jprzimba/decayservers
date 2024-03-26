@@ -42,9 +42,7 @@ Server::~Server()
 void Server::accept()
 {
 	if(!m_acceptor)
-	{
 		return;
-	}
 
 	Connection* connection = ConnectionManager::getInstance()->createConnection(m_io_service);
 	m_acceptor->async_accept(connection->getHandle(),
@@ -61,10 +59,9 @@ void Server::closeListenSocket()
 			boost::system::error_code error;
 			m_acceptor->close(error);
 			if(error)
-			{
 				PRINT_ASIO_ERROR("Closing listen socket");
-			}
 		}
+
 		delete m_acceptor;
 		m_acceptor = NULL;
 	}
@@ -75,6 +72,7 @@ void Server::openListenSocket()
 	m_acceptor = new boost::asio::ip::tcp::acceptor(m_io_service,
 		boost::asio::ip::tcp::endpoint(boost::asio::ip::address(
 		boost::asio::ip::address_v4(m_serverIp)), m_serverPort));
+
 	accept();
 }
 
@@ -102,10 +100,6 @@ void Server::onAccept(Connection* connection, const boost::system::error_code& e
 			#else
 			std::clog << "Warning: [Server::onAccept] More than 100 listen errors." << std::endl;
 			#endif
-		}
-		else
-		{
-
 		}
 	}
 }

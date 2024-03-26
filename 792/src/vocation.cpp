@@ -35,13 +35,13 @@ Vocations::~Vocations()
 {
 	for(VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it)
 		delete it->second;
+
 	vocationsMap.clear();
 }
 
 bool Vocations::loadFromXml()
 {
 	std::string filename = "data/XML/vocations.xml";
-
 	xmlDocPtr doc = xmlParseFile(filename.c_str());
 	if(doc)
 	{

@@ -367,8 +367,10 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 		int32_t damageModifier = 100;
 		if(player->getLevel() < getReqLevel())
 			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
+
 		if(player->getMagicLevel() < getReqMagLv())
 			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
+
 		return damageModifier;
 	}
 	return 100;
@@ -379,6 +381,7 @@ bool Weapon::useWeapon(Player* player, Item* item, Creature* target) const
 	int32_t damageModifier = playerWeaponCheck(player, target);
 	if(damageModifier == 0)
 		return false;
+
 	return internalUseWeapon(player, item, target, damageModifier);
 }
 
@@ -570,6 +573,7 @@ bool WeaponMelee::configureWeapon(const ItemType& it)
 		elementType = it.abilities->elementType;
 		elementDamage = it.abilities->elementDamage;
 	}
+
 	return Weapon::configureWeapon(it);
 }
 
@@ -587,6 +591,7 @@ bool WeaponMelee::useWeapon(Player* player, Item* item, Creature* target) const
 		eParams.useCharges = true;
 		Combat::doCombatHealth(player, target, damage, damage, eParams);
 	}
+
 	return true;
 }
 
@@ -778,6 +783,7 @@ int32_t WeaponDistance::playerWeaponCheck(Player* player, Creature* target) cons
 		if(weap)
 			return weap->playerWeaponCheck(player, target);
 	}
+
 	return Weapon::playerWeaponCheck(player, target);
 }
 

@@ -521,6 +521,7 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 		ret = g_actions->canUse(player, toPos);
 	else
 		ret = g_actions->canUseFar(player, toPos, getCheckLineOfSight());
+
 	return ret;
 }
 
