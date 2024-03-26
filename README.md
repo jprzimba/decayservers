@@ -19,13 +19,5 @@ If you like the project, feel free to contribute with a pull request and we will
 - [Tryller](https://github.com/jprzimba)
 - [frcento](https://github.com/frcento)
 
-### Donate
-
-If you live in Brazil and liked the project's initiative, you can make a donation via PIX to the following email: jprzimba@gmail.com
-
-### PIX coy and paste 
-00020126400014BR.GOV.BCB.PIX0118jprzimba@gmail.com5204000053039865802BR5918Joao Paulo Ricardo6008Imbituba62140510JPRTRYLLER63048663
-
-### PIX QR Code
-[![Descrição da Imagem](https://github.com/jprzimba/decayservers/raw/master/images/pixqrcode.png)](https://github.com/jprzimba/decayservers/blob/master/images/pixqrcode.png)
-
+# Know Bugs
+- (7.92) Can't move using mini map, characters (including GOD) can click on the minimap, but cannot move it.
