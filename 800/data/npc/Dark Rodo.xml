@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<npc name="Dark Rodo" script="runes_old.lua" walkinterval="2000" floorchange="0">
-	<look type="128" head="78" body="71" legs="82" feet="114"/>
-</npc>
