@@ -9,7 +9,7 @@ If you like the project, feel free to contribute with a pull request and we will
 
 - [Talaturen](https://github.com/MarkSamman)
 - Elf
-- [slawkens)](https://github.com/slawkens)
+- [slawkens](https://github.com/slawkens)
 - KaczooH
 - Lithium
 - Kiper
