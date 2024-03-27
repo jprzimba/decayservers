@@ -28,12 +28,12 @@
 
 	-- Account Manager
 	accountManager = false
-	newPlayerChooseVoc = true
-	newPlayerSpawnPosX = 438
-	newPlayerSpawnPosY = 504
-	newPlayerSpawnPosZ = 8
-	newPlayerTownId = 1
-	newPlayerLevel = 8
+	newPlayerChooseVoc = false
+	newPlayerSpawnPosX = 795
+	newPlayerSpawnPosY = 401
+	newPlayerSpawnPosZ = 7
+	newPlayerTownId = 10 -- Rookgaard
+	newPlayerLevel = 1
 	newPlayerMagicLevel = 0
 	generateAccountNumber = false
 
