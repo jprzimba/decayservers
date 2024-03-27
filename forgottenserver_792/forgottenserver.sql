@@ -99,8 +99,8 @@ CREATE TABLE `players`
 	FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
-INSERT INTO `players` VALUES (1, 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 1000, 1000, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
-INSERT INTO `players` VALUES (2, 'GM Tryller', 5, 222222, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 1000, 1000, 7, '', 400, 0, 0, 0, 1, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
+INSERT INTO `players` VALUES (1, 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 253, 231, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
+INSERT INTO `players` VALUES (2, 'GM Tryller', 5, 222222, 1, 0, 150, 150, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 438, 503, 7, '', 400, 0, 0, 0, 1, 0, 0, 0, '', 0, 0, 0, 10, 10, 10, 0, 0, 0);
 
 CREATE TABLE `bans`
 (

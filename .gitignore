@@ -1,6 +1,4 @@
 # Ignore files
-792/lastMotd.txt
-792/playersRecord.txt
 *.res
 *.s3db
 *.layout
