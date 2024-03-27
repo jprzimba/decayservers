@@ -26,7 +26,6 @@
   <creature name="centipede" type="monster" looktype="124"/>
   <creature name="chicken" type="monster" looktype="111"/>
   <creature name="cobra" type="monster" looktype="81"/>
-  <creature name="carniphila" type="monster" looktype="226" head="114" body="98" legs="97" feet="114"/>
   <creature name="crab" type="monster" looktype="112"/>
   <creature name="crocodile" type="monster" looktype="119"/>
   <creature name="crimson frog" type="monster" looktype="226" head="94" body="78" legs="94" feet="78"/>
@@ -93,8 +92,8 @@
   <creature name="orc shaman" type="monster" looktype="6"/>
   <creature name="orc spearman" type="monster" looktype="50"/>
   <creature name="orc warlord" type="monster" looktype="2"/>
+  <creature name="orc warrior" type="monster" looktype="7"/>
   <creature name="orchid frog" type="monster" looktype="226" head="109" body="14" legs="109" feet="114"/>
-  <creature name="gazer" type="monster" looktype="109"/>
   <creature name="panda" type="monster" looktype="123"/>
   <creature name="parrot" type="monster" looktype="217"/>
   <creature name="pig" type="monster" looktype="60"/>

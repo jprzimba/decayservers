@@ -29,9 +29,9 @@
 	-- Account Manager
 	accountManager = false
 	newPlayerChooseVoc = true
-	newPlayerSpawnPosX = 1000
-	newPlayerSpawnPosY = 1000
-	newPlayerSpawnPosZ = 7
+	newPlayerSpawnPosX = 438
+	newPlayerSpawnPosY = 504
+	newPlayerSpawnPosZ = 8
 	newPlayerTownId = 1
 	newPlayerLevel = 8
 	newPlayerMagicLevel = 0
