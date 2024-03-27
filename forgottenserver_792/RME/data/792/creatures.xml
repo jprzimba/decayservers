@@ -2,8 +2,11 @@
 <creatures>
 <!-- monsters -->
   <creature name="amazon" type="monster" looktype="137" lookhead="113" lookbody="120" looklegs="114" lookfeet="132"/>
+  <creature name="acolyte of the cult" type="monster" looktype="194" head="114" body="121" legs="121" feet="57"/>
+  <creature name="adept of the cult" type="monster" looktype="79" head="114" body="94" legs="94" feet="57"/>
   <creature name="ancient scarab" type="monster" looktype="79"/>
   <creature name="assassin" type="monster" looktype="129" lookhead="95" lookbody="95" looklegs="95" lookfeet="95"/>
+  <creature name="azure frog" type="monster" looktype="226" head="69" body="66" legs="69" feet="66"/>
   <creature name="badger" type="monster" looktype="105"/>
   <creature name="bandit" type="monster" looktype="129" lookhead="58" lookbody="59" looklegs="45" lookfeet="114"/>
   <creature name="banshee" type="monster" looktype="78"/>
@@ -12,18 +15,21 @@
   <creature name="behemoth" type="monster" looktype="55"/>
   <creature name="beholder" type="monster" looktype="17"/>
   <creature name="black knight" type="monster" looktype="131" lookhead="95" lookbody="95" looklegs="95" lookfeet="95"/>
+  <creature name="blood crab" type="monster" looktype="200"/>
   <creature name="blue djinn" type="monster" looktype="80"/>
   <creature name="bonebeast" type="monster" looktype="101"/>
   <creature name="bug" type="monster" looktype="45"/>
   <creature name="butterfly" type="monster" looktype="10"/>
   <creature name="carniphila" type="monster" looktype="120"/>
-  <creature name="Carrion Worm" type="monster" looktype="192"/>
+  <creature name="carrion worm" type="monster" looktype="192"/>
   <creature name="cave rat" type="monster" looktype="56"/>
   <creature name="centipede" type="monster" looktype="124"/>
   <creature name="chicken" type="monster" looktype="111"/>
   <creature name="cobra" type="monster" looktype="81"/>
+  <creature name="carniphila" type="monster" looktype="226" head="114" body="98" legs="97" feet="114"/>
   <creature name="crab" type="monster" looktype="112"/>
   <creature name="crocodile" type="monster" looktype="119"/>
+  <creature name="crimson frog" type="monster" looktype="226" head="94" body="78" legs="94" feet="78"/>
   <creature name="crypt shambler" type="monster" looktype="100"/>
   <creature name="cyclops" type="monster" looktype="22"/>
   <creature name="dark monk" type="monster" looktype="225"/>
@@ -47,6 +53,7 @@
   <creature name="elf arcanist" type="monster" looktype="63"/>
   <creature name="elf Scout" type="monster" looktype="64"/>
   <creature name="fire devil" type="monster" looktype="40"/>
+  <creature name="enlightened of the cult" type="monster" looktype="193"/>
   <creature name="fire elemental" type="monster" looktype="49"/>
   <creature name="flamingo" type="monster" looktype="212"/>
   <creature name="frost troll" type="monster" looktype="53"/>
@@ -57,6 +64,7 @@
   <creature name="giant spider" type="monster" looktype="38"/>
   <creature name="goblin" type="monster" looktype="61"/>
   <creature name="green djinn" type="monster" looktype="51"/>
+  <creature name="green frog" type="monster" looktype="224" head="69" body="66" legs="69" feet="66"/>
   <creature name="hero" type="monster" looktype="73"/>
   <creature name="hunter" type="monster" looktype="129" lookhead="95" lookbody="116" looklegs="121" lookfeet="115"/>
   <creature name="hyaena" type="monster" looktype="94"/>
@@ -77,6 +85,7 @@
   <creature name="monk" type="monster" looktype="57"/>
   <creature name="mummy" type="monster" looktype="65"/>
   <creature name="necromancer" type="monster" looktype="9"/>
+  <creature name="novice of the cult" type="monster" looktype="133" head="114" body="95" legs="114" feet="114"/>
   <creature name="orc" type="monster" looktype="5"/>
   <creature name="orc berserker" type="monster" looktype="8"/>
   <creature name="orc leader" type="monster" looktype="59"/>
@@ -84,7 +93,8 @@
   <creature name="orc shaman" type="monster" looktype="6"/>
   <creature name="orc spearman" type="monster" looktype="50"/>
   <creature name="orc warlord" type="monster" looktype="2"/>
-  <creature name="orc warrior" type="monster" looktype="7"/>
+  <creature name="orchid frog" type="monster" looktype="226" head="109" body="14" legs="109" feet="114"/>
+  <creature name="gazer" type="monster" looktype="109"/>
   <creature name="panda" type="monster" looktype="123"/>
   <creature name="parrot" type="monster" looktype="217"/>
   <creature name="pig" type="monster" looktype="60"/>
@@ -128,6 +138,9 @@
   <creature name="tarantula" type="monster" looktype="219"/>
   <creature name="terror bird" type="monster" looktype="218"/>
   <creature name="tiger" type="monster" looktype="125"/>
+  <creature name="thornback tortoise" type="monster" looktype="198"/>
+  <creature name="toad" type="monster" looktype="222"/>
+  <creature name="tortoise" type="monster" looktype="197"/>
   <creature name="troll" type="monster" looktype="15"/>
   <creature name="valkyrie" type="monster" looktype="139" lookhead="113" lookbody="57" looklegs="95" lookfeet="113"/>
   <creature name="vampire" type="monster" looktype="68"/>
