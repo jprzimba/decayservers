@@ -1,0 +1,21 @@
+[ CHANGELOG
+	Project Name
+		The Forgotten Server
+
+	Version
+		0.2
+
+	Codenamed
+		"Mystic Spirit"
+
+	License
+		GNU GPLv3
+
+	Forum
+		http://otland.net/
+]
+
+[v1 CREDITS
+	Credits for version 1 of this server goes to,
+	The Forgotten Server, OpenTibia SVN, Tryller and frcento.
+]

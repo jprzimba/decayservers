@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups>
+	<group id="1" name="Player"/>
+	<group id="2" name="Tutor" flags="16809984" customFlags="2" access="1"/>
+	<group id="3" name="Senior Tutor" flags="68736352256" access="2" maxVips="200"/>
+	<group id="4" name="Gamemaster" flags="126953861275487" access="3" depotLimit="3000" maxVips="300"/>
+	<group id="5" name="Community Manager" flags="65413425504250" access="4" depotLimit="4000" maxVips="400" />
+	<group id="6" name="God" flags="140734837530618" access="5" depotLimit="5000" maxVips="500" />
+</groups>

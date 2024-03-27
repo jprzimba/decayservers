@@ -1,0 +1,103 @@
+[ CHANGELOG
+	Project Name
+		The Forgotten Server
+
+	Version
+		0.2
+
+	Codenamed
+		"Mystic Spirit"
+
+	License
+		GNU GPLv3
+
+	Forum
+		http://otland.net/
+]
+
+[v1
+	Server charges
+		* Game protocol 7.9x support with 7.92 items.
+		* Global events from TFS 0.2.15.
+		* GOD's can move items from far.
+		* Server supports SQLite and MySQL.
+		* Add bank balance.
+		* Removed libxml and add pugixml support.
+		* Add data/libs/ for compats and funcitons.
+		* Moved all commands to talkactions.
+		* Moved grups from database to data/XML/groups.xml.
+		* Very fast clean system from Evolutions source.
+		* Stamina system.
+		* Add alot of lua functions from latest 0.2/0.3/0.4 The Forgotten Server and OpenTibia SVN.
+			- isPlayerGhost(cid)
+			- getPlayerParty(cid)
+			- doPlayerJoinParty(cid, leaderId)
+			- getPartyMembers(leaderId)
+			- doCleanMap()
+			- getPlayerBalance(cid)
+			- doPlayerSetBalance(cid, balance)
+			- isPlayerPzLocked(cid)
+			- getPlayerIp(cid)
+			- getPlayerMasterPososition(cid)
+			- isValidItemId(itemid)
+			- getGameState()
+			- doSetGameState(id)
+			- getPlayersOnline()
+			- getClosestFreeTile(cid, targetpos[, extended = false[, ignoreHouse = true]])
+			- getTownName(townId)
+			- getTownTemplePosition(townId[, displayError])
+			- getPlayerByNameWildcard(name~[, ret = false])
+			- getTownId(townName)
+			- doCreateMonster(name, pos[, displayError = true])
+			- doCreateNpc(name, pos[, displayError = true])
+			- doSummonMonster(cid, name)
+			- getExperienceStage(level)
+		* Guild system configurable in config.lua
+			- ingameGuildSystem
+			- levelToCreateGuild
+			- minGuildNameLength
+			- maxGuildNameLength
+		* Configurable spells at config.lua
+			- spellNameInsteadOfWords
+			- emoteSpells
+
+	Revbattlesys
+		* New Formula of Armor/Defense.
+		* Weapons configurable in XML and Lua, Wands, Rods, Burst Arrows and Poison Arrows.
+		* Drunk and Paralyze System.
+		* Creatures can move diagonally.
+		* New Lua Interface (Actions, NPCs).
+		* Big Changes in Spells.
+		* New Decay System.
+		* Rings and Amulets.
+		* New Monster AI.
+		* Vocations configurable in XML.
+    		* Players can summon monsters (utevo res).
+		* Check if the player knows the spell.
+		* Soul Points.
+		* Last Writer of letters.
+
+	Revdbsys
+		* Code cleaned up.
+		* Flexible interface for database drivers.
+		* Transparent database drivers.
+		* Speed up.
+		* Much less memory used (even 1000 times less for database queries!).
+		* Code optimization.
+
+	SVN and Forgottenn Server features
+		* Skull System.
+		* Party System.
+		* Bed System.
+		* Save System.
+		* Mute System.
+		* Rule Violations Report system (ctrl + r).
+		* Bug report system (ctrl + z).
+		* Violation window system (ctrl + y).
+		* Walk to item.
+    		* Push, death, walk delays.
+    		* Magic effect displayed on air.
+		* Wildcard~ for spells with params.
+		* Ghost system (bug if you use utana vid with ghost).
+    		* many many more...
+]
