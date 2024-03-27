@@ -572,8 +572,7 @@ bool Item::hasProperty(enum ITEMPROPERTY prop) const
 {
 	const ItemType& it = items[id];
 
-	switch(prop)
-	{
+	switch(prop){
 		case BLOCKSOLID:
 			if(it.blockSolid)
 				return true;
@@ -638,7 +637,6 @@ bool Item::hasProperty(enum ITEMPROPERTY prop) const
 			return false;
 			break;
 	}
-
 	return false;
 }
 

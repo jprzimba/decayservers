@@ -76,9 +76,9 @@
 	timeBetweenExActions = 1000
 
 	-- Map
-	mapName = "Evolutions"
-	mapAuthor = "Xidaozu"
-	randomizeTiles = true
+	mapName = "world"
+	mapAuthor = "Xidaozu & Sad Team Mapper"
+	randomizeTiles = false
 	mapStorageType = "relational"
 
 	-- Premium Account
