@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Dark Rodo" script="data/npc/scripts/runes.lua" walkinterval="2000" floorchange="0">
+	<health now="800" max="800"/>
+	<look type="144" head="96" body="109" legs="90" feet="128" addons="3"/>
+	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|. Do you want to buy any spell runes?"/>
+		<parameter key="message_needmoremoney" value="You do not have enough money."/>
+		<parameter key="message_decline" value="Is |TOTALCOST| gold coins too much for you? Get out of here!"/>
+	</parameters>
+</npc>
+
