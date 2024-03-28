@@ -21,3 +21,6 @@ If you like the project, feel free to contribute with a pull request and we will
 
 # Know Bugs
 - (7.92) Can't move using mini map, characters (including GOD) can click on the minimap, but cannot move it.
+
+# Tools
+You can find compatible RME and Dev-Cpp in the release page [here](https://github.com/jprzimba/decayservers/releases/tag/v1.0.0)
