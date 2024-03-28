@@ -452,7 +452,7 @@
 		<monster name="troll" x="-2" y="3" z="6" spawntime="60" />
 	</spawn>
 	<spawn centerx="359" centery="368" centerz="6" radius="5">
-		<npc name="miltrek" x="0" y="-1" z="6" spawntime="60" />
+		<npc name="eremo" x="0" y="-1" z="6" spawntime="60" />
 	</spawn>
 	<spawn centerx="397" centery="385" centerz="6" radius="5">
 		<npc name="maria" x="0" y="0" z="6" spawntime="60" />
@@ -1126,7 +1126,7 @@
 	</spawn>
 	<spawn centerx="204" centery="275" centerz="7" radius="5">
 		<monster name="war wolf" x="5" y="-1" z="7" spawntime="60" />
-		<npc name="kawill" x="1" y="1" z="7" spawntime="60" />
+		<npc name="eremo" x="1" y="1" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="210" centery="278" centerz="7" radius="5">
 		<monster name="polar bear" x="1" y="4" z="7" spawntime="60" />
@@ -1411,7 +1411,7 @@
 		<monster name="hydra" x="-2" y="5" z="7" spawntime="40" />
 	</spawn>
 	<spawn centerx="308" centery="453" centerz="7" radius="5">
-		<npc name="kawill" x="0" y="0" z="7" spawntime="60" />
+		<npc name="eremo" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="549" centery="456" centerz="7" radius="5">
 		<monster name="dworc fleshhunter" x="-1" y="-3" z="7" spawntime="60" />

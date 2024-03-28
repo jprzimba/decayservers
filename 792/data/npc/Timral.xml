@@ -1,4 +1,10 @@
-<npc name="Timral" script="data/npc/scripts/boat_enigma.lua" walkinterval="2000" floorchange="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Timral" script="data/npc/scripts/default.lua" walkinterval="0" floorchange="0">
 	<health now="150" max="150"/>
-	<look type="129" head="114" body="119" legs="114" feet="114" corpse="2212"/>
+	<look type="129" head="114" body="119" legs="114" feet="114" />
+	<parameters>
+		<parameter key="module_travel" value="1"/>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|. I can travel to Mystic Island and Karmia. Where would you like to go?."/>
+		<parameter key="travel_destinations" value="mystic island,1447,1504,7,220;karmia,520,533,6,120"/>
+	</parameters>
 </npc>
