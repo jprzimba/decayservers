@@ -27,7 +27,7 @@
 	replaceKickOnLogin = true
 
 	-- Account Manager
-	accountManager = false
+	accountManager = true
 	newPlayerChooseVoc = false
 	newPlayerSpawnPosX = 795
 	newPlayerSpawnPosY = 401
