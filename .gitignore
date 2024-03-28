@@ -1,6 +1,5 @@
 # Ignore files
 *.res
-*.s3db
 *.layout
 *.o
 *.rar
