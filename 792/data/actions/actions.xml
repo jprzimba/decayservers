@@ -152,4 +152,8 @@
 	<!-- Map Actions -->
 	<!-- Levers -->
 	<action uniqueid="7001" script="map/arenalever.lua"/>
+	<action uniqueid="14030" script="map/hydrascamp.lua"/>
+
+	<!-- Quests -->
+	<action uniqueid="9010" script="map/quests/vocationquest.lua"/>
 </actions>
