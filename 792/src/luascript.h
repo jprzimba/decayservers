@@ -492,6 +492,7 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerAccess(lua_State* L);
 		static int32_t luaGetPlayerLevel(lua_State* L);
 		static int32_t luaGetCreatureLookDirection(lua_State* L);
+		static int32_t luaDoCreatureSetLookDir(lua_State* L);
 		static int32_t luaGetPlayerMagLevel(lua_State* L);
 		static int32_t luaGetCreatureMana(lua_State* L);
 		static int32_t luaGetCreatureMaxMana(lua_State* L);

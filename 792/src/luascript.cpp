@@ -1145,6 +1145,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getCreatureLookDirection(cid)
 	lua_register(m_luaState, "getCreatureLookDirection", LuaScriptInterface::luaGetCreatureLookDirection);
+	
+	//doCreatureSetLookDirection(cid, dir)
+	lua_register(m_luaState, "doCreatureSetLookDirection", LuaScriptInterface::luaDoCreatureSetLookDir);
 
 	//getPlayerLevel(cid)
 	lua_register(m_luaState, "getPlayerLevel", LuaScriptInterface::luaGetPlayerLevel);
@@ -7662,6 +7665,31 @@ int32_t LuaScriptInterface::luaDoPlayerSetGuildId(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreatureSetLookDir(lua_State* L)
+{
+	//doCreatureSetLookDirection(cid, dir)
+	Direction dir = (Direction)popNumber(L);
+	ScriptEnvironment* env = getScriptEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		if(dir < NORTH || dir > WEST)
+		{
+			lua_pushboolean(L, false);
+			return 1;
+		}
+
+		g_game.internalCreatureTurn(creature, dir);
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
 	return 1;
 }
 

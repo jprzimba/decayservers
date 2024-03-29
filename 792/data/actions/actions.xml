@@ -158,4 +158,5 @@
 
 	<!-- Quests -->
 	<action uniqueid="9010" script="map/quests/vocationquest.lua"/>
+	<action uniqueid="7003" script="map/quests/demon_helmet/lever.lua"/>
 </actions>
