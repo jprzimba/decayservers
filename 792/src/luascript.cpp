@@ -7931,3 +7931,4 @@ int32_t LuaScriptInterface::luaGetCreatureByName(lua_State* L)
 	return 1;
 }
 
+
