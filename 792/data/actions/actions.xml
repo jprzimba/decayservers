@@ -157,8 +157,88 @@
 	<action uniqueid="7003" script="map/walllever2.lua" />
 
 	<!-- Quests -->
+	<!-- Karmia City Quests -->
+	<action uniqueid="5014" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5019" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5021" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5022" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5023" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5025" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5026" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5029" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5030" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5031" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5067" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5068" script="map/quests/cities/karmia/quests.lua"/>
+	<action uniqueid="5069" script="map/quests/cities/karmia/quests.lua"/>
+
+	<!-- Desert City Quests -->
+	<action uniqueid="5032" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5033" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5034" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5035" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5036" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5037" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5038" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5039" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5040" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5041" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5042" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5043" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5044" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5073" script="map/quests/cities/desert/quests.lua"/>
+	<action uniqueid="5074" script="map/quests/cities/desert/quests.lua"/>
+
+	<!-- Inferno City Quests -->
+	<action uniqueid="5015" script="map/quests/cities/inferno/quests.lua"/>
+	<action uniqueid="5016" script="map/quests/cities/inferno/quests.lua"/>
+	<action uniqueid="5017" script="map/quests/cities/inferno/quests.lua"/>
+	<action uniqueid="5018" script="map/quests/cities/inferno/quests.lua"/>
+
+	<!-- Premium City Quests -->
+	<action uniqueid="5045" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5046" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5047" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5048" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5058" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5059" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5060" script="map/quests/cities/premium_island/quests.lua"/>
+	<action uniqueid="5088" script="map/quests/cities/premium_island/quests.lua"/>
+
+	<!-- Rookgaard Quests -->
+	<action uniqueid="2398" script="map/quests/cities/rookgaard/quests.lua"/>
+	<action uniqueid="2458" script="map/quests/cities/rookgaard/quests.lua"/>
+	<action uniqueid="2464" script="map/quests/cities/rookgaard/quests.lua"/>
+
+	<!-- Tiquanda Quests -->
+	<action uniqueid="5052" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5053" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5054" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5055" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5056" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5057" script="map/quests/cities/tiquanda/quests.lua"/>
+	<action uniqueid="5066" script="map/quests/cities/tiquanda/quests.lua"/>
+
+	<!-- Venore Quests -->
+	<action uniqueid="5076" script="map/quests/cities/venore/quests.lua"/>
+	<action uniqueid="5077" script="map/quests/cities/venore/quests.lua"/>
+	<action uniqueid="5063" script="map/quests/cities/venore/quests.lua"/>
+	<action uniqueid="5064" script="map/quests/cities/venore/quests.lua"/>
+	<action uniqueid="5065" script="map/quests/cities/venore/quests.lua"/>
+	<action uniqueid="5080" script="map/quests/cities/venore/quests.lua"/>
+
+	<!-- Folda Quests -->
+	<action uniqueid="5081" script="map/quests/cities/folda/quests.lua"/>
+	<action uniqueid="5082" script="map/quests/cities/folda/quests.lua"/>
+	<action uniqueid="5083" script="map/quests/cities/folda/quests.lua"/>
+
+	<!-- Liberty bay Quests -->
+	<action uniqueid="5084" script="map/quests/cities/liberty_bay/quests.lua"/>
+	<action uniqueid="5086" script="map/quests/cities/liberty_bay/quests.lua"/>
+	<action uniqueid="5087" script="map/quests/cities/liberty_bay/quests.lua"/>
+
 	<!-- Vocation Quest -->
-	<action uniqueid="9010" script="map/quests/vocationquest.lua"/>
+	<action uniqueid="9010" script="map/quests/desert_quest.lua"/>
 
 	<!-- Annihilator -->
 	<action uniqueid="7000" script="map/quests/annihilator/lever.lua"/>
