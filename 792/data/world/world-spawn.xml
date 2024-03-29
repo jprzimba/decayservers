@@ -1702,28 +1702,28 @@
 		<monster name="bear" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="626" centery="599" centerz="7" radius="30">
-		<monster name="Thornback Tortoise" x="2" y="-22" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-15" y="-19" z="7" spawntime="60" />
-		<monster name="Tortoise" x="2" y="-18" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-7" y="-17" z="7" spawntime="60" />
-		<monster name="Tortoise" x="21" y="-15" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="7" y="-14" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-15" y="-10" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-3" y="-9" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="26" y="-9" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-26" y="-6" z="7" spawntime="60" />
-		<monster name="Tortoise" x="13" y="-5" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-16" y="0" z="7" spawntime="60" />
-		<monster name="Tortoise" x="28" y="2" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-4" y="3" z="7" spawntime="60" />
-		<monster name="Tortoise" x="6" y="4" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="15" y="4" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-10" y="8" z="7" spawntime="60" />
-		<monster name="Tortoise" x="14" y="9" z="7" spawntime="60" />
-		<monster name="Thornback Tortoise" x="26" y="9" z="7" spawntime="60" />
-		<monster name="Tortoise" x="23" y="14" z="7" spawntime="60" />
-		<monster name="Tortoise" x="3" y="18" z="7" spawntime="60" />
-		<monster name="Tortoise" x="-13" y="22" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="2" y="-22" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="-15" y="-19" z="7" spawntime="60" />
+		<monster name="tortoise" x="2" y="-18" z="7" spawntime="60" />
+		<monster name="tortoise" x="-7" y="-17" z="7" spawntime="60" />
+		<monster name="tortoise" x="21" y="-15" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="7" y="-14" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="-15" y="-10" z="7" spawntime="60" />
+		<monster name="tortoise" x="-3" y="-9" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="26" y="-9" z="7" spawntime="60" />
+		<monster name="tortoise" x="-26" y="-6" z="7" spawntime="60" />
+		<monster name="tortoise" x="13" y="-5" z="7" spawntime="60" />
+		<monster name="tortoise" x="-16" y="0" z="7" spawntime="60" />
+		<monster name="tortoise" x="28" y="2" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="-4" y="3" z="7" spawntime="60" />
+		<monster name="tortoise" x="6" y="4" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="15" y="4" z="7" spawntime="60" />
+		<monster name="tortoise" x="-10" y="8" z="7" spawntime="60" />
+		<monster name="tortoise" x="14" y="9" z="7" spawntime="60" />
+		<monster name="thornback tortoise" x="26" y="9" z="7" spawntime="60" />
+		<monster name="tortoise" x="23" y="14" z="7" spawntime="60" />
+		<monster name="tortoise" x="3" y="18" z="7" spawntime="60" />
+		<monster name="tortoise" x="-13" y="22" z="7" spawntime="60" />
 		<npc name="carpetman" x="-6" y="29" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="547" centery="600" centerz="7" radius="1">
@@ -1790,15 +1790,15 @@
 		<npc name="maria" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="615" centery="678" centerz="7" radius="5">
-		<monster name="Tortoise" x="-2" y="0" z="7" spawntime="800" />
+		<monster name="tortoise" x="-2" y="0" z="7" spawntime="800" />
 	</spawn>
 	<spawn centerx="584" centery="679" centerz="7" radius="5">
 		<monster name="deer" x="3" y="-2" z="7" spawntime="84600" />
 		<monster name="deer" x="-1" y="3" z="7" spawntime="84600" />
 	</spawn>
 	<spawn centerx="622" centery="685" centerz="7" radius="5">
-		<monster name="Tortoise" x="0" y="-5" z="7" spawntime="60" />
-		<monster name="Toad" x="0" y="0" z="7" spawntime="60" />
+		<monster name="tortoise" x="0" y="-5" z="7" spawntime="60" />
+		<monster name="toad" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="381" centery="686" centerz="7" radius="15">
 		<monster name="hunter" x="4" y="-6" z="7" spawntime="60" />
@@ -3003,7 +3003,7 @@
 	</spawn>
 	<spawn centerx="467" centery="491" centerz="8" radius="3">
 		<monster name="rotworm" x="2" y="-2" z="8" spawntime="40" />
-		<monster name="Carrion Worm" x="-3" y="0" z="8" spawntime="60" />
+		<monster name="carrion worm" x="-3" y="0" z="8" spawntime="60" />
 	</spawn>
 	<spawn centerx="613" centery="492" centerz="8" radius="5">
 		<monster name="lizard snakecharmer" x="-3" y="-1" z="8" spawntime="40" />
@@ -3310,49 +3310,49 @@
 		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
 	</spawn>
 	<spawn centerx="649" centery="605" centerz="8" radius="45">
-		<monster name="Thornback Tortoise" x="-10" y="-38" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-18" y="-33" z="8" spawntime="60" />
-		<monster name="Tortoise" x="2" y="-30" z="8" spawntime="60" />
-		<monster name="Tortoise" x="26" y="-30" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="4" y="-29" z="8" spawntime="60" />
-		<monster name="Tortoise" x="6" y="-27" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-26" y="-23" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="30" y="-23" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-11" y="-20" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-14" y="-19" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-7" y="-18" z="8" spawntime="60" />
-		<monster name="Tortoise" x="14" y="-17" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="31" y="-16" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="11" y="-15" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-24" y="-13" z="8" spawntime="60" />
-		<monster name="Tortoise" x="9" y="-13" z="8" spawntime="60" />
-		<monster name="Tortoise" x="28" y="-9" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-7" y="-8" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-5" y="-7" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="26" y="-3" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-22" y="-2" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-24" y="1" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-10" y="2" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-10" y="4" z="8" spawntime="60" />
-		<monster name="Tortoise" x="8" y="4" z="8" spawntime="60" />
-		<monster name="Tortoise" x="26" y="5" z="8" spawntime="60" />
-		<monster name="Tortoise" x="1" y="6" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="24" y="8" z="8" spawntime="60" />
-		<monster name="Tortoise" x="23" y="12" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-12" y="15" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-16" y="16" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-14" y="18" z="8" spawntime="60" />
-		<monster name="Tortoise" x="12" y="20" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="8" y="22" z="8" spawntime="60" />
-		<monster name="Tortoise" x="4" y="24" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-10" y="31" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="-10" y="35" z="8" spawntime="60" />
-		<monster name="Tortoise" x="3" y="35" z="8" spawntime="60" />
-		<monster name="Tortoise" x="14" y="35" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="7" y="37" z="8" spawntime="60" />
-		<monster name="Tortoise" x="9" y="37" z="8" spawntime="60" />
-		<monster name="Thornback Tortoise" x="11" y="37" z="8" spawntime="60" />
-		<monster name="Tortoise" x="-6" y="38" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-10" y="-38" z="8" spawntime="60" />
+		<monster name="tortoise" x="-18" y="-33" z="8" spawntime="60" />
+		<monster name="tortoise" x="2" y="-30" z="8" spawntime="60" />
+		<monster name="tortoise" x="26" y="-30" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="4" y="-29" z="8" spawntime="60" />
+		<monster name="tortoise" x="6" y="-27" z="8" spawntime="60" />
+		<monster name="tortoise" x="-26" y="-23" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="30" y="-23" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-11" y="-20" z="8" spawntime="60" />
+		<monster name="tortoise" x="-14" y="-19" z="8" spawntime="60" />
+		<monster name="tortoise" x="-7" y="-18" z="8" spawntime="60" />
+		<monster name="tortoise" x="14" y="-17" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="31" y="-16" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="11" y="-15" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-24" y="-13" z="8" spawntime="60" />
+		<monster name="tortoise" x="9" y="-13" z="8" spawntime="60" />
+		<monster name="tortoise" x="28" y="-9" z="8" spawntime="60" />
+		<monster name="tortoise" x="-7" y="-8" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-5" y="-7" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="26" y="-3" z="8" spawntime="60" />
+		<monster name="tortoise" x="-22" y="-2" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-24" y="1" z="8" spawntime="60" />
+		<monster name="tortoise" x="-10" y="2" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-10" y="4" z="8" spawntime="60" />
+		<monster name="tortoise" x="8" y="4" z="8" spawntime="60" />
+		<monster name="tortoise" x="26" y="5" z="8" spawntime="60" />
+		<monster name="tortoise" x="1" y="6" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="24" y="8" z="8" spawntime="60" />
+		<monster name="tortoise" x="23" y="12" z="8" spawntime="60" />
+		<monster name="tortoise" x="-12" y="15" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-16" y="16" z="8" spawntime="60" />
+		<monster name="tortoise" x="-14" y="18" z="8" spawntime="60" />
+		<monster name="tortoise" x="12" y="20" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="8" y="22" z="8" spawntime="60" />
+		<monster name="tortoise" x="4" y="24" z="8" spawntime="60" />
+		<monster name="tortoise" x="-10" y="31" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="-10" y="35" z="8" spawntime="60" />
+		<monster name="tortoise" x="3" y="35" z="8" spawntime="60" />
+		<monster name="tortoise" x="14" y="35" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="7" y="37" z="8" spawntime="60" />
+		<monster name="tortoise" x="9" y="37" z="8" spawntime="60" />
+		<monster name="thornback tortoise" x="11" y="37" z="8" spawntime="60" />
+		<monster name="tortoise" x="-6" y="38" z="8" spawntime="60" />
 	</spawn>
 	<spawn centerx="527" centery="608" centerz="8" radius="1">
 		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
@@ -4287,7 +4287,7 @@
 		<monster name="dwarf guard" x="1" y="0" z="9" spawntime="40" />
 	</spawn>
 	<spawn centerx="480" centery="538" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="0" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="345" centery="542" centerz="9" radius="5">
 		<monster name="dragon lord" x="0" y="1" z="9" spawntime="50" />
@@ -4296,13 +4296,13 @@
 		<monster name="dwarf guard" x="0" y="-3" z="9" spawntime="40" />
 	</spawn>
 	<spawn centerx="493" centery="545" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="0" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="533" centery="545" centerz="9" radius="1">
 		<monster name="dwarf guard" x="0" y="0" z="9" spawntime="40" />
 	</spawn>
 	<spawn centerx="466" centery="546" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="0" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="452" centery="548" centerz="9" radius="12">
 		<monster name="hero" x="-2" y="-6" z="9" spawntime="60" />
@@ -4323,20 +4323,20 @@
 		<monster name="priestess" x="1" y="10" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="476" centery="549" centerz="9" radius="3">
-		<monster name="Carrion Worm" x="0" y="-3" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="0" y="3" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="-3" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="3" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="505" centery="554" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="0" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="486" centery="559" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="0" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="344" centery="561" centerz="9" radius="5">
 		<monster name="dragon lord" x="0" y="-1" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="503" centery="563" centerz="9" radius="1">
-		<monster name="Carrion Worm" x="0" y="1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="1" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="536" centery="569" centerz="9" radius="12">
 		<monster name="dwarf" x="3" y="-10" z="9" spawntime="40" />
@@ -4728,7 +4728,7 @@
 	</spawn>
 	<spawn centerx="1058" centery="1020" centerz="9" radius="5">
 		<monster name="rotworm" x="2" y="-1" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="1" z="9" spawntime="60" />
 		<monster name="rotworm" x="2" y="3" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1033" centery="1022" centerz="9" radius="5">
@@ -4881,10 +4881,10 @@
 		<monster name="black knight" x="0" y="3" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1502" centery="1510" centerz="9" radius="5">
-		<monster name="Carrion Worm" x="-3" y="-4" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="-1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-3" y="-4" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="-1" z="9" spawntime="60" />
 		<monster name="rotworm" x="2" y="1" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="4" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="4" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1441" centery="1516" centerz="9" radius="7">
 		<monster name="quara predator" x="-3" y="-5" z="9" spawntime="60" />
@@ -4894,41 +4894,41 @@
 		<monster name="quara constrictor" x="3" y="1" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1500" centery="1523" centerz="9" radius="5">
-		<monster name="Carrion Worm" x="0" y="-4" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="-4" z="9" spawntime="60" />
 		<monster name="rotworm" x="-1" y="-1" z="9" spawntime="60" />
 		<monster name="rotworm" x="1" y="0" z="9" spawntime="60" />
 		<monster name="rotworm" x="-1" y="2" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="1" y="4" z="9" spawntime="60" />
+		<monster name="carrion worm" x="1" y="4" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1509" centery="1526" centerz="9" radius="5">
-		<monster name="Carrion Worm" x="-1" y="-2" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-3" y="-1" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="2" y="0" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="0" y="2" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="-2" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-3" y="-1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="2" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="2" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1520" centery="1528" centerz="9" radius="5">
-		<monster name="Carrion Worm" x="-2" y="-2" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="1" y="-2" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-2" y="-2" z="9" spawntime="60" />
+		<monster name="carrion worm" x="1" y="-2" z="9" spawntime="60" />
 		<monster name="rotworm" x="1" y="0" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="5" y="0" z="9" spawntime="60" />
+		<monster name="carrion worm" x="5" y="0" z="9" spawntime="60" />
 		<monster name="rotworm" x="-1" y="1" z="9" spawntime="60" />
 		<monster name="rotworm" x="-2" y="2" z="9" spawntime="60" />
 		<monster name="rotworm" x="3" y="3" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="0" y="4" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="4" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1513" centery="1538" centerz="9" radius="5">
-		<monster name="Carrion Worm" x="0" y="-3" z="9" spawntime="60" />
+		<monster name="carrion worm" x="0" y="-3" z="9" spawntime="60" />
 		<monster name="rotworm" x="2" y="-2" z="9" spawntime="60" />
 		<monster name="rotworm" x="1" y="-1" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="1" z="9" spawntime="60" />
 		<monster name="rotworm" x="-1" y="2" z="9" spawntime="60" />
 		<monster name="rotworm" x="-3" y="3" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-4" y="5" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-4" y="5" z="9" spawntime="60" />
 		<monster name="rotworm" x="-3" y="5" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1507" centery="1545" centerz="9" radius="5">
 		<monster name="rotworm" x="0" y="-1" z="9" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="1" z="9" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="1" z="9" spawntime="60" />
 		<monster name="rotworm" x="1" y="2" z="9" spawntime="60" />
 	</spawn>
 	<spawn centerx="1411" centery="1562" centerz="9" radius="5">
@@ -5557,18 +5557,18 @@
 		<monster name="elf arcanist" x="24" y="27" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="1051" centery="994" centerz="10" radius="5">
-		<monster name="Carrion Worm" x="-1" y="-3" z="10" spawntime="60" />
-		<monster name="Carrion Worm" x="-3" y="-1" z="10" spawntime="60" />
-		<monster name="Carrion Worm" x="2" y="0" z="10" spawntime="60" />
-		<monster name="Carrion Worm" x="-2" y="2" z="10" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="-3" z="10" spawntime="60" />
+		<monster name="carrion worm" x="-3" y="-1" z="10" spawntime="60" />
+		<monster name="carrion worm" x="2" y="0" z="10" spawntime="60" />
+		<monster name="carrion worm" x="-2" y="2" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="1052" centery="1008" centerz="10" radius="5">
-		<monster name="Carrion Worm" x="-1" y="-2" z="10" spawntime="60" />
-		<monster name="Carrion Worm" x="2" y="1" z="10" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="-2" z="10" spawntime="60" />
+		<monster name="carrion worm" x="2" y="1" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="1058" centery="1019" centerz="10" radius="5">
-		<monster name="Carrion Worm" x="1" y="-2" z="10" spawntime="60" />
-		<monster name="Carrion Worm" x="-1" y="3" z="10" spawntime="60" />
+		<monster name="carrion worm" x="1" y="-2" z="10" spawntime="60" />
+		<monster name="carrion worm" x="-1" y="3" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="1026" centery="1043" centerz="10" radius="8">
 		<monster name="fire devil" x="-3" y="-4" z="10" spawntime="60" />
