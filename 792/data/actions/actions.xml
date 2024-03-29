@@ -157,6 +157,17 @@
 	<action uniqueid="7003" script="map/walllever2.lua" />
 
 	<!-- Quests -->
+	<!-- Vocation Quest -->
 	<action uniqueid="9010" script="map/quests/vocationquest.lua"/>
+
+	<!-- Annihilator -->
+	<action uniqueid="7000" script="map/quests/annihilator/lever.lua"/>
+	<action uniqueid="9000" script="map/quests/annihilator/chest.lua"/>
+	<action uniqueid="9001" script="map/quests/annihilator/chest.lua"/>
+	<action uniqueid="9002" script="map/quests/annihilator/chest.lua"/>
+	<action uniqueid="9003" script="map/quests/annihilator/chest.lua"/>
+
+	<!-- Demon Helmet -->
 	<action uniqueid="7003" script="map/quests/demon_helmet/lever.lua"/>
+
 </actions>
