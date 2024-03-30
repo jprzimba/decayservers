@@ -259,4 +259,10 @@
 
 	<!-- Desert Quest -->
 	<action uniqueid="9010" script="map/quests/desert_quest.lua"/>
+
+	<!-- Ferumbras Tower -->
+	<action uniqueid="12151" script="map/ferumbras_tower/ferumbras_wall.lua"/>
+	<action uniqueid="12152" script="map/ferumbras_tower/ferumbras_wall2.lua"/>
+	<action uniqueid="12153" script="map/ferumbras_tower/ferumbras_wall3.lua"/>
+	<action uniqueid="5169" script="map/ferumbras_tower/ferumbras_stair.lua"/>
 </actions>
