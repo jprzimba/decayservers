@@ -234,6 +234,7 @@
 
 	<!-- Liberty bay Quests -->
 	<action uniqueid="5084" script="map/quests/cities/liberty_bay/quests.lua"/>
+	<action uniqueid="5085" script="map/quests/cities/liberty_bay/quests.lua"/>
 	<action uniqueid="5086" script="map/quests/cities/liberty_bay/quests.lua"/>
 	<action uniqueid="5087" script="map/quests/cities/liberty_bay/quests.lua"/>
 
@@ -248,6 +249,9 @@
 	<action uniqueid="9003" script="map/quests/annihilator/chest.lua"/>
 
 	<!-- Demon Helmet -->
+	<action uniqueid="5049" event="script" value="map/quests/demon_helmet/chest.lua"/>
+	<action uniqueid="5050" event="script" value="map/quests/demon_helmet/chest.lua"/>
+	<action uniqueid="5051" event="script" value="map/quests/demon_helmet/chest.lua"/>
 	<action uniqueid="7003" script="map/quests/demon_helmet/lever.lua"/>
 
 </actions>
