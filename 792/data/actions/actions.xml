@@ -238,9 +238,6 @@
 	<action uniqueid="5086" script="map/quests/cities/liberty_bay/quests.lua"/>
 	<action uniqueid="5087" script="map/quests/cities/liberty_bay/quests.lua"/>
 
-	<!-- Vocation Quest -->
-	<action uniqueid="9010" script="map/quests/desert_quest.lua"/>
-
 	<!-- Annihilator -->
 	<action uniqueid="7000" script="map/quests/annihilator/lever.lua"/>
 	<action uniqueid="9000" script="map/quests/annihilator/chest.lua"/>
@@ -248,10 +245,18 @@
 	<action uniqueid="9002" script="map/quests/annihilator/chest.lua"/>
 	<action uniqueid="9003" script="map/quests/annihilator/chest.lua"/>
 
-	<!-- Demon Helmet -->
-	<action uniqueid="5049" event="script" value="map/quests/demon_helmet/chest.lua"/>
-	<action uniqueid="5050" event="script" value="map/quests/demon_helmet/chest.lua"/>
-	<action uniqueid="5051" event="script" value="map/quests/demon_helmet/chest.lua"/>
-	<action uniqueid="7003" script="map/quests/demon_helmet/lever.lua"/>
+	<!-- Behemoth Quest -->
+	<action uniqueid="5010" script="map/quests/behemoth/quest.lua"/>
+	<action uniqueid="5011" script="map/quests/behemoth/quest.lua"/>
+	<action uniqueid="5012" script="map/quests/behemoth/quest.lua"/>
+	<action uniqueid="5013" script="map/quests/behemoth/quest.lua"/>
 
+	<!-- Demon Helmet -->
+	<action uniqueid="5049" script="map/quests/demon_helmet/chest.lua"/>
+	<action uniqueid="5050" script="map/quests/demon_helmet/chest.lua"/>
+	<action uniqueid="5051" script="map/quests/demon_helmet/chest.lua"/>
+	<action uniqueid="3002" script="map/quests/demon_helmet/lever.lua"/>
+
+	<!-- Desert Quest -->
+	<action uniqueid="9010" script="map/quests/desert_quest.lua"/>
 </actions>
