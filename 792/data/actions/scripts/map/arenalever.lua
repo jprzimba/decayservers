@@ -1,5 +1,3 @@
--- pvp arena lever
-
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if item.uid == 7001 and item.itemid == 1945 then
 		firstPlayerPosition = {x = 1040, y = 987, z = 8, stackpos = STACKPOS_TOP_CREATURE}

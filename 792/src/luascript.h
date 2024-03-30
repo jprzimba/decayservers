@@ -462,6 +462,7 @@ class LuaScriptInterface
 		static int32_t luaGetTopCreature(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
+		static int32_t luaGetPlayerInventoryItemId(lua_State* L);	
 
 		//set item
 		static int32_t luaDoSetItemActionId(lua_State* L);

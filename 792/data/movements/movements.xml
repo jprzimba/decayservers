@@ -211,6 +211,9 @@
 	<movevent event="StepOut" itemid="5405" script="drowning.lua"/>
 
 	<!-- Map -->
+	<!-- Under Water -->
+	<movevent event="StepIn" itemid="4820" actionid="4550" script="map/under_water/enter.lua"/>
+
 	<!-- Ferumbras Tower Entrace -->
 	<movevent event="StepIn" itemid="473" script="map/ferumbras_tower/entrace.lua"/>
 </movements>

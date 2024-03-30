@@ -1868,6 +1868,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getExperienceStage(level)
 	lua_register(m_luaState, "getExperienceStage", LuaScriptInterface::luaGetExperienceStage);
+
+	//getPlayerInventoryItemId(cid, slot)
+	lua_register(m_luaState, "getPlayerInventoryItemId", LuaScriptInterface::luaGetPlayerInventoryItemId);
 }
 
 int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
@@ -7959,4 +7962,27 @@ int32_t LuaScriptInterface::luaGetCreatureByName(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaGetPlayerInventoryItemId(lua_State* L)
+{
+    short slot = popNumber(L);
+	uint32_t cid = popNumber(L);
+    
+	ScriptEnvironment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
 
+	Item* item = player->getInventoryItem((slots_t)slot);
+	if(player)
+	{
+		if(item != NULL)
+			lua_pushnumber(L, item->getID());
+		else
+			lua_pushboolean(L, false);
+    }
+	else
+	{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}

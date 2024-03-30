@@ -370,6 +370,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	if(!player->canDoAction())
 		return false;
 
+	player->setNextActionTask(NULL);
 	player->stopWalk();
 
 	int32_t itemId = 0;
@@ -405,6 +406,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	if(!player->canDoAction())
 		return false;
 
+	player->setNextActionTask(NULL);
 	player->stopWalk();
 
 	Action* action = getAction(item);
@@ -464,45 +466,6 @@ void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 		ss << "Using one of " << count << " " << it.getPluralName() << "...";
 
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-}
-
-bool Actions::openContainer(Player* player, Container* container, const uint8_t index)
-{
-	Container* openContainer = NULL;
-
-	//depot container
-	if(Depot* depot = container->getDepot())
-	{
-		Depot* myDepot = player->getDepot(depot->getDepotId(), true);
-		myDepot->setParent(depot->getParent());
-		openContainer = myDepot;
-	}
-	else
-		openContainer = container;
-	
-	if(container->getCorpseOwner() != 0)
-	{
-		if(!player->canOpenCorpse(container->getCorpseOwner()))
-		{
-			player->sendCancel("You are not the owner.");
-			return true;
-		}
-	}
-
-	//open/close container
-	int32_t oldcid = player->getContainerID(openContainer);
-	if(oldcid != -1)
-	{
-		player->onCloseContainer(openContainer);
-		player->closeContainer(oldcid);
-	}
-	else
-	{
-		player->addContainer(index, openContainer);
-		player->onSendContainer(openContainer);
-	}
-
-	return true;
 }
 
 Action::Action(LuaScriptInterface* _interface) :
