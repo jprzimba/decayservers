@@ -134,8 +134,6 @@ bool ConfigManager::load()
 	integer[VIPLIST_DEFAULT_PREMIUM_LIMIT] = getGlobalNumber(L, "vipListDefaultPremiumLimit", 100);
 	integer[DEFAULT_DEPOT_SIZE_PREMIUM]	= getGlobalNumber(L, "defaultDepotSizePremium", 2000);
 	integer[DEFAULT_DEPOT_SIZE] = getGlobalNumber(L, "defaultDepotSize", 2000);
-	integer[STAMINA_AMOUNT] = getGlobalNumber(L, "staminaOfflineGainAmount", 1);
-	integer[STAMINA_LOST_MONSTER] = getGlobalNumber(L, "staminaLostMonster", 2);
  
 	boolean[CANNOT_ATTACK_SAME_LOOKFEET] = getGlobalBool(L, "noDamageToSameLookfeet", false);
 	boolean[AIMBOT_HOTKEY_ENABLED] = getGlobalBool(L, "hotkeyAimbotEnabled", true);
@@ -162,6 +160,7 @@ bool ConfigManager::load()
 	boolean[EXPERIENCE_STAGES] = getGlobalBool(L, "experienceStages", false);
 	boolean[REPLACE_KICK_ON_LOGIN] = getGlobalBool(L, "replaceKickOnLogin", true);
 	boolean[STOP_ATTACK_AT_EXIT] = getGlobalBool(L, "stopAttackingAtExit", false);
+	boolean[STAMINA_SYSTEM] = getGlobalBool(L, "useStaminaSystem", true);
 
 	m_loaded = true;
 	lua_close(L);

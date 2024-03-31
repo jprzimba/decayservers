@@ -347,7 +347,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 
 	player->lastLoginSaved = result->getDataLong("lastlogin");
 	player->lastLogout = result->getDataLong("lastlogout");
-	player->stamina = result->getDataInt("stamina");
+	player->staminaMinutes = result->getDataInt("stamina");
 
 	player->town = result->getDataInt("town_id");
 	Town* town = Towns::getInstance().getTown(player->town);
@@ -703,7 +703,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 		query << "`redskull` = " << redSkull << ", ";
 	}
 	query << "`lastlogout` = " << player->getLastLogout() << ", ";
-	query << "`stamina` = " << player->stamina << ", ";
+	query << "`stamina` = " << player->getStaminaMinutes() << ", ";
 	query << "`balance` = " << player->bankBalance << ", ";
 	query << "`blessings` = " << player->blessings;
 	if(g_config.getBool(ConfigManager::INGAME_GUILD_SYSTEM))

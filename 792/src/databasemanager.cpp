@@ -213,9 +213,9 @@ uint32_t DatabaseManager::updateDatabase()
 			std::clog << "Updating database to version 3 (stamina)" << std::endl;
 			Database* db = Database::getInstance();
 			if(db->getDatabaseEngine() == DATABASE_ENGINE_MYSQL)
-				db->executeQuery("ALTER TABLE `players` ADD `stamina` BIGINT UNSIGNED NOT NULL DEFAULT 201600");
+				db->executeQuery("ALTER TABLE `players` ADD `stamina` SMALLINT UNSIGNED NOT NULL DEFAULT 3360");
 			else
-				db->executeQuery("ALTER TABLE `players` ADD `stamina` INTEGER NOT NULL DEFAULT 201600");
+				db->executeQuery("ALTER TABLE `players` ADD `stamina` INTEGER NOT NULL DEFAULT 3360");
 
 			registerDatabaseConfig("db_version", 3);
 			return 3;

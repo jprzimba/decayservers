@@ -512,8 +512,9 @@ const int violationReasons[6] =
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) < PSTRG_##range##_SIZE))
 
 //56 hours like tibia 7.9 protocol
-#define STAMINA_MAX 201600
-//14 hours to drop player expto 0 like tibia 7.9 protocol
-#define STAMINA_MIN 50400
-
+#define STAMINA_MAX 3360
+//14 hours to drop player exp to 0 and not generate loot like tibia rl
+#define STAMINA_MIN 840
+//54 hours of stamina for bonus xp
+#define STAMINA_BONUS 3240
 #endif

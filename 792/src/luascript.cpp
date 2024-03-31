@@ -1439,7 +1439,7 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype)
 	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
 
-	//doPlayerAddExp(cid, exp)
+	//doPlayerAddExp(cid, exp, <optional> usemultiplier)
 	lua_register(m_luaState, "doPlayerAddExp", LuaScriptInterface::luaDoPlayerAddExp);
 
 	//doPlayerSetGuildId(cid, id)
@@ -4336,17 +4336,23 @@ int32_t LuaScriptInterface::luaGetPlayerLight(lua_State* L)
 
 int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
 {
-	//doPlayerAddExp(cid,exp)
+	//doPlayerAddExp(cid, exp, <optional> usemultiplier)
+	int32_t parameters = lua_gettop(L);
+
+	bool useMult = false;
+	if(parameters > 2)
+		useMult = popBoolean(L);
+
 	uint64_t exp = popNumber(L);
 	uint32_t cid = popNumber(L);
-	
+
 	ScriptEnvironment* env = getScriptEnv();
 	Player* player = env->getPlayerByUID(cid);
 	if(player)
 	{
 		if(exp > 0)
 		{
-			player->addExperience(NULL, exp);
+			player->addExperience(exp, useMult);
 			lua_pushboolean(L, true);
 		}
 		else

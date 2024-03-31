@@ -104,10 +104,7 @@
 	deSpawnRadius = 50
 
 	-- Stamina
-	-- staminaOfflineGainAmount: is the amount of stamina that the player will recover according to the time he was offline
-	-- staminaLostMonster: How many seconds of Stamina the player will lose for each monster killed
-	staminaOfflineGainAmount = 10
-	staminaLostMonster = 100
+	useStaminaSystem = true
 
 	-- Depot
 	defaultDepotSizePremium = 2000

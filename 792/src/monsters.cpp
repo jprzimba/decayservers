@@ -124,19 +124,13 @@ MonsterType::~MonsterType()
 
 uint32_t Monsters::getLootRandom()
 {
-	return random_range(0, MAX_LOOTCHANCE)/g_config.getNumber(ConfigManager::RATE_LOOT);
+	return random_range(0, MAX_LOOTCHANCE) / g_config.getNumber(ConfigManager::RATE_LOOT);
 }
 
 void MonsterType::createLoot(Container* corpse)
-{
-	if(g_config.getNumber(ConfigManager::RATE_LOOT) == 0)
-	{
-		corpse->__startDecaying();
-		return;
-	}
-		
+{		
 	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
-	if(owner)
+	if(!owner || owner->getStaminaMinutes() > STAMINA_MIN)
 	{
 		for(LootItems::const_iterator it = lootItems.begin(); it != lootItems.end() && (corpse->capacity() - corpse->size() > 0); it++)
 		{
@@ -156,6 +150,15 @@ void MonsterType::createLoot(Container* corpse)
 					corpse->__internalAddThing(tmpItem);
 			}
 		}
+	}
+	else
+	{
+		std::ostringstream ss;
+		ss << "No loot from " << nameDescription << ": (due to low stamina)";
+		if(owner->getParty())
+			owner->getParty()->broadcastPartyLoot(ss.str());
+		else
+			owner->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	}
 
 	corpse->__startDecaying();

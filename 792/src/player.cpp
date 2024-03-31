@@ -80,7 +80,9 @@ Creature()
 	magLevelPercent = 0;
 	magLevel = 0;
 	experience = 0;
-	stamina = STAMINA_MAX;
+
+	staminaMinutes = STAMINA_MAX;
+	nextUseStaminaTime = 0;
 	
 	lastPing = lastPong = OTSYS_TIME();
 
@@ -1430,10 +1432,9 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 	if(creature == this)
 	{
 		if(isLogout)
-		{
 			loginPosition = getPosition();
-			lastLogout = time(NULL);
-		}
+
+		lastLogout = time(NULL);
 
 		if(eventWalk != 0)
 			setFollowCreature(NULL);
@@ -1800,23 +1801,34 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(Creature* source, uint64_t exp)
+void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool applyStaminaChange/* = false*/)
 {
-	experience += exp;
-	uint32_t prevLevel = getLevel();
-	uint32_t newLevel = getLevel();
+	int32_t newLevel = level;
 
-	uint64_t currLevelExp = Player::getExpForLevel(newLevel);
 	uint64_t nextLevelExp = Player::getExpForLevel(newLevel + 1);
-	if(nextLevelExp < currLevelExp)
+	if(Player::getExpForLevel(newLevel) >= nextLevelExp)
 	{
-		// Cannot gain more experience
-		// Perhaps some sort of notice should be printed here?
+		//player has reached max level
 		levelPercent = 0;
 		sendStats();
 		return;
 	}
 
+	if(useMult)
+		exp *= g_game.getExperienceStage(level);
+
+	if(applyStaminaChange && g_config.getBool(ConfigManager::STAMINA_SYSTEM))
+	{
+		if(staminaMinutes > STAMINA_BONUS)
+		{
+			if(isPremium())
+				exp *= 1.5;
+		}
+		else if(staminaMinutes <= STAMINA_MIN)
+			exp *= 0.5;
+	}
+
+	experience += exp;
 	while(experience >= nextLevelExp)
 	{
 		++newLevel;
@@ -1826,33 +1838,41 @@ void Player::addExperience(Creature* source, uint64_t exp)
 		mana += vocation->getManaGain();
 		capacity += vocation->getCapGain();
 		nextLevelExp = Player::getExpForLevel(newLevel + 1);
+		if(Player::getExpForLevel(newLevel) >= nextLevelExp)
+		{
+			//player has reached max level
+			break;
+		}
 	}
 
+	int32_t prevLevel = level;
 	if(prevLevel != newLevel)
 	{
 		level = newLevel;
+
 		health = healthMax;
 		mana = manaMax;
 
 		updateBaseSpeed();
-		setBaseSpeed(getBaseSpeed());
+
+		int32_t newSpeed = getBaseSpeed();
+		setBaseSpeed(newSpeed);
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
 
-		std::ostringstream ss;
-		ss << "You advanced from Level " << prevLevel << " to Level " << newLevel << '.';
-		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
-
-		//scripting event - onAdvance
 		onAdvanceEvent(SKILL__LEVEL, prevLevel, newLevel);
+
+		std::ostringstream ss;
+		ss << "You advanced from Level " << prevLevel << " to Level " << newLevel << ".";
+		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 	}
 
-	currLevelExp = Player::getExpForLevel(level);
+	uint64_t currLevelExp = Player::getExpForLevel(level);
 	nextLevelExp = Player::getExpForLevel(level + 1);
 	if(nextLevelExp > currLevelExp)
 	{
-		uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
+		uint32_t newPercent = Player::getPercentLevel(experience - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
 		levelPercent = newPercent;
 	}
 	else
@@ -3381,20 +3401,25 @@ void Player::onKilledCreature(Creature* target)
 	}
 }
 
-void Player::gainExperience(uint64_t gainExp, Creature* source)
+void Player::gainExperience(uint64_t gainExp)
 {
-	if(hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0)
-		return;
-
-	addExperience(source, gainExp);
-
-	//soul regeneration
-	if(gainExp >= getLevel())
+	if(!hasFlag(PlayerFlag_NotGainExperience) && gainExp > 0)
 	{
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
-		condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
-		condition->setParam(CONDITIONPARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
-		addCondition(condition);
+		uint64_t oldExperience = experience;
+		if(staminaMinutes == 0)
+			return;
+
+		addExperience(gainExp, true, true);
+
+		//soul regeneration
+		int64_t gainedExperience = experience - oldExperience;
+		if(gainedExperience >= level)
+		{
+			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
+			condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
+			condition->setParam(CONDITIONPARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
+			addCondition(condition);
+		}
 	}
 }
 
@@ -3403,8 +3428,14 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 	if(hasFlag(PlayerFlag_NotGainExperience))
 		return;
 
+	if(target)
+	{
+		if(gainExp > 0 && target->getMonster())
+			useStamina();
+	}
+
 	Creature::onGainExperience(gainExp, target);
-	gainExperience(gainExp, target);
+	gainExperience(gainExp);
 }
 
 bool Player::isImmune(CombatType_t type) const
@@ -4340,4 +4371,68 @@ bool Player::onLookEvent(Thing* target, uint32_t itemId)
 	}
 
 	return true;
+}
+/*
+void Player::regenerateStamina(int32_t offlineTime)
+{
+	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM))
+		return;
+
+	offlineTime -= 600;
+	if(offlineTime < 180)
+		return;
+
+	int16_t regainStaminaMinutes = offlineTime / 180;
+	int16_t maxNormalStaminaRegen = STAMINA_BONUS - std::min<int16_t>(STAMINA_BONUS, staminaMinutes);
+	if(regainStaminaMinutes > maxNormalStaminaRegen)
+	{
+		int16_t happyHourStaminaRegen = (offlineTime - (maxNormalStaminaRegen * 180)) / 600;
+		staminaMinutes = std::min<int16_t>(STAMINA_MAX, std::max<int16_t>(STAMINA_BONUS, staminaMinutes) + happyHourStaminaRegen);
+	}
+	else
+		staminaMinutes += regainStaminaMinutes;
+}
+*/
+void Player::regenerateStamina(int32_t offlineTime)
+{
+    if (!g_config.getBool(ConfigManager::STAMINA_SYSTEM))
+        return;
+
+	if (staminaMinutes >= STAMINA_MAX)
+		return;
+
+    if (offlineTime < 60)
+        return;
+
+    offlineTime -= 60;
+
+    int16_t regainStaminaMinutes = offlineTime / 180;
+	staminaMinutes += regainStaminaMinutes;
+}
+
+void Player::useStamina()
+{
+	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM) || staminaMinutes == 0)
+		return;
+
+	time_t currentTime = time(NULL);
+	if(currentTime > nextUseStaminaTime)
+	{
+		time_t timePassed = currentTime - nextUseStaminaTime;
+		if(timePassed > 60)
+		{
+			if(staminaMinutes > 2)
+				staminaMinutes -= 2;
+			else
+				staminaMinutes = 0;
+
+			nextUseStaminaTime = currentTime + 120;
+		}
+		else
+		{
+			--staminaMinutes;
+			nextUseStaminaTime = currentTime + 60;
+		}
+		sendStats();
+	}
 }

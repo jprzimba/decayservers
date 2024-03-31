@@ -268,6 +268,16 @@ void Party::updateAllPartyIcons()
 	getLeader()->sendPlayerPartyIcons(getLeader());
 }
 
+void Party::broadcastPartyLoot(const std::string& loot)
+{
+	getLeader()->sendTextMessage(MSG_INFO_DESCR, loot);
+	if(!memberList.empty())
+	{
+		for(PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it)
+			(*it)->sendTextMessage(MSG_INFO_DESCR, loot);
+	}
+}
+
 void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations /*= false*/)
 {
 	PlayerVector::iterator it;

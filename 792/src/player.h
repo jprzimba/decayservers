@@ -165,8 +165,9 @@ class Player : public Creature, public Cylinder
 		uint64_t getBankBalance() const {return bankBalance;}
 		void setBankBalance(uint64_t balance) {bankBalance = balance;}
 		
-		unsigned int getStamina() const {return stamina;}
-		void setStamina(unsigned int newStamina) {stamina = newStamina;}
+		uint16_t getStaminaMinutes() const { return staminaMinutes; }
+		void regenerateStamina(int32_t offlineTime);
+		void useStamina();
 
 		Vocation* getVocation() const {return vocation;}
 
@@ -629,8 +630,8 @@ class Player : public Creature, public Cylinder
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
-		void gainExperience(uint64_t exp, Creature* source);
-		void addExperience(Creature* source, uint64_t exp);
+		void gainExperience(uint64_t exp);
+		void addExperience(uint64_t exp, bool useMult = false, bool applyStaminaChange = false);
 
 		void updateInventoryWeight();
 
@@ -641,8 +642,6 @@ class Player : public Creature, public Cylinder
 		void death();
 		virtual void dropCorpse();
 		virtual Item* getCorpse();
-		
-		unsigned int stamina;
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
@@ -670,7 +669,7 @@ class Player : public Creature, public Cylinder
 		virtual void __internalAddThing(Thing* thing);
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
-	protected:
+
 		ProtocolGame* client;
 
 		uint32_t level;
@@ -703,6 +702,10 @@ class Player : public Creature, public Cylinder
 		int32_t idleTime;
 		int32_t groupId;
 		uint32_t clientVersion;
+
+		//stamina
+		uint16_t staminaMinutes;
+		time_t nextUseStaminaTime;
 
 		OperatingSystem_t operatingSystem;
 		Group* group;

@@ -67,6 +67,7 @@ class ConfigManager
 			REPLACE_KICK_ON_LOGIN,
 			STOP_ATTACK_AT_EXIT,
 			BUFFER_SPELL_FAILURE,
+			STAMINA_SYSTEM,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -150,8 +151,6 @@ class ConfigManager
 			VIPLIST_DEFAULT_PREMIUM_LIMIT,
 			DEFAULT_DEPOT_SIZE_PREMIUM,
 			DEFAULT_DEPOT_SIZE,
-			STAMINA_AMOUNT,
-			STAMINA_LOST_MONSTER,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

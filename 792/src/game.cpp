@@ -720,10 +720,19 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 	Player* player = creature->getPlayer();
 	if(player)
 	{
+		int32_t offlineTime;
+		if(player->getLastLogout() != 0)
+		{
+			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+			offlineTime = std::min<int32_t>(time(NULL) - player->getLastLogout(), 86400 * 21);
+		}
+		else
+			offlineTime = 0;
+
 		Condition* conditionMuted = player->getCondition(CONDITION_MUTED, CONDITIONID_DEFAULT);
 		if(conditionMuted && conditionMuted->getTicks() > 0)
 		{
-			conditionMuted->setTicks(conditionMuted->getTicks() - (time(NULL) - player->getLastLogout()) * 1000);
+			conditionMuted->setTicks(conditionMuted->getTicks() - (offlineTime * 1000));
 			if(conditionMuted->getTicks() <= 0)
 				player->removeCondition(conditionMuted);
 			else
@@ -733,7 +742,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 		Condition* conditionTrade = player->getCondition(CONDITION_TRADETICKS, CONDITIONID_DEFAULT);
 		if(conditionTrade && conditionTrade->getTicks() > 0)
 		{
-			conditionTrade->setTicks(conditionTrade->getTicks() - (time(NULL) - player->getLastLogout()) * 1000);
+			conditionTrade->setTicks(conditionTrade->getTicks() - (offlineTime * 1000));
 			if(conditionTrade->getTicks() <= 0)
 				player->removeCondition(conditionTrade);
 			else
@@ -743,13 +752,14 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 		Condition* conditionYell = player->getCondition(CONDITION_YELLTICKS, CONDITIONID_DEFAULT);
 		if(conditionYell && conditionYell->getTicks() > 0)
 		{
-			conditionYell->setTicks(conditionYell->getTicks() - (time(NULL) - player->getLastLogout()) * 1000);
+			conditionYell->setTicks(conditionYell->getTicks() - (offlineTime * 1000));
 			if(conditionYell->getTicks() <= 0)
 				player->removeCondition(conditionYell);
 			else
 				player->addCondition(conditionYell->clone());
 		}
 
+		bool sentStats = false;
 		if(player->isPremium())
 		{
 			int32_t value;
@@ -762,11 +772,21 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool forced /*
 		else if(player->isPromoted())
 			player->setVocation(player->vocation->getFromVocation());
 
-		uint32_t timeOffLine = time(NULL) - player->getLastLogout();
-		unsigned int newStamina = player->getStamina() + timeOffLine * g_config.getNumber(ConfigManager::STAMINA_AMOUNT);
-		player->setStamina(newStamina);
-		if(player->getStamina() > STAMINA_MAX)
-			player->setStamina(STAMINA_MAX);
+		int16_t oldStaminaMinutes = player->getStaminaMinutes();
+		player->regenerateStamina(offlineTime);
+
+		if(!sentStats && player->getStaminaMinutes() != oldStaminaMinutes)
+		{
+			std::stringstream ss;
+			ss << "You have regenerated " << (player->getStaminaMinutes() - oldStaminaMinutes) << " minute";
+			if((player->getStaminaMinutes() - oldStaminaMinutes) == 1)
+			    ss << " of stamina.";
+			else
+			    ss << "s of stamina.";
+
+			player->sendTextMessage(MSG_STATUS_DEFAULT, ss.str().c_str());
+			player->sendStats();
+		}
 	}
 
 	addCreatureCheck(creature);

@@ -362,14 +362,11 @@ bool TalkAction::addSkill(Creature* creature, const std::string& cmd, const std:
 	trimString(param1);
 	trimString(param2);
 
-	if(!player)
-		return false;
-
 	Player* paramPlayer = g_game.getPlayerByName(param1);
 	if(paramPlayer)
 	{
 		if(param2[0] == 'l' || param2[0] == 'e')
-			paramPlayer->addExperience(paramPlayer, Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience);
+		paramPlayer->addExperience(Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false, false);
 		else if(param2[0] == 'm')
 			paramPlayer->addManaSpent(player->vocation->getReqMana(paramPlayer->getMagicLevel() + 1) - paramPlayer->manaSpent);
 		else
