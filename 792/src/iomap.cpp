@@ -136,6 +136,10 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					setLastErrorString("Invalid description tag.");
 					return false;
 				}
+
+				if(!mapDescription.empty())
+					std::clog << "Map description: " << mapDescription << std::endl;
+
 				break;
 			case OTBM_ATTR_EXT_SPAWN_FILE:
 				if(!propStream.GET_STRING(tmp))
