@@ -4372,27 +4372,7 @@ bool Player::onLookEvent(Thing* target, uint32_t itemId)
 
 	return true;
 }
-/*
-void Player::regenerateStamina(int32_t offlineTime)
-{
-	if(!g_config.getBool(ConfigManager::STAMINA_SYSTEM))
-		return;
 
-	offlineTime -= 600;
-	if(offlineTime < 180)
-		return;
-
-	int16_t regainStaminaMinutes = offlineTime / 180;
-	int16_t maxNormalStaminaRegen = STAMINA_BONUS - std::min<int16_t>(STAMINA_BONUS, staminaMinutes);
-	if(regainStaminaMinutes > maxNormalStaminaRegen)
-	{
-		int16_t happyHourStaminaRegen = (offlineTime - (maxNormalStaminaRegen * 180)) / 600;
-		staminaMinutes = std::min<int16_t>(STAMINA_MAX, std::max<int16_t>(STAMINA_BONUS, staminaMinutes) + happyHourStaminaRegen);
-	}
-	else
-		staminaMinutes += regainStaminaMinutes;
-}
-*/
 void Player::regenerateStamina(int32_t offlineTime)
 {
     if (!g_config.getBool(ConfigManager::STAMINA_SYSTEM))

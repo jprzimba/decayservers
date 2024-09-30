@@ -91,7 +91,6 @@ bool checkText(std::string text, std::string str);
 int random_range(int lowest_number, int highest_number, DistributionType_t type = DISTRO_UNIFORM);
 
 Direction getDirection(std::string string);
-Direction getReverseDirection(Direction dir);
 Position getNextPosition(Direction direction, Position pos);
 
 char upchar(char c);

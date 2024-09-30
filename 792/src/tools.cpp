@@ -612,41 +612,6 @@ Direction getDirection(std::string string)
 	return direction;
 }
 
-Direction getReverseDirection(Direction dir)
-{
-	Direction _dir = NORTH;
-	switch(dir)
-	{
-		case NORTH:
-			_dir = SOUTH;
-			break;
-		case SOUTH:
-			_dir = NORTH;
-			break;
-		case WEST:
-			_dir = EAST;
-			break;
-		case EAST:
-			_dir = WEST;
-			break;
-		case SOUTHWEST:
-			_dir = NORTHEAST;
-			break;
-		case NORTHWEST:
-			_dir = SOUTHEAST;
-			break;
-		case NORTHEAST:
-			_dir = SOUTHWEST;
-			break;
-		case SOUTHEAST:
-			_dir = NORTHWEST;
-			break;
-		default:
-			break;
-	}
-	return _dir;
-}
-
 Position getNextPosition(Direction direction, Position pos)
 {
 	switch(direction)

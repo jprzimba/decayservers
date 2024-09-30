@@ -1,5 +1,4 @@
 # Ignore files
-*.s3db
 *.res
 *.layout
 *.o
