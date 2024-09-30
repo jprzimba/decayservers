@@ -27,6 +27,7 @@
 	replaceKickOnLogin = true
 
 	-- Account Manager
+	-- 	newPlayerTownId = 10 is Rookgaard
 	accountManager = true
 	newPlayerChooseVoc = false
 	newPlayerSpawnPosX = 795
