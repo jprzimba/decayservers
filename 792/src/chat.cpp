@@ -213,12 +213,16 @@ Chat::Chat()
 	newChannel = new ChatChannel(CHANNEL_GAMECHAT, "Game Chat");
 	if(newChannel)
 		m_normalChannels[CHANNEL_GAMECHAT] = newChannel;
+		
+	newChannel = new ChatChannel(CHANNEL_RLCHAT, "RL Chat");
+	if(newChannel)
+		m_normalChannels[CHANNEL_RLCHAT] = newChannel;
 
 	newChannel = new ChatChannel(CHANNEL_TRADE, "Trade");
 	if(newChannel)
 		m_normalChannels[CHANNEL_TRADE] = newChannel;
 
-	newChannel = new ChatChannel(CHANNEL_TRADEROOK, "Trade-Rookgaard");
+	newChannel = new ChatChannel(CHANNEL_TRADEROOK, "Trade Rookgaard");
 	if(newChannel)
 		m_normalChannels[CHANNEL_TRADEROOK] = newChannel;
 

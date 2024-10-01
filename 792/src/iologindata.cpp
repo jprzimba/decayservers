@@ -776,14 +776,14 @@ bool IOLoginData::savePlayer(Player* player, bool preSave)
 
 	stmt.setQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
-	for(DepotMap::iterator it = player->depots.begin(); it !=player->depots.end() ;++it)
+	for(DepotMap::iterator it = player->depots.begin(); it != player->depots.end() ;++it)
 		itemList.push_back(itemBlock(it->first, it->second));
 
 	if(!saveItems(player, itemList, stmt))
 		return false;
 
 
-	//player stages
+	//player storage
 	query.str("");
 	query << "DELETE FROM `player_storage` WHERE `player_id` = " << player->getGUID() << ";";
 	if(!db->executeQuery(query.str()))
